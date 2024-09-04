@@ -6,6 +6,7 @@ import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-nex
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 import SelectCharacter from '../components/SelectCharacter.vue'
+import IconStackCloud from '../components/IconStackCloud.vue'
 
 export default {
   setup(props, context) {
@@ -76,7 +77,8 @@ export default {
     BNavbar,
     BNavItem,
     BCard,
-    SelectCharacter
+    SelectCharacter,
+    IconStackCloud
   }
 }
 </script>
@@ -91,11 +93,18 @@ export default {
         height: 4.5rem;
       "
     >
-      <div style="display: flex; justify-content: flex-start">
+      <div style="display: flex; justify-content: flex-start; height: 5rem">
+        <IconStackCloud class="moon" style="color: #c2b172"></IconStackCloud>
         <span class="component"
-          ><div style="width: 150%">Welcome {{ userStore.getDisplayName }}!</div></span
-        >
-        <div class="dazzle"></div>
+          ><div style="width: 150%">Welcome {{ userStore.getDisplayName }}!</div>
+          <div
+            style="display: flex; justify-content: end; position: relative"
+            class="sparkle-height"
+          >
+            <i class="bi bi-stars" style="color: #c2b172; position: absolute; z-index: 5"></i>
+          </div>
+        </span>
+        <div class="dazzle" style="z-index: 1"></div>
         <div class="dazzle2"></div>
       </div>
       <div style="padding-right: 1rem; padding-top: 0.5rem; min-width: 8.5rem">
@@ -148,6 +157,11 @@ export default {
   height: 5rem;
   font-family: 'Bahnschrift', sans-serif;
   text-wrap: wrap;
+  margin-right: -2px;
+  margin-left: -2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .button {
   background-color: #422c58;
@@ -159,6 +173,17 @@ export default {
   list-style-type: none;
   width: 33%;
   text-align: center;
+}
+.moon {
+  font-size: 3.5rem;
+  width: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sparkle-height {
+  bottom: 2.25rem;
+  left: 1.25rem;
 }
 @media (max-width: 600px) {
   /* CSS that should be displayed if width is equal to or less than 800px goes here */
@@ -173,6 +198,24 @@ export default {
     font-family: 'Bahnschrift', sans-serif;
     text-wrap: wrap;
     width: min-content;
+    box-shadow: 5px -2px 5px #aaaaaa;
+    margin-right: -2px;
+    margin-left: -2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .moon {
+    font-size: 1.25rem;
+    width: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding-top: 0.5rem;
+  }
+  .sparkle-height {
+    bottom: 3rem;
+    left: 1.25rem;
   }
 }
 .dazzle {
@@ -197,5 +240,6 @@ export default {
   left: 0;
   display: block;
   background-color: #dfdfdf;
+  height: 100vh;
 }
 </style>

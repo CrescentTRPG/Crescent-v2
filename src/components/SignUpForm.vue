@@ -29,8 +29,7 @@ export default {
         })
           .then(() => {
             console.log('User profile updated successfully')
-            userStore.setDisplayName(displayName.value)
-            userStore.setEmail(email.value)
+            this.userStore.setUser(user.displayName, user.email, user.uid)
             console.log('signed up')
             context.emit('login')
           })

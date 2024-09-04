@@ -20,10 +20,10 @@ import { ref } from 'vue'
 export default {
   props: ['character', 'name', 'useImg'],
   setup(props, context) {
-    const character = props.character
-    const name = props.name
-    const useImg = props.useImg
-    return { character, name }
+    const character = ref(props.character)
+    const name = ref(props.name)
+    const useImg = ref(props.useImg)
+    return { character }
   },
   components: {
     BCard,

@@ -41,8 +41,11 @@ export default {
     },
     async handleSubmit() {
       let userCredential = await this.login(this.email, this.password)
-      this.userStore.setDisplayName(userCredential.user.displayName)
-      this.userStore.setEmail(userCredential.user.email)
+      this.userStore.setUser(
+        userCredential.user.displayName,
+        userCredential.user.email,
+        userCredential.user.uid
+      )
       if (!this.error) {
         console.log('Log in Successful')
         this.$emit('login')
