@@ -24,7 +24,6 @@ export async function getCollection(collectionPath: string) {
       documents = []
     }
   )
-  console.log('here')
 }
 export async function getCollectionOnce(collectionPath: string) {
   let documents: Array<any> = []
@@ -36,6 +35,5 @@ export async function getCollectionOnce(collectionPath: string) {
     // doc.data() is never undefined for query doc snapshots
     documents.push({ ...doc.data(), id: doc.id })
   })
-  console.log('here')
   return documents
 }

@@ -4,6 +4,9 @@ import { useDesignStore } from './designStore.js'
 import { useSkillStore } from './skillsStore.js'
 import { db } from '@/firebase/config.js'
 import { onSnapshot, doc, query, getDocs, updateDoc } from 'firebase/firestore'
+import { useMartialSkillsStore } from './martialSkillsStore.js'
+import { useMartialPerksStore } from './martialPerksStore.js'
+import { useSpellStore } from './spellsStore.js'
 
 interface Character {
   id: string
@@ -31,6 +34,9 @@ interface Character {
 }
 export const useCharacterStore = defineStore('character', {
   state: () => ({
+    characterRef: () => {},
+    here: 0,
+    loading: true,
     id: '',
     name: '',
     image: '',
@@ -40,7 +46,16 @@ export const useCharacterStore = defineStore('character', {
     adventure: null,
     traits: null,
     condition: null,
-    attributes: { strength: 0 },
+    attributes: {
+      strength: 0,
+      agility: 0,
+      perception: 0,
+      willpower: 0,
+      health: 0,
+      intelligence: 0,
+      power: 0,
+      charisma: 0
+    },
     exceptionals: null,
     effigies: null,
     faunaTransformations: null,
@@ -55,6 +70,7 @@ export const useCharacterStore = defineStore('character', {
   }),
   getters: {
     getLocalCharacter() {},
+    getAgility: (state): number => state.attributes.agility,
     getCharacterId: (state): string => state.id,
     getArchetype: (state): string => state.archetype,
     getAttributes: (state): any => state.attributes,
@@ -67,8 +83,14 @@ export const useCharacterStore = defineStore('character', {
     setLocalArchetype(archetype: string) {
       this.archetype = archetype
     },
+    setLocalTotalAbilityPoints(totalAbilityPoints: number) {
+      this.totalAbilityPoints = totalAbilityPoints
+    },
     setLocalAttributes(attributes: any) {
       this.attributes = attributes
+    },
+    setLocalOrigin(origin: Array<string>) {
+      this.originSkills = origin
     },
     setLocalCharacter(character: Character) {
       this.id = character.id
@@ -83,11 +105,11 @@ export const useCharacterStore = defineStore('character', {
       this.exceptionals = character.exceptionals
     },
     async setCharacter(character: Character, uid: string, cid) {
-      let char = await useCollection('User/' + uid + '/Character/' + cid, character)
+      const char = await useCollection('User/' + uid + '/Character/' + cid, character)
       console.log(char)
     },
     async addCharacter(uid: string) {
-      let char = {
+      const char = {
         name: '',
         image: '',
         archetype: '',
@@ -103,6 +125,8 @@ export const useCharacterStore = defineStore('character', {
         secondaryTheme: '#c2b172',
         inputBacking: '#f1eef1',
         inputText: '#000000',
+        sidebarBacking: '#e7e2e9',
+        sidebarText: '#000000',
         primaryText: '#dfdfdf',
         pageBackdrop: '#dfdfdf',
         alertTheme: '#c15be6',
@@ -112,7 +136,7 @@ export const useCharacterStore = defineStore('character', {
         iconFill: 'check',
         iconColor: '#000000'
       }
-      let ret = await useCollection('User/' + uid + '/Character', char)
+      const ret = await useCollection('User/' + uid + '/Character', char)
       ret && this.setId(ret.id)
 
       useDesignStore().setDesign(defaultDesign, uid, this.getCharacterId)
@@ -121,9 +145,14 @@ export const useCharacterStore = defineStore('character', {
       })
       console.log(ret)
     },
+    unsubscribe() {
+      this.characterRef()
+    },
     async pullCharacterFromFirebase(uid: string, cid: string) {
-      onSnapshot(doc(db, 'User/' + uid + '/Character/' + cid), (doc) => {
-        let character = {
+      this.loading = true
+      this.here = 1
+      this.characterRef = onSnapshot(doc(db, 'User/' + uid + '/Character/' + cid), (doc) => {
+        const character = {
           id: doc.data()?.id,
           name: doc.data()?.name,
           image: doc.data()?.image,
@@ -136,10 +165,12 @@ export const useCharacterStore = defineStore('character', {
           exceptionals: doc.data()?.exceptionals
         }
         this.setLocalCharacter(character)
-        let design = {
+        const design = {
           primaryTheme: doc.data()?.design.primaryTheme,
           secondaryTheme: doc.data()?.design.secondaryTheme,
           inputBacking: doc.data()?.design.inputBacking,
+          sidebarBacking: doc.data()?.design.sidebarBacking,
+          sidebarText: doc.data()?.design.sidebarText,
           inputText: doc.data()?.design.inputText,
           primaryText: doc.data()?.design.primaryText,
           pageBackdrop: doc.data()?.design.pageBackdrop,
@@ -150,19 +181,56 @@ export const useCharacterStore = defineStore('character', {
           iconFill: doc.data()?.design.iconFill,
           iconColor: doc.data()?.design.iconColor
         }
+        useMartialPerksStore().setLocalPerkGain(doc.data()?.perkGain)
         useDesignStore().setLocalDesign(design)
         useSkillStore().pullCharacterSkillsFromFirebase()
-        useSkillStore().pullAllSkillsFromFirebase()
+        useSkillStore()
+          .pullAllSkillsFromFirebase()
+          .then(() => {
+            useSkillStore().setEffectiveSkills()
+          })
+        useMartialSkillsStore().pullAllCombatStylesFromFirebase()
+        useMartialSkillsStore().pullAllSpecializationsFromFirebase()
+        useMartialSkillsStore().pullCharacterCombatStylesFromFirebase()
+        useMartialSkillsStore().pullCharacterSpecializationsFromFirebase()
+        useMartialPerksStore().pullManualMartialPerksFromFirebase()
+        useMartialPerksStore().pullCharacterMartialPerksFromFirebase()
+        useSpellStore().pullManualSpellgroupsFromFirebase()
+        useSpellStore().pullCharacterSpellgroupsFromFirebase()
+        this.delay(1000).then(() => {
+          useCharacterStore().setLoadingFalse()
+        })
       })
+    },
+    delay(time: number) {
+      return new Promise((resolve) => setTimeout(resolve, time))
+    },
+    setLoadingFalse() {
+      this.loading = false
     },
     async setArchetype(archetype: string, uid: string, cid: string) {
       this.setLocalArchetype(archetype)
-      let ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { archetype: archetype })
+      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { archetype: archetype })
       console.log(ret)
     },
-    async setAttribute(attributes: string, uid: string, cid: string) {
+    async setTotalAbilityPoints(totalAbilityPoints: number, uid: string, cid: string) {
+      this.setLocalTotalAbilityPoints(totalAbilityPoints)
+      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), {
+        totalAbilityPoints: totalAbilityPoints
+      })
+      console.log(ret)
+    },
+    async setOrigin(origin: Array<string>, uid: string, cid: string) {
+      console.log(origin)
+      this.setLocalOrigin(origin)
+      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { originSkills: origin })
+      console.log(ret)
+    },
+    async setAttribute(attributes: any, uid: string, cid: string) {
       this.setLocalAttributes(attributes)
-      let ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { attributes: attributes })
+      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), {
+        attributes: attributes
+      })
       console.log(ret)
     }
   },

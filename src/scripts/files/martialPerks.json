@@ -1,0 +1,1058 @@
+[
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd27"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Absolute Focus",
+    "action_cost": "Reaction / Swift Action",
+    "target": "Touch",
+    "area": "Single Effect",
+    "type": "Charged (4)",
+    "duration": "Variable",
+    "resistance": "N/A",
+    "description": "The character has learned how to channel their focus. The character may choose between any of the following three effects as a swift action: \\nTransfer the focus of a willing target onto themselves. The character is now the one maintaining the focus for that effect. The character must have focus available to do so. \\nReplicate a target's armor or weapon utilizing their focus, causing a copy to appear in their hands. The item persists for as long as the character retains their focus. \\nUse their focus to give another character their ranks in an origin skill. This effect persists for as long as the character retains their focus. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd28"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Auric Defense",
+    "action_cost": "Swift Action",
+    "target": "Variable",
+    "area": "Variable",
+    "type": "Charged (5)",
+    "duration": "Variable",
+    "resistance": "N/A",
+    "description": "The character gains three abilities that they can utilize. \\nAs a swift action, the character gains a HP barrier equal to one-quarter of their maximum natural HP. The barrier lasts until the beginning of the character's next turn. \\nAs a swift action, the character gains two placed roles on all resistance checks until the start of their next turn. \\nAs a swift action, the character can create an indestructible 5' x 5' barrier within 60' LOS, remaining for as long as they maintain focus. The character can move any number of these barriers using their swift action, up to 30'. Any projectile with a ranged attack roll passing through the barrier is immediately destroyed. The barrier counts as an exceptionally protective cover. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd29"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Berserker's Frenzy",
+    "action_cost": "Reaction / Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Charged (5)",
+    "duration": "1 Minute",
+    "resistance": "N/A",
+    "description": "By expending a charge of this ability, and swift action, the character enters into a Frenzy, consuming their focus and allowing them to use new actions. These actions do not consume charges of this ability, and they may activate one of their frenzy abilities as a part of entering their frenzy, but only so long as it costs a swift action to activate. \\nAs a reaction to reducing a target to 0 HP, the character can take a movement action to approach a target and make a melee strike. \\nAs a swift action, the character may take a movement action to approach an enemy. \\nAs a swift action, the berserker loses 2 movement DVs until the start of their next turn but has a placed roll on all of their melee attack rolls until the beginning of their next turn. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd2a"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Bloodlust",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "1 Minute",
+    "resistance": "N/A",
+    "description": "As a swift action, the character readies themselves to absorb their enemies' vitality. At the end of their turn, the character gains a HP barrier equal to one-fourth of all damage they inflict during their turn; this barrier lasts until the end of their next turn. This ability consumes focus unless the character is frenzied, in which case the ability is applied automatically without action cost. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd2b"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Bladedancer",
+    "action_cost": "Reaction / Swift Action",
+    "target": "Weapon's Reach",
+    "area": "LOS 40'",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character gains the ability to deftly wield their weapon to both protect themselves and pierce an opponent's defenses. \\nAs a swift action, the character prepares to defend themselves from a target foe. If the target attempts to strike the character with a melee attack, the character takes a reaction to make an attack roll to contest the incoming attack (with a placed roll). If the character's roll is higher, the attack misses, the character hits the enemy with a strike, and the enemy is left prone with 0' of movement speed until the end of their next turn. \\nAs a reaction to an attempt to interpose or contest the incoming attack roll, the character completely nullifies any attempts to do. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd2c"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Chronotrigger",
+    "action_cost": "Swift Action",
+    "target": "LOS 60'",
+    "area": "Single Target",
+    "type": "Charged (1)",
+    "duration": "-1 Round",
+    "resistance": "WIL",
+    "description": "As a swift action, the character undoes the effects of the previous round for a single target, reversing the outcome of any effects applied to that target, causing them to resemble how they were at the end of their previous turn, WIL save to negate. Chronotrigger's charge is always expended upon use, even through time.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd2d"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Countermeasures",
+    "action_cost": "Reaction",
+    "target": "Melee Reach",
+    "area": "N/A",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "AGI",
+    "description": "The character gains access to several actions that allows them to defend themselves against an opponent's attacks. \\nAs a reaction, the character can reduce the damage of an incoming ranged attack by 1d10/P. If the damage is reduced to 0, they can catch the projectile, should they have a free hand, redirecting it at a target within 50' by making an attack roll, inflicting the attack's damage on a successful hit. \\nAs a reaction, the character can redirect a missed attack roll against them to a target within their weapon's melee reach. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd2e"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Disruptor",
+    "action_cost": "Reaction / Swift Action",
+    "target": "Melee Reach",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "STR",
+    "description": "The character gains access to several abilities they can use to disrupt others. \\nAs a reaction to being successfully struck by a target, the character strikes back with a concussive counterattack. The character makes an attack roll against the target if they are within range/reach. On hit, the target is unable to make any further strikes until the end of their turn. \\nAs a swift action, the character contests their strength with an adjacent target. On success, the target is thrown 30' in the direction of the character's choice. If thrown onto another target, the character makes a ranged attack roll, inflicting 1d8/P blunt to both targets' damage on a successful hit. \\nAs a reaction to a target leaving the character's melee reach, they can execute a melee strike against the target. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd2f"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Defensive Maneuvers",
+    "action_cost": "Swift Action",
+    "target": "Variable",
+    "area": "N/A",
+    "type": "Activated",
+    "duration": "1 Round",
+    "resistance": "N/A",
+    "description": "The character can take up a defensive position. \\nAs a swift action, the character selects a target to protect within the range/reach of their weapon. When the protected target is the target of an attack roll, the character may make a strike against the attacker. All combatants have a displaced roll when making ranged attack rolls against the protected target. \\nAs a swift action, the character can choose a 5-10' radius within their weapon's range/reach (this radius must be within your normal attack range/reach). Whenever someone moves through this area the character may choose to make a free strike against them. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd30"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Dodging",
+    "action_cost": "Reaction",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character has their movement DVs set to 15 + 1/P, though they forgo the usage of armor and shields (No benefit from DVs when wearing a shield or armor.) This DV gain is active so long as the character maintains focus. \\nAs a reaction, the character can contest the attack roll of an incoming attack if it is higher than the attack roll, they negate the strike. \\nAs a reaction to a target missing the character with an attack roll, they may make a strike against the opponent if they are within reach/range. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd31"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Explosive Attacks",
+    "action_cost": "Swift Action",
+    "target": "Weapon's Reach / Range",
+    "area": "10' Radius",
+    "type": "Charged (3)",
+    "duration": "Instantaneous",
+    "resistance": "AGI",
+    "description": "As a swift action, the character may prepare one of their weapons to strike with explosive force. For the duration of the round, all of their strikes explode on hit. All targets within 10' of any of the explosive strikes receive an amount of force damage equal to all of the damage inflicted by the user's weapon this turn; this may include the user. All targets get a single AGI save to negate the damage from all of the explosive attacks. The character does not make attack rolls when utilizing this ability.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd32"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Enguard",
+    "action_cost": "Reaction / Core Action",
+    "target": "Variable",
+    "area": "Variable",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "(Mark and Muse Upgrade) The character turns battle into art with their flash and guile, gaining access to several abilities. \\nAs a reaction to the muse using a supportive ability that targets the character, the character may extend that ability to also affect the muse. This does not work on abilities that require focus. \\nAs a core action, all falling damage the character would take is instead transferred to a 5' radius around where they land \\nAs a reaction to the mark attempting to strike their muse with an attack roll of any kind, the character moves up to twice their highest movement to their muse. If they are next to the muse, they contest every attack roll made by the mark against the muse, if they roll higher the attack is nullified. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd33"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Hexshot Rigging",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character can imbue a projectile with different properties as a swift action. \\nThe projectile ignores any intervening objects, such as windows, walls, barriers - though the character suffers a blindness penalty if they do not know where the target is. \\nThe projectile drains 1/P of the target's mana on hit. \\nThe projectile forces the target to lose their reaction until the end of their next turn on hit. \\nThe character can apply an alchemy potion to a trap as a swift action, causing the trap to inflict an alchemy effect. If the potion would typically explode in an AOE it does so, otherwise the potion effect only applies to the target that triggered the trap. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd34"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Immaculate Deftness",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated / Passive",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character gains access to a number of abilities that aid them in deftly crossing the battlefield unscathed. \\nThe character becomes immune to stun and paralysis \\nThe character halves the damage of any effect requiring an AGI check. If they succeed at the check, the damage is instead negated. If the check is failed, the damage is halved. \\nAs a swift action, the character can take up a defensive stance. Attack rolls cannot have placed rolls against them, nullifying all effects that grant them. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd35"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Indomitable",
+    "action_cost": "Swift Action",
+    "target": "LOS 80'",
+    "area": "Single Target",
+    "type": "Charged (2)",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character takes up an offensive stance as a swift action - choosing a target, and absorbing all damage from them (Receiving none of it.) On their next turn, the character may add this damage onto the first attack roll they make as bonus damage.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd36"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Hexsmith",
+    "action_cost": "Swift Action",
+    "target": "Variable",
+    "area": "Variable",
+    "type": "Charged (2)",
+    "duration": "Variable",
+    "resistance": "WIL",
+    "description": "The character dabbles in the realm of hexing and mind alteration. As a swift action they can use the following abilities. \\nThe character can attempt to link themselves with a target for a minute, WIL save to negate. Any damage dealt to the character is also dealt to the target. \\nThe character can enhance an attack they make. On hit, the attack instantaneously releases a noxious cloud for a turn, HEA save to negate. Those within 10' of the target (Including the target) lose access to their swift actions and reactions for 3 turns. \\nThe character contests their WIL against a target. If the target fails, they fall unconscious and take over the body of the target for as long as the target loses the contested check. The character can do any ability the target can do, except for suicidal actions. The affected target loses all actions, but the contested check is repeated at the start of the target's turns. When the effect breaks, both parties can resume their normal actions.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd37"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Judgement",
+    "action_cost": "Reactionary",
+    "target": "LOS 60'",
+    "area": "Variable",
+    "type": "Charged (2)",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character has learned how to orchestrate those around them. \\nAs a reaction, give another target an extra core action. \\nAs a reaction, give up to 5 targets the ability to immediately take a movement action. \\nAs a reaction, give another target 2 extra reactions they can utilize until the start of their next turn. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd39"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Mark and Muse",
+    "action_cost": "Swift Action/Passive",
+    "target": "LOS 60'",
+    "area": "2 Targets",
+    "type": "Activated",
+    "duration": "10 Minutes",
+    "resistance": "WIL",
+    "description": "The character can designate two targets as either a Mark or a Muse as a swift action, consuming their focus when they do so. \\nThe character receives a placed roll when making any attack rolls against the mark, but a displaced roll against all other targets. \\nAs a reaction to the mark forcing the muse to make a resistance check, the character can grant the muse a placed roll on the check. \\nWhen the muse and the character are within arms reach of one another, both of them have one instance of Mundane Damage Reduction \\nThe character can reselect a new mark/muse as a swift action. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd38"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Knight Protector",
+    "action_cost": "Swift / Movement Action",
+    "target": "LOS 40'",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Variable",
+    "resistance": "N/A",
+    "description": "The character can extend their abilities to their allies and help their team reposition. \\nAs a swift action, the character replaces the weapon skills and specialization of any willing target within 40'. The target adopts all of the weapon skills/specializations of the character. This ability persists as long as the character maintains this focus. \\nAs a movement action, the character swaps places with another willing target within 40'. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd3a"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Lifelink Aura",
+    "action_cost": "Swift Action",
+    "target": "Touch",
+    "area": "10 Targets",
+    "type": "Activated",
+    "duration": "Variable",
+    "resistance": "N/A",
+    "description": "As a swift action, the character extends their life force to up to 10 other targets. Should the targets take any damage, the damage is transferred to the character instead. This effect lasts as long as the character retains focus. The character cannot benefit from immunity while this ability is active. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd3b"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Mechanist",
+    "action_cost": "Swift Action",
+    "target": "60'",
+    "area": "Single Target",
+    "type": "Charged (4)",
+    "duration": "Variable",
+    "resistance": "WIL",
+    "description": "The character uses their knowledge to support and antagonize others they can... \\nAs a swift action, consume a target's temporary barrier, causing themselves or the target to heal by that much, WIL save to negate. \\nAs a swift action, give a target a 20 HP temporary barrier, persisting for a minute before expiring. \\nAs a swift action, release a disrupting pulse against a target, decreasing their armor DVs by 2 + 1/P, HEA save to negate. Upon failure, the armor remains damaged until it is repaired. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd3c"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Mitigative",
+    "action_cost": "Reaction",
+    "target": "Variable",
+    "area": "N/A",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character has become adept at defending themselves and those around them, they can... \\nAs a reaction, block an attack roll aimed at a target within 10' by granting them 3 bonus DVs; this DV bonus only applies to the single attack roll. \\nAs a reaction, decrease a source of mundane damage directed at a target within 5' by 1d8/P. \\nAs a reaction, rush over to an ally within 10', forcing the attack rolls of a single target to be against the character instead. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd3d"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Mighty Rage",
+    "action_cost": "Swift Action",
+    "target": "Weapon's Reach",
+    "area": "Single Target",
+    "type": "Passive / Upgrade",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "(Berserker's Frenzy Upgrade) The character requires Berserker's Frenzy to pick this perk. The character gains access to more actions while Frenzied. \\nAs a swift action, the character prepares to cleave through the target of their next melee attack. If the roll is high enough to hit the first target, it hits normally. If the roll is also high enough to hit a second target directly adjacent to the first, the character may continue the arc of their swing to also hit the second target. The character inflicts full damage to the first target and second target. \\nAs a swift action, the character prepares to devastate their foe with their attacks. The character has a placed roll on the damage die of all further attacks this turn. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd3e"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Mystic Warrior",
+    "action_cost": "N/A",
+    "target": "LOS 100'",
+    "area": "Self",
+    "type": "Passive",
+    "duration": "special",
+    "resistance": "WIL",
+    "description": "The character is in tune with surrounding magics and is able to copy continuous and focus effects onto themselves. Unwilling targets can attempt a WIL check to negate the effect. On subsequent rounds affected targets may reattempt the check as a swift action. The character may only have one ability copied at a time and copied focus abilities still consume the character's focus. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd3f"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Overdrive",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Charged (1)",
+    "duration": "Instantanoeus",
+    "resistance": "N/A",
+    "description": "Every motion brings the character one step closer to their opponent's defeat. \\nAs a swift action, gain 2 MP/P that may be used on any weapon specialization/combat style regardless of skill. \\nAs a swift action, replicate their strike against a single target onto 4 other targets within reach/range, including all weapon skills utilized against the first target. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd40"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Orchestrated Warfare",
+    "action_cost": "Swift Action",
+    "target": "LOS 60'",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "1 Round",
+    "resistance": "N/A",
+    "description": "The character has learned how to orchestrate both themselves and others... \\nAs a swift action, give another target the ability to immediately make a movement action and swift action. \\nAs a swift action, give another target the ability to immediately make a strike against a target within reach / range. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd42"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Phantom",
+    "action_cost": "Core / Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character gains access to several abilities that help them become one with the shadows. \\nAs a swift action, the character may teleport up to 10' in any direction that they have line of sight. The character returns to their original location at the end of their turn. \\nAs a core action, the character becomes invisible. This invisibility breaks upon making a check or attack roll of any kind (except subtlety.) The character may repeat the ability each round to maintain invisibility, or else it ends at the start of the caster's next turn.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd41"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Perfect Defense",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Passive",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "Standing behind the character now confers the same benefits as standing behind cover, nullifying the need for taking a swift action to do so. They can extend this ability to 10' on either side of themselves as a Swift Action - effectively becoming a wall, as a jut of opaque energy extends on either side. This effect lasts as long as the character retains focus. The character is always considered to be in normal cover as long as they are in their armor and have a shield.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd43"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Relentless Defender",
+    "action_cost": "Reaction",
+    "target": "Melee Reach",
+    "area": "Self",
+    "type": "Charged (3)",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character becomes adept at unorthodox defensive maneuvers, gaining access to several reactions. When a target gets within melee reach of the character... \\nAs a reaction, they can make a melee attack roll against an incoming target, with 1MP/P. \\nAs a reaction, take a movement action. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd44"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Shadow Trickery",
+    "action_cost": "Swift Action",
+    "target": "Variable",
+    "area": "Variable",
+    "type": "Charged (3)",
+    "duration": "Variable",
+    "resistance": "WIL",
+    "description": "The character gains access to a number of swift actions that allows them to warp themselves and the battlefield. \\nThe character or a target within melee reach becomes ethereal for 6 rounds, WIL save to negate. Affected targets can end the effect with a core action. \\nUpon a successful ranged attack roll, the character reappears at any point along the projectile's path. \\nThe character throws a smoke bomb at their feet, affecting a 20' radius. All characters are blinded as long as they stand inside of the smoke bombs area. The smoke bomb persists for 1 minute. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd45"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Risk Taker",
+    "action_cost": "Reaction / Swift Action",
+    "target": "Weapon's Reach",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character takes risks for temporary gain. \\nAs a swift action, the character alters one of their strikes. The attack roll suffers two displaced rolls. On a successful strike, it inflicts 25 bonus damage on hit. If the attack misses, then the enemy may use their reaction to make an attack roll, inflicting 25 bonus damage on hit. \\nAs a reaction to being struck with an attack roll by a target within the character's melee reach, the character may make a single strike against the target. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd46"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Sacrifice",
+    "action_cost": "Reaction / Swift Action",
+    "target": "LOS 40'",
+    "area": "Variable",
+    "type": "Charged (3)",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character gains access to a number of actions that allows them to defend their allies. \\nAs a swift action the character shares their DVs with a target until the end of the character's turn. All of the target's DVs are replaced with those of the character. \\nAs a reaction, the character can choose to absorb an instantaneous area of effect damaging ability as if it were a single target effect. In doing so, they automatically fail the check/save. \\nAs a reaction, when they or a target within 40' is struck by any single target attack roll, they can distribute the damage of the attack evenly between themselves and up to 3 other willing targets.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd47"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Shieldbearer",
+    "action_cost": "Swift / Core Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated / Passive",
+    "duration": "1 Minute",
+    "resistance": "N/A",
+    "description": "The character can defend themselves more adequately with a shield. \\nAs a core action, the character takes on a defensive stance, gaining resistance to all damage until the start of their next turn. The character can utilize a swift action to make a strike, using up to half of their maximum MP when doing so. \\nAs a swift action, the character can charge up to their land movement, making a melee attack roll against a target, knocking them prone on hit. \\nThese abilities are only usable while wielding a shield; The character gains a stacking placed roll on all HEA saves/checks while wielding one as well.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd48"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Sixth Sense",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character hones their knowledge of the battlefield to adapt to their enemies on the fly. \\nAs a swift action, they alter their attack roll into a HEA or AGI save. This character uses their STR or AGI to determine the difficulty. \\nAs a swift action, they alter their attack. Any additional martial points spent as a part of a missed altered strike are refunded (Such as Lethal.) This ability excludes the initial multi-attack costs. \\nAs a swift action, they cause their first successful strike this turn to disrupt the target's position, causing them to lose 4 armor DVs until the start of the character's next turn if the attack at least touches the target's movement DV.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd49"
+    },
+    "martial_perk_group_name": "Defensive Perks",
+    "passive": true,
+    "name": "Steady Hand",
+    "action_cost": "N/A",
+    "target": "Character",
+    "area": "Self",
+    "type": "Passive",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character has learned how to zero in on a target's weak points, given time. \\nIf the character is in cover, or they have not moved since their last round, they gain a placed roll on their first attack roll made during their turn. \\nTaking cover no longer takes an action",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd4b"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Substance",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "As a swift action, the character materializes a handheld, mundane object with properties of their choosing. If they conjure a weapon this way, it must take its attributes from a mundane pre-existing weapon. Alternatively, the character may imbue an object they are holding with mystical energy. They may have up to one object conjured at once, and up to one weapon imbued at once. The character may make the following interactions with their imbued or conjured objects: \\nAs a swift action, the character dismisses the object into an extraplanar space. They may immediately drop this at any time, without any action cost, allowing them to reequip the object, store it on their person, or have it harmlessly appear in an unoccupied space within 5' of their person. \\nIf the object is within 300', the character may recall it back to their hand as a swift action, making a single strike against all targets it passes. The object destroys all reasonably fragile obstacles and will attempt to move around tougher obstacles. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd4a"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Spirit Guardian",
+    "action_cost": "Swift Action",
+    "target": "Touch",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Special",
+    "resistance": "N/A",
+    "description": "The character turns into intangible, partially transparent energy and reaches out to a willing target, with a swift action. The character envelops the target, forming a protective outer layer. The two characters count as a single target, however, each of them still retain the ability to take their separate actions. For the purposes of resistance checks and to hit rolls they utilize the DVs and physical attributes of the character that becomes the armor and the mental attributes of the target wearing said armor. The character's movement speed is set to 0'. All damage the combined combatants would suffer is instead suffered by the character alone. This is active so long as the character retains their focus on this ability. While this is active, the character gains elemental resistance.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd4c"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Tactical Aid",
+    "action_cost": "Swift Action",
+    "target": "LOS 60'",
+    "area": "1/P Targets",
+    "type": "Activated",
+    "duration": "1 Round",
+    "resistance": "N/A",
+    "description": "The character is a true teammate, always looking out for those around them, ready to provide aid. \\nAs a swift action, give 1/P targets a placed roll on the next resistance check/save they make. \\nAs a swift action, give 1/P targets an extra d10 of damage on a single attack against a target of the character's choice. \\nAs a swift action, give 1/P targets + 2 bonus DVs. \\nAs a swift action, give 1/P targets the ability to reduce the first source of damage by 4. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd4d"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Theatrics",
+    "action_cost": "Reaction",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character lives on the edge of life and death, \\nAs a reaction to a damage source inflicted upon the character, they instead receive damage at the end of their next turn. This ability applies to a single instance of damage. \\nAs a reaction to an initiative roll, the character gains two placed rolls on the initiative roll. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd4e"
+    },
+    "martial_perk_group_name": "Supportive Perks",
+    "passive": true,
+    "name": "Team Player",
+    "action_cost": "Swift Action",
+    "target": "LOS 60'",
+    "area": "Variable",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character has become exceptionally experienced at orchestrating their teammates. \\nAs a swift action, switch initiative orders of two willing targets. This ability does not allow a target to take their turn twice in a round, and should a target move to a higher initiative than the character they take their turn after the character. \\nAs a swift action, select a target throwing them off their balance. They must take a reaction immediately. \\nAs a swift action, allow two willing targets to share the same initiative for the next round. They can choose to go on the lower or higher initiative. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd4f"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Trapper",
+    "action_cost": "Swift Action",
+    "target": "Variable",
+    "area": "Variable",
+    "type": "Activated, Charged",
+    "duration": "1 Hour",
+    "resistance": "Variable",
+    "description": "(Perk Upgrade, Traps) The character must have Traps to utilize Trapper. Trap gain the following benefits: \\nThe traps' triggering range is now 10' instead of 5'. \\nInflict 5d12 piercing damage should the target fail the save associated with the trap. \\nThe character can affix their traps to a weapon as a swift action, inflicting the effects of the trap to the first target struck. Additionally, the trapper gains 2 more charges of traps. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd50"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Traps",
+    "action_cost": "Swift Action",
+    "target": "Melee Reach",
+    "area": "5' radius",
+    "type": "Charged (4)",
+    "duration": "1 Hour",
+    "resistance": "Varies",
+    "description": "The character gains the ability to place a single use trap at any point within their melee reach. If any targets move within 5' of the trap, it instantly activates, affecting all within 5' of it. The character cannot trigger the trap (unless they do so manually) and is immune to its effects. As the character is placing the trap, they may choose between any of the following three effects: \\nClaw Trap: Pin caught targets, AGI save to negate. Affected targets can re-attempt with a core action. \\nConcussive Trap: Disrupt focus, HEA save to negate. \\nPoison Trap: Inflict 4 instances of suffering (Toxic), AGI save for half the instances.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd51"
+    },
+    "martial_perk_group_name": "Offensive Perks",
+    "passive": true,
+    "name": "Unstoppable Bloodrush",
+    "action_cost": "Reaction",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated / Charged",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character becomes a force of nature, gaining access to new abilities. \\nAs a reaction to being knocked below 0 HP, their HP is instead set to 3. The character has 3 charges of this ability that replenish upon a complete rest period. This ability is charged. \\nAs a reaction to moving out of the character's melee reach, the target must make their choice of a STR or AGI check. On failure, they lose their movement action and are knocked prone 20' away in a direction of the character's choice. This ability is activated, not charged. \\nIf the character is frenzied they are immune to the slow status condition, and there is no longer an action cost to maintaining a grapple. This ability is a passive. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd52"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Viscous Coating",
+    "action_cost": "Swift Action",
+    "target": "Reach / Range",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character can alter their attacks, choosing between any of the following three effects as a swift action: \\nThe character's first strike slows the target until the end of their next turn. \\nThe character converts any damage type with an attack roll into stress damage. \\nThe character converts any damage type with an attack roll into toxic damage. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ef8fcfb3f7f526c9ccd53"
+    },
+    "martial_perk_group_name": "Utility Perks",
+    "passive": true,
+    "name": "Wrestling",
+    "action_cost": "Reaction / Swift Action",
+    "target": "Melee Reach",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character gains expertise in grappling and holding their foes. It now only costs a swift action to maintain a grapple. \\nAs a swift action, the character may attempt to grapple an opponent with a melee attack roll. \\nAs a reaction to a target entering the character's unarmed reach, they may attempt to grapple the target. ",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041a30eb334e1016eee669"
+    },
+    "martial_perk_group_name": "Vocal",
+    "passive": false,
+    "name": "Projection",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "5 mile radius",
+    "type": "Focus",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "Clearly projecting their voice within the area, the character’s voice pierces through any obstructions,\nsuch as a vacuum. This ability lasts as long as they maintain focus on it.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041ab8eb334e1016eee66a"
+    },
+    "martial_perk_group_name": "Vocal",
+    "passive": false,
+    "name": "Acapella",
+    "action_cost": "Swift Action",
+    "target": "LOS 100'",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "WIL",
+    "description": "Drawing opponents into a haze with their melodic tone, the character contests their CHA against the WIL\nof the target, forcing them to immediately move up to twice their full movement towards the character on\nsuccess.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041b0eeb334e1016eee66b"
+    },
+    "martial_perk_group_name": "Vocal",
+    "passive": false,
+    "name": "Rap",
+    "action_cost": "Swift Action",
+    "target": "LOS 80'",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "1 Round",
+    "resistance": "AGI",
+    "description": "Pointing out flaws with their beats, the character contests their CHA against the AGI of the target,\nknocking them prone and giving them a displaced roll on their next attack roll on success.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041b53eb334e1016eee66c"
+    },
+    "martial_perk_group_name": "Vocal",
+    "passive": false,
+    "name": "Screamo",
+    "action_cost": "Swift Action",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "Twisting the flow of reality with their voice, the character gives the target a displaced roll or + 2 bonus on\nsetting resistance checks until the start of the character’s next turn.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041ba1eb334e1016eee66e"
+    },
+    "martial_perk_group_name": "Vocal",
+    "passive": false,
+    "name": "Duo",
+    "action_cost": "Reactionary",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "As a reaction to having a condition applied to them, the character contests their CHA against the target’s\nHEA, applying the condition onto the target as well on success.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041bd4eb334e1016eee66f"
+    },
+    "martial_perk_group_name": "Vocal",
+    "passive": false,
+    "name": "Vibrato",
+    "action_cost": "Swift Action",
+    "target": "LOS 5'*Rank",
+    "area": "Single Target",
+    "type": "Focus",
+    "duration": "1 Minute",
+    "resistance": "WIL",
+    "description": "Disrupting the natural rhythm that binds the targets to life, the character contests their CHA against the\ntarget’s WIL, dazing them on success, and removing their ability to use a group of the character’s choice\n(This can include martial perks, spellgroups, or specific weapon skills) or stipping them of their\narchetype.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041c35eb334e1016eee670"
+    },
+    "martial_perk_group_name": "Vocal",
+    "passive": false,
+    "name": "Siren Song",
+    "action_cost": "Core Action",
+    "target": "LOS 5'*Rank",
+    "area": "Single Target",
+    "type": "Charged (1)",
+    "duration": "1 Hour",
+    "resistance": "WIL",
+    "description": "Singing an alluring tune, the caster can contest their CHA against a chosen target’s WIL, charming them\non success. The affected target automatically re-attempts the check at the end of their turn.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041c9eeb334e1016eee671"
+    },
+    "martial_perk_group_name": "Instrumental",
+    "passive": false,
+    "name": "Somber Tune",
+    "action_cost": "Swift Action",
+    "target": "LOS 20'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "WIL",
+    "description": "Performing a slow melody; the character contests their CHA against the target’s WIL, calming the target's\nintense emotions on success This does not prevent affected targets from regaining tense emotions, it\nonly quells present emotions.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041cf5eb334e1016eee672"
+    },
+    "martial_perk_group_name": "Instrumental",
+    "passive": false,
+    "name": "Love Song",
+    "action_cost": "Swift Action",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "1 round",
+    "resistance": "N/A",
+    "description": "Stringing a beautiful song; the character grants the target 2 bonus Martial Points or a free finesse on a\nsingle spell that they can utilize until the end of their next turn.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041d38eb334e1016eee673"
+    },
+    "martial_perk_group_name": "Instrumental",
+    "passive": false,
+    "name": "Rhythm and Blues",
+    "action_cost": "Reactionary",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Charged (2)",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "Attuning themselves to the flow of magic around them; the character can redirect the check from a\nwilling target onto themselves. This must be done before the check is attempted.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041d89eb334e1016eee674"
+    },
+    "martial_perk_group_name": "Instrumental",
+    "passive": false,
+    "name": "Sound Waves",
+    "action_cost": "Swift Action",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "1 round",
+    "resistance": "N/A",
+    "description": "The performers sound waves extend around a target’s weapon increasing or decreasing the range/reach\nof that weapon by Rank*5’(Minimum of 5’), WIL save to negate. The resistance check is set with CHA.\n",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041db6eb334e1016eee675"
+    },
+    "martial_perk_group_name": "Instrumental",
+    "passive": false,
+    "name": "Musical Bridge",
+    "action_cost": "Swift Action",
+    "target": "LOS 10'*Rank",
+    "area": "2.5' Radius",
+    "type": "Focus",
+    "duration": "1 Minute",
+    "resistance": "N/A",
+    "description": "The performer has mastered sound manipulation; allowing them to transport music to a 5’ sphere within\nrange, nullifying the effect of cover or invisibility in the target area. If the performer casts magic, the\nmagic stems from that location. This ability persists as long as the performer retains focus.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041e1beb334e1016eee676"
+    },
+    "martial_perk_group_name": "Instrumental",
+    "passive": false,
+    "name": "Ballad",
+    "action_cost": "Core Action",
+    "target": "LOS 10'*Rank",
+    "area": "6 Targets",
+    "type": "Focus",
+    "duration": "1 Minute",
+    "resistance": "N/A",
+    "description": "Setting the stage; the character chooses up to 6 willing targets, granting them an additional damage die\non all sources of damage. These targets also have access to one placed roll each round, that can be\nexpended as a reaction. On subsequent turns the character forcibly expends their swift actions as long as\nthey maintain the ballad. The ballad can continue to affect targets so long as they can hear it.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041e56eb334e1016eee677"
+    },
+    "martial_perk_group_name": "Instrumental",
+    "passive": false,
+    "name": "Rocking Out",
+    "action_cost": "Swift Action",
+    "target": "Self",
+    "area": "Single Target",
+    "type": "Charged (3) ",
+    "duration": "Variable",
+    "resistance": "N/A",
+    "description": "The performer jams out, increasing the action cost of a spell by one round for every mana they wish to\ndecrease the cost of a spell by. If a spell costs a swift action it is first increased to a core action before\nbecoming a multi-round spell. Spells always cost at least 1 mana, and this ability can only reduce the cost\nof a spell up to four times.\n",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041ec5eb334e1016eee678"
+    },
+    "martial_perk_group_name": "Dance",
+    "passive": false,
+    "name": "Ballroom Dancing",
+    "action_cost": "Swift Action",
+    "target": "Touch",
+    "area": "Single Target",
+    "type": "Focus",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The performer has mastered sound manipulation; allowing them to transport music to a 5’ sphere within\nrange, nullifying the effect of cover or invisibility in the target area. If the performer casts magic, the\nmagic stems from that location. This ability persists as long as the performer retains focus.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041f45eb334e1016eee679"
+    },
+    "martial_perk_group_name": "Dance",
+    "passive": false,
+    "name": "Ballet",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The dancer leaps feet equal to twice an acrobatic check, allowing them to jump to anywhere in that\ndistance. The dancer may leap off of any solid surface, be it the ground, a wall, etc.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63041fa9eb334e1016eee67a"
+    },
+    "martial_perk_group_name": "Dance",
+    "passive": false,
+    "name": "Jazz",
+    "action_cost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "It becomes nearly impossible to slow the dancer; allowing them to utilize their swift action to make\nthemselves immune to the slow status condition until the end of their next turn.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63042015eb334e1016eee67c"
+    },
+    "martial_perk_group_name": "Dance",
+    "passive": true,
+    "name": "Hip Hop",
+    "action_cost": "N/A",
+    "target": "Character",
+    "area": "Self",
+    "type": "Passive",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The dancer’s arcane flow and musical flow combine, protecting them from harm. The dancer gains 2\nbonus DVs when they spend mana. All DVs granted by this skill are removed when the caster ends their\nturn without having spent mana.",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63042082eb334e1016eee67d"
+    },
+    "martial_perk_group_name": "Dance",
+    "passive": false,
+    "name": "Disco",
+    "action_cost": "Reactionary",
+    "target": "Character",
+    "area": "Single Attack",
+    "type": "Charged (4) ",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "As a reaction, the character can contest the attack roll of an incoming attack using their Performance, if it\nis higher than the attack roll, the attack does not strike, as they dodge out of the way of its effects.\n",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "630420dceb334e1016eee67e"
+    },
+    "martial_perk_group_name": "Dance",
+    "passive": false,
+    "name": "Flamenco",
+    "action_cost": "Swift Action",
+    "target": "LOS 30'",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "WIL",
+    "description": "Dancing in a provocative style; the character demands the target’s attention. Contesting their CHA\nagainst the target’s WIL, on success the target can only make attack rolls and only against the character\nuntil the start of the character’s next turn.\n",
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6304212ceb334e1016eee67f"
+    },
+    "martial_perk_group_name": "Dance",
+    "passive": true,
+    "name": "Breakdance",
+    "action_cost": "N/A",
+    "target": "Character",
+    "area": "Self",
+    "type": "Passive",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "It becomes impossible to grapple or move the dancer; they are immune to being grappled and forcibly\nmoved, deftly weaving out of the way in all situations.",
+    "__v": 0
+  }
+]

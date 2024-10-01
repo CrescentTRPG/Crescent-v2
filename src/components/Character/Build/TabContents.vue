@@ -1,17 +1,16 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
-import { ref } from 'vue'
 
-import CharacterSidebar from '../Build/CharacterSidebar.vue'
 import ArchetypeWidget from '../Build/ArchetypeWidget.vue'
-import RulesChecker from '../Build/RulesChecker.vue'
+import RulesStatus from '../Build/RulesStatus.vue'
+import MartialSkillsTable from './MartialSkillsTable.vue'
 import AbilityPointWidget from '../Build/AbilityPointWidget.vue'
 import ArmorLevelWidget from '../Build/ArmorLevelWidget.vue'
 import AttributeContainer from '../Build/AttributeContainer.vue'
 import { useDesignStore } from '../../../stores/designStore'
 import SkillsTable from '../Build/SkillsTable.vue'
+import MartialPerksTab from '../Build/MartialPerksTab.vue'
+import SpellsTable from './SpellsTable.vue'
 
 export default {
   props: ['tab'],
@@ -20,20 +19,17 @@ export default {
     const designStore = useDesignStore()
     return { designStore, props }
   },
-
   methods: {},
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
-    CharacterSidebar,
     ArchetypeWidget,
-    RulesChecker,
+    RulesStatus,
     AbilityPointWidget,
     AttributeContainer,
     ArmorLevelWidget,
-    SkillsTable
+    SkillsTable,
+    MartialSkillsTable,
+    MartialPerksTab,
+    SpellsTable
   }
 }
 </script>
@@ -45,8 +41,8 @@ export default {
       :style="{ background: designStore.inputBacking }"
     ></div>
     <div class="buildInfoDisplay">
-      <RulesChecker style="height: 4rem; align-self: flex-start"></RulesChecker
-      ><AbilityPointWidget style="height: 5rem; width: 50%; z-index: 2"></AbilityPointWidget>
+      <AbilityPointWidget style="height: 4rem; align-self: flex-start"></AbilityPointWidget
+      ><RulesStatus style="height: 5rem; width: 50%; z-index: 2"></RulesStatus>
     </div>
     <div class="buildContent" v-if="props.tab == 'corestats'">
       <AttributeContainer class="attributeWidth"></AttributeContainer>
@@ -58,9 +54,9 @@ export default {
       </div>
     </div>
     <div v-if="props.tab == 'skills'"><SkillsTable></SkillsTable></div>
-    <div v-if="props.tab == 'martialskills'">Martial Skills</div>
-    <div v-if="props.tab == 'martialperks'">Martial Perks</div>
-    <div v-if="props.tab == 'spells'">Spells</div>
+    <div v-if="props.tab == 'martialskills'"><MartialSkillsTable></MartialSkillsTable></div>
+    <div v-if="props.tab == 'martialperks'"><MartialPerksTab></MartialPerksTab></div>
+    <div v-if="props.tab == 'spells'"><SpellsTable></SpellsTable></div>
   </div>
 </template>
 

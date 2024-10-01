@@ -8,6 +8,8 @@ interface Design {
   primaryTheme: string
   secondaryTheme: string
   inputBacking: string
+  sidebarBacking: string
+  sidebarText: string
   inputText: string
   primaryText: string
   pageBackdrop: string
@@ -24,6 +26,8 @@ export const useDesignStore = defineStore('design', {
     primaryTheme: '#422c58',
     secondaryTheme: '#c2b172',
     inputBacking: '#f1eef1',
+    sidebarBacking: '#e7e2e9',
+    sidebarText: '#000000',
     inputText: '#000000',
     primaryText: '#dfdfdf',
     pageBackdrop: '#dfdfdf',
@@ -38,6 +42,8 @@ export const useDesignStore = defineStore('design', {
     getPrimaryTheme: (state) => state.primaryTheme,
     getSecondaryTheme: (state) => state.secondaryTheme,
     getInputBacking: (state): string => state.inputBacking,
+    getSidebarBacking: (state): string => state.sidebarBacking,
+    getSidebarText: (state): string => state.sidebarText,
     getInputText: (state) => state.inputText,
     getPrimaryText: (state) => state.primaryText,
     getPageBackdrop: (state) => state.pageBackdrop,
@@ -53,6 +59,8 @@ export const useDesignStore = defineStore('design', {
       primaryTheme: string
       secondaryTheme: string
       inputBacking: string
+      sidebarBacking: string
+      sidebarText: string
       inputText: string
       primaryText: string
       pageBackdrop: string
@@ -67,6 +75,8 @@ export const useDesignStore = defineStore('design', {
       this.secondaryTheme = design.secondaryTheme
       this.inputBacking = design.inputBacking
       this.inputText = design.inputText
+      this.sidebarBacking = design.sidebarBacking
+      this.sidebarText = design.sidebarText
       this.primaryText = design.primaryText
       this.pageBackdrop = design.pageBackdrop
       this.alertTheme = design.alertTheme

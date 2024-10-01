@@ -1,24 +1,33 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { db } from '@/firebase/config.js'
+
+import { useSkillStore } from '@/stores/skillsStore'
 import { useCharacterStore } from '../../../stores/characterStore'
 import { useUserStore } from '../../../stores/userStore'
-import { BButton, BCard, BNavItem, BNavbar, BTable, BFormSelect, BThead } from 'bootstrap-vue-next'
-import { onSnapshot, doc, query, getDocs, updateDoc, collection } from 'firebase/firestore'
+import { BButton, BTable, BFormSelect } from 'bootstrap-vue-next'
 import CustomModal from '@/components/CustomModal.vue'
 import CustomCheckbox from "../CustomCheckbox.vue"
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, toRaw } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
+import { storeToRefs } from 'pinia'
+
+
+interface Skill {
+  skill: string
+  rank: number
+  source: string
+  id: string
+}
 
 export default {
   setup(props, context) {
     const userStore = useUserStore()
     const characterStore = useCharacterStore()
     const designStore = useDesignStore()
-    const skills = ref({})
-    const allSkills: any = ref([])
-    const effectiveSkills: any = ref([])
+    const skillStore = useSkillStore()
+    const {skills, allSkills, effectiveSkills} = storeToRefs(skillStore)
+    //const skills = ref(skillStore.getSkills)
+    //const allSkills: any = ref(skillStore.getAllSkills)
+    const effectiveSkillsClone: any = ref(structuredClone(toRaw(effectiveSkills.value)))
     const modal = ref(false)
     const currentModal = ref(0)
     const options = [
@@ -34,63 +43,39 @@ export default {
       { value: '9', text: '9' },
       { value: '10', text: '10' }
     ]
-    const getEffectiveSkills = () => {
-      allSkills.value.forEach((skill) => {
-        effectiveSkills.value.push({
-          skill: skill.skill,
-          rank: (skill.rank = skills.value[skill.skill]?.rank || 0),
-          description: skill.description,
-          attribute: skill.attribute,
-          isOrigin: characterStore.originSkills.includes(skill.skill)
-        })
-      })
+
+
+    const fields = ref([{ key: 'skill' }, {key: 'isOrigin?'}, { key: 'ranks' }])
+    return { designStore, characterStore, effectiveSkills, userStore, skillStore, fields, skills, allSkills, effectiveSkillsClone, options, modal, currentModal }
+  },
+  watch: {
+    effectiveSkills() {
+      this.effectiveSkillsClone = ref(structuredClone(toRaw(this.effectiveSkills)))
     }
-    onMounted(() => {
-      let allSkillsRef = collection(db, 'Skill/Base/Skill')
-      let collectionRef = collection(
-        db,
-        'User/' + userStore.getUserId + '/Character/' + characterStore.getCharacterId + '/Skills'
-      )
-      onSnapshot(
-        collectionRef,
-        (snap) => {
-          snap.docs.forEach((doc) => {
-            skills.value[doc.data().skill] = doc.data()
-          })
-        },
-        (err) => {
-          console.log(err.message)
-        }
-      )
-      onSnapshot(
-        allSkillsRef,
-        (snap) => {
-          let results: any = []
-          snap.docs.forEach((doc) => {
-            results.push({ ...doc.data() })
-          })
-          allSkills.value = results
-          getEffectiveSkills()
-        },
-        (err) => {
-          console.log(err.message)
-        }
-      )
-    })
-    const fields = ref([{ key: 'skill' }, {key: 'isOrigin?'}, { key: 'actions' }])
-    return { designStore, fields, skills, allSkills, effectiveSkills, options, modal, currentModal }
   },
   methods: {
     showModal(id: number) {
       this.currentModal = id
       this.modal = !this.modal
+    },
+    update(skill: any, id: any, rank: any, source: any) {
+        let skillObj = {
+            skill: skill, id: id, rank: parseInt(rank), source: source
+        }
+        this.skillStore.setSkill(skillObj)
+    },
+    addOrigin(origin:any) {
+        let origins = this.characterStore.getOriginSkills.concat(origin);
+        this.characterStore.setOrigin(origins, this.userStore.getUserId, this.characterStore.getCharacterId)
+    },
+    removeOrigin(origin:any) {
+        let origins = this.characterStore.originSkills.filter(e => e != origin);
+        this.characterStore.setOrigin(origins, this.userStore.getUserId, this.characterStore.getCharacterId)
     }
   },
   components: {
     BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
+
     BTable,
     BFormSelect,
     CustomModal,
@@ -122,6 +107,7 @@ export default {
         </span>
     </div>
     <BTable
+    striped
       :items="effectiveSkills"
       :fields="fields"
       :style="{
@@ -145,8 +131,7 @@ export default {
           >{{ data.item.skill }}</BButton
         >
         <CustomModal
-          v-if="currentModal == data.index"
-          :showModal="modal"
+          :showModal="modal && currentModal == data.index"
           :title="data.item.skill"
           @close="showModal(data.index)"
         >
@@ -156,18 +141,19 @@ export default {
         </CustomModal>
       </template>
       <template #cell(isOrigin?)="data">
-        <CustomCheckbox :isChecked="data.item.isOrigin" style="margin-left: 1rem;"></CustomCheckbox>
+        <CustomCheckbox :overrideBox="''" :overrideFill="''" :isChecked="data.item.isOrigin" style="margin-left: 1rem;" :update="0" @true="addOrigin(data.item.skill)" @false="removeOrigin(data.item.skill)"></CustomCheckbox>
       </template>
-      <template #cell(actions)="data">
+      <template #cell(ranks)="data">
         <BFormSelect
           :options="options"
-          v-model="effectiveSkills[data.index].rank"
+          v-model="effectiveSkillsClone[data.index].rank"
           :style="{
             color: designStore.inputText,
             backgroundColor: designStore.inputBacking,
             borderColor: designStore.secondaryTheme
           }"
-          style="font-size: large; border: none; text-align: right; cursor: pointer"
+          @change="update(data.item.skill, data.item.id, effectiveSkillsClone[data.index].rank, data.item.source)"
+          style="font-size: large; border-width: 2px; width: 4rem; cursor: pointer"
         ></BFormSelect>
       </template>
     </BTable>

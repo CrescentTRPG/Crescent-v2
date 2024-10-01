@@ -1,7 +1,7 @@
 <script lang="ts">
 import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
+import { BButton, BCard, BNavItem, BNavbar, BNav } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 
@@ -14,13 +14,13 @@ export default {
 
     return { designStore, navPos }
   },
-  computed: {},
+
   methods: {
     navItemStyle(item: string) {
       if (item === this.navPos) {
         return this.designStore.getAlertTheme
       }
-      return this.designStore.getInputText
+      return this.designStore.getSidebarText
     },
     navItemStyleBg(item: string) {
       if (item === this.navPos) {
@@ -37,7 +37,8 @@ export default {
     BButton,
     BNavbar,
     BNavItem,
-    BCard
+    BCard,
+    BNav
   }
 }
 </script>
@@ -48,8 +49,8 @@ export default {
       vertical
       class="sidebar"
       :style="{
-        background: designStore.inputBacking,
-        color: designStore.inputText,
+        background: designStore.sidebarBacking,
+        color: designStore.sidebarText,
         borderColor: designStore.secondaryTheme
       }"
     >
@@ -65,7 +66,10 @@ export default {
           <span class="textI">Skills</span>
         </div>
       </BNavItem>
-      <BNavItem :style="{ color: navItemStyle('martialskills') }" @click="navPos = 'martialskills'">
+      <BNavItem
+        :style="{ color: navItemStyle('martialskills') }"
+        @click="switchTab('martialskills')"
+      >
         <div class="vertical">
           <v-icon scale="1.5" name="gi-crossed-swords" />
           <span class="textI">Martial Skills</span>
@@ -103,9 +107,15 @@ li {
 }
 
 .sidebar {
+  --bs-nav-link-padding-x: 0;
+  --bs-nav-link-padding-y: 0;
+  --bs-nav-link-color: color !important;
+  --bs-nav-link-hover-color: color !important;
+  margin-left: 0;
   max-width: 9rem;
   height: 100%;
-  border-right: solid 2px;
+  border-right: solid 4px;
+  /* box-shadow: inset -2px -3px 10px 2px; */
   display: flex;
   align-items: start;
   flex-direction: column;

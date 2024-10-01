@@ -240,6 +240,7 @@ export default {
   left: 0;
   display: block;
   background-color: #dfdfdf;
-  height: 100vh;
+  min-height: 100vh;
+  height: max-content;
 }
 </style>

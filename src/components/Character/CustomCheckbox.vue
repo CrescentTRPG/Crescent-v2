@@ -5,23 +5,34 @@ import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-nex
 import { ref } from 'vue'
 import { useDesignStore } from '../../stores/designStore'
 export default {
-  props: ['isChecked', 'overrideBox', 'overrideFill', 'key'],
+  props: ['isChecked', 'overrideBox', 'overrideFill', 'update'],
   setup(props, context) {
     const error = ref(null)
     const router = useRouter()
     const fill = ref(props.overrideFill)
     const box = ref(props.overrideBox)
-    const key = ref(props.key)
+    const update = ref(props.update)
     const designStore = useDesignStore()
-    return { designStore, props, fill, box }
+    const isChecked = props.isChecked
+    const checked = isChecked
+    return { designStore, props, fill, box, checked }
   },
   watch: {
-    key() {
+    update() {
       console.log('heyy')
+      this.$forceUpdate()
+    },
+    isChecked() {
+      this.checked = this.props.isChecked
+    }
+  },
+  methods: {
+    click() {
+      this.checked = !this.checked
+      this.$emit(this.checked + '')
       this.$forceUpdate()
     }
   },
-  methods: {},
   components: {
     BButton,
     BNavbar,
@@ -45,8 +56,17 @@ export default {
         height: 2rem;
         width: 2rem;
       "
+      @click="click()"
     >
-      <div style="display: flex; justify-content: center; height: 1rem; position: absolute">
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          height: 1rem;
+          position: absolute;
+          cursor: pointer;
+        "
+      >
         <i
           id="iconBox"
           :class="box || designStore.icon"
@@ -56,14 +76,16 @@ export default {
       </div>
     </div>
     <div
-      v-if="isChecked"
+      v-if="checked"
       style="
         display: flex;
         flex-direction: column;
         justify-content: center;
         height: 2rem;
         width: 2rem;
+        cursor: pointer;
       "
+      @click="click()"
     >
       <div style="display: flex; justify-content: center; height: 1rem">
         <i

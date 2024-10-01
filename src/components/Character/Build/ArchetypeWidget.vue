@@ -64,7 +64,6 @@ export default {
 
   methods: {
     updateIcon(name: string) {
-      console.log(name)
       this.icon = name
     }
   },

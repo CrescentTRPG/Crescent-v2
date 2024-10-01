@@ -5,6 +5,7 @@ import { createApp } from 'vue'
 import { createBootstrap } from 'bootstrap-vue-next'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
 import * as GiIcons from 'oh-vue-icons/icons/gi'
+import * as WiIcons from 'oh-vue-icons/icons/wi'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
@@ -21,8 +22,9 @@ import router from './router'
 
 let app: any
 const Gi = Object.values({ ...GiIcons })
-
+const Wi = Object.values({ ...WiIcons })
 addIcons(...Gi)
+addIcons(...Wi)
 
 auth.onAuthStateChanged(() => {
   if (!app) {

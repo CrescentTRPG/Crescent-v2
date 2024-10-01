@@ -1,28 +1,22 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
-import CharacterSidebar from '../Build/CharacterSidebar.vue'
-import TabContents from '../Build/TabContents.vue'
+
 import AttributeDisplay from '../Build/AttributeDisplay.vue'
+import { storeToRefs } from 'pinia'
+import { useCharacterStore } from '@/stores/characterStore'
 
 export default {
   setup(props, context) {
-    const error = ref(null)
-    const router = useRouter()
     const designStore = useDesignStore()
-    return { designStore }
-  },
+    const characterStore = useCharacterStore()
+    const { attributes } = storeToRefs(characterStore)
+    const agility = ref(attributes.value.agility)
 
+    return { designStore, attributes, agility }
+  },
   methods: {},
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
-    CharacterSidebar,
     AttributeDisplay
   }
 }
@@ -34,53 +28,61 @@ export default {
     :style="{ fontFamily: designStore.font }"
   >
     <AttributeDisplay
+      attrShorthand="STR"
       attribute="Strength"
-      attribute-message="Heavy Weapons, Versatile 
+      attributeMessage="Heavy Weapons, Versatile 
  Weapons, Might, Martial Perks"
-      attributeValue="10"
+      :attributeValue="attributes.strength"
       exceptionalValue="1"
     ></AttributeDisplay>
     <AttributeDisplay
+      attrShorthand="AGI"
       attribute="Agility"
-      attribute-message=" Precision Weapons, Versatile 
+      attributeMessage=" Precision Weapons, Versatile 
  Weapons, Acrobatics, Subtlety, Martial Perks"
-      attributeValue="10"
+      :attributeValue="attributes.agility"
       exceptionalValue="1"
     ></AttributeDisplay>
     <AttributeDisplay
+      attrShorthand="HEA"
       attribute="Health"
-      attribute-message="Fitness"
-      attributeValue="10"
+      attributeMessage="Fitness"
+      :attributeValue="attributes.health"
       exceptionalValue="1"
     ></AttributeDisplay>
     <AttributeDisplay
+      attrShorthand="WIL"
       attribute="Willpower"
-      attribute-message="Alchemy"
-      attributeValue="10"
+      attributeMessage="Alchemy"
+      :attributeValue="attributes.willpower"
       exceptionalValue="1"
     ></AttributeDisplay>
     <AttributeDisplay
+      attrShorthand="PER"
       attribute="Perception"
-      attribute-message="Awareness"
-      attributeValue="10"
+      attributeMessage="Awareness"
+      :attributeValue="attributes.perception"
       exceptionalValue="1"
     ></AttributeDisplay>
     <AttributeDisplay
+      attrShorthand="CHA"
       attribute="Charisma"
-      attribute-message=" Interpersonal, Performance, Divine Spellgroups"
-      attributeValue="10"
+      attributeMessage=" Interpersonal, Performance, Divine Spellgroups"
+      :attributeValue="attributes.charisma"
       exceptionalValue="1"
     ></AttributeDisplay>
     <AttributeDisplay
+      attrShorthand="INT"
       attribute="Intelligence"
-      attribute-message="Elemental Spellgroups, Knowledge, Crafting"
-      attributeValue="10"
+      attributeMessage="Elemental Spellgroups, Knowledge, Crafting"
+      :attributeValue="attributes.intelligence"
       exceptionalValue="1"
     ></AttributeDisplay>
     <AttributeDisplay
+      attrShorthand="PWR"
       attribute="Power"
-      attribute-message="Spells, Metamagic"
-      attributeValue="10"
+      attributeMessage="Spells, Metamagic"
+      :attributeValue="attributes.power"
       exceptionalValue="1"
     ></AttributeDisplay>
   </div>

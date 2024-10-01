@@ -24,6 +24,7 @@ export default {
       this.navPos = tab
       this.$emit(tab)
     },
+
     navItemStyle(item: string) {
       if (item === this.navPos) {
         return this.designStore.getAlertTheme
@@ -38,10 +39,8 @@ export default {
     }
   },
   components: {
-    BButton,
     BNavbar,
-    BNavItem,
-    BCard
+    BNavItem
   }
 }
 </script>

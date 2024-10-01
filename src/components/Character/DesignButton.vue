@@ -1,13 +1,12 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BModal, BFormSelect, BFormInput } from 'bootstrap-vue-next'
+import { BButton, BFormSelect, BFormInput } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../stores/designStore'
 import { useUserStore } from '../../stores/userStore'
 import { useCharacterStore } from '../../stores/characterStore'
 import CustomModal from '../CustomModal.vue'
 import CustomCheckbox from './CustomCheckbox.vue'
+import IconPicker from '../IconPicker.vue'
 
 export default {
   setup(props, context) {
@@ -17,6 +16,8 @@ export default {
     const secondaryTheme = ref(JSON.parse(JSON.stringify(design.secondaryTheme)))
     const inputBacking = ref(JSON.parse(JSON.stringify(design.inputBacking)))
     const inputText = ref(JSON.parse(JSON.stringify(design.inputText)))
+    const sidebarText = ref(JSON.parse(JSON.stringify(design.sidebarText)))
+    const sidebarBacking = ref(JSON.parse(JSON.stringify(design.sidebarBacking)))
     const primaryText = ref(JSON.parse(JSON.stringify(design.primaryText)))
     const pageBackdrop = ref(JSON.parse(JSON.stringify(design.pageBackdrop)))
     const alertTheme = ref(JSON.parse(JSON.stringify(design.alertTheme)))
@@ -25,7 +26,7 @@ export default {
     const icon = ref(JSON.parse(JSON.stringify(design.icon)))
     const iconFill = ref(JSON.parse(JSON.stringify(design.iconFill)))
     const iconColor = ref(JSON.parse(JSON.stringify(design.iconColor)))
-    const key = ref(0)
+    const update = ref(0)
     const fontList = ref([
       'Helvetica',
       'Arial',
@@ -66,16 +67,20 @@ export default {
       iconFill,
       iconColor,
       fontList,
-      key
+      update,
+      sidebarBacking,
+      sidebarText
     }
   },
   methods: {
-    update() {
+    updateObj() {
       let designObj = {
         primaryTheme: this.primaryTheme,
         secondaryTheme: this.secondaryTheme,
         inputBacking: this.inputBacking,
         inputText: this.inputText,
+        sidebarBacking: this.sidebarBacking,
+        sidebarText: this.sidebarText,
         primaryText: this.primaryText,
         pageBackdrop: this.pageBackdrop,
         alertTheme: this.alertTheme,
@@ -86,11 +91,30 @@ export default {
         iconColor: this.iconColor
       }
       this.design.setDesign(designObj, useUserStore().getUserId, useCharacterStore().getCharacterId)
+    },
+    reset() {
+      let designObj = {
+        primaryTheme: '#422c58',
+        secondaryTheme: '#c2b172',
+        inputBacking: '#f1eef1',
+        inputText: '#000000',
+        sidebarBacking: '#e7e2e9',
+        sidebarText: '#000000',
+        primaryText: '#dfdfdf',
+        pageBackdrop: '#dfdfdf',
+        alertTheme: '#c15be6',
+        font: 'Bahnschrift',
+        titleFont: 'Bahnschrift',
+        icon: 'bi bi-square',
+        iconFill: 'bi bi-check',
+        iconColor: '#000000'
+      }
+      this.design.setDesign(designObj, useUserStore().getUserId, useCharacterStore().getCharacterId)
     }
   },
   components: {
+    IconPicker,
     BButton,
-    BModal,
     BFormInput,
     BFormSelect,
     CustomModal,
@@ -120,6 +144,10 @@ export default {
             Input Text
             <BFormInput type="color" v-model="inputText" style="width: 100%"></BFormInput>
           </div>
+          <div class="colorView">
+            Sidebar Backing
+            <BFormInput type="color" v-model="sidebarBacking" style="width: 100%"></BFormInput>
+          </div>
         </div>
         <div style="display: flex; justify-content: space-around">
           <div class="colorView">
@@ -139,6 +167,10 @@ export default {
           </div>
           <div class="colorView">
             Icon Color<BFormInput type="color" v-model="iconColor" style="width: 100%"></BFormInput>
+          </div>
+          <div class="colorView">
+            Sidebar Text
+            <BFormInput type="color" v-model="sidebarText" style="width: 100%"></BFormInput>
           </div>
         </div>
         <div style="display: flex; margin: 0.5rem">
@@ -182,9 +214,10 @@ export default {
             Inner Icon
           </div>
           <BFormInput v-model="iconFill"></BFormInput>
+          <IconPicker :currentIcon="design.iconFill"></IconPicker>
         </div>
         <b-button
-          @click="key++"
+          @click="update++"
           style="margin-top: 0.5rem; font-size: 1rem"
           :style="{
             background: design.primaryTheme,
@@ -260,22 +293,35 @@ export default {
               :isChecked="true"
               :overrideBox="icon"
               :overrideFill="iconFill"
-              :key="key"
+              :update="update"
             ></CustomCheckbox>
           </div>
         </div>
       </template>
       <template v-slot:footer>
-        <BButton
-          :style="{
-            background: design.primaryTheme,
-            color: design.primaryText,
-            fontFamily: design.font,
-            borderColor: secondaryTheme
-          }"
-          @click="update"
-          >Set Color Scheme</BButton
-        >
+        <div style="display: flex">
+          <BButton
+            :style="{
+              background: design.primaryTheme,
+              color: design.primaryText,
+              fontFamily: design.font,
+              borderColor: secondaryTheme
+            }"
+            style="margin-right: 1rem"
+            @click="reset"
+            >Reset to Default</BButton
+          >
+          <BButton
+            :style="{
+              background: design.primaryTheme,
+              color: design.primaryText,
+              fontFamily: design.font,
+              borderColor: secondaryTheme
+            }"
+            @click="updateObj"
+            >Set Color Scheme</BButton
+          >
+        </div>
       </template>
     </CustomModal>
     <BButton

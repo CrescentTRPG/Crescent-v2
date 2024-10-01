@@ -9,6 +9,7 @@ import { useUserStore } from '../../../stores/userStore'
 
 import CharacterSidebar from '../Build/CharacterSidebar.vue'
 import BannerItem from '../Build/BannerItem.vue'
+import { storeToRefs } from 'pinia'
 
 export default {
   setup(props, context) {
@@ -16,7 +17,8 @@ export default {
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
     const userStore = useUserStore()
-    const archetype = ref(JSON.parse(JSON.stringify(characterStore.archetype)))
+    const { archetype } = storeToRefs(characterStore)
+    const archetypeRef = ref(archetype.value.slice(0))
     const options = [
       { value: 'augur', text: 'Augur' },
       { value: 'breaker', text: 'Breaker' },
@@ -31,14 +33,17 @@ export default {
       { value: 'elementalist', text: 'Elementalist' },
       { value: 'sorcerer', text: 'Sorcerer' }
     ]
-    return { designStore, archetype, options, characterStore, userStore }
+    return { designStore, archetypeRef, options, characterStore, userStore, archetype }
   },
   created() {
-    this.$emit(this.archetype)
+    this.$emit(this.archetypeRef)
   },
   watch: {
+    archetypeRef() {
+      this.$emit(this.archetypeRef)
+    },
     archetype() {
-      this.$emit(this.archetype)
+      this.archetypeRef = this.archetype
     }
   },
   methods: {
@@ -66,7 +71,7 @@ export default {
 <template>
   <div :style="{ fontFamily: designStore.font }" class="archetype-selector">
     <BFormSelect
-      v-model="archetype"
+      v-model="archetypeRef"
       :options="options"
       style="border: 2px solid; cursor: pointer"
       :style="{
@@ -75,7 +80,7 @@ export default {
         color: designStore.primaryText,
         fontFamily: designStore.titleFont
       }"
-      @change="selectArchetype(archetype)"
+      @change="selectArchetype(archetypeRef)"
     ></BFormSelect>
   </div>
 </template>

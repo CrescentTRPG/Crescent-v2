@@ -22,27 +22,67 @@ interface ManualSkill {
 export const useSkillStore = defineStore('skill', {
   state: () => ({
     skills: {},
-    allSkills: []
+    allSkills: [],
+    effectiveSkills: [
+      {
+        skill: 'nothing',
+        rank: 2,
+        description: 'something',
+        isOrigin: false,
+        id: 'huh',
+        source: 'Test'
+      }
+    ]
   }),
   getters: {
     getSkills: (state) => state.skills,
     getAllSkills: (state): Array<ManualSkill> => state.allSkills,
-    getEffectiveSkills: (state): Array<any> =>
-      state.allSkills.map((skill: ManualSkill) => ({
+    getEffectiveSkills: (state) => state.effectiveSkills
+  },
+  actions: {
+    async setSkill(skill: any) {
+      let ret
+      if (skill.id === '') {
+        ret = await addDoc(
+          collection(
+            db,
+            'User/' +
+              useUserStore().getUserId +
+              '/Character/' +
+              useCharacterStore().getCharacterId +
+              '/Skills/'
+          ),
+          skill
+        )
+        this.skills[skill.skill] = { ...skill, id: ret.id }
+      } else {
+        ret = updateDoc(
+          doc(
+            db,
+            'User/' +
+              useUserStore().getUserId +
+              '/Character/' +
+              useCharacterStore().getCharacterId +
+              '/Skills/' +
+              skill.id
+          ),
+          { rank: skill.rank }
+        )
+      }
+    },
+    setEffectiveSkills() {
+      this.effectiveSkills = this.allSkills.map((skill: ManualSkill) => ({
+        id: this.skills[skill.skill]?.id || '',
         skill: skill.skill,
-        rank: state.skills[skill.skill]?.rank || 0,
+        rank: this.skills[skill.skill]?.rank || 0,
+        source: this.skills[skill.skill]?.source || 'Base',
         description: skill.description,
         attribute: skill.attribute,
         isOrigin: useCharacterStore().getOriginSkills.includes(skill.skill)
       }))
-  },
-  actions: {
-    async setSkill(archetype: string, uid: string, cid: string) {
-      let ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { archetype: archetype })
-      console.log(ret)
     },
     async pullAllSkillsFromFirebase() {
-      let allSkillsRef = collection(db, 'Skill/Base/Skill')
+      let allSkillsRef = collection(db, 'Ability/Base/Skill')
       onSnapshot(
         allSkillsRef,
         (snap) => {
@@ -70,8 +110,9 @@ export const useSkillStore = defineStore('skill', {
         collectionRef,
         (snap) => {
           snap.docs.forEach((doc) => {
-            this.skills[doc.data().skill] = doc.data()
+            this.skills[doc.data().skill] = { ...doc.data(), id: doc.id }
           })
+          this.setEffectiveSkills()
         },
         (err) => {
           console.log(err.message)
