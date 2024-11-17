@@ -174,18 +174,27 @@ export default {
         height: 100%;
         border-top: 2px solid;
         border-bottom: 2px solid;
+        padding-right: 1%;
+        padding-left: 1%;
       "
       :style="{
+        background: designStore.inputBacking,
         color: designStore.inputText,
         borderColor: designStore.secondaryTheme
       }"
     >
-      <BButton
+      <div
         @click="showModal(1)"
         class="perkGainItem"
         :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-        >Perk Gain I :</BButton
       >
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 0.3rem">
+          <div style="padding: 0px; margin: 0px">Perk</div>
+          <div>&nbsp;Gain</div>
+          <div>&nbsp;I :</div>
+        </div>
+      </div>
+
       <BButton
         @click="showModal(1)"
         class="perkGainItemMobile"
@@ -250,12 +259,20 @@ export default {
           ></BInputGroup>
         </template>
       </CustomModal>
-      <BButton
+      <div class="spacer"></div>
+
+      <div
         @click="showModal(2)"
         class="perkGainItem"
         :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-        >Perk Gain II :</BButton
       >
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 0.3rem">
+          <div style="padding: 0px; margin: 0px">Perk</div>
+          <div>&nbsp;Gain</div>
+          <div>&nbsp;II :</div>
+        </div>
+      </div>
+
       <BButton
         @click="showModal(2)"
         class="perkGainItemMobile"
@@ -320,12 +337,19 @@ export default {
           ></BInputGroup>
         </template>
       </CustomModal>
-      <BButton
+      <div class="spacer"></div>
+
+      <div
         @click="showModal(3)"
         class="perkGainItem"
         :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-        >Perk Gain III :</BButton
       >
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 0.3rem">
+          <div style="padding: 0px; margin: 0px">Perk</div>
+          <div>&nbsp;Gain</div>
+          <div>&nbsp;III :</div>
+        </div>
+      </div>
       <BButton
         @click="showModal(3)"
         class="perkGainItemMobile"
@@ -392,12 +416,19 @@ export default {
           ></BInputGroup>
         </template>
       </CustomModal>
-      <BButton
+      <div class="spacer"></div>
+
+      <div
         @click="showModal(4)"
         class="perkGainItem"
         :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-        >Perk Gain IV :</BButton
       >
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 0.3rem">
+          <div style="padding: 0px; margin: 0px">Perk</div>
+          <div>&nbsp;Gain</div>
+          <div>&nbsp;IV :</div>
+        </div>
+      </div>
       <BButton
         @click="showModal(4)"
         class="perkGainItemMobile"
@@ -462,12 +493,19 @@ export default {
           ></BInputGroup>
         </template>
       </CustomModal>
-      <BButton
+      <div class="spacer"></div>
+
+      <div
         @click="showModal(5)"
         class="perkGainItem"
         :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-        >Perk Gain V :</BButton
       >
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 0.3rem">
+          <div style="padding: 0px; margin: 0px">Perk</div>
+          <div>&nbsp;Gain</div>
+          <div>&nbsp;V :</div>
+        </div>
+      </div>
       <BButton
         @click="showModal(5)"
         class="perkGainItemMobile"
@@ -477,7 +515,6 @@ export default {
       <div
         @click="showModal(5)"
         class="perkGain"
-        style="padding-right: 2.5%"
         :style="{ background: designStore.inputBacking, color: designStore.inputText }"
       >
         <div v-if="entitledGain < 5">
@@ -487,6 +524,7 @@ export default {
           <v-icon :name="perkGainIcon(perkGain[4])" scale="1.25"></v-icon>
         </div>
       </div>
+      <div class="spacer"></div>
       <CustomModal
         :showModal="modal && currentModal == 5"
         title="Perk Gain V"
@@ -543,9 +581,11 @@ export default {
   border-radius: 0;
   border: none;
   display: flex;
+  flex-grow: 2;
   justify-content: center;
-  flex-grow: 1;
-  align-items: center;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  width: fit-content;
 }
 .perkGain {
   cursor: pointer;
@@ -553,8 +593,13 @@ export default {
   border: none;
   display: flex;
   justify-content: center;
-  flex-grow: 1;
   align-items: center;
+}
+.spacer {
+  flex-grow: 1;
+}
+.smallSpacer {
+  flex-grow: 1;
 }
 .perkGainItemMobile {
   cursor: pointer;
@@ -569,7 +614,7 @@ export default {
 .bi-x-lg:hover {
   opacity: 1;
 }
-@media (max-width: 600px) {
+@media (max-width: 575px) {
   .perkGainItem {
     display: none;
   }
@@ -577,7 +622,7 @@ export default {
     display: block;
   }
 }
-@media (min-width: 601px) {
+@media (min-width: 576px) {
   .perkGainItemMobile {
     display: none;
   }

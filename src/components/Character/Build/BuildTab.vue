@@ -9,8 +9,6 @@ import TabContents from '../Build/TabContents.vue'
 
 export default {
   setup(props, context) {
-    const error = ref(null)
-    const router = useRouter()
     const designStore = useDesignStore()
     const tab = ref('corestats')
     return { designStore, tab }
@@ -18,10 +16,6 @@ export default {
 
   methods: {},
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
     CharacterSidebar,
     TabContents
   }
@@ -37,10 +31,14 @@ export default {
     <CharacterSidebar
       style="width: 20%; max-width: 9rem; z-index: 2; height: inherit"
       @corestats="tab = 'corestats'"
+      @traits="tab = 'traits'"
       @skills="tab = 'skills'"
       @martialskills="tab = 'martialskills'"
       @martialperks="tab = 'martialperks'"
       @spells="tab = 'spells'"
+      @effigy="tab = 'effigy'"
+      @fauna="tab = 'fauna'"
+      @performance="tab = 'performance'"
     ></CharacterSidebar>
     <TabContents style="width: 100%; flex-grow: 1; height: fit-content" :tab="tab"></TabContents>
   </div>

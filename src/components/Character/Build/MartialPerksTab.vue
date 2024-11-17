@@ -18,10 +18,6 @@ export default {
 
   methods: {},
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
     MartialPerksTable,
     MartialGainWidget
   }
@@ -32,7 +28,7 @@ export default {
   <div style="display: flex; flex-direction: column">
     <MartialGainWidget></MartialGainWidget>
 
-    <MartialPerksTable></MartialPerksTable>
+    <MartialPerksTable style="margin-top: -1rem"></MartialPerksTable>
   </div>
 </template>
 

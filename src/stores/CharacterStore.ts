@@ -7,6 +7,9 @@ import { onSnapshot, doc, query, getDocs, updateDoc } from 'firebase/firestore'
 import { useMartialSkillsStore } from './martialSkillsStore.js'
 import { useMartialPerksStore } from './martialPerksStore.js'
 import { useSpellStore } from './spellsStore.js'
+import { useManualStore } from './manualStore.js'
+import { useTraitsStore } from './traitsStore.js'
+import { useUserStore } from './userStore.js'
 
 interface Character {
   id: string
@@ -16,7 +19,7 @@ interface Character {
   totalAbilityPoints: number
   originSkills: Array<string>
   adventure: any //map
-  // traits: any //collection
+  traits: any
   condition: any //map
   attributes: any //map
   exceptionals: any //map
@@ -41,10 +44,11 @@ export const useCharacterStore = defineStore('character', {
     name: '',
     image: '',
     archetype: '',
+    traits: {},
+    spentAbilityPoints: 0,
     totalAbilityPoints: 10,
     originSkills: ['', ''],
     adventure: null,
-    traits: null,
     condition: null,
     attributes: {
       strength: 0,
@@ -56,7 +60,16 @@ export const useCharacterStore = defineStore('character', {
       power: 0,
       charisma: 0
     },
-    exceptionals: null,
+    exceptionals: {
+      strength: 0,
+      agility: 0,
+      perception: 0,
+      willpower: 0,
+      health: 0,
+      intelligence: 0,
+      power: 0,
+      charisma: 0
+    },
     effigies: null,
     faunaTransformations: null,
     performanceStyles: null,
@@ -86,8 +99,26 @@ export const useCharacterStore = defineStore('character', {
     setLocalTotalAbilityPoints(totalAbilityPoints: number) {
       this.totalAbilityPoints = totalAbilityPoints
     },
+    setLocalSpentAbilityPoints(spentAbilityPoints: number) {
+      this.spentAbilityPoints = spentAbilityPoints
+    },
+    setLocalTraits(traits: any) {
+      this.traits = traits
+    },
     setLocalAttributes(attributes: any) {
       this.attributes = attributes
+    },
+    updateExceptionals(exceptional: string, exceptionalValue: number) {
+      this.exceptionals[exceptional] = exceptionalValue
+      const ret = updateDoc(
+        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        {
+          exceptionals: this.exceptionals
+        }
+      )
+    },
+    setLocalExceptionals(exceptionals: any) {
+      this.exceptionals = exceptionals
     },
     setLocalOrigin(origin: Array<string>) {
       this.originSkills = origin
@@ -103,6 +134,7 @@ export const useCharacterStore = defineStore('character', {
       this.condition = character.condition
       this.attributes = character.attributes
       this.exceptionals = character.exceptionals
+      this.traits = character.traits
     },
     async setCharacter(character: Character, uid: string, cid) {
       const char = await useCollection('User/' + uid + '/Character/' + cid, character)
@@ -117,8 +149,31 @@ export const useCharacterStore = defineStore('character', {
         originSkills: ['', ''],
         adventure: null,
         condition: null,
-        attributes: null,
-        exceptionals: null
+        attributes: {
+          strength: 0,
+          agility: 0,
+          perception: 0,
+          willpower: 0,
+          health: 0,
+          intelligence: 0,
+          power: 0,
+          charisma: 0
+        },
+        exceptionals: {
+          strength: 0,
+          agility: 0,
+          perception: 0,
+          willpower: 0,
+          health: 0,
+          intelligence: 0,
+          power: 0,
+          charisma: 0
+        },
+        traits: {},
+        spells: {},
+        perks: {},
+        specializations: {},
+        combatStyles: {}
       }
       const defaultDesign = {
         primaryTheme: '#422c58',
@@ -134,6 +189,8 @@ export const useCharacterStore = defineStore('character', {
         titleFont: 'Bahnschrift',
         icon: 'square',
         iconFill: 'check',
+        charIconFlair: 'bi bi-stars',
+        charIcon: 'bi bi-moon-stars-fill',
         iconColor: '#000000'
       }
       const ret = await useCollection('User/' + uid + '/Character', char)
@@ -148,7 +205,7 @@ export const useCharacterStore = defineStore('character', {
     unsubscribe() {
       this.characterRef()
     },
-    async pullCharacterFromFirebase(uid: string, cid: string) {
+    async pullCharacterFromFirebase(uid: string, cid: string, fromScratch = false) {
       this.loading = true
       this.here = 1
       this.characterRef = onSnapshot(doc(db, 'User/' + uid + '/Character/' + cid), (doc) => {
@@ -162,7 +219,8 @@ export const useCharacterStore = defineStore('character', {
           adventure: doc.data()?.adventure,
           condition: doc.data()?.condition,
           attributes: doc.data()?.attributes,
-          exceptionals: doc.data()?.exceptionals
+          exceptionals: doc.data()?.exceptionals,
+          traits: doc.data()?.traits || {}
         }
         this.setLocalCharacter(character)
         const design = {
@@ -178,25 +236,28 @@ export const useCharacterStore = defineStore('character', {
           font: doc.data()?.design.font,
           titleFont: doc.data()?.design.titleFont,
           icon: doc.data()?.design.icon,
+          charIcon: doc.data()?.design.charIcon,
+          charIconFlair: doc.data()?.design.charIconFlair,
           iconFill: doc.data()?.design.iconFill,
           iconColor: doc.data()?.design.iconColor
         }
+        useManualStore().pullManualFromFirebase()
         useMartialPerksStore().setLocalPerkGain(doc.data()?.perkGain)
         useDesignStore().setLocalDesign(design)
-        useSkillStore().pullCharacterSkillsFromFirebase()
-        useSkillStore()
-          .pullAllSkillsFromFirebase()
-          .then(() => {
-            useSkillStore().setEffectiveSkills()
-          })
-        useMartialSkillsStore().pullAllCombatStylesFromFirebase()
-        useMartialSkillsStore().pullAllSpecializationsFromFirebase()
-        useMartialSkillsStore().pullCharacterCombatStylesFromFirebase()
-        useMartialSkillsStore().pullCharacterSpecializationsFromFirebase()
+        useSkillStore().setCharacterSkillsFromFirebase(doc.data()?.skills)
+        useMartialSkillsStore().setCharacterCombatStylesFromFirebase(doc.data()?.combatStyles)
+        useMartialSkillsStore().setCharacterSpecializationsFromFirebase(doc.data()?.specializations)
         useMartialPerksStore().pullManualMartialPerksFromFirebase()
-        useMartialPerksStore().pullCharacterMartialPerksFromFirebase()
+        useMartialPerksStore().setCharacterMartialPerksFromFirebase(doc.data()?.perks)
+        useSpellStore().setCharacterSpellgroupsFromFirebase(doc.data()?.spells)
         useSpellStore().pullManualSpellgroupsFromFirebase()
-        useSpellStore().pullCharacterSpellgroupsFromFirebase()
+
+        useSpellStore().setUpBuildDisplay(doc.data()?.spellChanged)
+        useMartialPerksStore().setUpBuildDisplay(doc.data()?.perkChanged)
+        useMartialSkillsStore().setUpBuildSpecializationDisplay(doc.data()?.specializationChanged)
+        useMartialSkillsStore().setUpBuildDisplay(doc.data()?.combatStyleChanged)
+        useSkillStore().setUpBuildDisplay(doc.data()?.skillChanged)
+
         this.delay(1000).then(() => {
           useCharacterStore().setLoadingFalse()
         })
@@ -232,6 +293,15 @@ export const useCharacterStore = defineStore('character', {
         attributes: attributes
       })
       console.log(ret)
+    },
+    async setExceptionals(exceptionals: any) {
+      this.setLocalExceptionals(exceptionals)
+      const ret = updateDoc(
+        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        {
+          exceptionals: exceptionals
+        }
+      )
     }
   },
   persist: true

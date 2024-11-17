@@ -1,0 +1,132 @@
+[{
+  "name": "Artifact",
+  "rank": 2,
+  "action_cost": "Core Action",
+  "type": "Continuous",
+  "target": "LOS 40' + 20'/F",
+  "area": "2.5' Radius",
+  "duration": "3 + 1/2F Rounds",
+  "resistance": "N/A",
+  "description": "A ball of vicious energy erupts at the target location. The ball has 15 HP, 14/14 armor DVs (0/0 Movement DVs), and automatically makes a ranged attack roll directed at the nearest target hostile to the caster at the end of each of the caster's turns (As long as they are within 40' of the artifact.) On hit, the ranged attack roll inflicts 2 + 1/2F d8 Pure_Magic damage. "
+},
+{
+  "name": "Aspect",
+  "rank": 3,
+  "action_cost": "Swift Action",
+  "type": "Continuous",
+  "target": "Self",
+  "area": "Caster",
+  "duration": "1 + 1/F Hours",
+  "resistance": "N/A",
+  "description": "Caster's physical form is replaced with that of their effigy. All of the following values are set to that of the effigy: Movespeed, DV's, physical size/appearance, Resistances, Susceptibilities, Immunities, replications and vulnerabilities. Caster also gains access to any abilities the effigy knows (spells and skills). "
+},
+{
+  "name": "Attunement",
+  "rank": 3,
+  "action_cost": "1 Minute",
+  "type": "Continuous",
+  "target": "Touch",
+  "area": "Effigy",
+  "duration": "1 + 1/F Hours",
+  "resistance": "N/A",
+  "description": "Magical energy surrounds the hands of the caster as they reach out and temporarily alter the effigy, allowing them to realign all of its attributes and characteristics, though these changes are only active for the duration, at which point the effigy returns to its previous state. "
+},
+{
+  "name": "Direction",
+  "rank": 0,
+  "action_cost": "Variable",
+  "type": "Evocation",
+  "target": "Effigy",
+  "area": "LOS 400'",
+  "duration": "Instantaneous",
+  "resistance": "Variable",
+  "description": "When in turn by turn mode, the effigy must be directed using either a swift or core action. If directed by a swift action - the effigy gains access to it's core action and its movement action. If directed using the caster's core action it gains access to its movement, core, reaction, and swift actions or the caster gives all present effigies a movement and core action. This can only ever be used once each turn per effigy, and the effigy acts independently from the caster once outside of the area. "
+},
+{
+  "name": "Empowered Effigy",
+  "rank": 5,
+  "action_cost": "Swift Action",
+  "type": "Evocation",
+  "target": "LOS Effigy",
+  "area": "Single",
+  "duration": "Instantaneous",
+  "resistance": "N/A",
+  "description": "Strands of energy wrap into the effigy's form as it loses its susceptibility and vulnerabilities for 4 + 2/F Rounds. The effigy is restored to its maximum HP and can take an extra Core and Movement Action. "
+},
+{
+  "name": "Forge Effigy",
+  "rank": 0,
+  "action_cost": "1 Hour",
+  "type": "Focus",
+  "target": "Self",
+  "area": "Caster",
+  "duration": "Permanent",
+  "resistance": "N/A",
+  "description": "Calling upon either the twisting energies of the universe, their own knowledge, or guile - the caster creates their effigy/effigies. This spell can only be used once every three days, and the effigies' abilities can only be altered once every month. "
+},
+{
+  "name": "Overload",
+  "rank": 4,
+  "action_cost": "Swift Action",
+  "type": "Evocation",
+  "target": "Caster's Effigy",
+  "area": "Single Target",
+  "duration": "Instantaneous",
+  "resistance": "N/A",
+  "description": "A tremendous degree of energy floods into the effigy, greatly amplifying it's abilities. All damage dice rolled as a result of an effigy's actions are doubled and it has an additional core action as a part of Direction. At the start of the caster's next turn, the effigy is destroyed."
+},
+{
+  "name": "Replicate",
+  "rank": 4,
+  "action_cost": "Swift Action",
+  "type": "Continuous",
+  "target": "LOS 40' + 10'/F",
+  "area": "Single Target",
+  "duration": "1 + 1/F Hours",
+  "resistance": "N/A",
+  "description": "The target has one of their abilities copied (Chosen randomly by the GM) onto the caster's effigy. The effigy must have the necessary resource to utilize the ability, unless a resource itself is stolen. This stolen ability is able to take the form of a target's unique power at the GM's discretion, such as an elemental immunity or an archetype. The effigy always knows what ability is stolen before using it. "
+},
+{
+  "name": "Sensation",
+  "rank": 2,
+  "action_cost": "Swift Action",
+  "type": "Continuous",
+  "target": "Caster's Effigy",
+  "area": "Single Target",
+  "duration": "Special",
+  "resistance": "N/A",
+  "description": "Caster goes unconscious - and remains so as long as they maintain this spell. They gain direct control of the effigy - gaining all of its senses, replacing their own actions with those of the effigy. The caster can utilize their swift action to end this effect."
+},
+{
+  "name": "Synthesis",
+  "rank": 5,
+  "action_cost": "Swift Action",
+  "type": "Continuous",
+  "target": "Caster's Effigy",
+  "area": "Single Target",
+  "duration": "1 + 2/F Hours",
+  "resistance": "N/A",
+  "description": "Caster fuses with an effigy as per Celestial Alignment (Equilibrium - 10), however the caster does not gain any new actions - keeping their standard suite of actions. They otherwise receive all other benefits."
+},
+{
+  "name": "Transposition",
+  "rank": 1,
+  "action_cost": "Swift Action",
+  "type": "Evocation",
+  "target": "LOS Effigy",
+  "area": "Single Target",
+  "duration": "Instantaneous",
+  "resistance": "N/A",
+  "description": "A shroud of purple smoke engulfs the effigy and the caster. The effigy and the caster swift places. Alternatively, this spell teleports the effigy to an unoccupied space next to the caster or vise versa. "
+},
+{
+  "name": "Vigilance",
+  "rank": 1,
+  "action_cost": "Reactionary",
+  "type": "Evocation",
+  "target": "LOS 10' + 10'/F",
+  "area": "Single Target",
+  "duration": "Instantaneous",
+  "resistance": "N/A",
+  "description": "In response to an attack roll being made against anyone within 10'+ 10'/F of the effigy - the effigy can interpose - shoving the target behind them as it moves. The attack roll is made against the effigy instead of the target. "
+}]

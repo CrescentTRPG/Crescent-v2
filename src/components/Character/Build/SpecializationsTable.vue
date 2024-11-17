@@ -3,7 +3,7 @@ import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { useCharacterStore } from '../../../stores/characterStore'
 import { useUserStore } from '../../../stores/userStore'
-import { BButton, BCard, BNavItem, BNavbar, BTable, BFormSelect, BThead } from 'bootstrap-vue-next'
+import { BButton, BThead, BTableSimple, BTh, BTr, BTd, BFormSelect } from 'bootstrap-vue-next'
 import CustomCheckbox from '../CustomCheckbox.vue'
 import { ref, onMounted, toRaw } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
@@ -11,6 +11,7 @@ import { useMartialSkillsStore } from '../../../stores/martialSkillsStore'
 import { storeToRefs } from 'pinia'
 import CustomModal from '@/components/CustomModal.vue'
 import MartialSkillsDisplay from '@/components/MartialSkillDisplay.vue'
+import OneToTenDropdown from '@/components/OneToTenDropdown.vue'
 
 interface Skill {
   skill: string
@@ -31,38 +32,40 @@ export default {
 
     const modal = ref(false)
     const currentModal = ref(0)
-    const options = [
-      { value: '0', text: '0' },
-      { value: '1', text: '1' },
-      { value: '2', text: '2' },
-      { value: '3', text: '3' },
-      { value: '4', text: '4' },
-      { value: '5', text: '5' },
-      { value: '6', text: '6' },
-      { value: '7', text: '7' },
-      { value: '8', text: '8' },
-      { value: '9', text: '9' },
-      { value: '10', text: '10' }
-    ]
 
     const fields = ref([
       { key: 'Specializations', class: 'w-40-max' },
       { key: 'CombatStyles', class: 'w-40' },
       { key: 'Ranks', class: 'w-10' }
     ])
+
+    const options = [
+      { value: 0, text: '0' },
+      { value: 1, text: '1' },
+      { value: 2, text: '2' },
+      { value: 3, text: '3' },
+      { value: 4, text: '4' },
+      { value: 5, text: '5' },
+      { value: 6, text: '6' },
+      { value: 7, text: '7' },
+      { value: 8, text: '8' },
+      { value: 9, text: '9' },
+      { value: 10, text: '10' }
+    ]
+
     return {
       designStore,
       characterStore,
       userStore,
       fields,
-      options,
       modal,
       currentModal,
       allSpecializations,
       buildDisplaySpecializationsClone,
       specializations,
       buildDisplaySpecializations,
-      martialSkillsStore
+      martialSkillsStore,
+      options
     }
   },
   watch: {
@@ -71,6 +74,28 @@ export default {
     }
   },
   methods: {
+    LightenDarkenColor(col, amt) {
+      var num = parseInt(col.substring(1), 16)
+      var r = (num >> 16) + amt
+      var b = ((num >> 8) & 0x00ff) + amt
+      var g = (num & 0x0000ff) + amt
+      var newColor = g | (b << 8) | (r << 16)
+      return '#' + newColor.toString(16)
+    },
+    tableBg(num: number) {
+      console.log(parseInt(this.designStore.inputBacking.substring(1), 16))
+
+      if (num % 2 === 0) {
+        if (parseInt(this.designStore.inputBacking.substring(1), 16) >= 3000000) {
+          return this.LightenDarkenColor(this.designStore.inputBacking, 10)
+        }
+        return this.LightenDarkenColor(this.designStore.inputBacking, -10)
+      }
+      return this.designStore.inputBacking
+    },
+    tableTxt(num: number) {
+      return this.designStore.inputText
+    },
     combatStylesString(combatStyles: Array<string>): string {
       console.log(typeof combatStyles)
       let ret: string = ''
@@ -83,34 +108,42 @@ export default {
       this.currentModal = id
       this.modal = !this.modal
     },
-    updateSpecialization(name: any, id: any, rank: any, source: any) {
+    updateSpecialization(
+      name: any,
+      id: any,
+      rank: any,
+      source: any,
+      index: number,
+      combatStyles: Array<String>
+    ) {
+      this.buildDisplaySpecializationsClone[index].rank = rank
       let skillObj = {
         name: name,
         id: id,
-        rank: parseInt(rank),
-        source: source
+        rank: rank,
+        source: source,
+        combatStyles: combatStyles,
+        index: index
       }
       this.martialSkillsStore.setSpecialization(skillObj)
     }
   },
   components: {
+    BThead,
+    BTableSimple,
+    BTr,
+    BTh,
+    BTd,
     BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
-    BTable,
-    BFormSelect,
     CustomModal,
-    MartialSkillsDisplay
+    MartialSkillsDisplay,
+    BFormSelect
   }
 }
 </script>
 
 <template>
-  <BTable
-    striped
-    :items="buildDisplaySpecializations"
-    :fields="fields"
+  <BTableSimple
     style="border-top: 2px solid"
     :style="{
       bsEmphasisColor: designStore.sidebarBacking,
@@ -120,73 +153,88 @@ export default {
       color: designStore.inputText,
       backgroundColor: designStore.inputBacking
     }"
-    headerTitle="Skills"
     class="tableClass"
   >
-    <template
-      #cell(Specializations)="data"
-      :style="{ background: designStore.inputBacking }"
-      lg="2"
-    >
-      <BButton
-        style="width: 100%; border: 2px solid; text-align: left"
-        @click="showModal(data.index)"
+    <col />
+    <col />
+    <col />
+    <BThead>
+      <BTr
+        style="border-bottom: 1px solid"
         :style="{
-          background: designStore.primaryTheme,
-          color: designStore.primaryText,
-          borderColor: designStore.secondaryTheme
-        }"
-        >{{ data.item.name }}</BButton
-      >
-      <CustomModal
-        :showModal="modal && currentModal == data.index"
-        :title="data.item.name"
-        @close="showModal(data.index)"
-      >
-        <template v-slot:body>
-          <div
-            style="padding-bottom: 0.5rem; border-top: 2px solid"
-            :style="{ borderColor: designStore.secondaryTheme }"
-          >
-            <div v-for="skill in data.item.skills">
-              <MartialSkillsDisplay
-                :title="skill.name"
-                :description="skill.description"
-                :mpCost="skill.mp_cost"
-              ></MartialSkillsDisplay>
-            </div>
-          </div>
-        </template>
-      </CustomModal>
-    </template>
-    <template #cell(CombatStyles)="data">
-      <div
-        style="display: flex; flex-direction: column; justify-content: center; min-height: 2.25rem"
-      >
-        {{ combatStylesString(data.item.combatStyles) }}
-      </div>
-    </template>
-    <template #cell(Ranks)="data">
-      <BFormSelect
-        :options="options"
-        v-model="buildDisplaySpecializationsClone[data.index].rank"
-        :style="{
+          fontFamily: designStore.font,
+          borderColor: designStore.secondaryTheme,
           color: designStore.inputText,
-          backgroundColor: designStore.inputBacking,
-          borderColor: designStore.secondaryTheme
+          backgroundColor: designStore.inputBacking
         }"
-        @change="
-          updateSpecialization(
-            data.item.name,
-            data.item.id,
-            buildDisplaySpecializationsClone[data.index].rank,
-            data.item.source
-          )
-        "
-        style="font-size: large; width: 4rem; cursor: pointer; border-width: 2px"
-      ></BFormSelect>
-    </template>
-  </BTable>
+      >
+        <BTh>Specializations</BTh>
+        <BTh>Combat Styles</BTh>
+        <BTh> Rank</BTh>
+      </BTr>
+      <BTr
+        v-for="(specialization, index) in buildDisplaySpecializationsClone"
+        :key="specialization.name"
+        :style="{ background: tableBg(index), color: tableTxt(index) }"
+      >
+        <BTd class="w-40-max"
+          ><BButton
+            style="width: 100%; border: 2px solid; text-align: left"
+            @click="showModal(index)"
+            :style="{
+              background: designStore.primaryTheme,
+              color: designStore.primaryText,
+              borderColor: designStore.secondaryTheme
+            }"
+            >{{ specialization.name }}</BButton
+          >
+          <CustomModal
+            :showModal="modal && currentModal == index"
+            :title="specialization.name"
+            @close="showModal(index)"
+          >
+            <template v-slot:body>
+              <div
+                style="padding-bottom: 0.5rem; border-top: 2px solid"
+                :style="{ borderColor: designStore.secondaryTheme }"
+              >
+                <div v-for="skill in specialization.skills" :key="skill.name">
+                  <MartialSkillsDisplay
+                    :title="skill.name"
+                    :description="skill.description"
+                    :mpCost="skill.mp_cost"
+                  ></MartialSkillsDisplay>
+                </div>
+              </div>
+            </template> </CustomModal
+        ></BTd>
+        <BTd class="w-40">{{ combatStylesString(specialization.combatStyles) }}</BTd>
+        <BTd>
+          <BFormSelect
+            :options="options"
+            v-model="buildDisplaySpecializationsClone[index].rank"
+            :style="{
+              color: designStore.inputText,
+              backgroundColor: designStore.inputBacking,
+              borderColor: designStore.secondaryTheme
+            }"
+            @change="
+              updateSpecialization(
+                specialization.name,
+                specialization.id,
+                buildDisplaySpecializationsClone[index].rank,
+                specialization.source,
+                specialization.index,
+                specialization.combatStyles
+              )
+            "
+            style="font-size: large; width: 4rem; cursor: pointer; border-width: 2px"
+          ></BFormSelect>
+        </BTd>
+        <BTd></BTd>
+      </BTr>
+    </BThead>
+  </BTableSimple>
 </template>
 
 <style>

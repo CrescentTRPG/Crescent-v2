@@ -76,7 +76,6 @@ export default {
     BButton,
     BNavbar,
     BNavItem,
-    BCard,
     SelectCharacter,
     IconStackCloud
   }

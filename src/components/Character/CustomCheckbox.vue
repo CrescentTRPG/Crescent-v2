@@ -1,14 +1,9 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../stores/designStore'
 export default {
   props: ['isChecked', 'overrideBox', 'overrideFill', 'update'],
   setup(props, context) {
-    const error = ref(null)
-    const router = useRouter()
     const fill = ref(props.overrideFill)
     const box = ref(props.overrideBox)
     const update = ref(props.update)
@@ -32,12 +27,6 @@ export default {
       this.$emit(this.checked + '')
       this.$forceUpdate()
     }
-  },
-  components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard
   }
 }
 </script>
@@ -91,13 +80,13 @@ export default {
         <i
           v-if="fill?.substring(0, 2) == 'bi' || designStore.iconFill.substring(0, 2) == 'bi'"
           :class="fill || designStore.iconFill"
-          style="font-size: 1.4rem; z-index: 3"
+          style="font-size: 1.4rem; z-index: 3; transform: translate(0.4px, -1px)"
         ></i>
         <v-icon
           v-if="fill?.substring(0, 2) == 'gi' || designStore.iconFill.substring(0, 2) == 'gi'"
           :name="fill || designStore.iconFill"
           scale="1.45"
-          style="font-size: 1.4rem; z-index: 3"
+          style="font-size: 1.4rem; z-index: 3; transform: translate(0.4px, -0.5px)"
         ></v-icon>
       </div>
     </div>

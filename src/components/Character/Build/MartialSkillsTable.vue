@@ -3,18 +3,29 @@ import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { useCharacterStore } from '../../../stores/characterStore'
 import { useUserStore } from '../../../stores/userStore'
-import { BButton, BCard, BNavItem, BNavbar, BTable, BFormSelect, BThead } from 'bootstrap-vue-next'
+import {
+  BButton,
+  BCard,
+  BNavItem,
+  BNavbar,
+  BTable,
+  BFormSelect,
+  BThead,
+  BTableSimple,
+  BTr,
+  BTh,
+  BTd
+} from 'bootstrap-vue-next'
 import CustomCheckbox from '../CustomCheckbox.vue'
 import { ref, onMounted, toRaw } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 import { useMartialSkillsStore } from '../../../stores/martialSkillsStore'
 import { storeToRefs } from 'pinia'
 import CustomModal from '@/components/CustomModal.vue'
-import MartialSkillsDisplay from "@/components/MartialSkillDisplay.vue"
-import SpecializationsTable from "./SpecializationsTable.vue"
-import CombatStylesTable from "./CombatStylesTable.vue"
-
-
+import MartialSkillsDisplay from '@/components/MartialSkillDisplay.vue'
+import SpecializationsTable from './SpecializationsTable.vue'
+import CombatStylesTable from './CombatStylesTable.vue'
+import TitleWidget from '@/components/TitleWidget.vue'
 
 interface Skill {
   skill: string
@@ -29,9 +40,18 @@ export default {
     const characterStore = useCharacterStore()
     const designStore = useDesignStore()
     const martialSkillsStore = useMartialSkillsStore()
-    const { allCombatStyles, allSpecializations, combatStyles, specializations, buildDisplayCombatStyles, buildDisplaySpecializations } = storeToRefs(martialSkillsStore)
+    const {
+      allCombatStyles,
+      allSpecializations,
+      combatStyles,
+      specializations,
+      buildDisplayCombatStyles,
+      buildDisplaySpecializations
+    } = storeToRefs(martialSkillsStore)
     const buildDisplayCombatStylesClone: any = ref(buildDisplayCombatStyles.value)
 
+    const martialSkillsMessage =
+      ' Martial Skills give a character the ability to improve their basic ability: Weapon Attack.  Combat Styles and Specializations are both Martial Skills.  Combat Styles represent a base proficiency in a broad class of weapons.  To buy a rank, a character must have equal to or greater Agility or Strength depending on the Combat Style.  Each rank gives the character more MP.  Specializations represent mastery of a specific style of weapon.  To buy a new rank of a Specialization, a character must have that rank or higher in an appropriate Combat Style.'
     const modal = ref(false)
     const currentModal = ref(0)
     const options = [
@@ -48,7 +68,7 @@ export default {
       { value: '10', text: '10' }
     ]
 
-    const fields = ref([{ key: 'CombatStyle' },{key: 'Attributes'}, { key: 'Ranks' }])
+    const fields = ref([{ key: 'CombatStyle' }, { key: 'Attributes' }, { key: 'Ranks' }])
     return {
       designStore,
       characterStore,
@@ -64,7 +84,8 @@ export default {
       combatStyles,
       specializations,
       buildDisplaySpecializations,
-      martialSkillsStore
+      martialSkillsStore,
+      martialSkillsMessage
     }
   },
   watch: {
@@ -73,35 +94,31 @@ export default {
     }
   },
   methods: {
-    attrString(attributes :Array<string>):string{
-      let ret :string = "";
-      attributes.forEach(attr => {
-        ret += attr + " OR "
-      });    
-      return ret.substring(0, ret.length-4)
+    attrString(attributes: Array<string>): string {
+      let ret: string = ''
+      attributes.forEach((attr) => {
+        ret += attr + ' OR '
+      })
+      return ret.substring(0, ret.length - 4)
     },
     showModal(id: number) {
       this.currentModal = id
       this.modal = !this.modal
     },
     updateCombatStyle(name: any, id: any, rank: any, source: any) {
-        let skillObj = {
-            name: name, id: id, rank: parseInt(rank), source: source
-        }
-        this.martialSkillsStore.setCombatStyle(skillObj)
-    },
+      let skillObj = {
+        name: name,
+        id: id,
+        rank: parseInt(rank),
+        source: source
+      }
+      this.martialSkillsStore.setCombatStyle(skillObj)
+    }
   },
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
-    BTable,
-    BFormSelect,
-    CustomModal,
-    MartialSkillsDisplay,
     CombatStylesTable,
-    SpecializationsTable
+    SpecializationsTable,
+    TitleWidget
   }
 }
 </script>
@@ -111,23 +128,8 @@ export default {
     style="display: flex; justify-content: flex-start; flex-direction: column; width: 100%"
     :style="{ fontFamily: designStore.font }"
   >
-    <div
-      style="font-size: x-large; margin-top: 1rem; padding: 0.5rem; display: flex;flex-direction: column;"
-      :style="{
-        fontFamily: designStore.titleFont,
-        color: designStore.primaryText,
-        background: designStore.primaryTheme
-      }"
-    >
-      <div style="margin-left: 2rem">Martial Skills</div>
-      <span style="display: flex;  margin-bottom: -1rem; margin-top: -1rem;" :style="{borderColor: designStore.secondaryTheme, color:designStore.secondaryTheme}">
-          <v-icon name="gi-abstract-119" style="position: relative; left: .25rem; top: .5rem"></v-icon>
-          <hr :style="{borderColor: designStore.secondaryTheme}"></hr>
-          <v-icon name="gi-abstract-119" style="position: relative; right: .25rem; top: .5rem"></v-icon>
-
-        </span>
-    </div>
-    <CombatStylesTable ></CombatStylesTable>
+    <TitleWidget title="Martial Skills" :info-message="martialSkillsMessage"></TitleWidget>
+    <CombatStylesTable></CombatStylesTable>
     <SpecializationsTable></SpecializationsTable>
   </div>
 </template>

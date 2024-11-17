@@ -10,12 +10,12 @@ import { storeToRefs } from 'pinia'
 import { useMartialPerksStore } from '../../../stores/martialPerksStore'
 import AbilityDisplay from '../../AbilityDisplay.vue'
 import CustomPagination from '../../CustomPagination.vue'
+import TitleWidget from '@/components/TitleWidget.vue'
 
 interface Skill {
   skill: string
   rank: number
   source: string
-  id: string
 }
 
 export default {
@@ -31,6 +31,8 @@ export default {
     const buildDisplayMartialPerksClone: any = ref(
       structuredClone(toRaw(buildDisplayMartialPerks.value))
     )
+    const martialPerksMessage =
+      "Martial Perks lend variety to a Martial character's turn, though anyone with enough Agility or Strength may purchase them.  To buy a Martial Perk, a character must have purchased a perk of one rank lower (when possible) and the character must have at least (Perk Rank * 2) Agility or Strength.  Like every ability group whose rank caps at 5 instead of 10, Martial Perks have a base cost of 3."
     const modal = ref(false)
     const currentModal = ref(0)
     const options = [
@@ -77,7 +79,8 @@ export default {
       buildDisplayMartialPerksClone,
       options,
       modal,
-      currentModal
+      currentModal,
+      martialPerksMessage
     }
   },
   watch: {
@@ -88,6 +91,20 @@ export default {
     }
   },
   methods: {
+    LightenDarkenColor(col, amt) {
+      var num = parseInt(col.substring(1), 16)
+      var r = (num >> 16) + amt
+      var b = ((num >> 8) & 0x00ff) + amt
+      var g = (num & 0x0000ff) + amt
+      var newColor = g | (b << 8) | (r << 16)
+      return '#' + newColor.toString(16)
+    },
+    tableBg() {
+      if (parseInt(this.designStore.inputBacking.substring(1), 16) >= 3000000) {
+        return this.LightenDarkenColor(this.designStore.inputBacking, 10)
+      }
+      return this.LightenDarkenColor(this.designStore.inputBacking, -10)
+    },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length
@@ -109,14 +126,14 @@ export default {
       this.currentModal = id
       this.modal = !this.modal
     },
-    update(name: any, id: any, rank: number, source: any, known: any, perkGroup: string) {
+    update(name: any, rank: number, source: any, known: any, perkGroup: string, perkIndex: number) {
       let perkObj = {
         name: name,
-        id: id,
         rank: rank,
         known: known,
         source: source,
-        perkGroup: perkGroup
+        perkGroup: perkGroup,
+        perkIndex: perkIndex
       }
       this.martialPerkStore.setMartialPerk(perkObj)
     },
@@ -146,7 +163,8 @@ export default {
     CustomCheckbox,
     BFormInput,
     AbilityDisplay,
-    CustomPagination
+    CustomPagination,
+    TitleWidget
   }
 }
 </script>
@@ -157,30 +175,7 @@ export default {
     style="display: flex; justify-content: flex-start; flex-direction: column; width: 100%"
     :style="{ fontFamily: designStore.font }"
   >
-    <div
-      style="font-size: x-large; padding: 0.5rem; display: flex; flex-direction: column"
-      :style="{
-        fontFamily: designStore.titleFont,
-        color: designStore.primaryText,
-        background: designStore.primaryTheme
-      }"
-    >
-      <div style="margin-left: 2rem">Martial Perks</div>
-      <span
-        style="display: flex; margin-bottom: -1rem; margin-top: -1rem"
-        :style="{ borderColor: designStore.secondaryTheme, color: designStore.secondaryTheme }"
-      >
-        <v-icon
-          name="gi-abstract-119"
-          style="position: relative; left: 0.25rem; top: 0.5rem"
-        ></v-icon>
-        <hr :style="{ borderColor: designStore.secondaryTheme }" />
-        <v-icon
-          name="gi-abstract-119"
-          style="position: relative; right: 0.25rem; top: 0.5rem"
-        ></v-icon>
-      </span>
-    </div>
+    <TitleWidget title="Martial Perks" :info-message="martialPerksMessage"></TitleWidget>
     <BFormInput
       class="inputSearch"
       placeholder="Search..."
@@ -190,7 +185,8 @@ export default {
         fontFamily: designStore.font,
         color: designStore.inputText,
         background: designStore.inputBacking,
-        borderColor: designStore.secondaryTheme
+        borderColor: designStore.secondaryTheme,
+        '--bs-secondary-color': designStore.inputText
       }"
     ></BFormInput>
     <BTable
@@ -207,7 +203,8 @@ export default {
         fontFamily: designStore.font,
         borderColor: designStore.secondaryTheme,
         color: designStore.inputText,
-        backgroundColor: designStore.inputBacking
+        backgroundColor: designStore.inputBacking,
+        '--bs-table-striped-bg': tableBg()
       }"
       headerTitle="Martial Perks"
       class="tableClass"
@@ -257,21 +254,21 @@ export default {
           @true="
             update(
               data.item.name,
-              data.item.id,
               data.item.rank,
               data.item.source,
               true,
-              data.item.perkGroup
+              data.item.perkGroup,
+              data.item.perkIndex
             )
           "
           @false="
             update(
               data.item.name,
-              data.item.id,
               data.item.rank,
               data.item.source,
               false,
-              data.item.perkGroup
+              data.item.perkGroup,
+              data.item.perkIndex
             )
           "
         ></CustomCheckbox>
@@ -295,6 +292,7 @@ export default {
 <style scoped>
 .tableClass {
   --bs-table-bg: background-color !important;
+  --bs-emphasis-color: color;
   --bs-table-color-type: color !important;
   margin-bottom: 0;
 }

@@ -1,0 +1,32 @@
+{
+  "Akimbo": {
+    "name": "Akimbo",
+    "mp_cost": "Passive",
+    "description": "When choosing to dual wield this weapon, each strike this character makes with their primary hand is replicated onto their offhand. When using this ability the MP cost of all specialization skills and combat styles is increased by 1. Furthermore, Assasination's cost increases by one for each additional rank purchased."
+  },
+  "Assassination": {
+    "name": "Assassination",
+    "mp_cost": "2 MP per rank",
+    "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank. The damage dice rolled is doubled if the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents."
+  },
+  "Crippling Attack": {
+    "name": "Crippling Attack",
+    "mp_cost": "3 MP per strike",
+    "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again."
+  },
+  "Lethal Barrage II": {
+    "name": "Lethal Barrage II",
+    "mp_cost": "1 MP per rank",
+    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+  },
+  "Pinpoint": {
+    "name": "Pinpoint",
+    "mp_cost": "2 MP per rank",
+    "description": "For every rank purchased, the character gains a placed roll to a single strike they make this turn."
+  },
+  "Tripping Attack": {
+    "name": "Tripping Attack",
+    "mp_cost": "2 MP per strike",
+    "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate."
+  }
+}

@@ -25,6 +25,9 @@ export default {
     const titleFont = ref(JSON.parse(JSON.stringify(design.titleFont)))
     const icon = ref(JSON.parse(JSON.stringify(design.icon)))
     const iconFill = ref(JSON.parse(JSON.stringify(design.iconFill)))
+    const charIcon = ref(JSON.parse(JSON.stringify(design.charIcon)))
+    const charIconFlair = ref(JSON.parse(JSON.stringify(design.charIconFlair)))
+
     const iconColor = ref(JSON.parse(JSON.stringify(design.iconColor)))
     const update = ref(0)
     const fontList = ref([
@@ -51,7 +54,36 @@ export default {
       'Comic Sans MS',
       'Bahnschrift'
     ])
+
+    const checkboxBacking = ref([
+      {
+        html: 'Square Outline <i class="bi bi-square"></i>',
+        value: 'bi bi-square',
+        name: 'square'
+      },
+      { html: 'Square Filled <i class="bi bi-square-fill"></i>', value: 'bi bi-square-fill' },
+      { html: 'Circle Outline <i class="bi bi-circle"></i>', value: 'bi bi-circle' },
+      { html: 'Circle Filled <i class="bi bi-circle-fill"></i>', value: 'bi bi-circle-fill' },
+      { html: 'Triangle Outline <i class="bi bi-triangle"></i>', value: 'bi bi-triangle' },
+      {
+        html: 'Triangle Outline <i class="bi bi-triangle-fill"></i>',
+        value: 'bi bi-triangle-fill'
+      },
+      { html: 'Diamond Outline <i class="bi bi-diamond"></i>', value: 'bi bi-diamond' },
+      { html: 'Diamond Filled <i class="bi bi-diamond-fill"></i>', value: 'bi bi-diamond-fill' },
+      { html: 'Pentagon Outline <i class="bi bi-pentagon"></i>', value: 'bi bi-pentagon' },
+      { html: 'Pentagon Filled <i class="bi bi-pentagon-fill"></i>', value: 'bi bi-pentagon-fill' },
+      { html: 'Hexagon Outline <i class="bi bi-hexagon"></i>', value: 'bi bi-hexagon' },
+      { html: 'Hexagon Filled <i class="bi bi-hexagon-fill"></i>', value: 'bi bi-hexagon-fill' },
+      { html: 'Octagon Outline <i class="bi bi-octagon"></i>', value: 'bi bi-octagon' },
+      { html: 'Octagon Filled <i class="bi bi-octagon-fill"></i>', value: 'bi bi-octagon-fill' },
+      { html: 'heart Outline <i class="bi bi-heart"></i>', value: 'bi bi-heart' },
+      { html: 'heart Filled <i class="bi bi-heart-fill"></i>', value: 'bi bi-heart-fill' },
+      { html: 'Star Outline <i class="bi bi-star"></i>', value: 'bi bi-star' },
+      { html: 'Star Filled <i class="bi bi-star-fill"></i>', value: 'bi bi-star-fill' }
+    ])
     return {
+      checkboxBacking,
       design,
       modal,
       primaryTheme,
@@ -63,6 +95,8 @@ export default {
       alertTheme,
       font,
       titleFont,
+      charIcon,
+      charIconFlair,
       icon,
       iconFill,
       iconColor,
@@ -86,6 +120,8 @@ export default {
         alertTheme: this.alertTheme,
         font: this.font,
         titleFont: this.titleFont,
+        charIcon: this.charIcon,
+        charIconFlair: this.charIconFlair,
         icon: this.icon,
         iconFill: this.iconFill,
         iconColor: this.iconColor
@@ -107,16 +143,18 @@ export default {
         titleFont: 'Bahnschrift',
         icon: 'bi bi-square',
         iconFill: 'bi bi-check',
+        charIconFlair: 'bi bi-stars',
+        charIcon: 'bi bi-moon-stars-fill',
         iconColor: '#000000'
       }
       this.design.setDesign(designObj, useUserStore().getUserId, useCharacterStore().getCharacterId)
     }
   },
   components: {
+    BFormSelect,
     IconPicker,
     BButton,
     BFormInput,
-    BFormSelect,
     CustomModal,
     CustomCheckbox
   }
@@ -132,17 +170,10 @@ export default {
             Primary Theme
             <BFormInput type="color" v-model="primaryTheme" style="width: 100%"></BFormInput>
           </div>
-          <div class="colorView">
-            Secondary Theme
-            <BFormInput type="color" v-model="secondaryTheme" style="width: 100%"></BFormInput>
-          </div>
+
           <div class="colorView">
             Input Backing
             <BFormInput type="color" v-model="inputBacking" style="width: 100%"></BFormInput>
-          </div>
-          <div class="colorView">
-            Input Text
-            <BFormInput type="color" v-model="inputText" style="width: 100%"></BFormInput>
           </div>
           <div class="colorView">
             Sidebar Backing
@@ -155,6 +186,20 @@ export default {
             <BFormInput type="color" v-model="primaryText" style="width: 100%"></BFormInput>
           </div>
           <div class="colorView">
+            Input Text
+            <BFormInput type="color" v-model="inputText" style="width: 100%"></BFormInput>
+          </div>
+          <div class="colorView">
+            Sidebar Text
+            <BFormInput type="color" v-model="sidebarText" style="width: 100%"></BFormInput>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-around">
+          <div class="colorView">
+            Secondary Theme
+            <BFormInput type="color" v-model="secondaryTheme" style="width: 100%"></BFormInput>
+          </div>
+          <div class="colorView">
             Page Backdrop
             <BFormInput type="color" v-model="pageBackdrop" style="width: 100%"></BFormInput>
           </div>
@@ -165,45 +210,53 @@ export default {
               style="width: 100%"
             ></BFormInput>
           </div>
-          <div class="colorView">
-            Icon Color<BFormInput type="color" v-model="iconColor" style="width: 100%"></BFormInput>
+        </div>
+        <div class="font">
+          <div class="fontWithLabel">
+            <div class="fontLabel">Main Font</div>
+            <BFormSelect
+              :options="fontList"
+              v-model="font"
+              style="min-width: 12rem; margin-bottom: 1rem; flex-grow: 1"
+              :style="{
+                borderColor: design.secondaryTheme,
+                color: design.inputText,
+                background: design.inputBacking
+              }"
+            ></BFormSelect>
           </div>
-          <div class="colorView">
-            Sidebar Text
-            <BFormInput type="color" v-model="sidebarText" style="width: 100%"></BFormInput>
+          <div class="fontWithLabel">
+            <div class="fontLabel">Title Font</div>
+            <BFormSelect
+              :options="fontList"
+              v-model="titleFont"
+              style="min-width: 12rem; margin-bottom: 1rem; flex-grow: 1"
+              :style="{
+                borderColor: design.secondaryTheme,
+                color: design.inputText,
+                background: design.inputBacking
+              }"
+            ></BFormSelect>
           </div>
         </div>
-        <div style="display: flex; margin: 0.5rem">
-          <div style="width: 16rem; align-self: center; margin: 0.5rem">Main Font</div>
-          <BFormSelect
-            :options="fontList"
-            v-model="font"
-            :style="{
-              borderColor: design.secondaryTheme,
-              color: design.inputText,
-              background: design.inputBacking
-            }"
-          ></BFormSelect>
-          <div style="width: 16rem; align-self: center; margin: 0.5rem">Title Font</div>
-          <BFormSelect :options="fontList" v-model="titleFont"></BFormSelect>
-        </div>
-        <div style="display: flex">
-          <div
-            style="
-              width: 31rem;
-              display: flex;
-              justify-content: center;
-              flex-direction: column;
-              text-align: center;
-              margin: 0.5rem;
-            "
-          >
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; flex-direction: row">
+          <div class="colorView">
             Checkbox Outside
+            <BFormSelect
+              html-field="html"
+              v-model="icon"
+              class="checkdrop"
+              :style="{
+                background: design.inputBacking,
+                color: design.inputText,
+                borderColor: design.secondaryTheme
+              }"
+              :options="checkboxBacking"
+            >
+            </BFormSelect>
           </div>
-          <BFormInput v-model="icon"></BFormInput>
           <div
             style="
-              width: 25rem;
               display: flex;
               justify-content: center;
               flex-direction: column;
@@ -212,9 +265,60 @@ export default {
             "
           >
             Inner Icon
+            <IconPicker
+              :style="{ background: inputBacking }"
+              style="align-self: center; border-radius: 10px"
+              :currentIcon="design.iconFill"
+              @selectedIcon="(icon) => (iconFill = icon)"
+              orientation="bottom"
+              :color="design.iconColor"
+            ></IconPicker>
           </div>
-          <BFormInput v-model="iconFill"></BFormInput>
-          <IconPicker :currentIcon="design.iconFill"></IconPicker>
+          <div class="colorView">
+            Icon Color<BFormInput type="color" v-model="iconColor" style="width: 100%"></BFormInput>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              flex-direction: column;
+              text-align: center;
+              margin: 0.5rem;
+            "
+          >
+            Character Icon
+
+            <IconPicker
+              style="align-self: center; border-radius: 10px"
+              :style="{ color: secondaryTheme }"
+              id="2"
+              :currentIcon="design.charIcon"
+              @selectedIcon="(icon) => (charIcon = icon)"
+              orientation="bottom"
+              :color="design.secondaryTheme"
+            ></IconPicker>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              flex-direction: column;
+              text-align: center;
+              margin: 0.5rem;
+            "
+          >
+            Framing Flair Icon
+            <IconPicker
+              style="align-self: center; border-radius: 10px"
+              :style="{ color: secondaryTheme }"
+              id="3"
+              :currentIcon="design.charIconFlair"
+              @selectedIcon="(icon) => (charIconFlair = icon)"
+              orientation="bottom"
+              :color="design.secondaryTheme"
+            ></IconPicker>
+          </div>
         </div>
         <b-button
           @click="update++"
@@ -301,22 +405,23 @@ export default {
       <template v-slot:footer>
         <div style="display: flex">
           <BButton
+            style="margin-right: 1rem; border: 1px solid"
             :style="{
+              borderColor: design.secondaryTheme,
               background: design.primaryTheme,
               color: design.primaryText,
-              fontFamily: design.font,
-              borderColor: secondaryTheme
+              fontFamily: design.font
             }"
-            style="margin-right: 1rem"
             @click="reset"
             >Reset to Default</BButton
           >
           <BButton
+            style="border: 1px solid"
             :style="{
               background: design.primaryTheme,
               color: design.primaryText,
               fontFamily: design.font,
-              borderColor: secondaryTheme
+              borderColor: design.secondaryTheme
             }"
             @click="updateObj"
             >Set Color Scheme</BButton
@@ -336,10 +441,54 @@ export default {
 </template>
 
 <style scoped>
+.fontWithLabel {
+  display: flex;
+  flex-grow: 1;
+}
+.fontLabel {
+  width: 6rem;
+  align-self: center;
+  margin: 0.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 65rem) {
+  .fontWithLabel {
+    flex-direction: column;
+  }
+  .fontLabel {
+    align-self: start;
+    margin: 0;
+  }
+  @media (max-width: 40rem) {
+    .fontWithLabel {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .fontLabel {
+      text-align: center;
+    }
+  }
+}
+
+.font {
+  display: flex;
+  margin: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-bottom: 0;
+  margin-top: 1rem;
+}
 .colorView {
-  width: 8rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   flex-direction: column;
+}
+option:hover {
+  background-color: red;
 }
 </style>

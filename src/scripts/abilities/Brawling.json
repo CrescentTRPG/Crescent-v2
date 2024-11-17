@@ -1,0 +1,58 @@
+[
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca76"
+      },
+      "name": "Reverse Grapple",
+      "mp_cost": "Passive",
+      "description": "The character can execute brawling specialization attacks while grappling/grappled. As part of acore action utilizing their brawling, they can attempt to reverse a grapple they're caught within. The character initiates a grapple check. On success, they choose between escaping or grappling the target. This action can only be taken once eachround."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca77"
+      },
+      "name": "Disarming Attack",
+      "mp_cost": "3 MP per strike",
+      "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the character's choosing."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca78"
+      },
+      "name": "Disorienting Strike",
+      "mp_cost": "2 MP per strike",
+      "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is a size category larger than the character, WIL save to negate."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca79"
+      },
+      "name": "Grappling Attack",
+      "mp_cost": "2 MP per strike",
+      "description": "The next successful strike this turn automatically grapples the target."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca7a"
+      },
+      "name": "Knockout",
+      "mp_cost": "6 MP per strike",
+      "description": "The next successful strike this turn causes the target to lose a core action until the end of their next turn, or instead be knocked unconscious if they are below half their maximum HP, their choice of a WIL or HEA save to negate either effect. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca7b"
+      },
+      "name": "Launch",
+      "mp_cost": "1 MP per rank",
+      "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca7c"
+      },
+      "name": "Lethal Barrage II",
+      "mp_cost": "1 MP per rank",
+      "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+    }
+  ]

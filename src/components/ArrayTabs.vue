@@ -2,18 +2,19 @@
 import { useDesignStore } from '@/stores/designStore'
 import { Ref, ref } from 'vue'
 
-import TabItem from './tabItem.vue'
+import TabItem from './TabItem.vue'
 import { BAccordion, BAccordionItem } from 'bootstrap-vue-next'
 
 export default {
   emits: ['selectedTabs'],
-  props: ['tabs'],
+  props: ['tabs', 'filteringMessage'],
   setup(props: any) {
     const designStore = useDesignStore()
     const selectedTabs: Ref<Array<any>> = ref([])
     return {
       designStore,
-      selectedTabs
+      selectedTabs,
+      props
     }
   },
   methods: {
@@ -27,6 +28,14 @@ export default {
         .slice(0, index)
         .concat(this.selectedTabs.slice(index + 1, this.selectedTabs.length))
       this.$emit('selectedTabs', this.selectedTabs)
+    },
+    LightenDarkenColor(col, amt) {
+      var num = parseInt(col.substring(1), 16)
+      var r = (num >> 16) + amt
+      var b = ((num >> 8) & 0x00ff) + amt
+      var g = (num & 0x0000ff) + amt
+      var newColor = g | (b << 8) | (r << 16)
+      return '#' + newColor.toString(16)
     }
   },
   components: { TabItem, BAccordion, BAccordionItem }
@@ -36,14 +45,14 @@ export default {
   <BAccordion
     class="accordion"
     :style="{
-      color: designStore.sidebarText,
+      color: LightenDarkenColor(designStore.inputText, -10),
       background: designStore.inputBacking,
-      backgroundColor: designStore.sidebarBacking,
+      backgroundColor: LightenDarkenColor(designStore.inputBacking, -10),
       borderColor: designStore.secondaryTheme
     }"
   >
     <BAccordionItem
-      title="Filter By Spellgroups"
+      :title="'Filter By ' + props.filteringMessage"
       :style="{
         color: designStore.inputText,
         background: designStore.sidebarBacking,

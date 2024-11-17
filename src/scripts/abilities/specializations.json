@@ -1,0 +1,788 @@
+[
+  {
+    "name": "Axes",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca67"
+        },
+        "name": "Momentum",
+        "mp_cost": "Passive",
+        "description": "Attacks made with the weapon, hit or miss, drive the target and attacker 5' in a direction of thecharacter's choosing, if the target is of the same size or smaller than the attacker."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca68"
+        },
+        "name": "Charge",
+        "mp_cost": "3 MP + 1 per rank",
+        "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from Momentum, Cleave Armor, Lethal, or Pierce Cover to all successfully struck."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca69"
+        },
+        "name": "Cleave Armor",
+        "mp_cost": "1 MP per rank",
+        "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca6a"
+        },
+        "name": "Embed",
+        "mp_cost": "1 MP per rank",
+        "description": "The next successful strike this turn inflicts a d10 of the relevant damage type per rank. While the weapon is embedded in the target, it is unusable until retrieved. The character cannot be moved by mundane means, and receives a placed roll on any magical attempts to move them while they hold onto the embedded object. The character also travels with the embedded object while it is held."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca6b"
+        },
+        "name": "Lethal Offhand Attack",
+        "mp_cost": "3 MP / 4 MP per strike",
+        "description": "The character makes an extra strike using their offhand weapon, adding any lethal bonuses to the attack. They can only take this action once each round. This ability costs 3 MP for versatile weapons and 4 MP for heavy."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca6c"
+        },
+        "name": "Pierce Cover",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, all strikes ignore up to 6'' of stone and wood, 3\" of iron and steel, or 1\" of adamantite, and 2 shield DVs until the start of their next turn. This ability does not allow attacks to ignore armor DVs."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca6d"
+        },
+        "name": "Throw",
+        "mp_cost": "1 MP per rank",
+        "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0beca6e"
+    },
+    "name": "Bows",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca6f"
+        },
+        "name": "Recurve Shot",
+        "mp_cost": "Passive",
+        "description": "Strikes made with this weapon curve. Should a strike with this weapon miss a target, the character can redirect the attack roll to a different target within the weapon's range. The character can only make use of this ability once eachround."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca70"
+        },
+        "name": "Burst Shot",
+        "mp_cost": "2 MP per rank",
+        "description": "The character makes an altered strike. If it hits, they then roll damage for extra strikes equal to the ranks of this ability purchased."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca71"
+        },
+        "name": "Tipped Arrows",
+        "mp_cost": "2 MP per rank",
+        "description": "For every rank purchased, the character can choose to add one stacking instance of theirchoice of toxic, fire or piercing suffering to all successful strikes this turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca72"
+        },
+        "name": "Object Shot",
+        "mp_cost": "1 MP per strike",
+        "description": "The character makes an altered strike. They load an object weighing less than 40 kilograms into their weapon and fire it at a target, passing the object onto the target should it at least meet their movement DVs. Unless otherwise specified, objects fired this way will inflict a d6 blunt damage. The character can choose to forgo weapon damage when using this ability."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca73"
+        },
+        "name": "Whistling Shot",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike this turn causes the target to become Frighten ed of the character until the end of their next turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca74"
+        },
+        "name": "Volley",
+        "mp_cost": "4 MP per strike",
+        "description": "With this altered strike, the character may choose a point within their weapon's range, and make an individual attack roll against all targets within a 10' radius of the point, adding any applicable bonuses from Lethal, Burst Attack, Tipped Arrows and Whistling Shot."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0beca75"
+    },
+    "name": "Brawling",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca76"
+        },
+        "name": "Reverse Grapple",
+        "mp_cost": "Passive",
+        "description": "The character can execute brawling specialization attacks while grappling/grappled. As part of acore action utilizing their brawling, they can attempt to reverse a grapple they're caught within. The character initiates a grapple check. On success, they choose between escaping or grappling the target. This action can only be taken once eachround."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca77"
+        },
+        "name": "Disarming Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the character's choosing."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca78"
+        },
+        "name": "Disorienting Strike",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is a size category larger than the character, WIL save to negate."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca79"
+        },
+        "name": "Grappling Attack",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn automatically grapples the target."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca7a"
+        },
+        "name": "Knockout",
+        "mp_cost": "6 MP per strike",
+        "description": "The next successful strike this turn causes the target to lose a core action until the end of their next turn, or instead be knocked unconscious if they are below half their maximum HP, their choice of a WIL or HEA save to negate either effect. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca7b"
+        },
+        "name": "Launch",
+        "mp_cost": "1 MP per rank",
+        "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca7c"
+        },
+        "name": "Lethal Barrage II",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0beca7d"
+    },
+    "name": "Handguns",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca7e"
+        },
+        "name": "Akimbo",
+        "mp_cost": "Passive",
+        "description": "When choosing to dual wield this weapon, each strike this character makes with their primary hand is replicated onto their offhand. When using this ability the MP cost of all specialization skills and combat styles is increased by 1. Furthermore, Assasination's cost increases by one for each additional rank purchased."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca7f"
+        },
+        "name": "Assassination",
+        "mp_cost": "2 MP per rank",
+        "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank. The damage dice rolled is doubled if the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca80"
+        },
+        "name": "Crippling Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca81"
+        },
+        "name": "Lethal Barrage II",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca82"
+        },
+        "name": "Pinpoint",
+        "mp_cost": "2 MP per rank",
+        "description": "For every rank purchased, the character gains a placed roll to a single strike they make this turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca83"
+        },
+        "name": "Tripping Attack",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0beca84"
+    },
+    "name": "Crossbows",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca85"
+        },
+        "name": "Hunter's Ammunition",
+        "mp_cost": "Passive",
+        "description": "A crossbow starts with one charge for each of the following abilities: > Blazeshot > Stunshot > Marking Shot > Bola Shot It takes a swift action to load another bolt into the crossbow (it no longer costs an action to reload the crossbow at rank 4.) Only one of these abilities may affect a given strike at a time; When a crossbow is reduced to zero charges, it gains a charge of Skyshot. This charge only lasts for one round. When this charge of Skyshot is lost, a crossbow's starting charges are replenished. A character may also expend a core action to replenish their crossbow's charges."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca86"
+        },
+        "name": "Blazeshot",
+        "mp_cost": "Blazeshot Charge",
+        "description": "The next successful strike this turn inflicts an instance of suffering (fire.) Stunshot (Stunshot Charge): The next successful strike this turn causes the target to lose their core action until the end of their next turn, HEA save to negate. If the target is below one a quarter of their maximum HP and they fail the save, they will instead be knocked unconscious."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca87"
+        },
+        "name": "Marking Shot",
+        "mp_cost": "Marking Shot Charge",
+        "description": "The next successful strike causes all attacks against the target to gain a placed roll, until the end of the character's next turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca88"
+        },
+        "name": "Bola Shot",
+        "mp_cost": "Bola Shot Charge",
+        "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca89"
+        },
+        "name": "Skyshot",
+        "mp_cost": "1 MP per rank, Skyshot Charge",
+        "description": "With this altered strike, the character may choose a point within their weapon's range, making an individual attack roll against all targets within a 5' radius of the point, inflicting d12 bonus piercing damage per rank purchased."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0beca8a"
+    },
+    "name": "Hammers",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca8b"
+        },
+        "name": "Grazing Strike",
+        "mp_cost": "Passive",
+        "description": "Strikes made with this weapon inflict half damage and inflict appropriate weapon skill effects if the strike at least matches the target's combined movement and bonus DVs."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca8c"
+        },
+        "name": "Charge",
+        "mp_cost": "3 MP + 1 per rank",
+        "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from Grazing Strike, Cleave Armor, Knockout, Lethal, or Concussive Strike to all successfully struck."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca8d"
+        },
+        "name": "Cleave Armor",
+        "mp_cost": "1 MP per rank",
+        "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca8e"
+        },
+        "name": "Concussive",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn befuddles the target until the end of their next turn, HE save to negate."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca8f"
+        },
+        "name": "Knockout",
+        "mp_cost": "6 MP per strike",
+        "description": "The next successful strike this turn causes the target to lose a core action until the end of their next turn, or instead be knocked unconscious if they are below half their maximum HP, their choice of a WIL or HEA save to negate either effect."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca90"
+        },
+        "name": "Launch",
+        "mp_cost": "1 MP per rank",
+        "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca91"
+        },
+        "name": "Lethal IV",
+        "mp_cost": "1 MP per rank",
+        "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0beca92"
+    },
+    "name": "Knives",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca93"
+        },
+        "name": "Blitz",
+        "mp_cost": "Passive",
+        "description": "Spending the appropriate martial points to activate Bleed, Blinding Attack, Crippling Attack, and Throw causes every successful strike made with a knife to apply these specialization effects."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca94"
+        },
+        "name": "Assassination",
+        "mp_cost": "2 MP per rank",
+        "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank. The damage dice rolled is doubled if the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca95"
+        },
+        "name": "Bleed",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn prevents the target from recovering any HP until the end of their next turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca96"
+        },
+        "name": "Blinding Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike this turn blinds the target until the end of their next turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca97"
+        },
+        "name": "Crippling Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca98"
+        },
+        "name": "Throw",
+        "mp_cost": "1 MP per rank",
+        "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acro- -batics check."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca99"
+        },
+        "name": "Lethal Barrage II",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0beca9a"
+    },
+    "name": "Machine Guns",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca9b"
+        },
+        "name": "Cascade",
+        "mp_cost": "Passive",
+        "description": "The multiattack cost is inherently reduced by one. Additionally, Once one attack strikes a target, all further strikes against that target also hit.  If at least two strikes hit a target they are slowed until the start of the character’s next turn.  If at least three strikes hit a target all attacks made as a part of this Weapon Attack against that target are considered Critical Hits and do double damage."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca9c"
+        },
+        "name": "Overwatch",
+        "mp_cost": "4 MP per activation + 1 MP per additional rank",
+        "description": "The character executes an action; they may select a point within their weapon's range and apply suppressive fire in a 10' radius area until the start of their next turn. Should anyone in the area take a movement or core action - the character is granted the ability to attack the target with 3 MP + 1 MP per additional rank. Those in the area have a displaced roll on any AGI checks / saves and have a displaced roll on attack rolls."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca9d"
+        },
+        "name": "Interrupt",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn interrupts an enemy. An interrupt cancels whatever action the target last attempted to execute should they fail a HEA save. Interrupts only function if the character is somehow able to activate the ability on the target's turn, such as through the use of Overwatch.Shred (2 MP per rank): All successful strikes reduce the targets' armor DVs by 1 per rank if they at least hit the target's movement DVs."
+      },
+      {
+        "_id": {
+          "$oid": "61536b9e6b504d40238c5bd0"
+        },
+        "name": "Shred",
+        "mp_cost": "2MP per rank",
+        "description": "All successful strikes reduce the targets’ armor DVs by 1 per rank if they at least hit the target’s movement DVs.  This lasts until the start of the character’s next turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca9e"
+        },
+        "name": "Disarming Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the target's choice."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0beca9f"
+        },
+        "name": "Concussive",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn befuddles the target until the end of their next turn, WIL save to negate."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0becaa0"
+    },
+    "name": "Shotguns",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaa1"
+        },
+        "name": " Overcharged Shot",
+        "mp_cost": "2 MP per rank",
+        "description": ""
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaa2"
+        },
+        "name": "Overcharged Shot",
+        "mp_cost": "2 MP per rank",
+        "description": "The character makes an altered strike. If it hits, they add their weapon's damage dice to their strike an additional time for every rank. Additionally, the strike gains the following effects on hit: * If the shotgun is in buckshot mode, the target is forced back 15' per rank. * If the shotgun is in slug mode, the target's movement speed is reduced by 15' per rank on their next movement action."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaa3"
+        },
+        "name": "Area Attack",
+        "mp_cost": "4 MP per strike",
+        "description": "The altered strike affects all targets in a 10'X10' cone with buckshot or 20'X20' cone with slugs applying a single attack roll, adding any applicable bonuses from Lethal, Modal, and Concussive strike to all successfully struck."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaa4"
+        },
+        "name": "Stopping Power",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, the target of the strike (Regardless of whether it hits or not) loses 5' of on all movement speeds until the start character's next turn. If they are reduced to 0 on all movement speeds, their movement DVs are halved."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaa5"
+        },
+        "name": "Blowback",
+        "mp_cost": "1 MP per rank",
+        "description": "The character alters their strike; launching themselves (opposite the direction of the shot) or another target(in the direction of the shot) 20' + 10' per additional rank. If used on an unwilling target, the character contests their STR against the target's AGI or STR (target's choice.) If the target is of a similar size or smaller in comparison to thecharacter and the weapon is in buckshot mode, there is no check on hit."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaa6"
+        },
+        "name": "Concussive Strike",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn befuddles the target until the end of their next turn, WIL save to negate. If the weapon is in slug mode, there is no check on hit"
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0becabd"
+    },
+    "name": "Whips",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becabe"
+        },
+        "name": "Inertia",
+        "mp_cost": "Passive",
+        "description": "For every 30' a character physically moves in one round, the damage of their next successful strike is increased by 5 of the weapon's relevant damage type."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becabf"
+        },
+        "name": "Disarming Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in the direction of the character's choice."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becac0"
+        },
+        "name": "Extending Reach",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, the character adds 5' of reach to all strikes made this round."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becac1"
+        },
+        "name": "Grappling Attack",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn automatically grapples the target."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becac2"
+        },
+        "name": "Lethal Barrage II",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becac3"
+        },
+        "name": "Swing",
+        "mp_cost": "2 MP per activation",
+        "description": "The character executes an action, they may fling their weapon, latching onto a suitable support, target, or object, within reach, AGI or STR save (target's choice) to negate. If the target is another person, one of them acts as support. The character may launch themselves or the target anywhere within reach of the support."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becac4"
+        },
+        "name": "Radial Attack",
+        "mp_cost": "4 MP per strike",
+        "description": "The character uses their altered strike to extend their attack to all targets within the weapon's reach, making an individual attack roll against them. They then make a single damage roll against all targets successfully struck, adding any applicable bonuses from Lethal, Disarming Attack, and Extending Reach to all successfully struck."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0becaa7"
+    },
+    "name": "Rifles",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaa8"
+        },
+        "name": "Aiming",
+        "mp_cost": "Passive",
+        "description": "If the character forgoes taking a movement action this round in favor of aiming for vitals, each shot they fire deals a minimum of 8 base damage."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaa9"
+        },
+        "name": "Overcharged Shot",
+        "mp_cost": "2 MP per rank",
+        "description": "The character makes an altered strike. If it hits, they add their weapon's damage dice to their strike an additional time for every rank."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaaa"
+        },
+        "name": "Piercing Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike ignores anything that would reduce its damage and bypasses (ignoring them) temporary barriers. This skill does not affect immunity."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaab"
+        },
+        "name": "Pierce Cover",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, all strikes ignore up to 6'' of stone and wood, 3\" of iron and steel, or 1\" of adamantite, and 2 shield DVs until the start of their next turn. This ability does not allow attacks to ignore armor DVs."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaac"
+        },
+        "name": "Pinpoint",
+        "mp_cost": "2 MP per rank",
+        "description": "For every rank purchased, the character gains a placed roll to a single strike they make this turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaad"
+        },
+        "name": "Punchthrough",
+        "mp_cost": "4 MP per strike",
+        "description": "The altered strike cuts through all foes in a line until colliding with a physical or magical barrier. The character makes a single attack roll and then makes a single damage roll against all targets successfully struck, adding any applicable bonuses from other rifle specialization skills and lethal to all successfully struck."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0becaae"
+    },
+    "name": "Polearms",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaaf"
+        },
+        "name": "Impaling Weapon",
+        "mp_cost": "Passive",
+        "description": "All successful strikes inflict an instance of suffering (piercing.) When striking a prone or pin ned target, the character's attack roll has a minimum value of 14."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becab0"
+        },
+        "name": "Fulcrum",
+        "mp_cost": "1 MP per rank",
+        "description": "The character executes an action. For every rank purchased the character propels themselves 30' into the air and reduces the MP cost of Sky Strike on their next turn by 1. The character begins falling at the start of their next turn. This ability can also be used to mitigate 30' worth of fall damage as the character deftly maneuvers through the air."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becab1"
+        },
+        "name": "Sky Strike",
+        "mp_cost": "3 MP per strike, only usable in air",
+        "description": "The character executes an action, moving 30', returning to the ground without fall damage, and alters their next strike. On a successful strike, they pin the target, AGI or STR save to negate (target'schoice) if the target is a size category larger than the character. On a successful pin, the character's weapon stays in the target, requiring a swift action to remove it (Anyone can, and doing so Inflicts three instances of suffering (Piercing) when done.)"
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becab2"
+        },
+        "name": "Radial Attack",
+        "mp_cost": "4 MP per strike",
+        "description": "The character uses their altered strike to extend their attack to all targets within the weapon's reach, making an individual attack roll against them. They then make a single damage roll against all targets successfully struck, adding any applicable bonuses from Tripping Attack, Fending Strike, Lethal, or Impaling Weapon to all successfully struck."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becab3"
+        },
+        "name": "Tripping Attack",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becab4"
+        },
+        "name": "Throw",
+        "mp_cost": "1 MP per rank",
+        "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check."
+      },
+      {
+        "_id": {
+          "$oid": "61ff3b4ced4dc1f179aa7a60"
+        },
+        "name": "Lethal IV",
+        "mp_cost": "1 MP per rank",
+        "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn."
+      }
+    ],
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "606ffd7f8cecf126c0becab5"
+    },
+    "name": "Swords",
+    "skills": [
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becab6"
+        },
+        "name": "Duelist",
+        "mp_cost": "Passive",
+        "description": "Swords are modal weapons that can be adjusted with the usage of a swift action. There are two modes; Offense and Defense. In order to use an offensive stance, the character must have 4 ranks in this specialization. * Offense: The MP cost of staggering blow for the first strike made each turn is reduced to 0. * Defense: At the end of their turn, for every distinct target the character has made a successful strike against on that turn, the character gains 1 bonus DV until the start of their next turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becab7"
+        },
+        "name": "Charge",
+        "mp_cost": "3 MP + 1 per rank",
+        "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from all other sword specialization abilities to all successfully struck."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becab8"
+        },
+        "name": "Disarming Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the character's choice."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becab9"
+        },
+        "name": "Disorienting Strike",
+        "mp_cost": "2 MP per strike",
+        "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is one or more size categories larger than the character, WIL save to negate."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becaba"
+        },
+        "name": "Staggering Blow",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike this turn knocks the target 10' backwards, opening them up to other attacks. All attack rolls against the target have a placed roll until the end of the character's next turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becabb"
+        },
+        "name": "Lethal Barrage II",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+      },
+      {
+        "_id": {
+          "$oid": "606ffd7f8cecf126c0becabc"
+        },
+        "name": "Lethal IV",
+        "mp_cost": "1 MP per rank",
+        "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn."
+      }
+    ],
+    "__v": 0
+  }
+]

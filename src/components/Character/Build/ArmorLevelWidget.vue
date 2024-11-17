@@ -1,19 +1,13 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BFormTextarea, BFormInput } from 'bootstrap-vue-next'
+import { BFormInput } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 import { useCharacterStore } from '../../../stores/characterStore'
-
-import CharacterSidebar from '../Build/CharacterSidebar.vue'
-import BannerItem from '../Build/BannerItem.vue'
-import ArchetypeSelector from '../Build/ArchetypeSelector.vue'
 import CustomModal from '../../CustomModal.vue'
 
 export default {
   setup(props, context) {
-    const router = useRouter()
     const modal = ref(false)
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
@@ -54,14 +48,6 @@ export default {
     }
   },
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
-    CharacterSidebar,
-    BannerItem,
-    ArchetypeSelector,
-    BFormTextarea,
     CustomModal,
     BFormInput
   }
@@ -106,6 +92,7 @@ export default {
             left: 11rem;
             bottom: 7rem;
             width: 2rem;
+            cursor: pointer;
           "
           @click="modal = !modal"
         ></i>

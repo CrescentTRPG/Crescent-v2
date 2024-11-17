@@ -1,20 +1,41 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNav } from 'bootstrap-vue-next'
-import { ref } from 'vue'
+import { BNavItem, BNav } from 'bootstrap-vue-next'
+import { ref, ComputedRef, computed } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
+import { useCharacterStore } from '@/stores/characterStore'
+import { useSpellStore } from '@/stores/spellsStore'
+import { useSkillStore } from '@/stores/skillsStore'
 
 export default {
   setup(props, context) {
-    const error = ref(null)
-    const router = useRouter()
     const designStore = useDesignStore()
+    const spellsStore = useSpellStore()
+    const skillsStore = useSkillStore()
+
+    const hasFauna: ComputedRef<Boolean> = computed(() => {
+      if (spellsStore.spellgroups['Fauna'] != undefined) {
+        return true
+      }
+      return false
+    })
+
+    const hasEffigy: ComputedRef<Boolean> = computed(() => {
+      if (spellsStore.spellgroups['Effigy'] != undefined) {
+        return true
+      }
+      return false
+    })
+
+    const hasPerformance: ComputedRef<Boolean> = computed(() => {
+      if (skillsStore.skills['Performance']?.rank >= 2) {
+        return true
+      }
+      return false
+    })
+
     const navPos = ref('corestats')
-
-    return { designStore, navPos }
+    return { designStore, navPos, hasFauna, hasEffigy, hasPerformance }
   },
-
   methods: {
     navItemStyle(item: string) {
       if (item === this.navPos) {
@@ -34,17 +55,14 @@ export default {
     }
   },
   components: {
-    BButton,
-    BNavbar,
     BNavItem,
-    BCard,
     BNav
   }
 }
 </script>
 
 <template>
-  <div style="height: 100%">
+  <div>
     <BNav
       vertical
       class="sidebar"
@@ -58,6 +76,12 @@ export default {
         <div class="vertical">
           <v-icon scale="1.5" name="gi-skills" />
           <span class="textI">Core Stats</span>
+        </div>
+      </BNavItem>
+      <BNavItem :style="{ color: navItemStyle('traits') }" @click="switchTab('traits')">
+        <div class="vertical">
+          <v-icon scale="1.5" name="gi-dna1" />
+          <span class="textI">Traits</span>
         </div>
       </BNavItem>
       <BNavItem :style="{ color: navItemStyle('skills') }" @click="switchTab('skills')">
@@ -85,6 +109,37 @@ export default {
         <div class="vertical">
           <v-icon scale="1.5" name="gi-comet-spark" />
           <span class="textI">Spells</span>
+        </div>
+      </BNavItem>
+      <BNavItem
+        v-if="hasEffigy"
+        :style="{ color: navItemStyle('effigy') }"
+        @click="switchTab('effigy')"
+      >
+        <div class="vertical">
+          <v-icon scale="1.5" name="gi-rock-golem" />
+          <span class="textI">Effigy</span>
+        </div>
+      </BNavItem>
+      <BNavItem
+        v-if="hasFauna"
+        :style="{ color: navItemStyle('fauna') }"
+        @click="switchTab('fauna')"
+      >
+        <div class="vertical">
+          <v-icon scale="1.5" name="gi-dragon-spiral" />
+          <span class="textI">Fauna</span>
+        </div>
+      </BNavItem>
+      <BNavItem
+        v-if="hasPerformance"
+        :style="{ color: navItemStyle('performance') }"
+        @click="switchTab('performance')"
+      >
+        <div class="vertical">
+          <v-icon scale="1.5" name="gi-sing" />
+          <span class="textI long">Performance</span>
+          <span class="textI short">Perform</span>
         </div>
       </BNavItem>
     </BNav>
@@ -122,7 +177,17 @@ li {
   padding-left: 1rem;
   border-left: solid 2px;
 }
-@media (max-width: 470px) {
+@media (max-width: 720px) {
+  .long {
+    display: none;
+  }
+}
+@media (min-width: 721px) {
+  .short {
+    display: none;
+  }
+}
+@media (max-width: 500px) {
   .textI {
     display: none;
   }

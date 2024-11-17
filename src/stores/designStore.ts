@@ -14,6 +14,8 @@ interface Design {
   primaryText: string
   pageBackdrop: string
   alertTheme: string
+  charIcon: string
+  charIconFlair: string
   font: string
   titleFont: string
   icon: string
@@ -36,6 +38,8 @@ export const useDesignStore = defineStore('design', {
     titleFont: 'Bahnschrift',
     icon: 'square',
     iconFill: 'check',
+    charIconFlair: 'bi bi-stars',
+    charIcon: 'bi bi-moon-stars-fill',
     iconColor: '#000000'
   }),
   getters: {
@@ -67,6 +71,8 @@ export const useDesignStore = defineStore('design', {
       alertTheme: string
       font: string
       titleFont: string
+      charIcon: string
+      charIconFlair: string
       icon: string
       iconFill: string
       iconColor: string
@@ -82,13 +88,15 @@ export const useDesignStore = defineStore('design', {
       this.alertTheme = design.alertTheme
       this.font = design.font
       this.titleFont = design.titleFont
+      this.charIcon = design.charIcon
+      this.charIconFlair = design.charIconFlair
       this.icon = design.icon
       this.iconFill = design.iconFill
       this.iconColor = design.iconColor
     },
     async setDesign(des: Design, uid: string, cid: string) {
       this.setLocalDesign(des)
-      let ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { design: des })
+      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { design: des })
       console.log(ret)
     }
   },

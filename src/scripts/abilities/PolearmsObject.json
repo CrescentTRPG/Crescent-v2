@@ -1,0 +1,37 @@
+{
+  "Impaling Weapon": {
+    "name": "Impaling Weapon",
+    "mp_cost": "Passive",
+    "description": "All successful strikes inflict an instance of suffering (piercing.) When striking a prone or pin ned target, the character's attack roll has a minimum value of 14."
+  },
+  "Fulcrum": {
+    "name": "Fulcrum",
+    "mp_cost": "1 MP per rank",
+    "description": "The character executes an action. For every rank purchased the character propels themselves 30' into the air and reduces the MP cost of Sky Strike on their next turn by 1. The character begins falling at the start of their next turn. This ability can also be used to mitigate 30' worth of fall damage as the character deftly maneuvers through the air."
+  },
+  "Sky Strike": {
+    "name": "Sky Strike",
+    "mp_cost": "3 MP per strike, only usable in air",
+    "description": "The character executes an action, moving 30', returning to the ground without fall damage, and alters their next strike. On a successful strike, they pin the target, AGI or STR save to negate (target'schoice) if the target is a size category larger than the character. On a successful pin, the character's weapon stays in the target, requiring a swift action to remove it (Anyone can, and doing so Inflicts three instances of suffering (Piercing) when done.)"
+  },
+  "Radial Attack": {
+    "name": "Radial Attack",
+    "mp_cost": "4 MP per strike",
+    "description": "The character uses their altered strike to extend their attack to all targets within the weapon's reach, making an individual attack roll against them. They then make a single damage roll against all targets successfully struck, adding any applicable bonuses from Tripping Attack, Fending Strike, Lethal, or Impaling Weapon to all successfully struck."
+  },
+  "Tripping Attack": {
+    "name": "Tripping Attack",
+    "mp_cost": "2 MP per strike",
+    "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate."
+  },
+  "Throw": {
+    "name": "Throw",
+    "mp_cost": "1 MP per rank",
+    "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check."
+  },
+  "Lethal IV": {
+    "name": "Lethal IV",
+    "mp_cost": "1 MP per rank",
+    "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn."
+  }
+}

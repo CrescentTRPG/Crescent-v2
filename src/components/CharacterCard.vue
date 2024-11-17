@@ -18,9 +18,9 @@ import { BCard, BCardImg, BCardTitle } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 
 export default {
-  props: ['character', 'name', 'useImg'],
+  props: ['characterProp', 'name', 'useImg'],
   setup(props, context) {
-    const character = ref(props.character)
+    const character = ref(props.characterProp)
     const name = ref(props.name)
     const useImg = ref(props.useImg)
     return { character }

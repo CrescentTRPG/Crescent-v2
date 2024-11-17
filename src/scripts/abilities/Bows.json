@@ -1,0 +1,50 @@
+[
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca6f"
+      },
+      "name": "Recurve Shot",
+      "mp_cost": "Passive",
+      "description": "Strikes made with this weapon curve. Should a strike with this weapon miss a target, the character can redirect the attack roll to a different target within the weapon's range. The character can only make use of this ability once eachround."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca70"
+      },
+      "name": "Burst Shot",
+      "mp_cost": "2 MP per rank",
+      "description": "The character makes an altered strike. If it hits, they then roll damage for extra strikes equal to the ranks of this ability purchased."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca71"
+      },
+      "name": "Tipped Arrows",
+      "mp_cost": "2 MP per rank",
+      "description": "For every rank purchased, the character can choose to add one stacking instance of theirchoice of toxic, fire or piercing suffering to all successful strikes this turn."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca72"
+      },
+      "name": "Object Shot",
+      "mp_cost": "1 MP per strike",
+      "description": "The character makes an altered strike. They load an object weighing less than 40 kilograms into their weapon and fire it at a target, passing the object onto the target should it at least meet their movement DVs. Unless otherwise specified, objects fired this way will inflict a d6 blunt damage. The character can choose to forgo weapon damage when using this ability."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca73"
+      },
+      "name": "Whistling Shot",
+      "mp_cost": "3 MP per strike",
+      "description": "The next successful strike this turn causes the target to become Frighten ed of the character until the end of their next turn."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca74"
+      },
+      "name": "Volley",
+      "mp_cost": "4 MP per strike",
+      "description": "With this altered strike, the character may choose a point within their weapon's range, and make an individual attack roll against all targets within a 10' radius of the point, adding any applicable bonuses from Lethal, Burst Attack, Tipped Arrows and Whistling Shot."
+    }
+  ]

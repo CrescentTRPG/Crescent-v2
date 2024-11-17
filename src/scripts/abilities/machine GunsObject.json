@@ -1,0 +1,32 @@
+{
+  "Cascade": {
+    "name": "Cascade",
+    "mp_cost": "Passive",
+    "description": "The multiattack cost is inherently reduced by one. Additionally, Once one attack strikes a target, all further strikes against that target also hit.  If at least two strikes hit a target they are slowed until the start of the character’s next turn.  If at least three strikes hit a target all attacks made as a part of this Weapon Attack against that target are considered Critical Hits and do double damage."
+  },
+  "Overwatch": {
+    "name": "Overwatch",
+    "mp_cost": "4 MP per activation + 1 MP per additional rank",
+    "description": "The character executes an action; they may select a point within their weapon's range and apply suppressive fire in a 10' radius area until the start of their next turn. Should anyone in the area take a movement or core action - the character is granted the ability to attack the target with 3 MP + 1 MP per additional rank. Those in the area have a displaced roll on any AGI checks / saves and have a displaced roll on attack rolls."
+  },
+  "Interrupt": {
+    "name": "Interrupt",
+    "mp_cost": "2 MP per strike",
+    "description": "The next successful strike this turn interrupts an enemy. An interrupt cancels whatever action the target last attempted to execute should they fail a HEA save. Interrupts only function if the character is somehow able to activate the ability on the target's turn, such as through the use of Overwatch.Shred (2 MP per rank): All successful strikes reduce the targets' armor DVs by 1 per rank if they at least hit the target's movement DVs."
+  },
+  "Shred": {
+    "name": "Shred",
+    "mp_cost": "2MP per rank",
+    "description": "All successful strikes reduce the targets’ armor DVs by 1 per rank if they at least hit the target’s movement DVs.  This lasts until the start of the character’s next turn."
+  },
+  "Disarming Attack": {
+    "name": "Disarming Attack",
+    "mp_cost": "3 MP per strike",
+    "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the target's choice."
+  },
+  "Concussive": {
+    "name": "Concussive",
+    "mp_cost": "2 MP per strike",
+    "description": "The next successful strike this turn befuddles the target until the end of their next turn, WIL save to negate."
+  }
+}

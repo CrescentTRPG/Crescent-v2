@@ -9,23 +9,28 @@ import CustomModal from '@/components/CustomModal.vue'
 import CustomCheckbox from '../CustomCheckbox.vue'
 import CustomPagination from '@/components/CustomPagination.vue'
 import ArrayTabs from '@/components/ArrayTabs.vue'
+import TitleWidget from '@/components/TitleWidget.vue'
 
 export default {
   setup() {
     const designStore = useDesignStore()
     const spellStore = useSpellStore()
-    const { buildDisplaySpellgroups, buildDisplaySpells } = storeToRefs(spellStore)
+    const { buildDisplaySpellgroups, buildDisplaySpells, manualSpellgroups } =
+      storeToRefs(spellStore)
     const fields = ref([
       { key: 'name', label: 'Name' },
-      { key: 'rank', label: 'Rank' },
+      { key: 'rank', label: 'Rank', sortable: true },
       { key: 'spellgroup', label: 'Spellgroup' },
-      { key: 'known', label: 'Known?' }
+      { key: 'known', label: 'Known?', sortable: true }
     ])
+    const spellsMessage =
+      'In order to buy spells, characters will need Power and Intelligence or Charisma.  Intelligence and Charisma limit how many spellgroups a character may know.  Every two points in Intelligence gives the charater the ability to select another Intelligence based spellgroup (Elemental and Core Magics).  Every two ranks in Charisma gives the character the ability to select another Charisma Based spellgroup (Divine Magics).  In order to gain new ranks in a spellgroup, a character must have purchased the rank below it and have equal to or greater Power.  Each new rank a character buys earns them mana.  The rank 0 spell is not bought, but comes free when you purchase the rank 1. The only exception to this rule is Arcana, whose spells all cost 3 ability points and they do not require Charisma or Intelligence to purchase.'
     const selectedTabs = ref([])
     const filterOn = ['name', 'grouping', 'rank', 'known', 'spellgroup']
     const filter = ref('')
     const spells = ref([])
     const modal = ref(false)
+    const spellgroupModal = ref(false)
     const currentPage = ref(1)
     const perPage = ref(18)
     const currentModal = ref(0)
@@ -67,7 +72,10 @@ export default {
       spells,
       currentModal,
       buildDisplaySpells,
-      buildDisplaySpellgroups
+      buildDisplaySpellgroups,
+      manualSpellgroups,
+      spellsMessage,
+      spellgroupModal
     }
   },
   components: {
@@ -78,19 +86,67 @@ export default {
     CustomModal,
     CustomCheckbox,
     CustomPagination,
-    ArrayTabs
+    ArrayTabs,
+    TitleWidget
   },
   methods: {
-    update(name: any, id: any, rank: number, source: any, known: any, spellgroup: string) {
+    LightenDarkenColor(col, amt) {
+      var num = parseInt(col.substring(1), 16)
+      var r = (num >> 16) + amt
+      var b = ((num >> 8) & 0x00ff) + amt
+      var g = (num & 0x0000ff) + amt
+      var newColor = g | (b << 8) | (r << 16)
+      return '#' + newColor.toString(16)
+    },
+    tableBg() {
+      if (parseInt(this.designStore.inputBacking.substring(1), 16) >= 3000000) {
+        return this.LightenDarkenColor(this.designStore.inputBacking, 10)
+      }
+      return this.LightenDarkenColor(this.designStore.inputBacking, -10)
+    },
+    update(
+      name: any,
+      rank: number,
+      source: any,
+      known: any,
+      spellgroup: string,
+      groupNumber: number,
+      groupSpellIndex: number,
+      spellIndex: number
+    ) {
       let spellObj = {
         name: name,
-        id: id,
         rank: rank,
         known: known,
         source: source,
-        spellgroup: spellgroup
+        spellgroup: spellgroup,
+        groupNumber: groupNumber,
+        groupSpellIndex: groupSpellIndex,
+        spellIndex: spellIndex
       }
       this.spellStore.setSpell(spellObj)
+    },
+    deleteSpell(
+      name: any,
+      rank: number,
+      source: any,
+      known: any,
+      spellgroup: string,
+      groupNumber: number,
+      groupSpellIndex: number,
+      spellIndex: number
+    ) {
+      let spellObj = {
+        name: name,
+        rank: rank,
+        known: known,
+        source: source,
+        spellgroup: spellgroup,
+        groupNumber: groupNumber,
+        groupSpellIndex: groupSpellIndex,
+        spellIndex: spellIndex
+      }
+      this.spellStore.removeSpell(spellObj)
     },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
@@ -100,43 +156,22 @@ export default {
     showModal(id: number) {
       this.currentModal = id
       this.modal = !this.modal
+    },
+    showSpellgroupModal(id: number) {
+      this.currentModal = id
+      this.spellgroupModal = !this.spellgroupModal
     }
   }
 }
 </script>
 <template>
   <div>
-    <div
-      style="
-        font-size: x-large;
-        margin-top: 1rem;
-        padding: 0.5rem;
-        display: flex;
-        flex-direction: column;
-      "
-      :style="{
-        fontFamily: designStore.titleFont,
-        color: designStore.primaryText,
-        background: designStore.primaryTheme
-      }"
-    >
-      <div style="margin-left: 2rem">Spells</div>
-      <span
-        style="display: flex; margin-bottom: -1rem; margin-top: -1rem"
-        :style="{ borderColor: designStore.secondaryTheme, color: designStore.secondaryTheme }"
-      >
-        <v-icon
-          name="gi-abstract-119"
-          style="position: relative; left: 0.25rem; top: 0.5rem"
-        ></v-icon>
-        <hr :style="{ borderColor: designStore.secondaryTheme }" />
-        <v-icon
-          name="gi-abstract-119"
-          style="position: relative; right: 0.25rem; top: 0.5rem"
-        ></v-icon>
-      </span>
-    </div>
-    <ArrayTabs :tabs="tabArray" @selectedTabs="(tabs) => (selectedTabs = tabs)"></ArrayTabs>
+    <TitleWidget title="Spells" :info-message="spellsMessage"></TitleWidget>
+    <ArrayTabs
+      filteringMessage="Spellgroup"
+      :tabs="tabArray"
+      @selectedTabs="(tabs) => (selectedTabs = tabs)"
+    ></ArrayTabs>
     <BFormInput
       class="inputSearch"
       placeholder="Search..."
@@ -146,7 +181,8 @@ export default {
         fontFamily: designStore.font,
         color: designStore.inputText,
         background: designStore.inputBacking,
-        borderColor: designStore.secondaryTheme
+        borderColor: designStore.secondaryTheme,
+        '--bs-secondary-color': designStore.inputText
       }"
     ></BFormInput>
     <BTable
@@ -156,7 +192,8 @@ export default {
         fontFamily: designStore.font,
         borderColor: designStore.secondaryTheme,
         color: designStore.inputText,
-        backgroundColor: designStore.inputBacking
+        backgroundColor: designStore.inputBacking,
+        '--bs-table-striped-bg': tableBg()
       }"
       :sort-internal="true"
       :filter="filter"
@@ -164,14 +201,14 @@ export default {
       :per-page="perPage"
       :current-page="currentPage"
       headerTitle="Spells"
-      class="tableClass"
+      class="tableClass mobile"
       :fields="fields"
       :items="filteredArray"
     >
       <template #cell(name)="data">
         <div :style="{ background: designStore.inputBacking }">
           <BButton
-            class="nameButton"
+            class="nameButton mobile"
             style="width: 100%; border: 2px solid; text-align: left"
             @click="showModal(data.index)"
             :style="{
@@ -188,7 +225,7 @@ export default {
           >
             <template v-slot:body>
               <AbilityDisplay
-                :medallion="data.item.groupIcon"
+                :medallion="manualSpellgroups[data.item.spellgroup].groupIcon"
                 :description="data.item.description"
                 :area="data.item.area"
                 :duration="data.item.duration"
@@ -202,7 +239,32 @@ export default {
         </div>
       </template>
       <template #cell(rank)="data">
-        <div style="margin-left: 1rem">{{ data.item.rank }}</div>
+        <div style="margin-left: 1rem; margin-top: 0.5rem">{{ data.item.rank }}</div>
+      </template>
+      <template #cell(spellgroup)="data">
+        <div style="margin-top: 0.5rem; cursor: pointer" @click="showSpellgroupModal(data.index)">
+          {{ data.item.spellgroup }}
+        </div>
+        <CustomModal
+          :showModal="spellgroupModal && currentModal == data.index"
+          :title="data.item.spellgroup"
+          @close="showSpellgroupModal(data.index)"
+        >
+          <template v-slot:body>
+            <div>
+              {{ data.item.spellgroup }} is a(n)
+              {{ buildDisplaySpellgroups[data.item.groupNumber].groupPurchaseLimiter }} based
+              spellgroup. A character may know ({{
+                buildDisplaySpellgroups[data.item.groupNumber].groupPurchaseLimiter
+              }}
+              / 2) {{ buildDisplaySpellgroups[data.item.groupNumber].groupPurchaseLimiter }} based
+              spellgroups. Additionally, in order to purchase a rank of {{ data.item.spellgroup }},
+              the character needs to have equal to or higher
+              {{ buildDisplaySpellgroups[data.item.groupNumber].rankLimiter }}, and must have
+              purchased the rank below it.
+            </div>
+          </template>
+        </CustomModal>
       </template>
       <template #cell(known)="data">
         <CustomCheckbox
@@ -214,21 +276,25 @@ export default {
           @true="
             update(
               data.item.name,
-              data.item.id || '',
               data.item.rank,
-              data.item.source,
+              manualSpellgroups[data.item.spellgroup].source,
               true,
-              data.item.spellgroup
+              data.item.spellgroup,
+              data.item.groupNumber,
+              data.item.groupSpellIndex,
+              data.item.spellIndex
             )
           "
           @false="
-            update(
+            deleteSpell(
               data.item.name,
-              data.item.id,
               data.item.rank,
-              data.item.source,
+              manualSpellgroups[data.item.spellgroup].source,
               false,
-              data.item.spellgroup
+              data.item.spellgroup,
+              data.item.groupNumber,
+              data.item.groupSpellIndex,
+              data.item.spellIndex
             )
           "
         ></CustomCheckbox>
@@ -242,3 +308,10 @@ export default {
     ></CustomPagination>
   </div>
 </template>
+<style>
+@media (max-width: 500px) {
+  .mobile {
+    font-size: small;
+  }
+}
+</style>

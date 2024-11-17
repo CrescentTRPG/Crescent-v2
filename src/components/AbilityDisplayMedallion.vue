@@ -17,10 +17,6 @@ export default {
 
   methods: {},
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard
   }
 }
 </script>

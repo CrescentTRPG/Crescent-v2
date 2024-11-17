@@ -1,0 +1,50 @@
+[
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0becaa1"
+      },
+      "name": " Overcharged Shot",
+      "mp_cost": "2 MP per rank",
+      "description": ""
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0becaa2"
+      },
+      "name": "Overcharged Shot",
+      "mp_cost": "2 MP per rank",
+      "description": "The character makes an altered strike. If it hits, they add their weapon's damage dice to their strike an additional time for every rank. Additionally, the strike gains the following effects on hit: * If the shotgun is in buckshot mode, the target is forced back 15' per rank. * If the shotgun is in slug mode, the target's movement speed is reduced by 15' per rank on their next movement action."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0becaa3"
+      },
+      "name": "Area Attack",
+      "mp_cost": "4 MP per strike",
+      "description": "The altered strike affects all targets in a 10'X10' cone with buckshot or 20'X20' cone with slugs applying a single attack roll, adding any applicable bonuses from Lethal, Modal, and Concussive strike to all successfully struck."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0becaa4"
+      },
+      "name": "Stopping Power",
+      "mp_cost": "1 MP per rank",
+      "description": "For every rank purchased, the target of the strike (Regardless of whether it hits or not) loses 5' of on all movement speeds until the start character's next turn. If they are reduced to 0 on all movement speeds, their movement DVs are halved."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0becaa5"
+      },
+      "name": "Blowback",
+      "mp_cost": "1 MP per rank",
+      "description": "The character alters their strike; launching themselves (opposite the direction of the shot) or another target(in the direction of the shot) 20' + 10' per additional rank. If used on an unwilling target, the character contests their STR against the target's AGI or STR (target's choice.) If the target is of a similar size or smaller in comparison to thecharacter and the weapon is in buckshot mode, there is no check on hit."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0becaa6"
+      },
+      "name": "Concussive Strike",
+      "mp_cost": "2 MP per strike",
+      "description": "The next successful strike this turn befuddles the target until the end of their next turn, WIL save to negate. If the weapon is in slug mode, there is no check on hit"
+    }
+  ]

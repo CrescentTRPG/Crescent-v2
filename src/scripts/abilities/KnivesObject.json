@@ -1,0 +1,37 @@
+{
+  "Blitz": {
+    "name": "Blitz",
+    "mp_cost": "Passive",
+    "description": "Spending the appropriate martial points to activate Bleed, Blinding Attack, Crippling Attack, and Throw causes every successful strike made with a knife to apply these specialization effects."
+  },
+  "Assassination": {
+    "name": "Assassination",
+    "mp_cost": "2 MP per rank",
+    "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank. The damage dice rolled is doubled if the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents."
+  },
+  "Bleed": {
+    "name": "Bleed",
+    "mp_cost": "2 MP per strike",
+    "description": "The next successful strike this turn prevents the target from recovering any HP until the end of their next turn."
+  },
+  "Blinding Attack": {
+    "name": "Blinding Attack",
+    "mp_cost": "3 MP per strike",
+    "description": "The next successful strike this turn blinds the target until the end of their next turn."
+  },
+  "Crippling Attack": {
+    "name": "Crippling Attack",
+    "mp_cost": "3 MP per strike",
+    "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again."
+  },
+  "Throw": {
+    "name": "Throw",
+    "mp_cost": "1 MP per rank",
+    "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acro- -batics check."
+  },
+  "Lethal Barrage II": {
+    "name": "Lethal Barrage II",
+    "mp_cost": "1 MP per rank",
+    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+  }
+}

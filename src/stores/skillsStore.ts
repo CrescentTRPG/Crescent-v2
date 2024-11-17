@@ -41,83 +41,68 @@ export const useSkillStore = defineStore('skill', {
   },
   actions: {
     async setSkill(skill: any) {
-      let ret
-      if (skill.id === '') {
-        ret = await addDoc(
-          collection(
-            db,
-            'User/' +
-              useUserStore().getUserId +
-              '/Character/' +
-              useCharacterStore().getCharacterId +
-              '/Skills/'
-          ),
-          skill
-        )
-        this.skills[skill.skill] = { ...skill, id: ret.id }
+      if (skill.rank == 0) {
+        delete this.skills[skill.skill]
       } else {
-        ret = updateDoc(
-          doc(
-            db,
-            'User/' +
-              useUserStore().getUserId +
-              '/Character/' +
-              useCharacterStore().getCharacterId +
-              '/Skills/' +
-              skill.id
-          ),
-          { rank: skill.rank }
-        )
+        this.skills[skill.skill] = skill
       }
+      updateDoc(
+        doc(
+          db,
+          'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
+        ),
+        { skills: this.skills, skillChanged: skill }
+      )
+    },
+    clearEffectiveSkills() {
+      this.effectiveSkills = []
     },
     setEffectiveSkills() {
-      this.effectiveSkills = this.allSkills.map((skill: ManualSkill) => ({
-        id: this.skills[skill.skill]?.id || '',
-        skill: skill.skill,
-        rank: this.skills[skill.skill]?.rank || 0,
-        source: this.skills[skill.skill]?.source || 'Base',
-        description: skill.description,
-        attribute: skill.attribute,
-        isOrigin: useCharacterStore().getOriginSkills.includes(skill.skill)
-      }))
-    },
-    async pullAllSkillsFromFirebase() {
-      let allSkillsRef = collection(db, 'Ability/Base/Skill')
-      onSnapshot(
-        allSkillsRef,
-        (snap) => {
-          let results: any = []
-          snap.docs.forEach((doc) => {
-            results.push({ ...doc.data() })
-          })
-          this.allSkills = results
-        },
-        (err) => {
-          console.log(err.message)
+      const effectiveSkillsArr = Object.values(this.allSkills).sort((a: any, b: any) => {
+        let aCode = a.skill.charCodeAt(0)
+        let bCode = b.skill.charCodeAt(0)
+        if (aCode - bCode == 0) {
+          aCode = a.skill.charCodeAt(1)
+          bCode = b.skill.charCodeAt(1)
+          if (aCode - bCode == 0) {
+            aCode = a.skill.charCodeAt(2)
+            bCode = b.skill.charCodeAt(2)
+          }
         }
-      )
-    },
-    pullCharacterSkillsFromFirebase() {
-      let collectionRef = collection(
-        db,
-        'User/' +
-          useUserStore().getUserId +
-          '/Character/' +
-          useCharacterStore().getCharacterId +
-          '/Skills'
-      )
-      onSnapshot(
-        collectionRef,
-        (snap) => {
-          snap.docs.forEach((doc) => {
-            this.skills[doc.data().skill] = { ...doc.data(), id: doc.id }
-          })
-          this.setEffectiveSkills()
-        },
-        (err) => {
-          console.log(err.message)
+        return aCode - bCode
+      })
+      const ret: Array<any> = []
+      let index = 0
+      effectiveSkillsArr.forEach((skill: ManualSkill) => {
+        const obj = {
+          id: this.skills[skill.skill]?.id || '',
+          skill: skill.skill,
+          rank: this.skills[skill.skill]?.rank || 0,
+          source: this.skills[skill.skill]?.source || 'Base',
+          description: skill.description,
+          attribute: skill.attribute,
+          isOrigin: useCharacterStore().getOriginSkills.includes(skill.skill),
+          index: index
         }
-      )
+        ret.push(obj)
+        index += 1
+      })
+      this.effectiveSkills = ret
+    },
+    setUpBuildDisplay(skillChanged) {
+      if (this.effectiveSkills.length > 1) {
+        if (skillChanged != undefined) {
+          this.effectiveSkills[skillChanged.index].rank = skillChanged.rank
+        }
+      } else {
+        this.setEffectiveSkills()
+      }
+    },
+    async setAllSkillsFromFirebase(skills: any) {
+      this.allSkills = Object.values(skills)
+    },
+    setCharacterSkillsFromFirebase(skills: any) {
+      this.skills = skills
     }
   },
   persist: true

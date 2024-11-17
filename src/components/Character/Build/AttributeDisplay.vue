@@ -1,10 +1,5 @@
 <script lang="ts">
-import { useRouter } from 'vue-router'
-import {
-  BFormInput,
-  BInputGroup,
-  BInputGroupText
-} from 'bootstrap-vue-next'
+import { BFormInput, BInputGroup, BInputGroupText } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 import CustomModal from '../../CustomModal.vue'
@@ -13,25 +8,43 @@ import { useUserStore } from '../../../stores/userStore'
 import { storeToRefs } from 'pinia'
 
 export default {
-  props: ['attribute', 'attributeValue', 'exceptionalValue', 'attributeMessage','attrShorthand' ],
+  props: ['attribute', 'attributeValue', 'exceptionalValue', 'attributeMessage', 'attrShorthand'],
   setup(props, context) {
-    const router = useRouter()
     const userStore = useUserStore()
     const characterStore = useCharacterStore()
-    const {attributes} = storeToRefs(characterStore)
-    const attribute = attributes.value[props.attribute.toLowerCase]
+    const { attributes, exceptionals } = storeToRefs(characterStore)
     const exceptionalValueRef = ref(props.exceptionalValue)
     const designStore = useDesignStore()
     const modal = ref(false)
     let attributeValueRef = ref(props.attributeValue)
 
-    return { designStore, modal, attributeValueRef, exceptionalValueRef, props, characterStore, userStore, attributes }
+    return {
+      designStore,
+      modal,
+      attributeValueRef,
+      exceptionalValueRef,
+      props,
+      characterStore,
+      userStore,
+      attributes,
+      exceptionals
+    }
   },
   methods: {
-    updateAttr(){
-      let copy = {...this.attributes};
-      copy[this.props.attribute.toLowerCase()] = parseInt(this.attributeValueRef);
-      this.characterStore.setAttribute(copy, this.userStore.getUserId, this.characterStore.getCharacterId)
+    updateAttr() {
+      let copy = { ...this.attributes }
+      copy[this.props.attribute.toLowerCase()] = parseInt(this.attributeValueRef)
+      this.characterStore.setAttribute(
+        copy,
+        this.userStore.getUserId,
+        this.characterStore.getCharacterId
+      )
+    },
+    updateExec() {
+      let copy = { ...this.exceptionals }
+      copy[this.props.attribute.toLowerCase()] = parseInt(this.exceptionalValueRef)
+      this.characterStore.setExceptionals(copy)
+      this.characterStore
     }
   },
   components: {
@@ -46,28 +59,81 @@ export default {
 <template>
   <div @click="modal = !modal" style="width: 100%">
     <div
-      style=" width: 100%; z-index: 1;box-shadow: inset -5px 0px 1px 1px; padding-right: 2rem;  cursor: pointer;" 
-      :style="{ background: designStore.inputBacking, color: designStore.secondaryTheme}"
+      style="
+        width: 100%;
+        z-index: 1;
+        box-shadow: inset -5px 0px 1px 1px;
+        padding-right: 2rem;
+        cursor: pointer;
+      "
+      :style="{ background: designStore.inputBacking, color: designStore.secondaryTheme }"
     >
-    <div style="display: flex; justify-content: space-between; z-index: 4; margin-left: 1rem; width: 100%" :style="{color: designStore.inputText}">
-      <div style="display: flex; flex-direction: column; font-size: large; width: inherit;">
-        <div style="display: flex;" class="attributeLabel"><div>{{ props.attribute }}</div><div style="font-size: small; align-self: flex-end; margin-bottom: .5rem;margin-left: .25rem;">({{ props.attrShorthand }}) </div></div>
-        <span class="line" :style="{borderColor: designStore.secondaryTheme, color:designStore.secondaryTheme}">
-          <v-icon name="gi-abstract-119" style="position: relative; left: .25rem"></v-icon>
-          <hr :style="{borderColor: designStore.secondaryTheme}"></hr>
-          <v-icon name="gi-abstract-119" style="position: relative; right: .25rem"></v-icon>
-
-        </span>
-        <div class="attributeMessage">
-          {{ props.attributeMessage }}
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          z-index: 4;
+          margin-left: 1rem;
+          width: 100%;
+        "
+        :style="{ color: designStore.inputText }"
+      >
+        <div style="display: flex; flex-direction: column; font-size: large; width: inherit">
+          <div style="display: flex" class="attributeLabel">
+            <div>{{ props.attribute }}</div>
+            <div
+              style="
+                font-size: small;
+                align-self: flex-end;
+                margin-bottom: 0.5rem;
+                margin-left: 0.25rem;
+              "
+            >
+              ({{ props.attrShorthand }})
+            </div>
+          </div>
+          <span
+            class="line"
+            :style="{ borderColor: designStore.secondaryTheme, color: designStore.secondaryTheme }"
+          >
+            <v-icon name="gi-abstract-119" style="position: relative; left: 0.25rem"></v-icon>
+            <hr :style="{ borderColor: designStore.secondaryTheme }" />
+            <v-icon name="gi-abstract-119" style="position: relative; right: 0.25rem"></v-icon>
+          </span>
+          <div class="attributeMessage">
+            {{ props.attributeMessage }}
+          </div>
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            z-index: 3;
+            font-size: xxx-large;
+            width: 6.5rem;
+            align-self: center;
+            padding-right: 0.6rem;
+            padding-left: 0.6rem;
+            border-radius: 0.75rem;
+            margin: 0.25rem;
+            border-left: 4px solid;
+            border-right: 4px solid;
+          "
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText,
+            borderColor: designStore.secondaryTheme
+          }"
+        >
+          <div style="display: flex; justify-content: center">
+            {{ props.attributeValue }}
+            <div style="font-size: medium; display: flex">
+              <div v-if="exceptionalValueRef >= 0">+</div>
+              {{ exceptionalValueRef }}
+            </div>
+          </div>
         </div>
       </div>
-      <div 
-      style="display: flex; flex-direction: column; z-index: 3; font-size: xxx-large; width: 6.5rem; align-self: center; padding-right: .6rem;padding-left: .6rem; border-radius: .75rem; margin: .25rem; border-left: 4px solid; border-right: 4px solid" 
-      :style="{background: designStore.primaryTheme, color: designStore.primaryText, borderColor: designStore.secondaryTheme}">
-        <div style="display: flex; justify-content: center">{{ props.attributeValue }} <div style="font-size: medium;display: flex;"> <div v-if="exceptionalValueRef >=0">+</div>{{ exceptionalValueRef }}</div></div>
-      </div>
-    </div>
     </div>
     <CustomModal :showModal="modal" :title="$props.attribute" @close="modal = false">
       <template v-slot:body>
@@ -78,7 +144,6 @@ export default {
           <BInputGroupText
             style="width: 7rem"
             :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-            
             >Attribute</BInputGroupText
           >
           <BFormInput
@@ -104,7 +169,9 @@ export default {
             type="number"
             min="-10"
             max="10"
+            @change="updateExec()"
             v-model="exceptionalValueRef"
+            disabled
           ></BFormInput>
         </BInputGroup>
       </template>
@@ -114,10 +181,17 @@ export default {
 
 <style>
 .attributeMessage {
-  z-index: 4; display: flex; justify-content: flex-start; margin-left: 2rem; font-size: small;
+  z-index: 4;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 2rem;
+  font-size: small;
 }
 .attributeLabel {
-  font-size: xx-large; z-index: 4; width: 45%; margin-left: 1.5rem
+  font-size: xx-large;
+  z-index: 4;
+  width: 45%;
+  margin-left: 1.5rem;
 }
 .attr {
   margin-top: 0.5rem;
@@ -136,18 +210,22 @@ export default {
   justify-content: flex-start;
   margin: 0.5rem;
 }
-.line{
-  display: flex; z-index: 4;margin-top: -1rem;margin-bottom: -1rem;
+.line {
+  display: flex;
+  z-index: 4;
+  margin-top: -1rem;
+  margin-bottom: -1rem;
 }
 @media (max-width: 550px) {
-  .attributeLabel{
+  .attributeLabel {
     font-size: x-large;
-    margin-left: .5rem  }
+    margin-left: 0.5rem;
+  }
   .attributeMessage {
     font-size: x-small;
     margin-left: 1.5rem;
   }
-  .line{
+  .line {
     margin-left: -1rem;
   }
 }

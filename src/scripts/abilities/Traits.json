@@ -1,0 +1,989 @@
+{
+  "Resistance": {
+    "nested": "true",
+    "Fire Resistance": {
+      "icon": "gi-fire-shield",
+      "name": "Fire Resistance",
+      "description": "The character halves all sources of fire damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Lightning Resistance": {
+      "icon": "gi-lightning-shield",
+      "name": "Lightning Resistance",
+      "description": "The character halves all sources of lightning damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Ice Resistance": {
+      "icon": "gi-ice-shield",
+      "name": "Ice Resistance",
+      "description": "The character halves all sources of ice damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Force Resistance": {
+      "icon": "gi-bolt-shield",
+      "name": "Force Resistance",
+      "description": "The character halves all sources of force damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Stress Resistance": {
+      "icon": "gi-healing-shield",
+      "name": "Stress Resistance",
+      "description": "The character halves all sources of Stress damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Piercing Resistance": {
+      "icon": "gi-shield-impact",
+      "name": "Piercing Resistance",
+      "description": "The character halves all sources of piercing damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Edged Resistance": {
+      "icon": "gi-slashed-shield",
+      "name": "Edged Resistance",
+      "description": "The character halves all sources of edged damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Blunt Resistance": {
+      "name": "Blunt Resistance",
+      "icon": "gi-boot-kick",
+      "description": "The character halves all sources of blunt damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Toxic Resistance": {
+      "icon": "gi-hazmat-suit",
+      "name": "Toxic Resistance",
+      "description": "The character halves all sources of toxic damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Blight Resistance": {
+      "icon": "gi-skull-shield",
+      "name": "Blight Resistance",
+      "description": "The character halves all sources of blight damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Divine Resistance": {
+      "icon": "gi-winged-shield",
+      "name": "Divine Resistance",
+      "description": "The character halves all sources of divine damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Pure Magic Resistance": {
+      "icon": "gi-rosa-shield",
+      "name": "Pure Magic Resistance",
+      "description": "The character halves all sources of pure magic damage, rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Magical Resistance": {
+      "icon": "gi-rosa-shield",
+      "name": "Magical Resistance",
+      "description": "The character halves all sources of magical damage (Blight, Divine, Pure Magic), rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Elemental Resistance": {
+      "icon": "gi-rosa-shield",
+      "name": "Elemental Resistance",
+      "description": "The character halves all sources of elemental damage (Fire, Ice, Lightning, Force), rounding down to whole numbers and has a placed roll on any associated checks."
+    },
+    "Mundane Resistance": {
+      "icon": "gi-bordered-shield",
+      "name": "Mundane Resistance",
+      "description": "The character halves all sources of mundane damage (Blunt, Edged, Stress, Piercing, Toxic), rounding down to whole numbers and has a placed roll on any associated checks."
+    }
+  },
+  "Immunity": {
+    "nested": "true",
+    "Fire Immunity": {
+      "icon": "gi-fire-shield",
+      "name": "Fire Immunity",
+      "description": "The character takes no damage from fire damage and automatically saves on any associated resistance check."
+    },
+    "Lightning Immunity": {
+      "icon": "gi-lightning-shield",
+      "name": "Lightning Immunity",
+      "description": "The character takes no damage from lightning damage and automatically saves on any associated resistance check."
+    },
+    "Ice Immunity": {
+      "icon": "gi-ice-shield",
+      "name": "Ice Immunity",
+      "description": "The character takes no damage from ice damage and automatically saves on any associated resistance check."
+    },
+    "Force Immunity": {
+      "icon": "gi-bolt-shield",
+      "name": "Force Immunity",
+      "description": "The character takes no damage from force damage and automatically saves on any associated resistance check."
+    },
+    "Stress Immunity": {
+      "icon": "gi-healing-shield",
+      "name": "Stress Immunity",
+      "description": "The character takes no damage from stress damage and automatically saves on any associated resistance check."
+    },
+    "Piercing Immunity": {
+      "icon": "gi-shield-impact",
+      "name": "Piercing Immunity",
+      "description": "The character takes no damage from piercing damage and automatically saves on any associated resistance check."
+    },
+    "Edged Immunity": {
+      "icon": "gi-slashed-shield",
+      "name": "Edged Immunity",
+      "description": "The character takes no damage from edged damage and automatically saves on any associated resistance check."
+    },
+    "Blunt Immunity": {
+      "icon": "gi-boot-kick",
+      "name": "Blunt Immunity",
+      "description": "The character takes no damage from blunt damage and automatically saves on any associated resistance check."
+    },
+    "Toxic Immunity": {
+      "icon": "gi-hazmat-suit",
+      "name": "Toxic Immunity",
+      "description": "The character takes no damage from toxic damage and automatically saves on any associated resistance check."
+    },
+    "Blight Immunity": {
+      "icon": "gi-skull-shield",
+      "name": "Blight Immunity",
+      "description": "The character takes no damage from blight damage and automatically saves on any associated resistance check."
+    },
+    "Divine Immunity": {
+      "icon": "gi-winged-shield",
+      "name": "Divine Immunity",
+      "description": "The character takes no damage from divine damage and automatically saves on any associated resistance check."
+    },
+    "Pure Magic Immunity": {
+      "icon": "gi-rosa-shield",
+      "name": "Pure Magic Immunity",
+      "description": "The character takes no damage from pure magic damage and automatically saves on any associated resistance check."
+    },
+    "Magical Immunity": {
+      "icon": "gi-rosa-shield",
+      "name": "Magical Immunity",
+      "description": "The character takes no damage from magical damage (Blight, Divine, Pure Magic) and automatically saves on any associated resistance check."
+    },
+    "Elemental Immunity": {
+      "icon": "gi-rosa-shield",
+      "name": "Elemental Immunity",
+      "description": "The character takes no damage from elemental damage (Fire, Ice, Lightning, Force) and automatically saves on any associated resistance check."
+    },
+    "Mundane Immunity": {
+      "icon": "gi-bordered-shield",
+      "name": "Mundane Immunity",
+      "description": "The character takes no damage from mundane damage (Blunt, Edged, Stress, Piercing, Toxic) and automatically saves on any associated resistance check."
+    }
+  },
+  "Susceptibility": {
+    "nested": "true",
+    "Fire Susceptibility": {
+      "icon": "gi-flame",
+      "name": "Fire Susceptibility",
+      "description": "The character takes double damage from fire damage and has a displaced roll on any associated resistance checks."
+    },
+    "Lightning Susceptibility": {
+      "icon": "gi-power-lightning",
+      "name": "Lightning Susceptibility",
+      "description": "The character takes double damage from lightning damage and has a displaced roll on any associated resistance checks."
+    },
+    "Ice Susceptibility": {
+      "icon": "gi-snowflake2",
+      "name": "Ice Susceptibility",
+      "description": "The character takes double damage from ice damage and has a displaced roll on any associated resistance checks."
+    },
+    "Force Susceptibility": {
+      "icon": "gi-flint-spark",
+      "name": "Force Susceptibility",
+      "description": "The character takes double damage from force damage and has a displaced roll on any associated resistance checks."
+    },
+    "Stress Susceptibility": {
+      "icon": "gi-worried-eyes",
+      "name": "Stress Susceptibility",
+      "description": "The character takes double damage from stress damage and has a displaced roll on any associated resistance checks."
+    },
+    "Piercing Susceptibility": {
+      "icon": "gi-pierced-heart",
+      "name": "Piercing Susceptibility",
+      "description": "The character takes double damage from piercing damage and has a displaced roll on any associated resistance checks."
+    },
+    "Edged Susceptibility": {
+      "icon": "gi-quick-slash",
+      "name": "Edged Susceptibility",
+      "description": "The character takes double damage from edged damage and has a displaced roll on any associated resistance checks."
+    },
+    "Blunt Susceptibility": {
+      "icon": "gi-punch-blast",
+      "name": "Blunt Susceptibility",
+      "description": "The character takes double damage from blunt damage and has a displaced roll on any associated resistance checks."
+    },
+    "Toxic Susceptibility": {
+      "icon": "gi-potion-of-madness",
+      "name": "Toxic Susceptibility",
+      "description": "The character takes double damage from toxic damage and has a displaced roll on any associated resistance checks."
+    },
+    "Blight Susceptibility": {
+      "icon": "gi-skeletal-hand",
+      "name": "Blight Susceptibility",
+      "description": "The character takes double damage from blight damage and has a displaced roll on any associated resistance checks."
+    },
+    "Divine Susceptibility": {
+      "icon": "gi-icarus",
+      "name": "Divine Susceptibility",
+      "description": "The character takes double damage from divine damage and has a displaced roll on any associated resistance checks."
+    },
+    "Pure Magic Susceptibility": {
+      "icon": "gi-explosion-rays",
+      "name": "Pure Magic Susceptibility",
+      "description": "The character takes double damage from pure magic damage and has a displaced roll on any associated resistance checks."
+    },
+    "Magical Susceptibility": {
+      "icon": "gi-dripping-star",
+      "name": "Magical Susceptibility",
+      "description": "The character takes double damage from magical damage (Blight, Divine, Pure Magic) and has a displaced roll on any associated resistance checks."
+    },
+    "Elemental Susceptibility": {
+      "icon": "gi-star-skull",
+      "name": "Elemental Susceptibility",
+      "description": "The character takes double damage from elemental damage (Fire, Ice, Lightning, Force) and has a displaced roll on any associated resistance checks."
+    },
+    "Mundane Susceptibility": {
+      "icon": "gi-achilles-heel",
+      "name": "Mundane Susceptibility",
+      "description": "The character takes double damage from mundane damage (Blunt, Edged, Stress, Piercing, Toxic) and has a displaced roll on any associated resistance checks."
+    }
+  },
+  "Vulnerability": {
+    "nested": "true",
+    "Fire Vulnerability": {
+      "icon": "gi-burning-skull",
+      "name": "Fire Vulnerability",
+      "description": "The character takes double damage from fire damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Lightning Vulnerability": {
+      "icon": "gi-power-lightning",
+      "name": "Lightning Vulnerability",
+      "description": "The character takes double damage from lightning damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check"
+    },
+    "Ice Vulnerability": {
+      "icon": "gi-snowflake2",
+      "name": "Ice Vulnerability",
+      "description": "The character takes double damage from ice damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Force Vulnerability": {
+      "icon": "gi-flint-spark",
+      "name": "Force Vulnerability",
+      "description": "The character takes double damage from force damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Stress Vulnerability": {
+      "icon": "gi-worried-eyes",
+      "name": "Stress Vulnerability",
+      "description": "The character takes double damage from stress damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Piercing Vulnerability": {
+      "icon": "gi-pierced-heart",
+      "name": "Piercing Vulnerability",
+      "description": "The character takes double damage from piercing damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Edged Vulnerability": {
+      "icon": "gi-crossed-slashes",
+      "name": "Edged Vulnerability",
+      "description": "The character takes double damage from edged damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Blunt Vulnerability": {
+      "icon": "gi-punch-blast",
+      "name": "Blunt Vulnerability",
+      "description": "The character takes double damage from blunt damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Toxic Vulnerability": {
+      "icon": "gi-potion-of-madness",
+      "name": "Toxic Vulnerability",
+      "description": "The character takes double damage from toxic damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Blight Vulnerability": {
+      "icon": "gi-skeletal-hand",
+      "name": "Blight Vulnerability",
+      "description": "The character takes double damage from blight damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Divine Vulnerability": {
+      "icon": "gi-icarus",
+      "name": "Divine Vulnerability",
+      "description": "The character takes double damage from divine damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Pure Magic Vulnerability": {
+      "icon": "gi-explosion-rays",
+      "name": "Pure Magic Vulnerability",
+      "description": "The character takes double damage from pure magic damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Magical Vulnerability": {
+      "icon": "gi-dripping-star",
+      "name": "Magical Vulnerability",
+      "description": "The character takes double damage from magical damage (Blight, Divine, Pure Magic) and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Elemental Vulnerability": {
+      "icon": "gi-star-skull",
+      "name": "Elemental Vulnerability",
+      "description": "The character takes double damage from elemental damage (Fire, Ice, Lightning, Force) and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+    },
+    "Mundane Vulnerability": {
+      "icon": "gi-achilles-heel",
+      "name": "Mundane Vulnerability",
+      "description": "The character takes double damage from mundane damage (Blunt, Edged, Stress, Piercing, Toxic) and automatically fails any associated resistance checks. This supercedes any ability to autosave a check"
+    }
+  },
+  "Damage Reduction": {
+    "nested": "true",
+    "Fire Damage Reduction": {
+      "icon": "gi-fire-shield",
+      "name": "Fire Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Lightning Damage Reduction": {
+      "icon": "gi-lightning-shield",
+      "name": "Lightning Damage Reduction",
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage"
+    },
+    "Ice Damage Reduction": {
+      "icon": "gi-ice-shield",
+      "name": "Ice Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Force Damage Reduction": {
+      "icon": "gi-bolt-shield",
+      "name": "Force Damage Reduction",
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage"
+    },
+    "Stress Damage Reduction": {
+      "icon": "gi-healing-shield",
+      "name": "Stress Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Piercing Damage Reduction": {
+      "icon": "gi-shield-impact",
+      "name": "Piercing Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Edged Damage Reduction": {
+      "icon": "gi-slashed-shield",
+      "name": "Edged Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Blunt Damage Reduction": {
+      "icon": "gi-boot-kick",
+      "name": "Blunt Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Toxic Damage Reduction": {
+      "icon": "gi-hazmat-suit",
+      "name": "Toxic Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Blight Damage Reduction": {
+      "icon": "gi-skull-shield",
+      "name": "Blight Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Divine Damage Reduction": {
+      "icon": "gi-winged-shield",
+      "name": "Divine Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Pure Magic Damage Reduction": {
+      "icon": "gi-rosa-shield",
+      "name": "Pure Magic Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Magical Damage Reduction": {
+      "icon": "gi-rosa-shield",
+      "name": "Magical Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Elemental Damage Reduction": {
+      "icon": "gi-rosa-shield",
+      "name": "Elemental Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    },
+    "Mundane Damage Reduction": {
+      "icon": "gi-bordered-shield",
+      "name": "Mundane Damage Reduction",
+      "number": 0,
+      "description": "The character reduces the amount of damage they recieve by *NUM* for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+    }
+  },
+  "Damage Amplification": {
+    "nested": "true",
+    "Fire Damage Amplification": {
+      "icon": "gi-flame",
+      "name": "Fire Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Lightning Damage Amplification": {
+      "icon": "gi-power-lightning",
+      "name": "Lightning Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Ice Damage Amplification": {
+      "icon": "gi-snowflake2",
+      "name": "Ice Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Force Damage Amplification": {
+      "icon": "gi-flint-spark",
+      "name": "Force Damage Amplification",
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Stress Damage Amplification": {
+      "icon": "gi-worried-eyes",
+      "name": "Stress Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Piercing Damage Amplification": {
+      "icon": "gi-pierced-heart",
+      "name": "Piercing Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Edged Damage Amplification": {
+      "icon": "gi-quick-slash",
+      "name": "Edged Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Blunt Damage Amplification": {
+      "icon": "gi-punch-blast",
+      "name": "Blunt Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Toxic Damage Amplification": {
+      "icon": "gi-potion-of-madness",
+      "name": "Toxic Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Blight Damage Amplification": {
+      "icon": "gi-skeletal-hand",
+      "name": "Blight Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Divine Damage Amplification": {
+      "icon": "gi-icarus",
+      "name": "Divine Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Pure Magic Damage Amplification": {
+      "icon": "gi-explosion-rays",
+      "name": "Pure Magic Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Magical Damage Amplification": {
+      "icon": "gi-dripping-star",
+      "name": "Magical Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Elemental Damage Amplification": {
+      "icon": "gi-star-skull",
+      "name": "Elemental Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    },
+    "Mundane Damage Amplification": {
+      "icon": "gi-achilles-heel",
+      "name": "Mundane Damage Amplification",
+      "number": 0,
+      "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
+    }
+  },
+  "Armor DVs": {
+    "icon": "gi-visored-helm",
+    "name": "Armor Dvs",
+    "number": 0,
+    "description": "The character has *NUM* Armor DVs, even when not wearing armor.  This does not stack with other sources of Armor DVs"
+  },
+  "Shield DVs": {
+    "icon": "gi-shield",
+    "name": "Shield Dvs",
+    "number": 0,
+    "description": "The character has *NUM* Shield DVs, even when not carring a shield.  This does not stack with other sources of Shield DVs"
+  },
+  "Bonus DVs": {
+    "icon": "gi-vibrating-shield",
+    "name": "Bonus Dvs",
+    "number": 0,
+    "description": "The character has *NUM* Bonus DVs.  This does not stack with other sources of Bonus DVs"
+  },
+  "Movement DVs": {
+    "icon": "gi-run",
+    "name": "Movement Dvs",
+    "number": 0,
+    "description": "The character has *NUM* Movement DVs.  This does not stack with other sources of Movement DVs.  Typically a character has 10 Base Movement DVS."
+  },
+  "Status Effect Immunity": {
+    "nested": "true",
+    "Grapple Immunity": {
+      "icon": "gi-manacles",
+      "name": "Grapple Immunity",
+      "description": "The character cannot be grappled."
+    },
+    "Blind Immunity": {
+      "icon": "gi-blindfold",
+      "name": "Blind Immunity",
+      "description": "The character cannot be blinded."
+    },
+    "Charm Immunity": {
+      "icon": "gi-cupidon-arrow",
+      "name": "Charm Immunity",
+      "description": "The character cannot be charmed."
+    },
+    "Confusion Immunity": {
+      "icon": "gi-misdirection",
+      "name": "Confusion Immunity",
+      "description": "The character cannot be confused."
+    },
+    "Ethereal Immunity": {
+      "icon": "gi-ghost",
+      "name": "Ethereal Immunity",
+      "description": "The character cannot become ethereal."
+    },
+    "Frighten Immunity": {
+      "icon": "gi-terror",
+      "name": "Frighten Immunity",
+      "description": "The character cannot be frightened."
+    },
+    "Invisibility Immunity": {
+      "icon": "gi-invisible",
+      "name": "Invisibility Immunity",
+      "description": "The character cannot become invisible."
+    },
+    "Paralyze Immunity": {
+      "icon": "gi-static-guard",
+      "name": "Paralyze Immunity",
+      "description": "The character cannot be paralyzed."
+    },
+    "Pin Immunity": {
+      "icon": "gi-pierced-body",
+      "name": "Pin Immunity",
+      "description": "The character cannot be pinned."
+    },
+    "Petrification Immunity": {
+      "icon": "gi-medusa-head",
+      "name": "Paralyze Immunity",
+      "description": "The character cannot be petrified."
+    },
+    "Prone Immunity": {
+      "icon": "gi-falling",
+      "name": "Prone Immunity",
+      "description": "The character cannot fall prone."
+    },
+    "Sick Immunity": {
+      "icon": "gi-vomiting",
+      "name": "Sick Immunity",
+      "description": "The character cannot be sickened."
+    },
+    "Slow Immunity": {
+      "icon": "gi-tortise",
+      "name": "Slow Immunity",
+      "description": "The character cannot be slowed."
+    },
+    "Spell Jam Immunity": {
+      "icon": "gi-magic-shield",
+      "name": "Spell Jam Immunity",
+      "description": "The character cannot be spell jammed."
+    },
+    "Stun Immunity": {
+      "icon": "gi-knocked-out-stars",
+      "name": "Stun Immunity",
+      "description": "The character cannot be stunned."
+    },
+    "Magical Suffering Immunity": {
+      "icon": "gi-rosa-shield",
+      "name": "Magical Suffering Immunity",
+      "description": "The character is uneffected by Magical Suffering. (Blight, Divine, Pure Magic)"
+    },
+    "Elemental Suffering Immunity": {
+      "icon": "gi-rosa-shield",
+      "name": "Elemental Suffering Immunity",
+      "description": "The character is uneffected by Elemental Suffering. (Fire, Ice, Lightning, Force)"
+    },
+    "Mundane Suffering Immunity": {
+      "icon": "gi-bordered-shield",
+      "name": "Mundane Suffering Immunity",
+      "description": "The character is uneffected by Mundane Suffering. (Toxic, Piercing, Stress, Edged, Blunt)"
+    },
+    "Blight Suffering Immunity": {
+      "icon": "gi-skull-shield",
+      "name": "Blight Suffering Immunity",
+      "description": "The character is uneffected by Blight Suffering."
+    },
+    "Blunt Suffering Immunity": {
+      "icon": "gi-boot-kick",
+      "name": "Blunt Suffering Immunity",
+      "description": "The character is uneffected by Blunt Suffering."
+    },
+    "Divine Suffering Immunity": {
+      "icon": "gi-winged-shield",
+      "name": "Divine Suffering Immunity",
+      "description": "The character is uneffected by Divine Suffering."
+    },
+    "Edged Suffering Immunity": {
+      "icon": "gi-slashed-shield",
+      "name": "Edged Suffering Immunity",
+      "description": "The character is uneffected by Edged Suffering."
+    },
+    "Fire Suffering Immunity": {
+      "icon": "gi-fire-shield",
+      "name": "Fire Suffering Immunity",
+      "description": "The character is uneffected by Fire Suffering."
+    },
+    "Force Suffering Immunity": {
+      "icon": "gi-bolt-shield",
+      "name": "Force Suffering Immunity",
+      "description": "The character is uneffected by Force Suffering."
+    },
+    "Ice Suffering Immunity": {
+      "icon": "gi-ice-shield",
+      "name": "Ice Suffering Immunity",
+      "description": "The character is uneffected by Ice Suffering."
+    },
+    "Lightning Suffering Immunity": {
+      "icon": "gi-lightning-shield",
+      "name": "Lightning Suffering Immunity",
+      "description": "The character is uneffected by Lightning Suffering."
+    },
+    "Stress Suffering Immunity": {
+      "icon": "gi-healing-shield",
+      "name": "Stress Suffering Immunity",
+      "description": "The character is uneffected by Stress Suffering."
+    },
+    "Piercing Suffering Immunity": {
+      "icon": "gi-shield-impact",
+      "name": "Piercing Suffering Immunity",
+      "description": "The character is uneffected by Piercing Suffering."
+    },
+    "Pure Magic Suffering Immunity": {
+      "icon": "gi-rosa-shield",
+      "name": "Pure Magic Suffering Immunity",
+      "description": "The character is uneffected by Pure Magic Suffering."
+    },
+    "Toxic Suffering Immunity": {
+      "icon": "gi-hazmat-suit",
+      "name": "Toxic Suffering Immunity",
+      "description": "The character is uneffected by Toxic Suffering."
+    },
+    "Unconsciousness Immunity": {
+      "icon": "gi-night-sleep",
+      "name": "Unconsciousness Immunity",
+      "description": "The character cannot be forced unconciouss."
+    },
+    "Fatigue Immunity": {
+      "icon": "gi-sleepy",
+      "name": "Fatigue Immunity",
+      "description": "The character is immune to fatigue"
+    },
+    "Encumberance Immunity": {
+      "icon": "gi-oppression",
+      "name": "Encumberance Immunity",
+      "description": "The character is cannot be encumbered"
+    },
+    "Warp Immunity": {
+      "icon": "gi-paranoia",
+      "name": "Encumberance Immunity",
+      "description": "The character cannot gain stacks of Warp"
+    },
+    "Befuddle Immunity": {
+      "icon": "gi-distraction",
+      "name": "Befuddle Immunity",
+      "description": "The character cannot be befuddled"
+    }
+  },
+  "Extra Origin Skills": {
+    "icon": "gi-progression",
+    "name": "Extra Origin Skills",
+    "number": 0,
+    "description": "The character is entitled to *NUM* extra origin skills.  A defualt character has 2."
+  },
+  "Bonus HP": {
+    "icon": "gi-health-increase",
+    "name": "Bonus HP",
+    "number": 0,
+    "description": "The character is naturally hardier and has *NUM* increased maximum HP"
+  },
+  "Bonus Mana": {
+    "icon": "gi-spell-book",
+    "name": "Bonus Mana",
+    "number": 0,
+    "description": "The character is naturally magically attuned and has *NUM* increased maximum Mana"
+  },
+  "Exceptional": {
+    "nested": "true",
+    "Exceptional Strength": {
+      "icon": "gi-strong",
+      "name": "Bonus Exceptional Strength",
+      "number": 0,
+      "description": "The character has *NUM* natural exceptional Strength(s). Exceptionals grant a static bonus to their associated Attribute and may be stressed for powerful effects...",
+      "ability": {
+        "name": "Stress Exceptional Strength",
+        "actionCost": "Reaction",
+        "type": "Instantaneous",
+        "duration": "1 Round",
+        "resistance": "N/A",
+        "description": "The character rolls the maximum number on their choice of 3 damage dice this turn.  This ability expends the exceptional, only to return during the next long rest",
+        "area": "Self",
+        "target": "Character",
+        "rank": "NA",
+        "group": "Trait Actions"
+      }
+    },
+    "Exceptional Agility": {
+      "icon": "gi-acrboatic",
+      "name": "Bonus Exceptional Agility",
+      "number": 0,
+      "description": "The character has *NUM* natural exceptional Agility(s). Exceptionals grant a static bonus to their associated Attribute and may be stressed for powerful effects...",
+      "ability": {
+        "name": "Stress Exceptional Agility",
+        "actionCost": "Reaction",
+        "type": "Instantaneous",
+        "duration": "1 Round",
+        "resistance": "N/A",
+        "description": "The character gains 10 additional movement DVs until the start of their next turn.",
+        "area": "Self",
+        "target": "Character",
+        "rank": "NA",
+        "group": "Trait Actions"
+      }
+    },
+    "Exceptional Health": {
+      "icon": "gi-broccoli",
+      "name": "Bonus Exceptional Health",
+      "number": 0,
+      "description": "The character has *NUM* natural exceptional Health(s). Exceptionals grant a static bonus to their associated Attribute and may be stressed for powerful effects...",
+      "ability": {
+        "name": "Stress Exceptional Health",
+        "actionCost": "Reaction",
+        "type": "Instantaneous",
+        "duration": "1 Round",
+        "resistance": "N/A",
+        "description": "The character halves all incoming mundane and elemental damage from an individual instance.",
+        "area": "Self",
+        "target": "Character",
+        "rank": "NA",
+        "group": "Trait Actions"
+      }
+    },
+    "Exceptional Perception": {
+      "icon": "gi-angry-eyes",
+      "name": "Bonus Exceptional Perception",
+      "number": 0,
+      "description": "The character has *NUM* natural exceptional Perception(s). Exceptionals grant a static bonus to their associated Attribute and may be stressed for powerful effects...",
+      "ability": {
+        "name": "Stress Exceptional Perception",
+        "actionCost": "Reaction",
+        "type": "Instantaneous",
+        "duration": "1 Round",
+        "resistance": "N/A",
+        "description": "The character does not roll on their next attack roll - they instead automatically hit (within reason.)",
+        "area": "Self",
+        "target": "Character",
+        "rank": "NA",
+        "group": "Trait Actions"
+      }
+    },
+    "Exceptional Willpower": {
+      "icon": "gi-inner-self",
+      "name": "Bonus Exceptional Willpower",
+      "number": 0,
+      "description": "The character has *NUM* natural exceptional Willpower(s). Exceptionals grant a static bonus to their associated Attribute and may be stressed for powerful effects...",
+      "ability": {
+        "name": "Stress Exceptional Willpower",
+        "actionCost": "Reaction",
+        "type": "Instantaneous",
+        "duration": "1 Round",
+        "resistance": "N/A",
+        "description": "The character automatically makes the attempted resistance check.",
+        "area": "Self",
+        "target": "Character",
+        "rank": "NA",
+        "group": "Trait Actions"
+      }
+    },
+    "Exceptional Charisma": {
+      "icon": "gi-discussion",
+      "name": "Bonus Exceptional Charisma",
+      "number": 0,
+      "description": "The character has *NUM* natural exceptional Charisma(s). Exceptionals grant a static bonus to their associated Attribute and may be stressed for powerful effects...",
+      "ability": {
+        "name": "Stress Exceptional Charisma",
+        "actionCost": "Reaction",
+        "type": "Instantaneous",
+        "duration": "1 Round",
+        "resistance": "N/A",
+        "description": "The character adds their  CHA  twice to an interpersonal check, instead of their interpersonal skill.",
+        "area": "Self",
+        "target": "Character",
+        "rank": "NA",
+        "group": "Trait Actions"
+      }
+    },
+    "Exceptional Intelligence": {
+      "icon": "gi-smart",
+      "name": "Bonus Exceptional Intelligence",
+      "number": 0,
+      "description": "The character has *NUM* natural exceptional Intelligence(s). Exceptionals grant a static bonus to their associated Attribute and may be stressed for powerful effects...",
+      "ability": {
+        "name": "Stress Exceptional Intelligence",
+        "actionCost": "Reaction",
+        "type": "Instantaneous",
+        "duration": "1 Round",
+        "resistance": "N/A",
+        "description": "The character may instead roll a skill check using their INT attribute as the modifier.",
+        "area": "Self",
+        "target": "Character",
+        "rank": "NA",
+        "group": "Trait Actions"
+      }
+    },
+    "Exceptional Power": {
+      "icon": "gi-magic-palm",
+      "name": "Bonus Exceptional Power",
+      "number": 0,
+      "description": "The character has *NUM* natural exceptional Power(s). Exceptionals grant a static bonus to their associated Attribute and may be stressed for powerful effects...",
+      "ability": {
+        "name": "Stress Exceptional Power",
+        "actionCost": "Reaction",
+        "type": "Instantaneous",
+        "duration": "1 Round",
+        "resistance": "N/A",
+        "description": "The character converts all damage they inflict this turn into pure magic damage.",
+        "area": "Self",
+        "target": "Character",
+        "rank": "NA",
+        "group": "Trait Actions"
+      }
+    }
+  },
+  "Inferior": {
+    "nested": "true",
+    "Inferior Stength": {
+      "icon": "gi-weight crush",
+      "name": "Inferior Strength",
+      "number": 0,
+      "description": "The character has *NUM* natural Inferior Strength(s). Inferior attributes give the character a displaced roll on all checks associated with this attribute."
+    },
+    "Inferior Agility": {
+      "icon": "gi-snail",
+      "name": "Inferior Agility",
+      "number": 0,
+      "description": "The character has *NUM* natural Inferior Agility(s). Inferior attributes give the character a displaced roll on all checks associated with this attribute."
+    },
+    "Inferior Health": {
+      "icon": "gi-skeleton",
+      "name": "Inferior Health",
+      "number": 0,
+      "description": "The character has *NUM* natural Inferior Health(s). Inferior attributes give the character a displaced roll on all checks associated with this attribute."
+    },
+    "Inferior Willpower": {
+      "icon": "gi-sheep",
+      "name": "Inferior Willpower",
+      "number": 0,
+      "description": "The character has *NUM* natural Inferior Willpower(s). Inferior attributes give the character a displaced roll on all checks associated with this attribute."
+    },
+    "Inferior Charisma": {
+      "icon": "gi-fedora",
+      "name": "Inferior Charisma",
+      "number": 0,
+      "description": "The character has *NUM* natural Inferior Charisma(s). Inferior attributes give the character a displaced roll on all checks associated with this attribute."
+    },
+    "Inferior Intelligence": {
+      "icon": "gi-dunce-cap",
+      "name": "Inferior Intelligence",
+      "number": 0,
+      "description": "The character has *NUM* natural Inferior Intelligence(s). Inferior attributes give the character a displaced roll on all checks associated with this attribute."
+    },
+    "Inferior Power": {
+      "icon": "gi-burning-book",
+      "name": "Inferior Power",
+      "number": 0,
+      "description": "The character has *NUM* natural Inferior Power(s). Inferior attributes give the character a displaced roll on all checks associated with this attribute."
+    },
+    "Inferior Perception": {
+      "icon": "gi-one-eyed",
+      "name": "Inferior Perception",
+      "number": 0,
+      "description": "The character has *NUM* natural Inferior Perception(s). Inferior attributes give the character a displaced roll on all checks associated with this attribute."
+    }
+  },
+  "Size Category": {
+    "nested": "true",
+    "Tiny Size Category": {
+      "icon": "gi-fairy",
+      "name": "Tiny Size Category",
+      "description": "The character's size category is Tiny (6in X 6in) or smaller."
+    },
+    "Small Size Category": {
+      "icon": "gi-duck",
+      "name": "Small Size Category",
+      "description": "The character's size category is Small (3ft X 3ft) or smaller."
+    },
+    "Medium Size Category": {
+      "icon": "gi-person",
+      "name": "Medium Size Category",
+      "description": "The character's size category is Medium (7ft X 7ft) or smaller."
+    },
+    "Large Size Category": {
+      "icon": "gi-minotaur",
+      "name": "Large Size Category",
+      "description": "The character's size category is Large (15ft X 15ft) or smaller."
+    },
+    "Massive Size Category": {
+      "icon": "gi-wyvern",
+      "name": "Massive Size Category",
+      "description": "The character's size category is Massive (30ft X 30ft) or smaller."
+    },
+    "Colossal Size Category": {
+      "icon": "gi-sea-dragon",
+      "name": "Colossal Size Category",
+      "description": "The character's size category is Colossal (45ft X 45ft) or smaller."
+    },
+    "Titanic Size Category": {
+      "icon": "gi-sinking-ship",
+      "name": "Titanic Size Category",
+      "description": "The character's size category is Titanic (larger than 45ft X 45ft)."
+    }
+  },
+  "Bonus MP": {
+    "icon": "gi-saber-and-pistol",
+    "name": "Bonus MP",
+    "number": 0,
+    "description": "The character is naturally martially attuned and has *NUM* bonus MP"
+  },
+  "Bonus Movespeed": {
+    "icon": "gi-sprint",
+    "name": "Bonus Movespeed",
+    "number": 0,
+    "description": "The character is naturally fast and has *NUM* bonus movespeed"
+  },
+  "Flight Speed": {
+    "icon": "gi-angel-wings",
+    "name": "Flight Speed",
+    "number": 0,
+    "description": "The character has a natural flight speed of *NUM* feet per round"
+  },
+  "Swim Speed": {
+    "icon": "gi-whale-tail",
+    "name": "Swim Speed",
+    "number": 0,
+    "description": "The character has a natural swim speed of *NUM* feet per round"
+  },
+  "Burrowing Speed": {
+    "icon": "gi-dig-hole",
+    "name": "Burrowing Speed",
+    "number": 0,
+    "description": "The character has a natural burrowing speed of *NUM* feet per round"
+  },
+  "Climbing Speed": {
+    "icon": "gi-gecko",
+    "name": "Climbing Speed",
+    "number": 0,
+    "description": "The character has a natural climbing speed of *NUM* feet per round"
+  }
+}

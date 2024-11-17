@@ -95,8 +95,7 @@ export default {
         <BButton
           :style="{ background: designStore.inputBacking, color: itemStyle(i) }"
           @click="switchTab(i)"
-          class="navItem"
-          style="padding-left: 1rem; padding-right: 1rem"
+          class="navItem navNum"
           >{{ i }}</BButton
         >
       </div>
@@ -140,5 +139,22 @@ li {
   padding: 0rem;
   min-width: 2rem;
   border: none;
+}
+.navNum {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (max-width: 500px) {
+  .navItem {
+    padding: 0rem;
+    min-width: 0.25rem;
+    border: none;
+    font-size: small;
+  }
+  .navNum {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
 }
 </style>

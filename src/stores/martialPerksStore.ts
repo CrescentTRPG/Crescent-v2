@@ -1,14 +1,5 @@
 import { db } from '@/firebase/config.js'
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  orderBy,
-  query,
-  updateDoc
-} from 'firebase/firestore'
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { defineStore } from 'pinia'
 import { useUserStore } from './userStore.js'
 import { useCharacterStore } from './characterStore.js'
@@ -28,7 +19,6 @@ interface ManualMartialPerk {
 }
 
 interface ManualMartialPerk {
-  id: string
   name: string
   source: string
 }
@@ -37,7 +27,7 @@ export const useMartialPerksStore = defineStore('martialPerk', {
   state: () => ({
     perkGain: ['', '', '', '', ''],
     martialPerks: {},
-    manualMartialPerks: [],
+    manualMartialPerks: {},
     buildDisplayMartialPerks: [
       {
         name: 'meep',
@@ -49,7 +39,6 @@ export const useMartialPerksStore = defineStore('martialPerk', {
         actionCost: 'Swift Action',
         known: false,
         rank: 1,
-        id: '',
         duration: 'Instantaneous',
         source: 'Base',
         perkGroup: 'Defensive Perks'
@@ -63,79 +52,76 @@ export const useMartialPerksStore = defineStore('martialPerk', {
     setLocalPerkGain(gain: Array<string>) {
       this.perkGain = gain
     },
-    setUpBuildDisplay() {
-      this.buildDisplayMartialPerks = this.manualMartialPerks.map(
-        (martialPerk: ManualMartialPerk) => ({
-          id: this.martialPerks[martialPerk.name]?.id || '',
-          name: martialPerk.name,
-          description: martialPerk.description,
-          rank: martialPerk.rank,
-          source: martialPerk.source,
-          known: this.martialPerks[martialPerk.name]?.known ? true : false,
-          actionCost: martialPerk.actionCost,
-          duration: martialPerk.duration,
-          type: martialPerk.type,
-          target: martialPerk.target,
-          resistance: martialPerk.resistance,
-          area: martialPerk.area,
-          perkGroup: martialPerk.perkGroup
+    setUpBuildDisplayFromScratch() {
+      const perks: Array<any> = []
+      let index = 0
+
+      Object.values(this.manualMartialPerks)
+        .sort((a: any, b: any) => {
+          if (a.rank === b.rank) {
+            let aCode = a.name.charCodeAt(0)
+            let bCode = b.name.charCodeAt(0)
+            if (aCode - bCode == 0) {
+              aCode = a.name.charCodeAt(1)
+              bCode = b.name.charCodeAt(1)
+              if (aCode - bCode == 0) {
+                aCode = a.name.charCodeAt(2)
+                bCode = b.name.charCodeAt(2)
+              }
+            }
+            return aCode - bCode
+          }
+          return a.rank - b.rank
         })
-      )
+        .forEach((martialPerk: any) => {
+          perks.push({
+            name: martialPerk.name,
+            description: martialPerk.description,
+            rank: martialPerk.rank,
+            source: martialPerk.source,
+            known: this.martialPerks[martialPerk.name]?.known ? true : false,
+            actionCost: martialPerk.actionCost,
+            duration: martialPerk.duration,
+            type: martialPerk.type,
+            target: martialPerk.target,
+            resistance: martialPerk.resistance,
+            area: martialPerk.area,
+            perkGroup: martialPerk.perkGroup,
+            perkIndex: index
+          })
+          index += 1
+        })
+      this.buildDisplayMartialPerks = perks
+    },
+    setUpBuildDisplay(perkChanged) {
+      if (this.buildDisplayMartialPerks.length > 1) {
+        if (perkChanged != undefined) {
+          this.buildDisplayMartialPerks[perkChanged.perkIndex].known = perkChanged.known
+        }
+      } else {
+        this.setUpBuildDisplayFromScratch()
+      }
+    },
+    clearBuildDisplay() {
+      this.buildDisplayMartialPerks = []
+    },
+    setManualMartialPerksFromFirebase(perks) {
+      this.manualMartialPerks = perks
     },
     pullManualMartialPerksFromFirebase() {
-      const manualMartialPerksRef = query(
-        collection(db, 'Ability/Base/Martial Perk'),
-        orderBy('rank', 'asc')
-      )
+      const manualMartialPerksRef = doc(db, 'Ability/Base')
       onSnapshot(
         manualMartialPerksRef,
         (snap) => {
-          const results: any = []
-          snap.docs.forEach((doc) => {
-            results.push({
-              name: doc.data().name,
-              rank: doc.data().rank,
-              description: doc.data().description,
-              area: doc.data().area,
-              resistance: doc.data().resistance,
-              target: doc.data().target,
-              type: doc.data().type,
-              actionCost: doc.data().action_cost,
-              duration: doc.data().duration,
-              source: 'Base',
-              perkGroup: doc.data().martial_perk_group_name
-            })
-          })
-          this.manualMartialPerks = results
-          this.setUpBuildDisplay()
+          this.manualMartialPerks = snap.data()?.perks
         },
         (err) => {
           console.log(err.message)
         }
       )
     },
-    pullCharacterMartialPerksFromFirebase() {
-      const collectionRef = collection(
-        db,
-        'User/' +
-          useUserStore().getUserId +
-          '/Character/' +
-          useCharacterStore().getCharacterId +
-          '/Martial Perks'
-      )
-      onSnapshot(
-        collectionRef,
-        (snap) => {
-          snap.docs.forEach((doc) => {
-            this.martialPerks[doc.data().name] = { ...doc.data(), id: doc.id }
-          })
-          this.setUpBuildDisplay()
-        },
-        (err) => {
-          console.log(err.message)
-        }
-      )
-      this.setUpBuildDisplay()
+    setCharacterMartialPerksFromFirebase(perks: any) {
+      this.martialPerks = perks
     },
     async resolvePerkGain(removedPerk: any) {
       if (
@@ -175,49 +161,23 @@ export const useMartialPerksStore = defineStore('martialPerk', {
         this.setPerkGain(copy)
       }
     },
+    setLocalPerk(perk: any) {
+      this.martialPerks[perk.name] = perk
+    },
     async setMartialPerk(perk: any) {
-      let ret
-      if (perk.id === '') {
-        ret = await addDoc(
-          collection(
-            db,
-            'User/' +
-              useUserStore().getUserId +
-              '/Character/' +
-              useCharacterStore().getCharacterId +
-              '/Martial Perks/'
-          ),
-          perk
-        )
-        this.martialPerks[perk.name] = { ...perk, id: ret.id }
-      } else if (perk.known === false) {
-        deleteDoc(
-          doc(
-            db,
-            'User/' +
-              useUserStore().getUserId +
-              '/Character/' +
-              useCharacterStore().getCharacterId +
-              '/Martial Perks/' +
-              perk.id
-          )
-        )
-        this.resolvePerkGain(perk)
-        this.martialPerks[perk.name] = undefined
+      if (perk.known) {
+        this.setLocalPerk(perk)
       } else {
-        ret = updateDoc(
-          doc(
-            db,
-            'User/' +
-              useUserStore().getUserId +
-              '/Character/' +
-              useCharacterStore().getCharacterId +
-              '/Martial Perks/' +
-              perk.id
-          ),
-          perk
-        )
+        delete this.martialPerks[perk.name]
+        this.resolvePerkGain(perk)
       }
+      await updateDoc(
+        doc(
+          db,
+          'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
+        ),
+        { perks: this.martialPerks, perkChanged: perk }
+      )
     },
     async setPerkGain(perkGain: Array<string>) {
       this.setLocalPerkGain(perkGain)

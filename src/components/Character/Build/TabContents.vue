@@ -11,6 +11,9 @@ import { useDesignStore } from '../../../stores/designStore'
 import SkillsTable from '../Build/SkillsTable.vue'
 import MartialPerksTab from '../Build/MartialPerksTab.vue'
 import SpellsTable from './SpellsTable.vue'
+import TraitsTab from './TraitsTab.vue'
+import TitleWidget from '@/components/TitleWidget.vue'
+import FaunaTab from './Fauna/FaunaTab.vue'
 
 export default {
   props: ['tab'],
@@ -29,7 +32,10 @@ export default {
     SkillsTable,
     MartialSkillsTable,
     MartialPerksTab,
-    SpellsTable
+    SpellsTable,
+    TraitsTab,
+    TitleWidget,
+    FaunaTab
   }
 }
 </script>
@@ -46,10 +52,14 @@ export default {
     </div>
     <div class="buildContent" v-if="props.tab == 'corestats'">
       <AttributeContainer class="attributeWidth"></AttributeContainer>
-      <div style="display: flex; justify-content: center; flex-grow: 1">
-        <div class="archetypeDisplay">
-          <ArchetypeWidget></ArchetypeWidget>
-          <ArmorLevelWidget></ArmorLevelWidget>
+      <div class="archetypeHeader">
+        <TitleWidget title="Archetype"></TitleWidget>
+
+        <div class="archetypeContainer">
+          <div class="archetypeDisplay">
+            <ArchetypeWidget></ArchetypeWidget>
+            <ArmorLevelWidget></ArmorLevelWidget>
+          </div>
         </div>
       </div>
     </div>
@@ -57,13 +67,22 @@ export default {
     <div v-if="props.tab == 'martialskills'"><MartialSkillsTable></MartialSkillsTable></div>
     <div v-if="props.tab == 'martialperks'"><MartialPerksTab></MartialPerksTab></div>
     <div v-if="props.tab == 'spells'"><SpellsTable></SpellsTable></div>
+    <div v-if="props.tab == 'traits'"><TraitsTab></TraitsTab></div>
+    <div v-if="props.tab == 'fauna'"><FaunaTab></FaunaTab></div>
+    <div v-if="props.tab == 'effigy'">e</div>
+    <div v-if="props.tab == 'performance'">p</div>
   </div>
 </template>
 
 <style>
 .attributeWidth {
   width: 66%;
-  margin-right: 2rem;
+}
+.archetypeContainer {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  margin-left: 2rem;
 }
 .buildContent {
   display: flex;
@@ -91,6 +110,15 @@ export default {
   }
 }
 @media (max-width: 750px) {
+  .archetypeHeader {
+    width: 100%;
+  }
+  .archetypeContainer {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    margin-left: 0rem;
+  }
   .buildContent {
     flex-wrap: wrap;
   }

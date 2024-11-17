@@ -1,0 +1,42 @@
+[
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca85"
+      },
+      "name": "Hunter's Ammunition",
+      "mp_cost": "Passive",
+      "description": "A crossbow starts with one charge for each of the following abilities: > Blazeshot > Stunshot > Marking Shot > Bola Shot It takes a swift action to load another bolt into the crossbow (it no longer costs an action to reload the crossbow at rank 4.) Only one of these abilities may affect a given strike at a time; When a crossbow is reduced to zero charges, it gains a charge of Skyshot. This charge only lasts for one round. When this charge of Skyshot is lost, a crossbow's starting charges are replenished. A character may also expend a core action to replenish their crossbow's charges."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca86"
+      },
+      "name": "Blazeshot",
+      "mp_cost": "Blazeshot Charge",
+      "description": "The next successful strike this turn inflicts an instance of suffering (fire.) Stunshot (Stunshot Charge): The next successful strike this turn causes the target to lose their core action until the end of their next turn, HEA save to negate. If the target is below one a quarter of their maximum HP and they fail the save, they will instead be knocked unconscious."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca87"
+      },
+      "name": "Marking Shot",
+      "mp_cost": "Marking Shot Charge",
+      "description": "The next successful strike causes all attacks against the target to gain a placed roll, until the end of the character's next turn."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca88"
+      },
+      "name": "Bola Shot",
+      "mp_cost": "Bola Shot Charge",
+      "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca89"
+      },
+      "name": "Skyshot",
+      "mp_cost": "1 MP per rank, Skyshot Charge",
+      "description": "With this altered strike, the character may choose a point within their weapon's range, making an individual attack roll against all targets within a 5' radius of the point, inflicting d12 bonus piercing damage per rank purchased."
+    }
+  ]

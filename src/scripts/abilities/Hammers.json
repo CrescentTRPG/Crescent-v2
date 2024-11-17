@@ -1,0 +1,58 @@
+[
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca8b"
+      },
+      "name": "Grazing Strike",
+      "mp_cost": "Passive",
+      "description": "Strikes made with this weapon inflict half damage and inflict appropriate weapon skill effects if the strike at least matches the target's combined movement and bonus DVs."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca8c"
+      },
+      "name": "Charge",
+      "mp_cost": "3 MP + 1 per rank",
+      "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from Grazing Strike, Cleave Armor, Knockout, Lethal, or Concussive Strike to all successfully struck."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca8d"
+      },
+      "name": "Cleave Armor",
+      "mp_cost": "1 MP per rank",
+      "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca8e"
+      },
+      "name": "Concussive",
+      "mp_cost": "2 MP per strike",
+      "description": "The next successful strike this turn befuddles the target until the end of their next turn, HE save to negate."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca8f"
+      },
+      "name": "Knockout",
+      "mp_cost": "6 MP per strike",
+      "description": "The next successful strike this turn causes the target to lose a core action until the end of their next turn, or instead be knocked unconscious if they are below half their maximum HP, their choice of a WIL or HEA save to negate either effect."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca90"
+      },
+      "name": "Launch",
+      "mp_cost": "1 MP per rank",
+      "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca91"
+      },
+      "name": "Lethal IV",
+      "mp_cost": "1 MP per rank",
+      "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn."
+    }
+  ]

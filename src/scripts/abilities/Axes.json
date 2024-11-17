@@ -1,0 +1,58 @@
+[
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca67"
+      },
+      "name": "Momentum",
+      "mp_cost": "Passive",
+      "description": "Attacks made with the weapon, hit or miss, drive the target and attacker 5' in a direction of thecharacter's choosing, if the target is of the same size or smaller than the attacker."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca68"
+      },
+      "name": "Charge",
+      "mp_cost": "3 MP + 1 per rank",
+      "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from Momentum, Cleave Armor, Lethal, or Pierce Cover to all successfully struck."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca69"
+      },
+      "name": "Cleave Armor",
+      "mp_cost": "1 MP per rank",
+      "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca6a"
+      },
+      "name": "Embed",
+      "mp_cost": "1 MP per rank",
+      "description": "The next successful strike this turn inflicts a d10 of the relevant damage type per rank. While the weapon is embedded in the target, it is unusable until retrieved. The character cannot be moved by mundane means, and receives a placed roll on any magical attempts to move them while they hold onto the embedded object. The character also travels with the embedded object while it is held."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca6b"
+      },
+      "name": "Lethal Offhand Attack",
+      "mp_cost": "3 MP / 4 MP per strike",
+      "description": "The character makes an extra strike using their offhand weapon, adding any lethal bonuses to the attack. They can only take this action once each round. This ability costs 3 MP for versatile weapons and 4 MP for heavy."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca6c"
+      },
+      "name": "Pierce Cover",
+      "mp_cost": "1 MP per rank",
+      "description": "For every rank purchased, all strikes ignore up to 6'' of stone and wood, 3\" of iron and steel, or 1\" of adamantite, and 2 shield DVs until the start of their next turn. This ability does not allow attacks to ignore armor DVs."
+    },
+    {
+      "_id": {
+        "$oid": "606ffd7f8cecf126c0beca6d"
+      },
+      "name": "Throw",
+      "mp_cost": "1 MP per rank",
+      "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check."
+    }
+  ]

@@ -48,10 +48,6 @@ export default {
     }
   },
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
     AbilityDisplayMedallion
   }
 }

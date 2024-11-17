@@ -1,15 +1,6 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
-import {
-  BButton,
-  BCard,
-  BNavItem,
-  BNavbar,
-  BInputGroup,
-  BFormInput,
-  BInputGroupText
-} from 'bootstrap-vue-next'
+import { BInputGroup, BFormInput, BInputGroupText } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 import { useSkillStore } from '@/stores/skillsStore'
@@ -19,11 +10,10 @@ import CustomModal from '@/components/CustomModal.vue'
 import { useUserStore } from '@/stores/userStore'
 import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
 import { useMartialPerksStore } from '@/stores/martialPerksStore'
+import { useSpellStore } from '@/stores/spellsStore'
 
 export default {
   setup(props, context) {
-    const error = ref(null)
-    const router = useRouter()
     const modal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
@@ -31,10 +21,13 @@ export default {
     const skillStore = useSkillStore()
     const martialSkillsStore = useMartialSkillsStore()
     const martialPerksStore = useMartialPerksStore()
+    const spellsStore = useSpellStore()
     const { skills } = storeToRefs(skillStore)
     const { combatStyles, specializations } = storeToRefs(martialSkillsStore)
     const { martialPerks } = storeToRefs(martialPerksStore)
     const { totalAbilityPoints } = storeToRefs(characterStore)
+    const { spellgroups } = storeToRefs(spellsStore)
+
     const totalAbilityPointsRef = totalAbilityPoints.value
 
     return {
@@ -47,12 +40,16 @@ export default {
       characterStore,
       combatStyles,
       specializations,
-      martialPerks
+      martialPerks,
+      spellgroups
     }
   },
   watch: {
     totalAbilityPoints() {
       this.totalAbilityPointsRef = this.totalAbilityPoints
+    },
+    spentAbilityPoints() {
+      this.updateSpentAbilityPoints(this.spentAbilityPoints)
     }
   },
   computed: {
@@ -69,10 +66,21 @@ export default {
           counter += val.rank * 3
         }
       })
+      Object.values(this.spellgroups).forEach((val: any) => {
+        Object.values(val.spells).forEach((spell: any) => {
+          if (spell.known) {
+            counter += val.baseCost * spell.rank
+          }
+        })
+      })
       return counter
     }
   },
+
   methods: {
+    updateSpentAbilityPoints(points: number) {
+      this.characterStore.setLocalSpentAbilityPoints(points)
+    },
     updateTotalAbilityPoints() {
       this.characterStore.setTotalAbilityPoints(
         this.totalAbilityPointsRef,
@@ -92,10 +100,6 @@ export default {
     }
   },
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
     CustomModal,
     BInputGroup,
     BFormInput,
@@ -152,7 +156,7 @@ export default {
             >
               {{ totalAbilityPoints }}
             </div>
-            <div style="align-self: center">Earned</div>
+            <div style="align-self: center">Total</div>
           </div>
         </div>
         <div class="level">

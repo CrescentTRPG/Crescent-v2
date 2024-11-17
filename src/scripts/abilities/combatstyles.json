@@ -1,0 +1,77 @@
+{
+  "Heavy": {
+    "name": "Heavy",
+    "skills": {
+      "Lethal": {
+        "name": "Lethal",
+        "mp_cost": "1 MP per rank",
+        "description": "Each rank purchased allows the character to add 3 damage to a single strike they make this turn."
+      },
+      "Multiattack": {
+        "name": "Multiattack",
+        "mp_cost": "5 MP per strike",
+        "description": "Every amount of martial points spent equal to the weapon’s multi attack cost allows the character to make an extra strike."
+      },
+      "Offhand Attack": {
+        "name": "Offhand Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "Spending an amount of martial points equal to the offhand  attack cost allows the character to make an extra strike with their offhand weapon. This action can only be taken once each round."
+      },
+      "Precise": {
+        "name": "Precise",
+        "mp_cost": "3 MP per rank",
+        "description": "Every 3 martial points spent, the character receives a placed roll to all strikes made that turn."
+      }
+    }
+  },
+  "Light": {
+    "name": "Light",
+    "skills": {
+      "Lethal": {
+        "name": "Lethal",
+        "mp_cost": "1 MP per rank",
+        "description": "Each rank purchased allows the character to add 1 damage to a single strike they make this turn."
+      },
+      "Multiattack": {
+        "name": "Multiattack",
+        "mp_cost": "2 MP per strike",
+        "description": "Every amount of martial points spent equal to the weapon’s multi attack cost allows the character to make an extra strike."
+      },
+      "Offhand Attack": {
+        "name": "Offhand Attack",
+        "mp_cost": "1 MP per strike",
+        "description": "Spending an amount of martial points equal to the offhand  attack cost allows the character to make an extra strike with their offhand weapon. This action can only be taken once each round."
+      },
+      "Precise": {
+        "name": "Precise",
+        "mp_cost": "3 MP per rank",
+        "description": "Every 3 martial points spent, the character receives a placed roll to all strikes made that turn."
+      }
+    }
+  },
+  "Versatile": {
+    "name": "Versatile",
+    "skills": {
+      "Lethal": {
+        "name": "Lethal",
+        "mp_cost": "1 MP per rank",
+        "description": "Each rank purchased allows the character to add 2 damage to a single strike they make this turn."
+      },
+      "Multiattack": {
+        "name": "Multiattack",
+        "mp_cost": "3 MP per strike",
+        "description": "Every amount of martial points spent equal to the weapon’s multi attack cost allows the character to make an extra strike."
+      },
+      "Offhand Attack": {
+        "name": "Offhand Attack",
+        "mp_cost": "2 MP per strike",
+        "description": "Spending an amount of martial points equal to the offhand  attack cost allows the character to make an extra strike with their offhand weapon. This action can only be taken once each round."
+      },
+      "Precise": {
+        "name": "Precise",
+        "mp_cost": "3 MP per rank",
+        "description": "Every 3 martial points spent, the character receives a placed roll to all strikes made that turn."
+      }
+    }
+  }
+}

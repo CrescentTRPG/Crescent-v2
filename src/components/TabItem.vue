@@ -24,7 +24,7 @@ export default {
     },
     buttonText() {
       if (this.selected) {
-        return this.designStore.inputBacking
+        return this.designStore.primaryTheme
       }
       return this.designStore.primaryText
     },
@@ -43,10 +43,11 @@ export default {
 <template>
   <BButton
     @click="click"
+    style="border-radius: 0px; border: 2px solid"
     :style="{
       background: buttonBg(),
-      color: buttonText(),
-      borderColor: designStore.secondaryTheme
+      borderColor: designStore.sidebarBacking,
+      color: buttonText()
     }"
     >{{ props.tabName }}</BButton
   >

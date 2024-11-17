@@ -32,6 +32,10 @@ import { getCollection, getCollectionOnce } from '../composable/getCollection'
 import { db } from '@/firebase/config.js'
 import { onSnapshot, collection } from 'firebase/firestore'
 import { useDesignStore } from '@/stores/designStore'
+import { useSpellStore } from '@/stores/spellsStore'
+import { useMartialPerksStore } from '@/stores/martialPerksStore'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
+import { useSkillStore } from '@/stores/skillsStore'
 
 export default {
   setup(props, context) {
@@ -64,8 +68,12 @@ export default {
       useCharacterStore().addCharacter(useUserStore().getUserId)
     },
     selectCharacter(character) {
+      useSpellStore().clearBuildDisplay()
+      useMartialPerksStore().clearBuildDisplay()
+      useMartialSkillsStore().clearMartialSkillsBuild()
+      useSkillStore().clearEffectiveSkills()
       useCharacterStore().setLocalCharacter(character)
-      useCharacterStore().pullCharacterFromFirebase(useUserStore().getUserId, character.id)
+      useCharacterStore().pullCharacterFromFirebase(useUserStore().getUserId, character.id, true)
       this.router.push({ name: 'character' })
     }
   }

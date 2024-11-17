@@ -68,14 +68,8 @@ export default {
     }
   },
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
-    CharacterSidebar,
     BannerItem,
     ArchetypeSelector,
-    BFormTextarea,
     CustomModal
   }
 }
@@ -113,6 +107,7 @@ export default {
             left: 10rem;
             top: 7.5rem;
             width: 2rem;
+            cursor: pointer;
           "
           @click="modal = !modal"
         ></i>

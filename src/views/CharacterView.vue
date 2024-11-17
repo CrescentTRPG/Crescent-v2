@@ -8,7 +8,14 @@
     <div>{{ message }}</div>
     <v-icon scale="4" :name="rightmoon" animation="float"></v-icon>
   </div>
-  <div class="fill" :style="{ background: design.pageBackdrop }" v-if="!character.loading">
+  <div
+    class="fill"
+    style="display: flex; flex-direction: column"
+    :style="{
+      background: design.pageBackdrop
+    }"
+    v-if="!character.loading"
+  >
     <div
       style="display: flex; justify-content: space-between; height: 4.5rem"
       :style="{ background: design.inputBacking }"
@@ -27,10 +34,18 @@
             class="sparkle-height"
           >
             <i
-              class="bi bi-stars"
+              v-if="design.charIconFlair.substring(0, 2) == 'bi'"
+              :class="design.charIconFlair"
               style="position: absolute; z-index: 5"
               :style="{ color: design.secondaryTheme }"
             ></i>
+            <v-icon
+              v-if="design.charIconFlair.substring(0, 2) == 'gi'"
+              :name="design.charIconFlair"
+              scale="1.5"
+              style="position: absolute; z-index: 5; right: -10"
+              :style="{ color: design.secondaryTheme }"
+            ></v-icon>
           </div>
         </span>
         <div
@@ -70,12 +85,13 @@
       @journal="navPos = 'journal'"
       @manual="navPos = 'manual'"
     ></CharacterNav>
-    <BuildTab v-if="navPos === 'build'"></BuildTab>
+    <BuildTab v-if="navPos === 'build'" style="flex-grow: 1"></BuildTab>
+    <OverviewTab v-if="navPos === 'overview'"></OverviewTab>
   </div>
 </template>
 
 <script lang="ts">
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
+import { BButton } from 'bootstrap-vue-next'
 import { onMounted, onUnmounted, ref } from 'vue'
 import CharacterNav from '../components/Character/CharacterNav.vue'
 import IconStackCloud from '../components/IconStackCloud.vue'
@@ -85,6 +101,7 @@ import { useCharacterStore } from '@/stores/characterStore'
 import DesignButton from '../components/Character/DesignButton.vue'
 import { useUserStore } from '@/stores/userStore'
 import { FileExtensionInfo } from 'typescript'
+import OverviewTab from '@/components/Character/Overview/OverviewTab.vue'
 
 export default {
   setup(props, context) {
@@ -191,7 +208,8 @@ export default {
     CharacterNav,
     IconStackCloud,
     BuildTab,
-    DesignButton
+    DesignButton,
+    OverviewTab
   },
   methods: {
     delay: function (time) {
@@ -201,7 +219,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .diceButton {
   border: none;
   font-size: 1.75rem;

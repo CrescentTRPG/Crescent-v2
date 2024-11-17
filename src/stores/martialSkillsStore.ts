@@ -23,6 +23,24 @@ interface ManualSpecialization {
   source: string
 }
 
+interface CharacterSpecialization {
+  skills: any
+  combatStyles: Array<string>
+  name: string
+  id: string
+  source: string
+  rank: number
+}
+
+interface CharacterCombatStyles {
+  skills: any
+  combatStyles: Array<string>
+  name: string
+  id: string
+  source: string
+  rank: number
+}
+
 interface MartialSkill {
   id: string
   name: string
@@ -34,8 +52,12 @@ export const useMartialSkillsStore = defineStore('martialSkill', {
   state: () => ({
     combatStyles: {},
     specializations: {},
-    allCombatStyles: { Heavy: { skills: [], attributes: [], name: '', id: '', source: '' } },
-    allSpecializations: { Axes: { skills: [], combatStyles: [], name: '', id: '', source: '' } },
+    allCombatStyles: {
+      Heavy: { skills: [], attributes: [], name: '', id: '', source: '', groupIcon: '' }
+    },
+    allSpecializations: {
+      Axes: { skills: [], combatStyles: [], name: '', id: '', source: '', groupIcon: '' }
+    },
     buildDisplayCombatStyles: [
       {
         name: 'nothing',
@@ -43,7 +65,8 @@ export const useMartialSkillsStore = defineStore('martialSkill', {
         skills: [{ name: '', description: '', mp_cost: '' }],
         id: 'huh',
         source: 'Test',
-        attributes: ['STR']
+        attributes: ['STR'],
+        groupIcon: 'gi-hearts'
       }
     ],
     buildDisplaySpecializations: [
@@ -53,7 +76,8 @@ export const useMartialSkillsStore = defineStore('martialSkill', {
         skills: [{ name: '', description: '', mp_cost: '' }],
         id: 'huh',
         source: 'Test',
-        combatStyles: ['Heavy']
+        combatStyles: ['Heavy'],
+        groupIcon: 'gi-hearts'
       }
     ]
   }),
@@ -64,181 +88,157 @@ export const useMartialSkillsStore = defineStore('martialSkill', {
     getAllSpecializations: (state) => state.allSpecializations
   },
   actions: {
-    setUpBuildDisplay() {
-      this.buildDisplayCombatStyles = Object.values(this.allCombatStyles).map(
-        (combatStyle: ManualCombatStyle) => ({
+    setUpBuildDisplayFromScratch() {
+      const allCombatStylesArr = Object.values(this.allCombatStyles).sort((a: any, b: any) => {
+        let aCode = a.attributes.length
+        let bCode = b.attributes.length
+        if (a.attributes.includes('Agility')) {
+          aCode -= 1
+        } else {
+          aCode += 2
+        }
+        if (b.attributes.includes('Agility')) {
+          bCode -= 1
+        } else {
+          bCode += 2
+        }
+        return aCode - bCode
+      })
+      const ret: Array<{
+        name: string
+        id: string
+        skills: Array<any>
+        source: string
+        rank: number
+        attributes: Array<string>
+        index: number
+        groupIcon: string
+      }> = []
+      let index = 0
+      allCombatStylesArr.forEach((combatStyle) => {
+        const obj = {
           id: this.combatStyles[combatStyle.name]?.id || '',
-          skills: combatStyle.skills,
+          skills: Object.values(combatStyle.skills),
           source: combatStyle.source,
           name: combatStyle.name,
           rank: this.combatStyles[combatStyle.name]?.rank || 0,
-          attributes: combatStyle.attributes
-        })
-      )
+          attributes: combatStyle.attributes,
+          index: index,
+          groupIcon: combatStyle.groupIcon
+        }
+        ret.push(obj)
+        index += 1
+      })
+      this.buildDisplayCombatStyles = ret
     },
-    setUpBuildSpecializationDisplay() {
-      this.buildDisplaySpecializations = Object.values(this.allSpecializations).map(
-        (specialization: ManualSpecialization) => ({
+    setUpBuildDisplay(combatStyleChanged) {
+      if (this.buildDisplayCombatStyles.length > 1) {
+        if (combatStyleChanged != undefined) {
+          this.buildDisplayCombatStyles[combatStyleChanged.index].rank = combatStyleChanged.rank
+        }
+      } else {
+        this.setUpBuildDisplayFromScratch()
+      }
+    },
+    setUpBuildSpecializationDisplayFromScratch() {
+      const allSpecializationsArr = Object.values(this.allSpecializations).sort(
+        (a: any, b: any) => {
+          let aCode = a.name.charCodeAt(0)
+          let bCode = b.name.charCodeAt(0)
+          if (aCode - bCode == 0) {
+            aCode = a.name.charCodeAt(1)
+            bCode = b.name.charCodeAt(1)
+            if (aCode - bCode == 0) {
+              aCode = a.name.charCodeAt(2)
+              bCode = b.name.charCodeAt(2)
+            }
+          }
+          return aCode - bCode
+        }
+      )
+      let index = 0
+      const ret: Array<{
+        name: string
+        id: string
+        skills: Array<any>
+        source: string
+        rank: number
+        combatStyles: Array<string>
+        groupIcon: string
+      }> = []
+      allSpecializationsArr.forEach((specialization) => {
+        const obj = {
           id: this.specializations[specialization.name]?.id || '',
-          skills: specialization.skills,
+          skills: Object.values(specialization.skills),
           source: specialization.source,
           name: specialization.name,
           rank: this.specializations[specialization.name]?.rank || 0,
-          combatStyles: specialization.combatStyles
-        })
-      )
+          combatStyles: specialization.combatStyles,
+          index: index,
+          groupIcon: specialization.groupIcon
+        }
+        ret.push(obj)
+        index += 1
+      })
+      this.buildDisplaySpecializations = ret
+    },
+    setUpBuildSpecializationDisplay(specializationChanged) {
+      if (this.buildDisplaySpecializations.length > 1) {
+        if (specializationChanged != undefined) {
+          this.buildDisplaySpecializations[specializationChanged.index].rank =
+            specializationChanged.rank
+        }
+      } else {
+        this.setUpBuildSpecializationDisplayFromScratch()
+      }
+    },
+    clearMartialSkillsBuild() {
+      this.buildDisplayCombatStyles = []
+      this.buildDisplaySpecializations = []
     },
     async setCombatStyle(combatStyle: any) {
-      let ret
-      if (combatStyle.id === '') {
-        ret = await addDoc(
-          collection(
-            db,
-            'User/' +
-              useUserStore().getUserId +
-              '/Character/' +
-              useCharacterStore().getCharacterId +
-              '/Combat Styles/'
-          ),
-          combatStyle
-        )
-        this.combatStyles[combatStyle.name] = { ...combatStyle, id: ret.id }
+      console.log(combatStyle)
+      console.log(combatStyle)
+      if (combatStyle.rank == 0) {
+        delete this.combatStyles[combatStyle.skill]
       } else {
-        ret = updateDoc(
-          doc(
-            db,
-            'User/' +
-              useUserStore().getUserId +
-              '/Character/' +
-              useCharacterStore().getCharacterId +
-              '/Combat Styles/' +
-              combatStyle.id
-          ),
-          { rank: combatStyle.rank }
-        )
+        this.combatStyles[combatStyle.skill] = { ...combatStyle }
       }
+      console.log(this.combatStyles)
+
+      updateDoc(
+        doc(
+          db,
+          'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
+        ),
+        { combatStyles: this.combatStyles, combatStyleChanged: combatStyle }
+      )
     },
     async setSpecialization(specialization: any) {
-      let ret
-      if (specialization.id === '') {
-        ret = await addDoc(
-          collection(
-            db,
-            'User/' +
-              useUserStore().getUserId +
-              '/Character/' +
-              useCharacterStore().getCharacterId +
-              '/Specializations/'
-          ),
-          specialization
-        )
-        this.specializations[specialization.name] = { ...specialization, id: ret.id }
+      if (specialization.rank == 0) {
+        delete this.specializations[specialization.name]
       } else {
-        ret = updateDoc(
-          doc(
-            db,
-            'User/' +
-              useUserStore().getUserId +
-              '/Character/' +
-              useCharacterStore().getCharacterId +
-              '/Specializations/' +
-              specialization.id
-          ),
-          { rank: specialization.rank }
-        )
+        this.specializations[specialization.name] = { ...specialization }
       }
-    },
-    async pullAllCombatStylesFromFirebase() {
-      const allCombatStylesRef = collection(db, 'Ability/Base/Combat Style')
-      onSnapshot(
-        allCombatStylesRef,
-        (snap) => {
-          const len = snap.docs.length
-          let count = 0
-          snap.docs.forEach(async (doc) => {
-            count++
-            this.allCombatStyles[doc.data().name] = { ...doc.data(), source: 'Base' }
-            const results = await getCollectionOnce(
-              'Ability/Base/Combat Style/' + doc.data().name + '/Skills'
-            )
-            this.allCombatStyles[doc.data().name].skills = results
-            if (len == count) {
-              this.setUpBuildDisplay()
-            }
-          })
-        },
-        (err) => {
-          console.log(err.message)
-        }
+      updateDoc(
+        doc(
+          db,
+          'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
+        ),
+        { specializations: this.specializations, specializationChanged: specialization }
       )
     },
-    async pullAllSpecializationsFromFirebase() {
-      const allSpecializationsRef = collection(db, 'Ability/Base/Specialization')
-      onSnapshot(
-        allSpecializationsRef,
-        (snap) => {
-          const len = snap.docs.length
-          let count = 0
-          snap.docs.forEach(async (doc) => {
-            count++
-            this.allSpecializations[doc.data().name] = { ...doc.data(), source: 'Base' }
-            const results = await getCollectionOnce(
-              'Ability/Base/Specialization/' + doc.data().name + '/Skills'
-            )
-            this.allSpecializations[doc.data().name].skills = results
-            if (len == count) {
-              this.setUpBuildSpecializationDisplay()
-            }
-          })
-        },
-        (err) => {
-          console.log(err.message)
-        }
-      )
+    setAllSpecializationsFromFirebase(specializations: any) {
+      this.allSpecializations = specializations
     },
-    pullCharacterCombatStylesFromFirebase() {
-      const collectionRef = collection(
-        db,
-        'User/' +
-          useUserStore().getUserId +
-          '/Character/' +
-          useCharacterStore().getCharacterId +
-          '/Combat Styles'
-      )
-      onSnapshot(
-        collectionRef,
-        (snap) => {
-          snap.docs.forEach((doc) => {
-            this.combatStyles[doc.data().name] = { ...doc.data(), id: doc.id }
-          })
-          this.setUpBuildDisplay()
-        },
-        (err) => {
-          console.log(err.message)
-        }
-      )
+    setAllCombatStylesFromFirebase(combatStyles: any) {
+      this.allCombatStyles = combatStyles
     },
-    pullCharacterSpecializationsFromFirebase() {
-      const collectionRef = collection(
-        db,
-        'User/' +
-          useUserStore().getUserId +
-          '/Character/' +
-          useCharacterStore().getCharacterId +
-          '/Specializations'
-      )
-      onSnapshot(
-        collectionRef,
-        (snap) => {
-          snap.docs.forEach((doc) => {
-            this.specializations[doc.data().name] = { ...doc.data(), id: doc.id }
-          })
-          this.setUpBuildSpecializationDisplay()
-        },
-        (err) => {
-          console.log(err.message)
-        }
-      )
+    setCharacterCombatStylesFromFirebase(combatStyles: CharacterCombatStyles) {
+      this.combatStyles = combatStyles
+    },
+    setCharacterSpecializationsFromFirebase(specializations: CharacterSpecialization) {
+      this.specializations = specializations
     }
   },
   persist: true

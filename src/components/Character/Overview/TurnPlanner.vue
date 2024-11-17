@@ -1,0 +1,78 @@
+<script lang="ts">
+import { ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore'
+
+import { useCharacterStore } from '@/stores/characterStore'
+
+import { useUserStore } from '@/stores/userStore'
+import PlannedActionWidget from './PlannedActionWidget.vue'
+import TitleMedallion from '@/components/TitleMedallion.vue'
+import TrackerWidget from './TrackerWidget.vue'
+
+export default {
+  setup(props, context) {
+    const modal = ref(false)
+    const userStore = useUserStore()
+    const designStore = useDesignStore()
+    const characterStore = useCharacterStore()
+    return {
+      designStore,
+      modal,
+      userStore,
+      characterStore
+    }
+  },
+  components: { PlannedActionWidget, TitleMedallion, TrackerWidget }
+}
+</script>
+
+<template>
+  <div
+    style="
+      width: 15rem;
+      height: 85rem;
+      grid-column: 1 / span 2;
+      border: 2px solid;
+      border-top: transparent;
+    "
+    :style="{
+      background: designStore.sidebarBacking,
+      borderColor: designStore.secondaryTheme,
+      color: designStore.sidebarText
+    }"
+  >
+    <TitleMedallion title="Turn Planner" style="margin-bottom: -0.5rem"></TitleMedallion>
+    <PlannedActionWidget actionName="Core Action"></PlannedActionWidget>
+    <PlannedActionWidget actionName="Swift Action"></PlannedActionWidget>
+
+    <PlannedActionWidget actionName="Movement Action"></PlannedActionWidget>
+
+    <PlannedActionWidget actionName="Reaction"></PlannedActionWidget>
+    <TitleMedallion title="Trackers"></TitleMedallion>
+    <TrackerWidget name="Exceptional Willpower" :charges="1"></TrackerWidget>
+    <TrackerWidget name="Exceptional Charisma" :charges="1"></TrackerWidget>
+    <TrackerWidget name="Berserker's Frenzy" :charges="5"></TrackerWidget>
+    <div style="justify-content: flex-end; display: flex; cursor: pointer">
+      <div>Add Tracker</div>
+      <i class="bi bi-plus" style="font-size: 1.5rem; margin-top: -0.25rem"></i>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.fullNames {
+  display: block;
+}
+
+.iconNames {
+  display: block;
+}
+@media (max-width: 600px) {
+  .fullNames {
+    display: none;
+  }
+  .iconNames {
+    display: block;
+  }
+}
+</style>

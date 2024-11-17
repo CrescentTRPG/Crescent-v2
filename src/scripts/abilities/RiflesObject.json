@@ -1,0 +1,50 @@
+{
+    "Aiming": {
+        "_id": {
+            "$oid": "606ffd7f8cecf126c0becaa8"
+        },
+        "name": "Aiming",
+        "mp_cost": "Passive",
+        "description": "If the character forgoes taking a movement action this round in favor of aiming for vitals, each shot they fire deals a minimum of 8 base damage."
+    },
+    "Overcharged Shot": {
+        "_id": {
+            "$oid": "606ffd7f8cecf126c0becaa9"
+        },
+        "name": "Overcharged Shot",
+        "mp_cost": "2 MP per rank",
+        "description": "The character makes an altered strike. If it hits, they add their weapon's damage dice to their strike an additional time for every rank."
+    },
+    "Piercing Attack": {
+        "_id": {
+            "$oid": "606ffd7f8cecf126c0becaaa"
+        },
+        "name": "Piercing Attack",
+        "mp_cost": "3 MP per strike",
+        "description": "The next successful strike ignores anything that would reduce its damage and bypasses (ignoring them) temporary barriers. This skill does not affect immunity."
+    },
+    "Pierce Cover": {
+        "_id": {
+            "$oid": "606ffd7f8cecf126c0becaab"
+        },
+        "name": "Pierce Cover",
+        "mp_cost": "1 MP per rank",
+        "description": "For every rank purchased, all strikes ignore up to 6'' of stone and wood, 3\" of iron and steel, or 1\" of adamantite, and 2 shield DVs until the start of their next turn. This ability does not allow attacks to ignore armor DVs."
+    },
+    "Pinpoint": {
+        "_id": {
+            "$oid": "606ffd7f8cecf126c0becaac"
+        },
+        "name": "Pinpoint",
+        "mp_cost": "2 MP per rank",
+        "description": "For every rank purchased, the character gains a placed roll to a single strike they make this turn."
+    },
+    "Punchthrough": {
+        "_id": {
+            "$oid": "606ffd7f8cecf126c0becaad"
+        },
+        "name": "Punchthrough",
+        "mp_cost": "4 MP per strike",
+        "description": "The altered strike cuts through all foes in a line until colliding with a physical or magical barrier. The character makes a single attack roll and then makes a single damage roll against all targets successfully struck, adding any applicable bonuses from other rifle specialization skills and lethal to all successfully struck."
+    }
+}
