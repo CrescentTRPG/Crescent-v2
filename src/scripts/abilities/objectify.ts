@@ -1,7 +1,7 @@
 import fs from 'fs'
 
 // Read the input JSON file
-fs.readFile('Rifles.json', 'utf8', (err, data) => {
+fs.readFile('Dnace.json', 'utf8', (err, data) => {
   if (err) {
     console.error('Error reading the file:', err)
     return
@@ -20,7 +20,7 @@ fs.readFile('Rifles.json', 'utf8', (err, data) => {
   })
 
   // Write the transformed data to the output JSON file
-  fs.writeFile('RiflesObject.json', JSON.stringify(outputData, null, 4), (err) => {
+  fs.writeFile('DanceObject.json', JSON.stringify(outputData, null, 4), (err) => {
     if (err) {
       console.error('Error writing the file:', err)
       return

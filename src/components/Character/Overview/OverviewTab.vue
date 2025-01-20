@@ -16,6 +16,7 @@ import TurnPlanner from './TurnPlanner.vue'
 import { BAccordion, BAccordionItem } from 'bootstrap-vue-next'
 import ActionsRepresentationWidget from './ActionsRepresentationWidget.vue'
 import BPopover from 'bootstrap-vue-next/src/directives/BPopover.js'
+import BarPlannerDisplay from './BarPlannerDisplay.vue'
 
 export default {
   setup(props, context) {
@@ -41,7 +42,7 @@ export default {
     TurnPlanner,
     BAccordion,
     BAccordionItem,
-    BPopover
+    BarPlannerDisplay
   }
 }
 </script>
@@ -53,33 +54,32 @@ export default {
     </div>
     <div class="mobileBannnerTime"><MobileCharacterStateBanner></MobileCharacterStateBanner></div>
     <div class="centralItems">
-      <div style="display: flex; justify-content: space-between">
-        <EffectsRibbon></EffectsRibbon>
-        <div>
-          <div></div>
-          <BAccordion
-            class="accordion plannerOverlay"
+      <div class="plannerInfoHeader" style="justify-content: space-between">
+        <BarPlannerDisplay class="plannerInfoHeader"></BarPlannerDisplay>
+
+        <BAccordion
+          class="accordion plannerOverlay"
+          :style="{
+            color: designStore.sidebarText,
+            background: designStore.inputBacking,
+            backgroundColor: designStore.sidebarBacking,
+            borderColor: designStore.secondaryTheme
+          }"
+        >
+          <BAccordionItem
+            :title="`Planner&nbsp`"
+            style="z-index: 4; position: relative"
             :style="{
-              color: designStore.sidebarText,
-              background: designStore.inputBacking,
-              backgroundColor: designStore.sidebarBacking,
+              color: designStore.inputText,
+              background: designStore.sidebarBacking,
               borderColor: designStore.secondaryTheme
             }"
           >
-            <BAccordionItem
-              :title="`Planner&nbsp`"
-              style="z-index: 4; position: relative"
-              :style="{
-                color: designStore.inputText,
-                background: designStore.sidebarBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-            >
-              <TurnPlanner></TurnPlanner>
-            </BAccordionItem>
-          </BAccordion>
-        </div>
+            <TurnPlanner></TurnPlanner>
+          </BAccordionItem>
+        </BAccordion>
       </div>
+      <EffectsRibbon></EffectsRibbon>
       <OverviewAttributes></OverviewAttributes>
       <MovespeedWidget></MovespeedWidget>
       <TitleWidget title="Abilities" style="margin-top: -0.25rem"></TitleWidget>
@@ -89,7 +89,7 @@ export default {
   </div>
 </template>
 
-<style scoped>
+<style>
 .overviewLayout {
   display: flex;
   width: 100%;
@@ -104,11 +104,15 @@ export default {
 }
 .plannerOverlay {
   display: none;
-  position: absolute;
   right: 0;
   height: 3rem;
   z-index: 5;
-  border: 2px solid;
+  border: 1px solid;
+}
+.plannerInfoHeader {
+  height: 3rem;
+
+  display: none;
 }
 @media (max-width: 1200px) {
   .turnPlanner {
@@ -121,6 +125,11 @@ export default {
   }
   .centralItems {
     width: 100%;
+  }
+  .plannerInfoHeader {
+    height: 3rem;
+
+    display: flex;
   }
   .plannerOverlay {
     display: block;
@@ -136,6 +145,9 @@ export default {
   .turnPlanner {
     display: none;
   }
+  .plannerInfoHeader {
+    display: flex;
+  }
   .overviewLayout {
     display: flex;
     flex-direction: column;
@@ -147,8 +159,8 @@ export default {
     display: block;
   }
   .plannerOverlay {
-    display: block;
     position: absolute;
+    display: block;
     right: 0;
     height: 3rem;
     z-index: 5;

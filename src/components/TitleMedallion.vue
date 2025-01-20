@@ -2,7 +2,7 @@
 import { useDesignStore } from '../stores/designStore'
 
 export default {
-  props: ['title'],
+  props: ['title', 'color'],
   setup(props, context) {
     const designStore = useDesignStore()
     return {
@@ -39,7 +39,7 @@ export default {
     ></v-icon>
     <div
       style="font-size: large; text-align: center; margin: 0.25rem"
-      :style="{ fontFamily: designStore.titleFont, color: designStore.sidebarText }"
+      :style="{ fontFamily: designStore.titleFont, color: props.color || designStore.sidebarText }"
     >
       {{ props.title }}
     </div>

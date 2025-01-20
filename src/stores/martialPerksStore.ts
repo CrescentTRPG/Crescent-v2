@@ -95,7 +95,7 @@ export const useMartialPerksStore = defineStore('martialPerk', {
     },
     setUpBuildDisplay(perkChanged) {
       if (this.buildDisplayMartialPerks.length > 1) {
-        if (perkChanged != undefined) {
+        if (perkChanged != undefined && perkChanged.name) {
           this.buildDisplayMartialPerks[perkChanged.perkIndex].known = perkChanged.known
         }
       } else {

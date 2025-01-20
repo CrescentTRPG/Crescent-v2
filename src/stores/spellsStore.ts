@@ -130,7 +130,7 @@ export const useSpellStore = defineStore('spell', {
     },
     setUpBuildDisplay(spellChanged: any) {
       if (this.buildDisplaySpellgroups.length > 1 && this.buildDisplaySpells.length > 1) {
-        if (spellChanged != undefined) {
+        if (spellChanged != undefined && spellChanged.name) {
           this.buildDisplaySpellgroups[spellChanged.groupNumber].spells[
             spellChanged.groupSpellIndex
           ].known = spellChanged.known
@@ -205,30 +205,32 @@ export const useSpellStore = defineStore('spell', {
       if (!this.spellgroups[spell.spellgroup]) {
         this.setLocalSpellgroup(spell.spellgroup)
         //set all rank zeros
-        for (let i = 0; i < this.buildDisplaySpellgroups[spell.groupNumber].spells.length; i++) {
-          if (this.buildDisplaySpellgroups[spell.groupNumber].spells[i].rank == 0) {
-            this.setLocalSpell({
-              ...this.buildDisplaySpellgroups[spell.groupNumber].spells[i],
-              known: true
-            })
-            updateDoc(
-              doc(
-                db,
-                'User/' +
-                  useUserStore().getUserId +
-                  '/Character/' +
-                  useCharacterStore().getCharacterId
-              ),
-              {
-                spells: this.spellgroups,
-                spellChanged: {
-                  ...this.buildDisplaySpellgroups[spell.groupNumber].spells[i],
-                  known: true
+        if (spell.rank > 0) {
+          for (let i = 0; i < this.buildDisplaySpellgroups[spell.groupNumber].spells.length; i++) {
+            if (this.buildDisplaySpellgroups[spell.groupNumber].spells[i].rank == 0) {
+              this.setLocalSpell({
+                ...this.buildDisplaySpellgroups[spell.groupNumber].spells[i],
+                known: true
+              })
+              updateDoc(
+                doc(
+                  db,
+                  'User/' +
+                    useUserStore().getUserId +
+                    '/Character/' +
+                    useCharacterStore().getCharacterId
+                ),
+                {
+                  spells: this.spellgroups,
+                  spellChanged: {
+                    ...this.buildDisplaySpellgroups[spell.groupNumber].spells[i],
+                    known: true
+                  }
                 }
-              }
-            )
-          } else {
-            break
+              )
+            } else {
+              break
+            }
           }
         }
       }

@@ -34,6 +34,11 @@ export const useTraitsStore = defineStore('traits', {
         const attr = attrArr[attrArr.length - 1].toLowerCase()
         useCharacterStore().updateExceptionals(attr, 0)
       }
+      if (traitName.includes('Inferior')) {
+        const attrArr = traitName.split(' ')
+        const attr = attrArr[attrArr.length - 1].toLowerCase()
+        useCharacterStore().updateExceptionals(attr, 0)
+      }
     }
   },
   persist: true

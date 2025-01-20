@@ -31,7 +31,7 @@ export default {
         display: flex;
         justify-content: space-between;
       "
-      :style="{ textDecoration: 'underline wavy 1px' + designStore.secondaryTheme }"
+      :style="{ textDecoration: 'underline 1px' + designStore.secondaryTheme }"
     >
       <div>{{ props.name + ' : ' }}</div>
       <div v-if="props.charges == 1" style="margin-right: 1rem">

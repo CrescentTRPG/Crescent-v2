@@ -26,7 +26,7 @@ export default {
     const { combatStyles, specializations } = storeToRefs(martialSkillsStore)
     const { martialPerks } = storeToRefs(martialPerksStore)
     const { totalAbilityPoints } = storeToRefs(characterStore)
-    const { spellgroups } = storeToRefs(spellsStore)
+    const { spellgroups, manualSpellgroups } = storeToRefs(spellsStore)
 
     const totalAbilityPointsRef = totalAbilityPoints.value
 
@@ -41,7 +41,8 @@ export default {
       combatStyles,
       specializations,
       martialPerks,
-      spellgroups
+      spellgroups,
+      manualSpellgroups
     }
   },
   watch: {
@@ -69,7 +70,11 @@ export default {
       Object.values(this.spellgroups).forEach((val: any) => {
         Object.values(val.spells).forEach((spell: any) => {
           if (spell.known) {
-            counter += val.baseCost * spell.rank
+            if (this.manualSpellgroups[spell.spellgroup].flatCost) {
+              counter += val.baseCost
+            } else {
+              counter += val.baseCost * spell.rank
+            }
           }
         })
       })

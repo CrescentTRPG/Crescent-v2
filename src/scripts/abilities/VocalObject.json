@@ -1,0 +1,86 @@
+{
+  "Projection": {
+    "rank": 1,
+    "passive": false,
+    "name": "Projection",
+    "actionCost": "Swift Action",
+    "target": "Character",
+    "area": "5 mile radius",
+    "type": "Focus",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "Clearly projecting their voice within the area, the character’s voice pierces through any obstructions,\nsuch as a vacuum. This ability lasts as long as they maintain focus on it."
+  },
+  "Acapella": {
+    "rank": 2,
+    "passive": false,
+    "name": "Acapella",
+    "actionCost": "Swift Action",
+    "target": "LOS 100'",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "WIL",
+    "description": "Drawing opponents into a haze with their melodic tone, the character contests their CHA against the WIL\nof the target, forcing them to immediately move up to twice their full movement towards the character on\nsuccess."
+  },
+  "Rap": {
+    "rank": 2,
+    "passive": false,
+    "name": "Rap",
+    "actionCost": "Swift Action",
+    "target": "LOS 80'",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "1 Round",
+    "resistance": "AGI",
+    "description": "Pointing out flaws with their beats, the character contests their CHA against the AGI of the target,\nknocking them prone and giving them a displaced roll on their next attack roll on success."
+  },
+  "Screamo": {
+    "rank": 2,
+    "passive": false,
+    "name": "Screamo",
+    "actionCost": "Swift Action",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "Twisting the flow of reality with their voice, the character gives the target a displaced roll or + 2 bonus on\nsetting resistance checks until the start of the character’s next turn."
+  },
+  "Duo": {
+    "rank": 3,
+    "passive": false,
+    "name": "Duo",
+    "actionCost": "Reactionary",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "As a reaction to having a condition applied to them, the character contests their CHA against the target’s\nHEA, applying the condition onto the target as well on success."
+  },
+  "Vibrato": {
+    "rank": 4,
+    "passive": false,
+    "name": "Vibrato",
+    "actionCost": "Swift Action",
+    "target": "LOS 5'*Rank",
+    "area": "Single Target",
+    "type": "Focus",
+    "duration": "1 Minute",
+    "resistance": "WIL",
+    "description": "Disrupting the natural rhythm that binds the targets to life, the character contests their CHA against the\ntarget’s WIL, dazing them on success, and removing their ability to use a group of the character’s choice\n(This can include martial perks, spellgroups, or specific weapon skills) or stipping them of their\narchetype."
+  },
+  "Siren Song": {
+    "rank": 6,
+    "passive": false,
+    "name": "Siren Song",
+    "actionCost": "Core Action",
+    "target": "LOS 5'*Rank",
+    "area": "Single Target",
+    "type": "Charged (1)",
+    "duration": "1 Hour",
+    "resistance": "WIL",
+    "description": "Singing an alluring tune, the caster can contest their CHA against a chosen target’s WIL, charming them\non success. The affected target automatically re-attempts the check at the end of their turn."
+  }
+}

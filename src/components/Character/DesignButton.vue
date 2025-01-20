@@ -1,5 +1,5 @@
 <script lang="ts">
-import { BButton, BFormSelect, BFormInput } from 'bootstrap-vue-next'
+import { BButton, BFormSelect, BFormInput, BDropdown, BDropdownItem } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../stores/designStore'
 import { useUserStore } from '../../stores/userStore'
@@ -82,6 +82,98 @@ export default {
       { html: 'Star Outline <i class="bi bi-star"></i>', value: 'bi bi-star' },
       { html: 'Star Filled <i class="bi bi-star-fill"></i>', value: 'bi bi-star-fill' }
     ])
+    let designs = [
+      {
+        primaryTheme: '#3E5642',
+        secondaryTheme: '#aca26c',
+        inputBacking: '#cad8d6',
+        inputText: '#195115',
+        sidebarBacking: '#7d7064',
+        sidebarText: '#351a08',
+        primaryText: '#ccdbcf',
+        pageBackdrop: '#6d7566',
+        alertTheme: '#f36353',
+        font: 'Bahnschrift',
+        titleFont: 'Segoe UI Light',
+        icon: 'bi bi-square',
+        iconFill: 'bi bi-check',
+        charIconFlair: 'bi bi-stars',
+        charIcon: 'bi bi-moon-stars-fill',
+        iconColor: '#000000'
+      },
+      {
+        primaryTheme: '#d0ccea',
+        secondaryTheme: '#fffdeb',
+        inputBacking: '#f3e7f3',
+        inputText: '#a081b1',
+        sidebarBacking: '#d2e8ee',
+        sidebarText: '#846a90',
+        primaryText: '#846a90',
+        pageBackdrop: '#eceffe',
+        alertTheme: '#5585c8',
+        font: 'Helvetica',
+        titleFont: 'Ink Free',
+        icon: 'bi bi-heart',
+        iconFill: 'bi bi-check',
+        charIconFlair: 'gi-charm',
+        charIcon: 'gi-bow-tie-ribbon',
+        iconColor: '#ad89be'
+      },
+      {
+        primaryTheme: '#381a56',
+        secondaryTheme: '#a1925e',
+        inputBacking: '#2c1b2c',
+        inputText: '#cabfbf',
+        sidebarBacking: '#0f1038',
+        sidebarText: '#dfdfdf',
+        primaryText: '#dfdfdf',
+        pageBackdrop: '#101010',
+        alertTheme: '#c15be6',
+        font: 'Bahnschrift',
+        titleFont: 'Bahnschrift',
+        icon: 'bi bi-square',
+        iconFill: 'bi bi-check',
+        charIconFlair: 'bi bi-stars',
+        charIcon: 'bi bi-moon-stars-fill',
+        iconColor: '#dfdfdf'
+      },
+      {
+        primaryTheme: '#400707',
+        secondaryTheme: '#a80000',
+        inputBacking: '#2f2b28',
+        inputText: '#cccccc',
+        sidebarBacking: '#404040',
+        sidebarText: '#dfdfdf',
+        primaryText: '#dfdfdf',
+        pageBackdrop: '#101010',
+        alertTheme: '#fe8839',
+        font: 'Bahnschrift',
+        titleFont: 'Franklin Gothic Medium',
+        icon: 'bi bi-square',
+        iconFill: 'gi-supersonic-bullet',
+        charIconFlair: 'gi-steel-claws',
+        charIcon: 'gi-daemon-skull',
+        iconColor: '#dfdfdf'
+      },
+      {
+        primaryTheme: '#2D193E',
+        secondaryTheme: '#000000',
+        inputBacking: '#54445A',
+        inputText: '#c4c4c4',
+        sidebarBacking: '#552759',
+        sidebarText: '#000000',
+        primaryText: '#c78233',
+        pageBackdrop: '#150E11',
+        alertTheme: '#52ff7d',
+        font: 'Lucida',
+        titleFont: 'Bookman Old Style',
+        icon: 'bi bi-square',
+        iconFill: 'gi-spider-face',
+        charIconFlair: 'gi-skull-staff',
+        charIcon: 'gi-witch-flight',
+        iconColor: '#410733'
+      }
+    ]
     return {
       checkboxBacking,
       design,
@@ -103,7 +195,8 @@ export default {
       fontList,
       update,
       sidebarBacking,
-      sidebarText
+      sidebarText,
+      designs
     }
   },
   methods: {
@@ -148,6 +241,9 @@ export default {
         iconColor: '#000000'
       }
       this.design.setDesign(designObj, useUserStore().getUserId, useCharacterStore().getCharacterId)
+    },
+    setFromDropdown(obj) {
+      this.design.setDesign(obj, useUserStore().getUserId, useCharacterStore().getCharacterId)
     }
   },
   components: {
@@ -156,6 +252,8 @@ export default {
     BButton,
     BFormInput,
     CustomModal,
+    BDropdown,
+    BDropdownItem,
     CustomCheckbox
   }
 }
@@ -404,6 +502,55 @@ export default {
       </template>
       <template v-slot:footer>
         <div style="display: flex">
+          <BDropdown
+            text="Set From built in color schemes"
+            style="font-size: medium"
+            :style="{
+              background: design.primaryTheme,
+              '--bs-btn-bg': design.primaryTheme,
+              '--bs-btn-color': design.primaryText,
+              '--bs-btn-border-color': design.secondaryTheme,
+              '--bs-btn-hover-color': design.primaryText,
+              '--bs-btn-hover-bg': design.primaryTheme,
+              '--bs-btn-hover-border-color': design.secondaryTheme,
+              '--bs-btn-active-color': design.primaryText,
+              '--bs-btn-active-bg:': design.primaryTheme,
+              '--bs-btn-active-border-color': design.secondaryTheme,
+              '--bs-dropdown-color': design.primaryText,
+              '--bs-dropdown-bg': design.primaryTheme,
+              '--bs-dropdown-link-hover-color': design.alertTheme,
+              '--bs-dropdown-link-hover-bg': design.primaryTheme,
+              '--bs-dropdown-link-active-color': design.alertTheme,
+              '--bs-dropdown-link-active-bg': design.primaryTheme,
+              scrollbarColor: design.secondaryTheme + ' ' + design.primaryTheme
+            }"
+          >
+            <template #button-content>
+              <BButton
+                style="margin-bottom: 0.5rem; border: 1px solid"
+                :style="{
+                  '--dropdownBg': design.inputBacking,
+                  borderColor: design.secondaryTheme
+                }"
+                >Set From built in color schemes</BButton
+              >
+            </template>
+            <BDropdownItem class="dropdown-item" @click="setFromDropdown(designs[2])"
+              >Dark Mode</BDropdownItem
+            >
+            <BDropdownItem class="dropdown-item" @click="setFromDropdown(designs[3])"
+              >Edge Lord</BDropdownItem
+            >
+            <BDropdownItem class="dropdown-item" @click="setFromDropdown(designs[0])"
+              >Scouts Honor</BDropdownItem
+            >
+            <BDropdownItem class="dropdown-item" @click="setFromDropdown(designs[1])"
+              >Pastel Cutie</BDropdownItem
+            >
+            <BDropdownItem class="dropdown-item" @click="setFromDropdown(designs[4])"
+              >Witch Vibes</BDropdownItem
+            >
+          </BDropdown>
           <BButton
             style="margin-right: 1rem; border: 1px solid"
             :style="{
@@ -415,6 +562,7 @@ export default {
             @click="reset"
             >Reset to Default</BButton
           >
+
           <BButton
             style="border: 1px solid"
             :style="{

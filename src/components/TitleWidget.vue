@@ -4,7 +4,7 @@ import CustomModal from './CustomModal.vue'
 import { ref } from 'vue'
 
 export default {
-  props: ['title', 'infoMessage'],
+  props: ['title', 'infoMessage', 'spent', 'total', 'units'],
   setup(props) {
     const modal = ref(false)
 
@@ -33,13 +33,18 @@ export default {
   >
     <div style="display: flex; flex-direction: row; justify-content: space-between">
       <div style="margin-left: 2rem">{{ props.title }}</div>
-      <div v-if="infoMessage">
-        <i
-          class="bi bi-patch-question"
-          style="margin-right: 2rem; cursor: pointer"
-          :style="{ color: designStore.alertTheme }"
-          @click="modal = true"
-        ></i>
+      <div style="display: flex">
+        <div v-if="units" style="margin-right: 1rem; font-size: large">
+          {{ spent }} / {{ total }} {{ units }}
+        </div>
+        <div v-if="infoMessage">
+          <i
+            class="bi bi-patch-question"
+            style="margin-right: 2rem; cursor: pointer"
+            :style="{ color: designStore.alertTheme }"
+            @click="modal = true"
+          ></i>
+        </div>
       </div>
     </div>
     <span

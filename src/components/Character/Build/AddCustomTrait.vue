@@ -5,6 +5,7 @@ import { BForm, BFormInput, BFormTextarea, BInputGroup, BInputGroupText } from '
 import IconPicker from '@/components/IconPicker.vue'
 import ToggleSwitch from '@/components/ToggleSwitch.vue'
 import ActionCostDropdown from '@/components/ActionCostDropdown.vue'
+import SearchForAbilityDropdown from '@/components/SearchForAbilityDropdown.vue'
 export default {
   emits: ['stagedTrait'],
   setup(props, context) {
@@ -18,6 +19,7 @@ export default {
       icon: 'gi-dna1'
     })
     const traitAbility = ref({
+      isTrait: true,
       name: trait.value.name,
       actionCost: 'Core Action',
       area: 'Self',
@@ -60,7 +62,8 @@ export default {
     ToggleSwitch,
     BFormTextarea,
     ActionCostDropdown,
-    BForm
+    BForm,
+    SearchForAbilityDropdown
   }
 }
 </script>
@@ -152,6 +155,9 @@ export default {
       ></ToggleSwitch>
     </BInputGroup>
     <div v-if="hasAbility" style="margin-top: 1rem">
+      <SearchForAbilityDropdown
+        @ability="(ability) => (traitAbility = ability)"
+      ></SearchForAbilityDropdown>
       <BForm
         :style="{
           background: designStore.inputBacking,
@@ -160,6 +166,7 @@ export default {
         }"
       >
         <BFormInput
+          v-model="traitAbility.name"
           @change="emitTrait()"
           placeholder="name"
           class="ability-form-item"
@@ -178,7 +185,11 @@ export default {
             borderColor: designStore.secondaryTheme
           }"
         >
-          <ActionCostDropdown @change="emitTrait()" class="grid__item"></ActionCostDropdown>
+          <ActionCostDropdown
+            v-model="traitAbility.actionCost"
+            @change="emitTrait()"
+            class="grid__item"
+          ></ActionCostDropdown>
           <div
             class="ability-item"
             :style="{

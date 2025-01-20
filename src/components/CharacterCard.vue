@@ -5,7 +5,7 @@
       :src="getCharacterImage()"
       style="border: 4px solid #dfdfdf; border-radius: 0; background-color: #dfdfdf"
     ></BCardImg>
-    <div v-if="!useImg" class="addIconContainer">
+    <div v-if="!useImg" class="addIconContainer" :style="{ background: designStore.inputBacking }">
       <i class="bi bi-person-add" style="position: relative; right: 1rem"></i>
     </div>
     <div style="margin: 1.5rem"></div>
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { useDesignStore } from '@/stores/designStore'
 import { BCard, BCardImg, BCardTitle } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 
@@ -21,9 +22,10 @@ export default {
   props: ['characterProp', 'name', 'useImg'],
   setup(props, context) {
     const character = ref(props.characterProp)
+    const designStore = useDesignStore()
     const name = ref(props.name)
     const useImg = ref(props.useImg)
-    return { character }
+    return { character, designStore }
   },
   components: {
     BCard,

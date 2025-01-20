@@ -27,7 +27,11 @@
         ></IconStackCloud>
         <span
           class="component"
-          :style="{ background: design.primaryTheme, color: design.primaryText }"
+          :style="{
+            background: design.primaryTheme,
+            color: design.primaryText,
+            fontFamily: design.titleFont
+          }"
           ><div style="width: 150%">{{ character?.name }}</div>
           <div
             style="display: flex; justify-content: end; position: relative"
@@ -68,12 +72,27 @@
         </div>
         <div>
           <BButton
+            @click="showDice = !showDice"
             class="diceButton"
             style="margin-right: 0.25rem"
             :style="{ background: design.primaryTheme, color: design.primaryText }"
           >
             <i class="bi bi-dice-6"></i>
           </BButton>
+          <BOffcanvas
+            v-model="showDice"
+            placement="end"
+            :backdrop="true"
+            shadow="false"
+            :teleportDisabled="false"
+            :style="{
+              background: design.primaryTheme,
+              color: design.primaryText,
+              '--bs-btn-close-color': design.primaryText
+            }"
+          >
+            <DiceSidebar></DiceSidebar>
+          </BOffcanvas>
         </div>
       </div>
     </div>
@@ -87,6 +106,8 @@
     ></CharacterNav>
     <BuildTab v-if="navPos === 'build'" style="flex-grow: 1"></BuildTab>
     <OverviewTab v-if="navPos === 'overview'"></OverviewTab>
+    <DetailsTab v-if="navPos === 'details'"></DetailsTab>
+    <EquipmentTab v-if="navPos === 'equipment'"></EquipmentTab>
   </div>
 </template>
 
@@ -102,6 +123,10 @@ import DesignButton from '../components/Character/DesignButton.vue'
 import { useUserStore } from '@/stores/userStore'
 import { FileExtensionInfo } from 'typescript'
 import OverviewTab from '@/components/Character/Overview/OverviewTab.vue'
+import BOffcanvas from 'bootstrap-vue-next/src/components/BOffcanvas/BOffcanvas.vue'
+import DiceSidebar from '@/components/DiceSidebar/DiceSidebar.vue'
+import DetailsTab from '@/components/Character/Details/DetailsTab.vue'
+import EquipmentTab from '@/components/Character/Equipment/EquipmentTab.vue'
 
 export default {
   setup(props, context) {
@@ -110,6 +135,7 @@ export default {
     const character = useCharacterStore()
     const leftmoon = ref('wi-moon-alt-full')
     const rightmoon = ref('wi-moon-alt-new')
+    const showDice = ref(false)
     const loadMessage = function () {
       let val = Math.floor(Math.random() * 15)
       switch (val) {
@@ -201,7 +227,7 @@ export default {
     onUnmounted(() => {
       character.unsubscribe()
     })
-    return { design, navPos, character, leftmoon, rightmoon, message }
+    return { design, navPos, character, leftmoon, rightmoon, message, showDice }
   },
   components: {
     BButton,
@@ -209,7 +235,11 @@ export default {
     IconStackCloud,
     BuildTab,
     DesignButton,
-    OverviewTab
+    OverviewTab,
+    BOffcanvas,
+    DiceSidebar,
+    DetailsTab,
+    EquipmentTab
   },
   methods: {
     delay: function (time) {
@@ -230,5 +260,10 @@ export default {
     font-size: 1rem;
     margin-bottom: 1rem;
   }
+}
+.btn-close {
+  ----bs-btn-close-color: inherit;
+}
+ul {
 }
 </style>

@@ -1,0 +1,159 @@
+{
+  "Blinded": {
+    "name": "Blinded",
+    "short": "Blind",
+    "groupIcon": "gi-sight-disabled",
+    "description": "Target cannot utilize its sight to perceive its surroundings, and has their LOS restricted to 10’. The target automatically fails any checks that require sight.\\nTrue blindness prevents all means of sight, even those  provided by magical or unnatural senses. Magical darkness inflicts True Blindness, limiting LOS to touch.\\nThe affected target suffers 2 displaced rolls on all PER checks.\\nAll attack rolls against the target gain a placed roll."
+  },
+  "Charmed": {
+    "name": "Charmed",
+    "short": "Charm",
+    "groupIcon": "gi-smitten",
+    "description": "Targets affected by this condition will perceive the charmer as their ally, and refuse to harm them — and seek to protect them. The charmer may direct the charmed target to perform an action as a swift action, so long as it does not directly endanger/harm the charmed individual. The condition lasts for the duration of the magical effect causing it. In case the affected target or its possessions is a target of offensive actions stemming from the charmer, the charmed target is allowed to immediately re-attempt the original resistance check again to break the charm with no action cost."
+  },
+  "Confused": {
+    "name": "Confused",
+    "short": "Confuse",
+    "groupIcon": "gi-misdirection",
+    "description": "Target cannot differentiate between friend and foe. It will attempt to resist any magical effects and if in the middle of combat will select targets for both its benign and offensive actions arbitrarily (roll a d6, 1-3 is benign, 4-6 is offensive), though it has a preference for the nearest targets."
+  },
+  "Ethereal": {
+    "name": "Ethereal",
+    "short": "Ethereal",
+    "groupIcon": "gi-spectre",
+    "description": "Targets affected by this condition are in the ethereal plane; they...\\nAre immune to all damage that is not from its current plane.\\nCan only affect other  ethereal  targets\\nAre flying at a speed equal to their normal movement speed.\\nAre capable of moving through non-magical materials such as wood or stone, but not enchanted materials and are blinded while inside solid materials.\nIf the target turns physical, they are displaced to the nearest unoccupied space within 20’. If no such place exists, the target materializes inside a solid object, dead."
+  },
+  "Frightened": {
+    "name": "Frightened",
+    "short": "Frighten",
+    "groupIcon": "gi-terror",
+    "description": "Target is terrified by the source of this condition and will utilize its movement action to put space between itself and the source. In addition:\\nThey have a displaced roll on any check stemming from the source of the condition.\\nThey have a displaced roll when making an attack roll against the source of the condition."
+  },
+  "Invisible": {
+    "name": "Invisible",
+    "short": "Invisible",
+    "groupIcon": "gi-invisible",
+    "description": "Target bends visible light around itself, turning invisible to normal vision, though it still releases noise.\\nAttacks against them have a blindness penalty if they are undetected, otherwise only one displaced roll if hidden.\\nGain  two  placed rolls on subtlety checks"
+  },
+  "Paralyzed": {
+    "name": "Paralyzed",
+    "short": "Paralyze",
+    "groupIcon": "gi-skeleton-inside",
+    "description": "Target is paralyzed and cannot move its body, though it regains its movement action upon breaking free of the paralysis.\\nTarget is still aware of its surroundings, though unable to to take actions.\\nUpon taking any damage, the paralysis is broken immediately at no action cost.\\nTarget cannot make AGI checks while paralyzed."
+  },
+  "Pinned": {
+    "name": "Pinned",
+    "short": "Pin",
+    "groupIcon": "gi-sticky-boot",
+    "description": "Affected target suffers a number of penalties:\\nA pinned target’s movement speed is always 0.\\nA pinned target’s movement DVs are set to 0.\\nHas two displaced rolls on all AGI checks and loses any placed rolls."
+  },
+  "Grappled": {
+    "name": "Grappled",
+    "short": "Grapple",
+    "groupIcon": "gi-handcuffs",
+    "description": "A grapple can be made with a successful melee attack roll, (inflicting no damage, though skill can alter grapples) pinning them on hit. The target is reduced to a core action (while grappled), and the grappler is slowed. The target regains their movement and swift action upon breaking the grapple. To maintain a grapple the character must spend a Core Action each round.\\nIt takes two arms to grapple a target of the character’s own size class, one arm to grapple a target of a smaller size class, and the character cannot effectively grapple a target of a larger size class.\\nGrappled targets can attempt to break by using a core action to attempt a new grapple check (contested might check.)"
+  },
+  "Petrified": {
+    "name": "Petrified",
+    "short": "Petrify",
+    "groupIcon": "gi-medusa-head",
+    "description": "Target is turned into a statue, losing all of their actions. In this state the target gains resistance to most damage types, but can receive blunt, magical or stress damages as normal. Unless otherwise stated, the target re-attempts the check at the end of each of their turns, breaking free on success.\\nIf the target takes blunt damage that brings it to negative HP, the statue is shattered, but can be glued back together. If the effect ends when the statue is shattered, the target is dead. If the target takes enough magical or mental damage to normally kill it, it dies.\\nThe target is not aware of its surroundings while under this condition."
+  },
+  "Prone": {
+    "name": "Prone",
+    "short": "Prone",
+    "groupIcon": "gi-falling",
+    "description": "Target is knocked to the ground, gaining a number of effects until they utilize half of their movement to stand up.\\nThe target’s movement DVs are reduced to zero\\nAttacks against the target gain a placed roll.\\nThe target’s movement speed is halved.\\nThe target suffers a displaced roll on AGI checks"
+  },
+  "Sickened": {
+    "name": "Sickened",
+    "short": "Sick",
+    "groupIcon": "gi-vomiting",
+    "description": "Sickened I. Target suffers a displaced roll on all checks. Upon entering combat, the target becomes confused. Sickened  II+. Target gains a stacking instance of suffering (Toxic.)"
+  },
+  "Slowed": {
+    "name": "Slowed",
+    "short": "Slow",
+    "groupIcon": "gi-snail",
+    "description": "A slowed character moves at half of their normal movement speed and loses their reaction."
+  },
+  "Spell Jammed": {
+    "name": "Spell Jammed",
+    "short": "Spell Jammed",
+    "groupIcon": "gi-brain-freeze",
+    "description": "The target cannot utilize magic under this condition.\\nIf condition specifies magic type, only that magic type is blocked. Otherwise all magic is restricted.\\nThis condition does not stop already activated spell effects from working, but does not allow activation of any new effects by the target."
+  },
+  "Stunned": {
+    "name": "Stunned",
+    "short": "Stun",
+    "groupIcon": "gi-time-trap",
+    "description": "The target is stunned and cannot perform any movement, core, reaction, or swift actions.\\nHas a displaced roll on all HEA, WIL, STR, and AGI checks.\\nA stunned target’s movement speed is always 0.\\nTarget cannot access their movement DVs while pinned."
+  },
+  "Suffering": {
+    "name": "Suffering",
+    "short": "Suffer",
+    "groupIcon": "gi-bleeding-heart",
+    "description": "Each instance of Suffering inflicts a d6 of a damage type at the start of a character’s turn until cleared. Targets under the effects of  suffering  can  remove all instances of it by expending their swift action."
+  },
+  "Unconcious": {
+    "name": "Unconcious",
+    "short": "Unconcious",
+    "groupIcon": "gi-coma",
+    "description": "Unconscious targets have a number of distinctions:\\nCannot perform any kind of actions and automatically fail all AGI and STR checks."
+  },
+  "Fatigued": {
+    "name": "Fatigued",
+    "short": "Fatigue",
+    "groupIcon": "gi-sleepy",
+    "description": "The character failed to get a complete rest period. The scale of detriment increases for each night the character fails to rest. After missing their first night of rest, the character has a displaced roll on all attribute checks. On each subsequent day, the character receives a stacking displaced roll on every roll for each night the character misses a day’s rest."
+  },
+  "Encumbered": {
+    "name": "Encumbered",
+    "short": "Encumber",
+    "groupIcon": "gi-weight-crush",
+    "description": "The total weight of what the character is carrying exceeds that of the character’s weight multiplied by their Might (½ Strength Attribute + Might Ranks.) When encumbered, they are slowed."
+  },
+  "Warped": {
+    "name": "Warped",
+    "short": "Warp",
+    "groupIcon": "gi-psychic-waves",
+    "description": "Upon gaining three instances of Warp a character becomes Warped. Each complete rest period reduces each instance of Warp by 1; unless they are already Warped. The  character’s mind has been shattered; either through insight into higher beings, extreme stress, addiction or circumstance. The character must fulfill the warp’s condition, whatever it may be for the day. Failure to fulfill the warp’s condition within 18 hours will cause the character to be unable to recover HP in any way and gain a displaced roll on all attribute checks until they fulfill the warp’s condition. Warp can also twist a character’s motivations, memories, and personality. Cures for warp are often highly personal. Ex: Soul Warp - A character’s obsession with blight forces them to consume a soul once each day."
+  },
+  "Befuddled": {
+    "name": "Befuddled",
+    "short": "Befuddle",
+    "groupIcon": "gi-laser-sparks",
+    "description": "The character loses their sense of self, spacing out occasionally. The character has a displaced roll on all PER and INT related checks as long as the condition lasts. A befuddled character cannot maintain Focus, any active focus spells are broken upon becoming befuddled."
+  },
+  "X Resistance": {
+    "icon": "gi-shield-echos",
+    "name": "X Resistance",
+    "description": "The character halves all sources of X damage, rounding down to whole numbers and has a placed roll on any associated checks."
+  },
+  "X Susceptibility": {
+    "icon": "gi-scar-wound",
+    "name": "X Susceptibility",
+    "description": "The character takes double damage from X damage and has a displaced roll on any associated resistance checks."
+  },
+  "X Vulnerability": {
+    "icon": "gi-achilles-heel",
+    "name": "X Vulnerability",
+    "description": "The character takes double damage from X damage and and automatically fails any associated resistance checks. This supercedes any ability to autosave a check."
+  },
+  "X Immunity": {
+    "icon": "gi-armor-upgrade",
+    "name": "X Immunity",
+    "description": "The character takes no damage from X damage and automatically saves on any associated resistance check."
+  },
+  "X Damage Reduction": {
+    "icon": "gi-dragon-shield",
+    "name": "X Damage Reduction",
+    "description": "The character reduces the amount of damage they recieve by for every damage dice of the appropriate damage type rolled in the attack. Damage cannot be negative, and only affects the damage of relevent damage type if an attack deals multiple types of damage."
+  },
+  "X Damage Amplification": {
+    "icon": "gi-megaphone",
+    "name": "X Damage Amplification",
+    "number": 0,
+    "description": "The character increases the amount of damage they recieve by the rank of DA for every damage dice rolled of the appropriate damage type rolled in the attack."
+  }
+}

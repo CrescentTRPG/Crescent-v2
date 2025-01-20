@@ -5,10 +5,11 @@ import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-nex
 import { ref } from 'vue'
 import { useDesignStore } from '../stores/designStore'
 export default {
+  props: ['value'],
   setup(props, context) {
     const error = ref(null)
     const designStore = useDesignStore()
-    const checked = false
+    const checked = props.value || false
     return { designStore, checked }
   },
   methods: {

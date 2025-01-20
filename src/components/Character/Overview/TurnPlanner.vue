@@ -22,7 +22,7 @@ export default {
       characterStore
     }
   },
-  components: { PlannedActionWidget, TitleMedallion, TrackerWidget }
+  components: { PlannedActionWidget, TitleMedallion }
 }
 </script>
 
@@ -42,20 +42,32 @@ export default {
     }"
   >
     <TitleMedallion title="Turn Planner" style="margin-bottom: -0.5rem"></TitleMedallion>
-    <PlannedActionWidget actionName="Core Action"></PlannedActionWidget>
-    <PlannedActionWidget actionName="Swift Action"></PlannedActionWidget>
+    <PlannedActionWidget
+      actionName="Core Action"
+      :ability="characterStore.plannedCoreAction.ability"
+    ></PlannedActionWidget>
+    <PlannedActionWidget
+      actionName="Swift Action"
+      :ability="characterStore.plannedSwiftAction.ability"
+    ></PlannedActionWidget>
 
-    <PlannedActionWidget actionName="Movement Action"></PlannedActionWidget>
+    <PlannedActionWidget
+      actionName="Movement Action"
+      :ability="characterStore.plannedMovementAction.ability"
+    ></PlannedActionWidget>
 
-    <PlannedActionWidget actionName="Reaction"></PlannedActionWidget>
-    <TitleMedallion title="Trackers"></TitleMedallion>
+    <PlannedActionWidget
+      actionName="Reaction"
+      :ability="characterStore.plannedReaction.ability"
+    ></PlannedActionWidget>
+    <!-- <TitleMedallion title="Trackers"></TitleMedallion>
     <TrackerWidget name="Exceptional Willpower" :charges="1"></TrackerWidget>
     <TrackerWidget name="Exceptional Charisma" :charges="1"></TrackerWidget>
     <TrackerWidget name="Berserker's Frenzy" :charges="5"></TrackerWidget>
     <div style="justify-content: flex-end; display: flex; cursor: pointer">
       <div>Add Tracker</div>
       <i class="bi bi-plus" style="font-size: 1.5rem; margin-top: -0.25rem"></i>
-    </div>
+    </div> -->
   </div>
 </template>
 

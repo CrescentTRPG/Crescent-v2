@@ -148,6 +148,10 @@ hr {
   opacity: 0.5;
 }
 
+.bi-plus-lg:hover {
+  opacity: 0.5;
+}
+
 ::-webkit-scrollbar-button ::before ::after {
   display: none;
 }

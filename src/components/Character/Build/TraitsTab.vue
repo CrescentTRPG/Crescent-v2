@@ -60,6 +60,11 @@ export default {
         const attr = attrArr[attrArr.length - 1].toLowerCase()
         useCharacterStore().updateExceptionals(attr, trait.number)
       }
+      if (trait.name.includes('Inferior') && isDefault) {
+        const attrArr = trait.name.split(' ')
+        const attr = attrArr[attrArr.length - 1].toLowerCase()
+        useCharacterStore().updateExceptionals(attr, trait.number * -1)
+      }
       this.traitStore.setTraits(characterTraits)
       this.modal = false
     }

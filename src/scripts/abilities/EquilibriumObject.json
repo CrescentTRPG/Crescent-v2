@@ -47,6 +47,18 @@
     "resistance": "WIL",
     "description": "A glob of energy fires from the caster's fingertips, sapping the energy of everything around. Those impacted by the orb lose 2 + 1/4F d10 mana and have their focus disrupted, WIL save to negate. These mana can be recovered normally via a rest period. "
   },
+  "Mind Meld": {
+    "spellgroup": "Equilibrium",
+    "name": "Mind Meld",
+    "rank": 4,
+    "actionCost": "Swift Action",
+    "type": "Focus",
+    "target": "Touch",
+    "area": "Single Target",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "This ability allows the willing target to utilize any spells or skill that the caster has access to - though they must be cast with the target’s own mana. This spell affects both the caster and the target with the link, as the caster also has access to any spells that the target has. This consumes the target's focus as well."
+  },
   "Energy Conversion": {
     "spellgroup": "Equilibrium",
     "name": "Energy Conversion",

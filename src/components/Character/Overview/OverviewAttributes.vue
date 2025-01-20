@@ -69,7 +69,7 @@ export default {
   display: none;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 900px) {
   .fullDisplay {
     display: none;
   }

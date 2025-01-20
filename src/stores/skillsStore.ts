@@ -5,6 +5,7 @@ import { useUserStore } from './userStore.js'
 import { useCharacterStore } from './characterStore.js'
 import { db } from '@/firebase/config.js'
 import { collection, setDoc, doc, addDoc, updateDoc, onSnapshot } from 'firebase/firestore'
+import { usePerformanceStore } from './performanceStore.js'
 
 interface Skill {
   skill: string
@@ -30,6 +31,7 @@ export const useSkillStore = defineStore('skill', {
         description: 'something',
         isOrigin: false,
         id: 'huh',
+        attribute: 'Agility',
         source: 'Test'
       }
     ]
@@ -41,6 +43,21 @@ export const useSkillStore = defineStore('skill', {
   },
   actions: {
     async setSkill(skill: any) {
+      if (skill.skill === 'Performance' && skill.rank < 10) {
+        const performanceStore = usePerformanceStore()
+        if (skill.rank < 5) {
+          performanceStore.setPerformanceStyles({
+            ...performanceStore.performanceStyles,
+            style2: '',
+            style3: ''
+          })
+        } else {
+          performanceStore.setPerformanceStyles({
+            ...performanceStore.performanceStyles,
+            style3: ''
+          })
+        }
+      }
       if (skill.rank == 0) {
         delete this.skills[skill.skill]
       } else {
@@ -91,7 +108,7 @@ export const useSkillStore = defineStore('skill', {
     },
     setUpBuildDisplay(skillChanged) {
       if (this.effectiveSkills.length > 1) {
-        if (skillChanged != undefined) {
+        if (skillChanged != undefined && skillChanged.name) {
           this.effectiveSkills[skillChanged.index].rank = skillChanged.rank
         }
       } else {

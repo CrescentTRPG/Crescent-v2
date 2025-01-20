@@ -14,6 +14,7 @@ import SpellsTable from './SpellsTable.vue'
 import TraitsTab from './TraitsTab.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
 import FaunaTab from './Fauna/FaunaTab.vue'
+import PerformanceTab from './PerformanceTab.vue'
 
 export default {
   props: ['tab'],
@@ -35,7 +36,8 @@ export default {
     SpellsTable,
     TraitsTab,
     TitleWidget,
-    FaunaTab
+    FaunaTab,
+    PerformanceTab
   }
 }
 </script>
@@ -70,7 +72,7 @@ export default {
     <div v-if="props.tab == 'traits'"><TraitsTab></TraitsTab></div>
     <div v-if="props.tab == 'fauna'"><FaunaTab></FaunaTab></div>
     <div v-if="props.tab == 'effigy'">e</div>
-    <div v-if="props.tab == 'performance'">p</div>
+    <div v-if="props.tab == 'performance'"><PerformanceTab></PerformanceTab></div>
   </div>
 </template>
 

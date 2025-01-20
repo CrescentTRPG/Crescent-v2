@@ -133,7 +133,7 @@ export const useMartialSkillsStore = defineStore('martialSkill', {
     },
     setUpBuildDisplay(combatStyleChanged) {
       if (this.buildDisplayCombatStyles.length > 1) {
-        if (combatStyleChanged != undefined) {
+        if (combatStyleChanged != undefined && combatStyleChanged.name) {
           this.buildDisplayCombatStyles[combatStyleChanged.index].rank = combatStyleChanged.rank
         }
       } else {
@@ -184,7 +184,7 @@ export const useMartialSkillsStore = defineStore('martialSkill', {
     },
     setUpBuildSpecializationDisplay(specializationChanged) {
       if (this.buildDisplaySpecializations.length > 1) {
-        if (specializationChanged != undefined) {
+        if (specializationChanged != undefined && specializationChanged.rank) {
           this.buildDisplaySpecializations[specializationChanged.index].rank =
             specializationChanged.rank
         }

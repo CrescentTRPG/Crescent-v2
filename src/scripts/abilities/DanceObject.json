@@ -1,0 +1,86 @@
+{
+  "Ballroom Dancing": {
+    "rank": 1,
+    "passive": false,
+    "name": "Ballroom Dancing",
+    "actionCost": "Swift Action",
+    "target": "Touch",
+    "area": "Single Target",
+    "type": "Focus",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The performer has mastered sound manipulation; allowing them to transport music to a 5’ sphere within\nrange, nullifying the effect of cover or invisibility in the target area. If the performer casts magic, the\nmagic stems from that location. This ability persists as long as the performer retains focus."
+  },
+  "Ballet": {
+    "rank": 1,
+    "passive": false,
+    "name": "Ballet",
+    "actionCost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The dancer leaps feet equal to twice an acrobatic check, allowing them to jump to anywhere in that\ndistance. The dancer may leap off of any solid surface, be it the ground, a wall, etc."
+  },
+  "Jazz": {
+    "rank": 2,
+    "passive": false,
+    "name": "Jazz",
+    "actionCost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "It becomes nearly impossible to slow the dancer; allowing them to utilize their swift action to make\nthemselves immune to the slow status condition until the end of their next turn."
+  },
+  "Hip Hop": {
+    "rank": 3,
+    "passive": true,
+    "name": "Hip Hop",
+    "actionCost": "N/A",
+    "target": "Character",
+    "area": "Self",
+    "type": "Passive",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The dancer’s arcane flow and musical flow combine, protecting them from harm. The dancer gains 2\nbonus DVs when they spend mana. All DVs granted by this skill are removed when the caster ends their\nturn without having spent mana."
+  },
+  "Disco": {
+    "rank": 3,
+    "passive": false,
+    "name": "Disco",
+    "actionCost": "Reactionary",
+    "target": "Character",
+    "area": "Single Attack",
+    "type": "Charged (4) ",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "As a reaction, the character can contest the attack roll of an incoming attack using their Performance, if it\nis higher than the attack roll, the attack does not strike, as they dodge out of the way of its effects.\n"
+  },
+  "Flamenco": {
+    "rank": 3,
+    "passive": false,
+    "name": "Flamenco",
+    "actionCost": "Swift Action",
+    "target": "LOS 30'",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "WIL",
+    "description": "Dancing in a provocative style; the character demands the target’s attention. Contesting their CHA\nagainst the target’s WIL, on success the target can only make attack rolls and only against the character\nuntil the start of the character’s next turn.\n"
+  },
+  "Breakdance": {
+    "rank": 7,
+    "passive": true,
+    "name": "Breakdance",
+    "actionCost": "N/A",
+    "target": "Character",
+    "area": "Self",
+    "type": "Passive",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "It becomes impossible to grapple or move the dancer; they are immune to being grappled and forcibly\nmoved, deftly weaving out of the way in all situations."
+  }
+}

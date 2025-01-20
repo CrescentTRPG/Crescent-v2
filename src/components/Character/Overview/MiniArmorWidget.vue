@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/userStore'
 import { styleText } from 'util'
 
 export default {
-  props: ['emblem', 'marginTop', 'value'],
+  props: ['emblem', 'marginTop', 'value', 'color'],
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
@@ -27,7 +27,7 @@ export default {
 </script>
 <template>
   <div>
-    <div style="z-index: 5" :style="{ color: designStore.secondaryTheme }">
+    <div style="z-index: 5" :style="{ color: props.color }">
       <v-icon
         :name="props.emblem"
         scale="4"
@@ -74,7 +74,7 @@ export default {
           :style="{
             color: designStore.primaryText,
             background: designStore.primaryTheme,
-            borderColor: designStore.secondaryTheme
+            borderColor: props.color
           }"
         >
           {{ props.value }}

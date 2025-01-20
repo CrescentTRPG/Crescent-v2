@@ -26,6 +26,7 @@ import {
 import CustomModal from '@/components/CustomModal.vue'
 import MultiStackIcon from '@/components/MultiStackIcon.vue'
 import { useTraitsStore } from '@/stores/traitsStore'
+import { usePerformanceStore } from '@/stores/performanceStore'
 
 export default {
   setup(props, context) {
@@ -58,11 +59,14 @@ export default {
       }
 
       groups.forEach((group) => {
-        numXBased[group.groupPurchaseLimiter].num += 1
-        if (numXBased[group.groupPurchaseLimiter].groups.length == 0) {
-          numXBased[group.groupPurchaseLimiter].groups = group.name
-        } else {
-          numXBased[group.groupPurchaseLimiter].groups += ', ' + group.name
+        if (group.groupPurchaseLimiter != 'None') {
+          numXBased[group.groupPurchaseLimiter].num += 1
+
+          if (numXBased[group.groupPurchaseLimiter].groups.length == 0) {
+            numXBased[group.groupPurchaseLimiter].groups = group.name
+          } else {
+            numXBased[group.groupPurchaseLimiter].groups += ', ' + group.name
+          }
         }
       })
 
@@ -334,21 +338,51 @@ export default {
       })
       return ret
     })
+    const performanceStore = usePerformanceStore()
 
+    const practicedPerformanceStylesViolation = computed(() => {
+      let ret: Array<string> = []
+      Object.values(performanceStore.practicedStyles).forEach((style) => {
+        Object.values(style).forEach((ability: any) => {
+          if (
+            ability.style != performanceStore.performanceStyles.style1 &&
+            ability.style != performanceStore.performanceStyles.style2 &&
+            ability.style != performanceStore.performanceStyles.style3 &&
+            ability.known
+          ) {
+            ret.push(
+              'The character has practiced the ability: ' +
+                ability.name +
+                ' from the performance style: ' +
+                ability.style +
+                " when they haven't selected the style as one of their performance styles.  Either deselect the ability or select the corresponding performance style."
+            )
+          }
+        })
+      })
+      return ret
+    })
+    const attrSum: ComputedRef<number> = computed((): number => {
+      return Object.values(characterStore.attributes).reduce((acc, val) => acc + val, 0)
+    })
+    const maxAttrSum: ComputedRef<number> = computed((): number => {
+      return Math.min(11, Math.floor(characterStore.totalAbilityPoints / 20)) + 38
+    })
     const attributeSumViolation: ComputedRef<string> = computed((): string => {
-      let attrSum = Object.values(characterStore.attributes).reduce((acc, val) => acc + val, 0)
-      let maxAttrSum = Math.max(11, Math.floor(characterStore.totalAbilityPoints / 20)) + 38
-      if (attrSum > maxAttrSum) {
+      if (attrSum.value > maxAttrSum.value) {
         return (
           'You have allocated ' +
-          Math.abs(attrSum - maxAttrSum) +
-          ' too many points accross your attributes'
+          Math.abs(attrSum.value - maxAttrSum.value) +
+          ' too many points across your attributes'
         )
       }
-      if (attrSum < maxAttrSum) {
+      return ''
+    })
+    const attributeSumSuggestion: ComputedRef<string> = computed((): string => {
+      if (attrSum.value < maxAttrSum.value) {
         return (
           'You have  ' +
-          Math.abs(maxAttrSum - attrSum) +
+          Math.abs(maxAttrSum.value - attrSum.value) +
           ' unused attribute points.  You can use these to increase the values of any attribute(Max 10)'
         )
       }
@@ -418,6 +452,13 @@ export default {
       return ''
     })
 
+    const pickArchetypeSuggestion: ComputedRef<string> = computed((): string => {
+      if (characterStore.spentAbilityPoints === 0) {
+        return "You haven't selected an archetype. Archetypes are a powerful and influential bonus.  You can read about archetype abilities by selecting one and hitting the ?.  You may be familar with the idea of a class.  Archetypes do not function like classes since they do not restrict what kinds of abilities a character may select."
+      }
+      return ''
+    })
+
     const addTraitSuggestionWarden: ComputedRef<string> = computed((): string => {
       if (
         characterStore.archetype === 'warden' &&
@@ -473,6 +514,12 @@ export default {
       if (addTraitSuggestionWarden.value != '') {
         ret.push(addTraitSuggestionWarden.value)
       }
+      if (attributeSumSuggestion.value != '') {
+        ret.push(attributeSumSuggestion.value)
+      }
+      if (practicedPerformanceStylesViolation.value.length > 0) {
+        ret = ret.concat(practicedPerformanceStylesViolation.value)
+      }
       if (ret.length < 1) {
         return ['Good']
       }
@@ -482,7 +529,8 @@ export default {
       designStore,
       status,
       modal,
-      shorthand
+      shorthand,
+      practicedPerformanceStylesViolation
     }
   },
   methods: {
@@ -544,7 +592,13 @@ export default {
             ></i>
             <i
               class="bi bi-question"
-              style="font-size: x-large; align-self: center; transform: scale(2, 2); z-index: 3"
+              style="
+                font-size: x-large;
+                align-self: center;
+                transform: scale(2, 2);
+                z-index: 3;
+                margin-top: -0.5rem;
+              "
               :style="{ color: designStore.alertTheme }"
               v-if="
                 status[0] != 'Good' &&
@@ -553,6 +607,7 @@ export default {
               "
             ></i>
             <i
+              id="error"
               class="bi bi-exclamation"
               style="
                 font-size: x-large;

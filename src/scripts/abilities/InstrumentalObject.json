@@ -1,0 +1,86 @@
+{
+  "Somber Tune": {
+    "rank": 1,
+    "passive": false,
+    "name": "Somber Tune",
+    "actionCost": "Swift Action",
+    "target": "LOS 20'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "WIL",
+    "description": "Performing a slow melody; the character contests their CHA against the target’s WIL, calming the target's\nintense emotions on success This does not prevent affected targets from regaining tense emotions, it\nonly quells present emotions."
+  },
+  "Love Song": {
+    "rank": 2,
+    "passive": false,
+    "name": "Love Song",
+    "actionCost": "Swift Action",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "1 round",
+    "resistance": "N/A",
+    "description": "Stringing a beautiful song; the character grants the target 2 bonus Martial Points or a free finesse on a\nsingle spell that they can utilize until the end of their next turn."
+  },
+  "Rhythm and Blues": {
+    "rank": 2,
+    "passive": false,
+    "name": "Rhythm and Blues",
+    "actionCost": "Reactionary",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Charged (2)",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "Attuning themselves to the flow of magic around them; the character can redirect the check from a\nwilling target onto themselves. This must be done before the check is attempted."
+  },
+  "Sound Waves": {
+    "rank": 2,
+    "passive": false,
+    "name": "Sound Waves",
+    "actionCost": "Swift Action",
+    "target": "LOS 10'*Rank",
+    "area": "Single Target",
+    "type": "Activated",
+    "duration": "1 round",
+    "resistance": "N/A",
+    "description": "The performers sound waves extend around a target’s weapon increasing or decreasing the range/reach\nof that weapon by Rank*5’(Minimum of 5’), WIL save to negate. The resistance check is set with CHA.\n"
+  },
+  "Musical Bridge": {
+    "rank": 3,
+    "passive": false,
+    "name": "Musical Bridge",
+    "actionCost": "Swift Action",
+    "target": "LOS 10'*Rank",
+    "area": "2.5' Radius",
+    "type": "Focus",
+    "duration": "1 Minute",
+    "resistance": "N/A",
+    "description": "The performer has mastered sound manipulation; allowing them to transport music to a 5’ sphere within\nrange, nullifying the effect of cover or invisibility in the target area. If the performer casts magic, the\nmagic stems from that location. This ability persists as long as the performer retains focus."
+  },
+  "Ballad": {
+    "rank": 4,
+    "passive": false,
+    "name": "Ballad",
+    "actionCost": "Core Action",
+    "target": "LOS 10'*Rank",
+    "area": "6 Targets",
+    "type": "Focus",
+    "duration": "1 Minute",
+    "resistance": "N/A",
+    "description": "Setting the stage; the character chooses up to 6 willing targets, granting them an additional damage die\non all sources of damage. These targets also have access to one placed roll each round, that can be\nexpended as a reaction. On subsequent turns the character forcibly expends their swift actions as long as\nthey maintain the ballad. The ballad can continue to affect targets so long as they can hear it."
+  },
+  "Rocking Out": {
+    "rank": 4,
+    "passive": false,
+    "name": "Rocking Out",
+    "actionCost": "Swift Action",
+    "target": "Self",
+    "area": "Single Target",
+    "type": "Charged (3) ",
+    "duration": "Variable",
+    "resistance": "N/A",
+    "description": "The performer jams out, increasing the action cost of a spell by one round for every mana they wish to\ndecrease the cost of a spell by. If a spell costs a swift action it is first increased to a core action before\nbecoming a multi-round spell. Spells always cost at least 1 mana, and this ability can only reduce the cost\nof a spell up to four times.\n"
+  }
+}

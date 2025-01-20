@@ -10,7 +10,6 @@ import { useUserStore } from '@/stores/userStore'
 import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
 import { useMartialPerksStore } from '@/stores/martialPerksStore'
 import { useSpellStore } from '@/stores/spellsStore'
-import { group } from 'console'
 import AbilityDisplay from '@/components/AbilityDisplay.vue'
 import CustomPagination from '@/components/CustomPagination.vue'
 import { LiteralUnion } from 'node_modules/bootstrap-vue-next/dist/src/types'
@@ -19,6 +18,11 @@ import ArrayTabs from '@/components/ArrayTabs.vue'
 import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue'
 import BDropdownItem from 'bootstrap-vue-next/src/components/BDropdown/BDropdownItem.vue'
 import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
+import { isTemplateExpression } from 'typescript'
+import { useEquipmentStore } from '@/stores/equipmentStore'
+import { usePerformanceStore } from '@/stores/performanceStore'
+import { useFaunaStore } from '@/stores/faunaStore'
+import CreatureDisplay from '../Build/Fauna/CreatureDisplay.vue'
 
 export default {
   emits: ['ability'],
@@ -37,7 +41,10 @@ export default {
     const { martialPerks, buildDisplayMartialPerks } = storeToRefs(martialPerksStore)
     const skillStore = useSkillStore()
     const { effectiveSkills, skills } = storeToRefs(skillStore)
-
+    const performanceStore = usePerformanceStore()
+    const { manualPerformanceStyles } = usePerformanceStore()
+    const equipmentStore = useEquipmentStore()
+    const faunaStore = useFaunaStore()
     const currentPage = ref(1)
     const perPage = ref(15)
     const currentModal = ref(0)
@@ -52,9 +59,15 @@ export default {
           item
             ? item.spellgroup
               ? `${item.rank} Mana`
-              : item.perkGroup
-                ? `${item.type}`
-                : 'No Cost'
+              : item.uses
+                ? item.uses
+                : item.Movement
+                  ? `${item.rank} Mana`
+                  : item.perkGroup
+                    ? `${item.type}`
+                    : item.style
+                      ? `${item.type}`
+                      : 'No Cost'
             : 'Something went wrong'
       },
 
@@ -64,18 +77,22 @@ export default {
           item
             ? item.spellgroup
               ? `${item.spellgroup}`
-              : item.perkGroup
-                ? `${item.perkGroup}`
-                : item.attributes
-                  ? 'Combat Style'
-                  : item.combatStyles
-                    ? 'Specialization'
-                    : 'Skill'
+              : item.isEquipment
+                ? 'Equipment'
+                : item.perkGroup
+                  ? `${item.perkGroup}`
+                  : item.style
+                    ? item.style
+                    : item.attributes
+                      ? 'Combat Style'
+                      : item.combatStyles
+                        ? 'Specialization'
+                        : 'Skill'
             : 'Something went wrong',
         label: 'Group'
       },
       { key: 'actionCost', label: 'Action Cost' },
-      { key: 'actions', label: 'Plan to Use' }
+      { key: 'actions', label: 'Plan' }
     ])
     const knownSpells: ComputedRef<Array<any>> = computed(() => {
       const groups: any = Object.values(spellgroups.value)
@@ -227,6 +244,21 @@ export default {
       } else {
         arr['Traits'] = { known: false, name: 'Traits', index: 0 }
       }
+      if (equipmentStore.getAbilitites.length > 0) {
+        arr['Equipment'] = { known: true, name: 'Equipment', index: 0 }
+      } else {
+        arr['Equipment'] = { known: false, name: 'Equipment', index: 0 }
+      }
+      if (equipmentStore.getAbilitites.length > 0) {
+        arr['Performance'] = { known: true, name: 'Performance', index: 0 }
+      } else {
+        arr['Performance'] = { known: false, name: 'Performance', index: 0 }
+      }
+      if (equipmentStore.getAbilitites.length > 0) {
+        arr['Fauna Transformations'] = { known: true, name: 'Fauna Transformations', index: 0 }
+      } else {
+        arr['Fauna Transformations'] = { known: false, name: 'Fauna Transformations', index: 0 }
+      }
       return arr
     })
 
@@ -251,6 +283,15 @@ export default {
           if (tab.name === 'Traits') {
             abilities = abilities.concat(knownTraits.value)
           }
+          if (tab.name === 'Equipment') {
+            abilities = abilities.concat(equipmentStore.getAbilitites)
+          }
+          if (tab.name === 'Performance') {
+            abilities = abilities.concat(performanceStore.getAbilities)
+          }
+          if (tab.name === 'Fauna Transformations') {
+            abilities = abilities.concat(faunaStore.getCreatures)
+          }
         })
         return abilities
       }
@@ -260,6 +301,9 @@ export default {
         .concat(knownSpecializations.value)
         .concat(knownSkillz.value)
         .concat(knownTraits.value)
+        .concat(equipmentStore.getAbilitites)
+        .concat(performanceStore.getAbilities)
+        .concat(faunaStore.getCreatures)
     })
 
     const totalRows = ref(knownAbilities?.value?.length)
@@ -285,7 +329,8 @@ export default {
       knownTraits,
       tabObject,
       selectedTabs,
-      infoModal
+      infoModal,
+      manualPerformanceStyles
     }
   },
   components: {
@@ -298,7 +343,8 @@ export default {
     MartialSkillDisplay,
     ArrayTabs,
     BDropdown,
-    BDropdownItem
+    BDropdownItem,
+    CreatureDisplay
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -333,13 +379,30 @@ export default {
       else {
         return actionCost
       }
+    },
+    addToTurnPlanner(ability: any, actionCost: string) {
+      if (actionCost === 'Core Action') {
+        this.characterStore.setPlannedCoreAction(ability)
+      }
+      if (actionCost === 'Swift Action') {
+        this.characterStore.setPlannedSwiftAction(ability)
+      }
+      if (actionCost === 'Reaction') {
+        this.characterStore.setPlannedReaction(ability)
+      }
+      if (actionCost === 'Movement Action') {
+        this.characterStore.setPlannedMovementAction(ability)
+      }
     }
   }
 }
 </script>
 
 <template>
-  <div :style="{ background: designStore.sidebarBacking, borderColor: designStore.secondaryTheme }">
+  <div
+    style="border-left: 2px solid; margin-left: -2px"
+    :style="{ background: designStore.sidebarBacking, borderColor: designStore.secondaryTheme }"
+  >
     <ArrayTabs
       filteringMessage="Ability Type"
       :tabs="Object.values(tabObject)"
@@ -395,11 +458,11 @@ export default {
               borderColor: designStore.secondaryTheme
             }"
             >{{ data.item.rank ? data.item.rank : data.item.rank === 0 ? 0 : 'N/A' }} {{ ' - ' }}
-            {{ data.item.name }}</BButton
+            {{ data.item.name || data.item.Name }}</BButton
           >
           <CustomModal
             :showModal="modal && currentModal == data.index"
-            :title="data.item.name || data.item.skill + ' - ' + data.item.rank"
+            :title="data.item.name || data.item.Name || data.item.skill + ' - ' + data.item.rank"
             @close="showModal(data.index)"
           >
             <template v-slot:body>
@@ -407,20 +470,24 @@ export default {
                 v-if="
                   data.item.spellgroup ||
                   data.item.perkGroup ||
-                  (!(data.item.attributes || data.item.combatStyles) && !data.item.skill)
+                  (!(data.item.attributes || data.item.combatStyles) &&
+                    !data.item.skill &&
+                    !data.item.Movement)
                 "
                 :medallion="
-                  manualSpellgroups[data.item.spellgroup]?.groupIcon || data.item.groupIcon
+                  manualSpellgroups[data.item.spellgroup]?.groupIcon ||
+                  data.item.groupIcon ||
+                  'gi-cubes'
                 "
-                :description="data.item.description"
-                :area="data.item.area"
-                :duration="data.item.duration"
-                :action-cost="data.item.actionCost"
-                :resistance="data.item.resistance"
-                :target="data.item.target"
-                :type="data.item.type"
+                :description="data.item.description || ''"
+                :area="data.item.area || ''"
+                :duration="data.item.duration || ''"
+                :action-cost="data.item.actionCost || ''"
+                :resistance="data.item.resistance || ''"
+                :target="data.item.target || ''"
+                :type="data.item.type || ''"
               ></AbilityDisplay>
-
+              <CreatureDisplay v-if="data.item.Movement" :creature="data.item"></CreatureDisplay>
               <div
                 v-if="data.item.attributes || data.item.combatStyles"
                 style="padding-bottom: 0.5rem; border-top: 2px solid"
@@ -445,13 +512,21 @@ export default {
             data.item
               ? data.item.spellgroup
                 ? `${data.item.spellgroup}`
-                : data.item.perkGroup
-                  ? `${data.item.perkGroup}`
-                  : data.item.attributes
-                    ? 'Combat Style'
-                    : data.item.combatStyles
-                      ? 'Specialization'
-                      : 'Skill'
+                : data.item.isEquipment
+                  ? 'Equipment'
+                  : data.item.perkGroup
+                    ? `${data.item.perkGroup}`
+                    : data.item.attributes
+                      ? 'Combat Style'
+                      : data.item.combatStyles
+                        ? 'Specialization'
+                        : data.item.isTrait
+                          ? 'Trait'
+                          : data.item.Movement
+                            ? 'Fauna Transformation'
+                            : data.item.style
+                              ? data.item.style
+                              : 'Skill'
               : 'Something went wrong'
           }}
         </div>
@@ -467,7 +542,9 @@ export default {
       </template>
       <template #cell(actions)="data">
         <BDropdown
+          test-data="action"
           class="me-2"
+          style="margin-left: -1rem"
           :style="{
             '--bs-btn-color': designStore.inputText,
             '--bs-btn-hover-bg': designStore.inputBacking,
@@ -500,19 +577,30 @@ export default {
           >
             Actions
           </div>
-          <BDropdownItem href="#" v-if="data.item.actionCost.includes('Core Action')"
+          <BDropdownItem
+            href="#"
+            @click="addToTurnPlanner(data.item, 'Core Action')"
+            v-if="data.item.actionCost?.includes('Core Action')"
             >Core Action</BDropdownItem
           >
-          <BDropdownItem href="#" v-if="data.item.actionCost.includes('Swift Action')"
+          <BDropdownItem
+            href="#"
+            v-if="data.item.actionCost?.includes('Swift')"
+            @click="addToTurnPlanner(data.item, 'Swift Action')"
             >Swift Action</BDropdownItem
           >
-          <BDropdownItem href="#" v-else :style="{ color: designStore.alertTheme }">
-            <template #button-content> Swift Action <i class="bi bi-patch question"></i></template
-          ></BDropdownItem>
-          <BDropdownItem href="#" v-if="data.item.actionCost.includes('Movement')"
+
+          <BDropdownItem
+            href="#"
+            v-if="data.item.actionCost?.includes('Movement')"
+            @click="addToTurnPlanner(data.item, 'Movement Action')"
             >Movement Action</BDropdownItem
           >
-          <BDropdownItem href="#" v-if="data.item.actionCost.includes('Reaction')">
+          <BDropdownItem
+            href="#"
+            v-if="data.item.actionCost?.includes('Reaction')"
+            @click="addToTurnPlanner(data.item, 'Reaction')"
+          >
             Reaction</BDropdownItem
           >
           <div
@@ -528,16 +616,30 @@ export default {
             ></i>
             <div style="margin-top: -0.5rem">Actions</div>
           </div>
-          <BDropdownItem href="#" v-if="!data.item.actionCost.includes('Core Action')"
+          <BDropdownItem
+            href="#"
+            v-if="!data.item.actionCost?.includes('Core Action')"
+            @click="addToTurnPlanner(data.item, 'Core Action')"
             >Core Action</BDropdownItem
           >
-          <BDropdownItem href="#" v-if="!data.item.actionCost.includes('Swift Action')">
+          <BDropdownItem
+            href="#"
+            v-if="!data.item.actionCost?.includes('Swift Action')"
+            @click="addToTurnPlanner(data.item, 'Swift Action')"
+          >
             Swift Action
           </BDropdownItem>
-          <BDropdownItem href="#" v-if="!data.item.actionCost.includes('Movement')"
+          <BDropdownItem
+            href="#"
+            v-if="!data.item.actionCost?.includes('Movement')"
+            @click="addToTurnPlanner(data.item, 'Movement Action')"
             >Movement Action</BDropdownItem
           >
-          <BDropdownItem href="#" v-if="!data.item.actionCost.includes('Reaction')">
+          <BDropdownItem
+            href="#"
+            v-if="!data.item.actionCost?.includes('Reaction')"
+            @click="addToTurnPlanner(data.item, 'Reaction')"
+          >
             Reaction</BDropdownItem
           >
         </BDropdown>

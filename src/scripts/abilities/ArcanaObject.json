@@ -1,0 +1,170 @@
+{
+  "Arcane Grip": {
+    "name": "Arcane Grip",
+    "rank": 0,
+    "spellgroup": "Arcana",
+    "actionCost": "Core Action",
+    "type": "Focus",
+    "target": "Variable",
+    "area": "6''",
+    "duration": "1 Hour",
+    "resistance": "N/A",
+    "description": "Caster can forcibly manipulate an area using their will from up to (Rank * 5)' away. Caster can use their core action to exert their will upon an object, manipulating these objects from afar. When using their will in such a way, they cannot perform attacks or manipulate anything more than (Rank *3) pounds. "
+  },
+  "Assemble": {
+    "name": "Assemble",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "2 Rounds",
+    "type": "Focus",
+    "target": "Touch",
+    "area": "5' x 5' x 5' cube",
+    "duration": "1 + 1/F Hours",
+    "resistance": "STR",
+    "description": "The caster transforms a mundane material, such as dirt, into an item. The item can be up to the size of a 5' x 5' x 5' cube. The item is as sturdy as iron, appears to be magical, and cannot replicate anything more advanced than an analog watch."
+  },
+  "Binding": {
+    "name": "Binding",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "Core Action",
+    "type": "Continuous",
+    "target": "Touch",
+    "area": "Single Target",
+    "duration": "Variable",
+    "resistance": "N/A",
+    "description": "Caster must make a melee attack roll to touch a target - upon a successful touch attack, the target is pinned until the end of their next turn, pulsing magical chains wrapping around them. "
+  },
+  "Bend Elements": {
+    "name": "Bend Elements",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "None",
+    "type": "Continuous",
+    "target": "Caster",
+    "area": "Self",
+    "duration": "Permanent",
+    "resistance": "N/A",
+    "description": "Caster manifests elemental power around them. The number of effects that the caster can do simultaneously is equal to (Rank/2). Caster may select from the following effects: \\nProduce minor, non-damaging elemental effects, such as leaving a trail of energy as footprints, or forcing their eyes to glow. \\nShift easily moveable objects in the area, such as unlocked doors, leaves, and curtains. \\nCasually manipulate objects less than (Rank) pounds with air, though they cannot make attacks with this effect. \\nInflict slight temperature changes, warming themselves up or cooling themselves down "
+  },
+  "Darken": {
+    "name": "Darken",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "None",
+    "type": "Continuous",
+    "target": "Caster",
+    "area": "Self",
+    "duration": "Permanent",
+    "resistance": "N/A",
+    "description": "Caster manifests darkness within the physical world. The number of effects that the caster can do simultaneously is equal to (Rank/2). Caster may select one of the following effects: \\nA small fire, candle, or other light source is snuffed out. \\nEasily moveable objects in the area such as unlocked doors, leaves, and curtains, all move to create shade within a 5' radius. \\nNatural shadows appear in a 5' radius for the next minute."
+  },
+  "Forge": {
+    "name": "Forge",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "Swift Action",
+    "type": "Continuous",
+    "target": "Touch",
+    "area": "Single Weapon",
+    "duration": "1 Round",
+    "resistance": "N/A",
+    "description": "Caster alters the properties of the weapon, it now deals adaptive damage of the caster's type instead of its regular damage type. This effect reapplies itself at the start of each round, and can only be active on a single weapon at once."
+  },
+  "Inner Glow": {
+    "name": "Inner Glow",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "Swift Action",
+    "type": "Continuous",
+    "target": "LOS 100'",
+    "area": "Variable",
+    "duration": "10 Minutes",
+    "resistance": "Fire",
+    "description": "Caster releases (Rank) orbs into their line of sight - the orbs dissipate should they leave it. Each orb emanates enough light to illuminate a 5' area. The caster can arrange these orbs of light however they please, directing them as a Swift Action or forcing them to coalesce around the caster, causing them to glow with an aura of whatever color they please. The orbs have a movement speed of 60' when directed by the caster as a Swift Action. Caster may only have one instance of this spell up at a time. "
+  },
+  "Renew Object": {
+    "name": "Renew Object",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "Core Action",
+    "type": "Evocation",
+    "target": "Touch",
+    "area": "Single Target",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "Caster can repair simple broken things or extremely superficial wounds (Rank/2) times per day. It does not restore the inherent magical properties of an object. Any repairs done with this spell leave an obvious substitute where the damage used to be. "
+  },
+  "Sorcerous Strike": {
+    "name": "Sorcerous Strike",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "Core Action",
+    "type": "Evocation",
+    "target": "Caster",
+    "area": "Self",
+    "duration": "Instantaneous",
+    "resistance": "Blunt",
+    "description": "Caster expends their core action to make a melee attack roll. On hit, the caster inflicts (Spell Rank/2) d10 extra adaptive damage in addition to their weapon's base damage. "
+  },
+  "Sear": {
+    "name": "Sear",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "Core Action",
+    "type": "Evocation",
+    "target": "LOS 30'",
+    "area": "(Spell Rank)'",
+    "duration": "Instantaneous",
+    "resistance": "HEA",
+    "description": "Caster concentrates their arcane energy in a specific area, searing those inside with (Spell Rank/2) d6 adaptive damage. HEA save to halve the damage."
+  },
+  "Stabilize": {
+    "name": "Stabilize",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "Core Action",
+    "type": "Evocation",
+    "target": "Special",
+    "area": "Single Target",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "Caster stabilizes a target in a state of unstable unconsciousness if they are up to (Rank)*2 ft away. This effect prevents the target from bleeding out further. "
+  },
+  "Telepathy": {
+    "name": "Telepathy",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "Core Action",
+    "type": "Continuous",
+    "target": "Variable",
+    "area": "Single Target",
+    "duration": "1 Minute",
+    "resistance": "WIL",
+    "description": "Caster reaches out towards a mind up to (Rank * 10) away. The caster can maintain a continuous stream of mental communication with them, allowing them to both communicate with one another so long as they share one language in common, WIL save to negate. The caster can mask their presence so that the target does not know where the voices came from. "
+  },
+  "Form Familiar": {
+    "name": "Form Familiar",
+    "rank": 0,
+    "spellgroup": "Arcana",
+
+    "actionCost": "1 hour",
+    "type": "Focus",
+    "target": "Touch",
+    "area": "Single Target",
+    "duration": "Permanent",
+    "Resistance": "N/A",
+    "description": "To create a familiar, the caster fractures a piece of their soul and concentrates it into a small rock or gemstone of some kind, this fusion creates an obedient pet that can take a variety of forms.  The familiar’s form must be of size category small. By default familiars only have 5HP, a land speed of 20’, and have an attack that does 1d4 damage in any chosen damage type.  Familiars must breathe water or air and be either nocturnal or diurnal.  Familiars have telepathic communication with their masters, though they cannot speak or learn language, and will follow simple commands. At the following ranks they gain upgrades….\nRank 2: As a Swift Action caster loses all their senses but gains the senses of their familiar.  This ability is maintained with focus.\nRank: 4:  The familiar can now either have a swim speed of 15’, fly speed of 15’, or a land speed of 30’.\nRank: 6: The familiar can be teleported anywhere within LOS of the caster as a Swift Action. The familiar can also be used as a point of casting all spells.\nRank: 8: The familiar can now have two kinds of movement (outlined in Rank 4 upgrade).\nRank: 10: The familiar can now be of the Tiny or Medium size class as well.\nIf the familiar dies, the soul rushes back to its other half and with it comes the last minute of memories the familiar had.  The familiar’s form does not need to stay consistent across summonings but once summoned that form is considered permanent until they are reformed.  The familiar can be reformed at any time and will have the memories of all past familiar forms.\n"
+  }
+}

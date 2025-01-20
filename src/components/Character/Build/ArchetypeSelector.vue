@@ -1,7 +1,14 @@
 <script lang="ts">
 import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BFormSelect } from 'bootstrap-vue-next'
+import {
+  BButton,
+  BCard,
+  BNavItem,
+  BNavbar,
+  BFormSelect,
+  BFormSelectOption
+} from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 import { useCharacterStore } from '../../../stores/characterStore'
@@ -10,6 +17,7 @@ import { useUserStore } from '../../../stores/userStore'
 import CharacterSidebar from '../Build/CharacterSidebar.vue'
 import BannerItem from '../Build/BannerItem.vue'
 import { storeToRefs } from 'pinia'
+import BFormSelectOptionGroup from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelectOptionGroup.vue'
 
 export default {
   setup(props, context) {
@@ -33,7 +41,35 @@ export default {
       { value: 'elementalist', text: 'Elementalist' },
       { value: 'sorcerer', text: 'Sorcerer' }
     ]
-    return { designStore, archetypeRef, options, characterStore, userStore, archetype }
+    const heavyOptions = [
+      { value: 'augur', text: 'Augur' },
+      { value: 'breaker', text: 'Breaker' },
+      { value: 'warden', text: 'Warden' },
+      { value: 'paladin', text: 'Paladin' }
+    ]
+    const mediumOptions = [
+      { value: 'mage', text: 'Mage' },
+      { value: 'monk', text: 'Monk' },
+      { value: 'rogue', text: 'Rogue' }
+    ]
+    const lightOptions = [
+      { value: 'mystic', text: 'Mystic' },
+      { value: 'nomad', text: 'Nomad' },
+      { value: 'priest', text: 'Priest' },
+      { value: 'elementalist', text: 'Elementalist' },
+      { value: 'sorcerer', text: 'Sorcerer' }
+    ]
+    return {
+      designStore,
+      archetypeRef,
+      options,
+      characterStore,
+      userStore,
+      archetype,
+      heavyOptions,
+      mediumOptions,
+      lightOptions
+    }
   },
   created() {
     this.$emit(this.archetypeRef)
@@ -57,13 +93,9 @@ export default {
     }
   },
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
-    CharacterSidebar,
-    BannerItem,
-    BFormSelect
+    BFormSelect,
+    BFormSelectOption,
+    BFormSelectOptionGroup
   }
 }
 </script>
@@ -72,7 +104,6 @@ export default {
   <div :style="{ fontFamily: designStore.font }" class="archetype-selector">
     <BFormSelect
       v-model="archetypeRef"
-      :options="options"
       style="border: 2px solid; cursor: pointer"
       :style="{
         background: designStore.primaryTheme,
@@ -81,7 +112,44 @@ export default {
         fontFamily: designStore.titleFont
       }"
       @change="selectArchetype(archetypeRef)"
-    ></BFormSelect>
+    >
+      <BFormSelectOptionGroup
+        label="Heavy Armor"
+        :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+      >
+        <BFormSelectOption
+          v-for="arch in heavyOptions"
+          :key="arch.value"
+          :value="arch.value"
+          :style="{ background: designStore.inputBacking, color: designStore.inputText }"
+          >{{ arch.text }}</BFormSelectOption
+        >
+      </BFormSelectOptionGroup>
+      <BFormSelectOptionGroup
+        label="Medium Armor"
+        :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+      >
+        <BFormSelectOption
+          v-for="arch in mediumOptions"
+          :key="arch.value"
+          :value="arch.value"
+          :style="{ background: designStore.inputBacking, color: designStore.inputText }"
+          >{{ arch.text }}</BFormSelectOption
+        >
+      </BFormSelectOptionGroup>
+      <BFormSelectOptionGroup
+        label="Light Armor"
+        :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+      >
+        <BFormSelectOption
+          v-for="arch in lightOptions"
+          :key="arch.value"
+          :value="arch.value"
+          :style="{ background: designStore.inputBacking, color: designStore.inputText }"
+          >{{ arch.text }}</BFormSelectOption
+        >
+      </BFormSelectOptionGroup>
+    </BFormSelect>
   </div>
 </template>
 
