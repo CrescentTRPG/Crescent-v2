@@ -61,7 +61,6 @@ export default {
           return -1
         }
       })
-      console.log(ret)
       return ret
     })
     const rolltitle = ref('')
@@ -218,16 +217,13 @@ export default {
     }
 
     function processRollString(rollString: string) {
-      console.log(rollString)
       let rollsArr: Array<string> | string = createRollsArray(rollString)
-      console.log(rollsArr)
 
       if (typeof rollsArr === 'string') {
         return rollsArr
       }
       let rollsObj = {}
       rollsArr.forEach((rollI) => {
-        console.log(rollI, 'rolli')
         let roll = rollI
         const labelStart = roll.indexOf('#')
         const labelEnd = roll.lastIndexOf('#')
@@ -235,7 +231,6 @@ export default {
           roll = roll.substring(0, labelStart) || ''
           roll = roll + (rollI.substring(labelEnd + 1) || '')
         }
-        console.log('roll ', roll)
 
         rollsObj[roll] = {
           str: roll,
@@ -246,7 +241,6 @@ export default {
           label: rollI.substring(labelStart + 1, labelEnd)
         }
       })
-      console.log(rollsObj)
       rollsArr.forEach((rollI) => {
         let roll = rollI
         const labelStart = roll.indexOf('#')
@@ -254,12 +248,10 @@ export default {
         if (labelStart > -1 && labelEnd > -1) {
           roll = roll.substring(0, labelStart) || ''
           roll = roll + (rollI.substring(labelEnd + 1) || '')
-          console.log(roll, 'inside')
         }
         const rawRoll = roll.substring(roll.indexOf('|') + 1) || roll
 
         let rollArr = splitDie(rawRoll)
-        console.log(rollArr)
         let prevDieNum = 1
         let len = rollArr.length
         let i = 0
@@ -286,14 +278,12 @@ export default {
 
         for (; i < len; i++) {
           if (rollArr[i].includes('Roll')) {
-            console.log('wawwa')
             i++
           }
           if (rollArr[i] === '+') {
             i++
             if (i < len) {
               let rollObj = processValue(rollArr[i])
-              console.log(rollObj)
               if (typeof rollObj === 'string') {
                 return rollObj
               } else {
@@ -359,7 +349,6 @@ export default {
                 return rollObj
               } else {
                 if (rollObj.minValue === 0 || rollObj.minValue < rollObj.val) {
-                  console.log(roll)
                   rollsObj[roll].subtotal = rollsObj[roll].subtotal + rollObj.val
                   rollsObj[roll].resultsArr.push({ ...rollObj, operator: '' })
                 } else {
