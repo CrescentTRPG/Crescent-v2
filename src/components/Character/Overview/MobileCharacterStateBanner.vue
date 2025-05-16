@@ -14,6 +14,7 @@ import HpWidget from './HpWidget.vue'
 import ManaWidget from './ManaWidget.vue'
 import ArmorWidget from './ArmorWidget.vue'
 import MPWidget from './MPWidget.vue'
+import { useCharacterComputedStore } from '@/stores/characterComputedStore'
 
 export default {
   setup(props, context) {
@@ -21,11 +22,43 @@ export default {
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
+    const { hpStatusModifiers } = storeToRefs(characterStore)
+    const characterComputedStore = useCharacterComputedStore()
+    const martialPerksStore = useMartialPerksStore()
+    const { martialPerks } = storeToRefs(martialPerksStore)
+    const {
+      totalHp,
+      secondaryHandheldPassives,
+      primaryHandheldPassives,
+      wornArmorPassives,
+      totalMana,
+      wornArmor,
+      wornShield,
+      armorDvs,
+      moveDvs,
+      shieldDvs,
+      bonusDvs,
+      totalDvs
+    } = storeToRefs(characterComputedStore)
     return {
       designStore,
       modal,
       userStore,
-      characterStore
+      characterStore,
+      totalHp,
+      secondaryHandheldPassives,
+      primaryHandheldPassives,
+      wornArmorPassives,
+      hpStatusModifiers,
+      totalMana,
+      wornArmor,
+      wornShield,
+      martialPerks,
+      armorDvs,
+      moveDvs,
+      shieldDvs,
+      bonusDvs,
+      totalDvs
     }
   },
   components: {
@@ -40,16 +73,72 @@ export default {
 <template>
   <div class="mainContainer" :style="{ background: designStore.sidebarBacking }">
     <div class="bannerRowItemContainer" style="margin-left: -1.25rem">
-      <HpWidget class="bannerRowItem" style="margin-top: -0.5rem"></HpWidget>
+      <HpWidget
+        :secondaryHandheldPassives="secondaryHandheldPassives"
+        :primaryHandheldPassives="primaryHandheldPassives"
+        :wornArmorPassives="wornArmorPassives"
+        :setCurrentAndBarrier="characterStore.setCurrentAndBarrierHP"
+        :current-hp="characterStore.currentHp"
+        :barrier-hp="characterStore.barrierHp"
+        :hpStatusModifiers="hpStatusModifiers"
+        :storeRef="characterStore"
+        :statusEffects="characterStore.statusEffects"
+        :traits="characterStore.traits"
+        :totalHp="totalHp"
+        :removeHpStatusModifier="characterStore.removeHpStatusModifier"
+        :addNewHpStatusModifier="characterStore.addNewHpStatusModifier"
+        class="bannerRowItem"
+        style="margin-top: -0.5rem"
+      ></HpWidget>
     </div>
     <div class="bannerRowItemContainer">
-      <ManaWidget class="bannerRowItem" style="bottom: 0.25rem"></ManaWidget>
+      <ManaWidget
+        :removeManaStatusModifier="characterStore.removeManaStatusModifier"
+        :addNewManaStatusModifier="characterStore.addNewManaStatusModifier"
+        :totalMana="totalMana"
+        :customStatusEffects="characterStore.customStatusEffects"
+        :currentMana="characterStore.currentMana"
+        :traits="characterStore.traits"
+        :manaStatusModifiers="characterStore.manaStatusModifiers"
+        :setCurrentMana="characterStore.setCurrentMana"
+        :secondaryHandheldPassives="secondaryHandheldPassives"
+        :primaryHandheldPassives="primaryHandheldPassives"
+        :wornArmorPassives="wornArmorPassives"
+        class="bannerRowItem"
+        style="bottom: 0.25rem"
+      ></ManaWidget>
     </div>
     <div class="bannerRowItemContainer" style="padding-left: 0.25rem">
-      <ArmorWidget class="bannerRowItem" style="bottom: 0.75rem"></ArmorWidget>
+      <ArmorWidget
+        :armorDvs="armorDvs"
+        :moveDvs="moveDvs"
+        :shieldDvs="shieldDvs"
+        :bonusDvs="bonusDvs"
+        :totalDvs="totalDvs"
+        :armorStatusModifiers="characterStore.armorStatusModifiers"
+        :traits="characterStore.traits"
+        :secondaryHandheldPassives="secondaryHandheldPassives"
+        :primaryHandheldPassives="primaryHandheldPassives"
+        :wornArmorPassives="wornArmorPassives"
+        :statusEffects="characterStore.statusEffects"
+        :wornArmor="wornArmor"
+        :wornShield="wornShield"
+        :martialPerks="martialPerks"
+        :removeArmorStatusModifier="characterStore.removeArmorStatusModifier"
+        :addNewArmorStatusModifier="characterStore.addNewArmorStatusModifier"
+        class="bannerRowItem"
+        style="bottom: 0.75rem"
+      ></ArmorWidget>
     </div>
     <div class="bannerRowItemContainer" style="padding-left: 0.25rem">
-      <MPWidget class="bannerRowItem" style="bottom: 1rem"></MPWidget>
+      <MPWidget
+        :mpStatusModifiers="characterStore.mpStatusModifiers"
+        :addNewMpStatusModifier="characterStore.addNewMpStatusModifier"
+        :removeMpStatusModifier="characterStore.removeMpStatusModifier"
+        :getMp="characterStore.getMp"
+        class="bannerRowItem"
+        style="bottom: 1rem"
+      ></MPWidget>
     </div>
   </div>
 </template>

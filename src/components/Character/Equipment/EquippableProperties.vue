@@ -6,7 +6,7 @@ import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.
 import TitleMedallion from '@/components/TitleMedallion.vue'
 import SearchableDropdown from '@/components/SearchableDropdown.vue'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import { useEquipmentStore } from '@/stores/equipmentStore'
+import { Passive, useEquipmentStore } from '@/stores/equipmentStore'
 import PassiveListObj from './PassiveListObj.vue'
 import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
 import CustomCheckbox from '../CustomCheckbox.vue'
@@ -25,7 +25,7 @@ export default {
     const designStore = useDesignStore()
     const equipmentStore = useEquipmentStore()
     const martialSkillsStore = useMartialSkillsStore()
-    const passives = ref(props.passedStats?.passives || {})
+    const passives: Ref<any> = ref(props.passedStats?.passives || {})
     const material = ref(props.passedStats?.material || '')
     const searchS = ref('')
     const enchantments = ref(props.passedStats?.enchantments || {})
@@ -207,65 +207,70 @@ export default {
       }
     }
     function addPassive() {
-      if (
-        selectedMod.value.includes('Attribute') ||
-        selectedMod.value.includes('laced') ||
-        selectedMod.value.includes('Inferior') ||
-        selectedMod.value.includes('Exceptional')
-      ) {
-        const loc = selectedMod.value + ' ' + target.value
-        let passiveObj = {
-          modAmount: modAmount.value,
-          name: loc,
-          damageType: passiveDamageType.value
+      console.log(selectedMod.value)
+      console.log(target.value)
+
+      if (selectedMod.value) {
+        if (
+          selectedMod.value.includes('Attribute') ||
+          selectedMod.value.includes('laced') ||
+          selectedMod.value.includes('Inferior') ||
+          selectedMod.value.includes('Exceptional')
+        ) {
+          const loc = selectedMod.value + ' ' + target.value
+          let passiveObj = {
+            modAmount: modAmount.value,
+            name: loc,
+            damageType: passiveDamageType.value
+          }
+          passives.value[loc] = passiveObj
+        } else if (
+          selectedMod.value === 'Suffering' ||
+          selectedMod.value === 'Resistance' ||
+          selectedMod.value === 'Susceptibility' ||
+          selectedMod.value === 'Immunity' ||
+          selectedMod.value === 'Vulnerability' ||
+          selectedMod.value === 'Damage Reduction' ||
+          selectedMod.value === 'Damage Amplification'
+        ) {
+          let passiveObj = {
+            modAmount: modAmount.value,
+            name: selectedMod.value,
+            damageType:
+              selectedMod.value === 'Suffering' ||
+              selectedMod.value === 'Resistance' ||
+              selectedMod.value === 'Susceptibility' ||
+              selectedMod.value === 'Immunity' ||
+              selectedMod.value === 'Vulnerability' ||
+              selectedMod.value === 'Damage Reduction' ||
+              selectedMod.value === 'Damage Amplification'
+                ? passiveDamageType.value
+                : ''
+          }
+          passives.value[passiveDamageType.value + ' ' + selectedMod.value] = passiveObj
+        } else {
+          let passiveObj = {
+            modAmount: modAmount.value,
+            name: selectedMod.value,
+            damageType:
+              selectedMod.value === 'Suffering' ||
+              selectedMod.value === 'Resistance' ||
+              selectedMod.value === 'Susceptibility' ||
+              selectedMod.value === 'Immunity' ||
+              selectedMod.value === 'Vulnerability' ||
+              selectedMod.value === 'Damage Reduction' ||
+              selectedMod.value === 'Damage Amplification'
+                ? passiveDamageType.value
+                : ''
+          }
+          passives.value[selectedMod.value] = passiveObj
         }
-        passives.value[loc] = passiveObj
-      } else if (
-        selectedMod.value === 'Suffering' ||
-        selectedMod.value === 'Resistance' ||
-        selectedMod.value === 'Susceptibility' ||
-        selectedMod.value === 'Immunity' ||
-        selectedMod.value === 'Vulnerability' ||
-        selectedMod.value === 'Damage Reduction' ||
-        selectedMod.value === 'Damage Amplification'
-      ) {
-        let passiveObj = {
-          modAmount: modAmount.value,
-          name: selectedMod.value,
-          damageType:
-            selectedMod.value === 'Suffering' ||
-            selectedMod.value === 'Resistance' ||
-            selectedMod.value === 'Susceptibility' ||
-            selectedMod.value === 'Immunity' ||
-            selectedMod.value === 'Vulnerability' ||
-            selectedMod.value === 'Damage Reduction' ||
-            selectedMod.value === 'Damage Amplification'
-              ? passiveDamageType.value
-              : ''
-        }
-        passives.value[passiveDamageType.value + ' ' + selectedMod.value] = passiveObj
-      } else {
-        let passiveObj = {
-          modAmount: modAmount.value,
-          name: selectedMod.value,
-          damageType:
-            selectedMod.value === 'Suffering' ||
-            selectedMod.value === 'Resistance' ||
-            selectedMod.value === 'Susceptibility' ||
-            selectedMod.value === 'Immunity' ||
-            selectedMod.value === 'Vulnerability' ||
-            selectedMod.value === 'Damage Reduction' ||
-            selectedMod.value === 'Damage Amplification'
-              ? passiveDamageType.value
-              : ''
-        }
-        passives.value[selectedMod.value] = passiveObj
+        modAmount.value = 0
+        selectedMod.value = ''
+        searchS.value = ''
+        passiveDamageType.value = ''
+        passChanges()
       }
-      modAmount.value = 0
-      selectedMod.value = ''
-      searchS.value = ''
-      passiveDamageType.value = ''
-      passChanges()
     }
     function addWeaponSkills() {
       if (!combatStyles.value.includes(selectedCombatStyle.value)) {
@@ -745,13 +750,14 @@ export default {
       ></BButton>
     </div>
     <PassiveListObj
-      v-for="passive in Object.values(passives)"
+      v-for="passive in Object.values(passives) as Array<Passive>"
       :modifierType="passive.name"
       :modAmount="passive.modAmount"
       :damageType="passive.damageType"
       :key="passive.name"
       @delete="removePassive(passive.name, passive.damageType)"
-    ></PassiveListObj>
+    >
+    </PassiveListObj>
   </div>
 </template>
 <style>

@@ -12,6 +12,7 @@ import { storeToRefs } from 'pinia'
 import CustomModal from '@/components/CustomModal.vue'
 import MartialSkillsDisplay from '@/components/MartialSkillDisplay.vue'
 import OneToTenDropdown from '@/components/OneToTenDropdown.vue'
+import DropdownSelect from '@/components/DropdownSelect.vue'
 
 interface Skill {
   skill: string
@@ -52,6 +53,31 @@ export default {
       { value: 9, text: '9' },
       { value: 10, text: '10' }
     ]
+    function getSortedSkills(spec) {
+      return spec.skills.sort(function (a, b) {
+        let aVal =
+          a.skillStats.type === 'Passive'
+            ? 0
+            : a.skillStats.modes
+              ? a.skillStats[a.skillStats.modes[0]].type === 'Passive'
+                ? 0
+                : 100
+              : 100
+        let bVal =
+          b.skillStats.type === 'Passive'
+            ? 0
+            : b.skillStats.modes
+              ? b.skillStats[b.skillStats.modes[0]].type === 'Passive'
+                ? 0
+                : 100
+              : 100
+        let ret = 0
+        if (aVal > bVal) ret = 1
+        else if (aVal < bVal) ret = -1
+
+        return ret
+      })
+    }
 
     return {
       designStore,
@@ -65,7 +91,8 @@ export default {
       specializations,
       buildDisplaySpecializations,
       martialSkillsStore,
-      options
+      options,
+      getSortedSkills
     }
   },
   watch: {
@@ -137,7 +164,7 @@ export default {
     BButton,
     CustomModal,
     MartialSkillsDisplay,
-    BFormSelect
+    DropdownSelect
   }
 }
 </script>
@@ -198,7 +225,7 @@ export default {
                 style="padding-bottom: 0.5rem; border-top: 2px solid"
                 :style="{ borderColor: designStore.secondaryTheme }"
               >
-                <div v-for="skill in specialization.skills" :key="skill.name">
+                <div v-for="skill in getSortedSkills(specialization)" :key="skill.name">
                   <MartialSkillsDisplay
                     :title="skill.name"
                     :description="skill.description"
@@ -210,26 +237,28 @@ export default {
         ></BTd>
         <BTd class="w-40">{{ combatStylesString(specialization.combatStyles) }}</BTd>
         <BTd>
-          <BFormSelect
-            :options="options"
-            v-model="buildDisplaySpecializationsClone[index].rank"
-            :style="{
-              color: designStore.inputText,
-              backgroundColor: designStore.inputBacking,
-              borderColor: designStore.secondaryTheme
-            }"
-            @change="
-              updateSpecialization(
-                specialization.name,
-                specialization.id,
-                buildDisplaySpecializationsClone[index].rank,
-                specialization.source,
-                specialization.index,
-                specialization.combatStyles
-              )
+          <DropdownSelect
+            :default="buildDisplaySpecializationsClone[index].rank"
+            style="
+              font-size: large;
+              width: 4.5rem;
+              cursor: pointer;
+              border-width: 2px;
+              margin-left: 0rem;
             "
-            style="font-size: large; width: 4rem; cursor: pointer; border-width: 2px"
-          ></BFormSelect>
+            :options="options"
+            @selection="
+              (selection) =>
+                updateSpecialization(
+                  specialization.name,
+                  specialization.id,
+                  selection,
+                  specialization.source,
+                  specialization.index,
+                  specialization.combatStyles
+                )
+            "
+          ></DropdownSelect>
         </BTd>
         <BTd></BTd>
       </BTr>

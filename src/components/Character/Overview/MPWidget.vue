@@ -2,55 +2,21 @@
 import { computed, ComputedRef, ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 
-import { useCharacterStore } from '@/stores/characterStore'
-
-import { useUserStore } from '@/stores/userStore'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
-import { storeToRefs } from 'pinia'
 import CustomModal from '@/components/CustomModal.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import BFormGroup from 'bootstrap-vue-next/src/components/BFormGroup/BFormGroup.vue'
 import StatusModifierExplaination from './StatusModifierExplaination.vue'
-import TitleMedallion from '@/components/TitleMedallion.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
 import StatusEffectItem from './StatusEffectItem.vue'
-import { useEquipmentStore } from '@/stores/equipmentStore'
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
 
 export default {
+  props: ['mpStatusModifiers', 'removeMpStatusModifier', 'addNewMpStatusModifier', 'getMp'],
   setup(props, context) {
     const modal = ref(false)
-    const userStore = useUserStore()
     const designStore = useDesignStore()
-    const characterStore = useCharacterStore()
-    const { mpStatusModifiers } = storeToRefs(characterStore)
-    const martialSkillsStore = useMartialSkillsStore()
-    const { combatStyles } = storeToRefs(martialSkillsStore)
-    const equipmentStore = useEquipmentStore()
-    const { equipment } = storeToRefs(equipmentStore)
     const modifierType = ['Modify Mp', 'Override Mp']
 
-    const wornArmorPassives = computed(() => {
-      return equipment.value.items.Armor[equipment.value.wornArmor]?.equippedStats?.passives || {}
-    })
-
-    const primaryHandheldPassives = computed(() => {
-      return (
-        equipment.value.items.Weapon[equipment.value.primaryHand]?.equippedStats?.passives || {}
-      )
-    })
-
-    const secondaryHandheldPassives = computed(() => {
-      return (
-        equipment.value.items.Shield[equipment.value.secondaryHand]?.equippedStats?.passives ||
-        equipment.value.items.Weapon[equipment.value.secondaryHand]?.equippedStats?.passives ||
-        {}
-      )
-    })
     const statusModifiersList: ComputedRef<Array<any>> = computed(() => {
-      let modifiers = Object.values(mpStatusModifiers.value)
+      let modifiers = Object.values(props.mpStatusModifiers)
       let ret = []
       modifiers.forEach((modGroup: any) => {
         ret = ret.concat(Object.values(modGroup))
@@ -60,7 +26,7 @@ export default {
       return ret
     })
     function getColor() {
-      if (mpStatusModifiers.value['Override Mp'] || mpStatusModifiers.value['Modify Mp']) {
+      if (props.mpStatusModifiers['Override Mp'] || props.mpStatusModifiers['Modify Mp']) {
         return designStore.alertTheme
       }
       return designStore.primaryText
@@ -72,88 +38,26 @@ export default {
         modAmount: addedVal.modAmount
       }
 
-      characterStore.addNewMpStatusModifier(statusObj)
+      props.addNewMpStatusModifier(statusObj)
     }
 
     function removeModifier(modifierType, modAmount, linkedStatus) {
-      characterStore.removeMpStatusModifier({
+      props.removeMpStatusModifier({
         modifierType: modifierType,
         modAmount: modAmount,
         linkedStatus: linkedStatus
       })
     }
 
-    const maxCombatStyle: ComputedRef<number> = computed(() => {
-      const styles = Object.values(combatStyles.value)
-      let ret = styles.reduce((acc: number, style: any) => (style.rank > acc ? style.rank : acc), 0)
-      if (mpStatusModifiers.value['Override Mp']) {
-        let max = Object.values(mpStatusModifiers.value['Override Mp']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          0
-        )
-        if (max > 0) {
-          ret = max
-        }
-      }
-      if (characterStore.traits['Bonus MP']) {
-        ret += parseInt(characterStore.traits['Bonus MP'].number)
-      }
-      if (wornArmorPassives.value['Override Mp']) {
-        ret = parseInt(wornArmorPassives.value['Override Mp']?.modAmount)
-      }
-      if (primaryHandheldPassives.value['Override Mp']) {
-        ret = parseInt(primaryHandheldPassives.value['Override Mp']?.modAmount)
-      }
-      if (secondaryHandheldPassives.value['Override Mp']) {
-        ret = parseInt(secondaryHandheldPassives.value['Override Mp']?.modAmount)
-      }
-      let modifier = -1000
-
-      if (wornArmorPassives.value['Modify Mp']) {
-        modifier = Math.max(parseInt(wornArmorPassives.value['Modify Mp']?.modAmount), modifier)
-      }
-      if (primaryHandheldPassives.value['Modify Mp']) {
-        modifier = Math.max(
-          parseInt(primaryHandheldPassives.value['Modify Mp']?.modAmount),
-          modifier
-        )
-      }
-      if (secondaryHandheldPassives.value['Modify Mp']) {
-        modifier = Math.max(
-          parseInt(secondaryHandheldPassives.value['Modify Mp']?.modAmount),
-          modifier
-        )
-      }
-      if (modifier == -1000) {
-        modifier = 0
-      }
-
-      if (mpStatusModifiers.value['Modify Mp']) {
-        let max = Object.values(mpStatusModifiers.value['Modify Mp']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          -1000
-        )
-        if (max != -1000) {
-          modifier = modifier + max
-        }
-      }
-
-      return Math.max(ret + modifier, 0)
-    })
     return {
       designStore,
       modal,
-      userStore,
-      characterStore,
-      maxCombatStyle,
       modifierType,
       statusModifiersList,
       addMpStatusModifier,
       removeModifier,
       getColor,
-      primaryHandheldPassives
+      props
     }
   },
   components: {
@@ -191,7 +95,7 @@ export default {
           color: getColor()
         }"
       >
-        <div style="display: flex; justify-content: center">{{ maxCombatStyle }}</div>
+        <div style="display: flex; justify-content: center">{{ props.getMp }}</div>
         <div
           :style="{ fontFamily: designStore.titleFont, color: getColor() }"
           style="font-size: 1.5rem; align-self: center; margin-top: -1rem"
@@ -209,7 +113,7 @@ export default {
     <CustomModal title="Modify MP " :showModal="modal" @close="modal = !modal">
       <template v-slot:body>
         <div style="font-size: x-large; text-align: center; margin-bottom: 0.25rem">
-          {{ maxCombatStyle }} Martial Points
+          {{ props.getMp }} Martial Points
         </div>
 
         <div style="display: flex; justify-content: space-between; margin-top: -1.5rem">

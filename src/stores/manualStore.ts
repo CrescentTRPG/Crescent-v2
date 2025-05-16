@@ -8,9 +8,10 @@ import { useSkillStore } from './skillsStore.js'
 import { useStatusEffectStore } from './statusEffectStore.js'
 import { usePerformanceStore } from './performanceStore.js'
 import { useFaunaStore } from './faunaStore.js'
+import { useSpellStore } from './spellsStore.js'
 
 export const useManualStore = defineStore('manual', {
-  state: () => ({}),
+  state: () => ({ generalActions: {} }),
   getters: {},
   actions: {
     async pullManualFromFirebase() {
@@ -25,6 +26,7 @@ export const useManualStore = defineStore('manual', {
         useStatusEffectStore().setManualStatusEffect(docSnap.data()['Status Effects'])
         usePerformanceStore().setManualPerformanceStyles(docSnap.data()['Performance']['styles'])
         useFaunaStore().setFaunaFromManual(docSnap.data()['Fauna'])
+        this.generalActions = docSnap.data()['generalActions']
       } else {
         console.log("Couldn't pull base manual!!")
       }

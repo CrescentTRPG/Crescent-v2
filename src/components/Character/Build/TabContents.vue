@@ -15,6 +15,7 @@ import TraitsTab from './TraitsTab.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
 import FaunaTab from './Fauna/FaunaTab.vue'
 import PerformanceTab from './PerformanceTab.vue'
+import MartialAttackBuilderTab from '../Matrial Attack Builder/MartialAttackBuilderTab.vue'
 
 export default {
   props: ['tab'],
@@ -37,7 +38,8 @@ export default {
     TraitsTab,
     TitleWidget,
     FaunaTab,
-    PerformanceTab
+    PerformanceTab,
+    MartialAttackBuilderTab
   }
 }
 </script>
@@ -73,6 +75,9 @@ export default {
     <div v-if="props.tab == 'fauna'"><FaunaTab></FaunaTab></div>
     <div v-if="props.tab == 'effigy'">e</div>
     <div v-if="props.tab == 'performance'"><PerformanceTab></PerformanceTab></div>
+    <div v-if="props.tab == 'martialbuilder'">
+      <MartialAttackBuilderTab></MartialAttackBuilderTab>
+    </div>
   </div>
 </template>
 

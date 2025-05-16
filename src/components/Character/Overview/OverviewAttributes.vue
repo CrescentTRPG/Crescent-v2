@@ -7,6 +7,9 @@ import { useCharacterStore } from '@/stores/characterStore'
 import { useUserStore } from '@/stores/userStore'
 import OverviewAttr from './OverviewAttr.vue'
 import GridDiplayAttr from './GridDiplayAttr.vue'
+import { useStatusEffectStore } from '@/stores/statusEffectStore'
+import { storeToRefs } from 'pinia'
+import { get } from 'node_modules/bootstrap-vue-next/dist/src/utils'
 
 export default {
   setup(props, context) {
@@ -14,11 +17,62 @@ export default {
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
+    const statusEffectsStore = useStatusEffectStore()
+    const {
+      getStrength,
+      getAgility,
+      getPerception,
+      getHealth,
+      getCharisma,
+      getIntelligence,
+      getPower,
+      getWillpower,
+      getStrengthExceptionals,
+      getStrengthInferiors,
+      getAgilityExceptionals,
+      getAgilityInferiors,
+      getHealthInferiors,
+      gethealthExceptionals,
+      getWillpowerExceptionals,
+      getWillpowerInferiors,
+      getPerceptionInferiors,
+      getperceptionExceptionals,
+      getCharismaExceptionals,
+      getCharismaInferiors,
+      getIntelligenceExceptionals,
+      getIntelligenceInferiors,
+      getPowerExceptionals,
+      getPowerInferiors
+    } = storeToRefs(statusEffectsStore)
     return {
       designStore,
       modal,
       userStore,
-      characterStore
+      characterStore,
+      getStrength,
+      getAgility,
+      getPerception,
+      getHealth,
+      getCharisma,
+      getIntelligence,
+      getPower,
+      getWillpower,
+      getStrengthExceptionals,
+      getStrengthInferiors,
+      getAgilityExceptionals,
+      getAgilityInferiors,
+      getHealthInferiors,
+      gethealthExceptionals,
+      getWillpowerExceptionals,
+      getWillpowerInferiors,
+      getPerceptionInferiors,
+      getperceptionExceptionals,
+      getCharismaExceptionals,
+      getCharismaInferiors,
+      getIntelligenceExceptionals,
+      getIntelligenceInferiors,
+      getPowerExceptionals,
+      getPowerInferiors
     }
   },
   components: { OverviewAttr, GridDiplayAttr }
@@ -35,22 +89,94 @@ export default {
     <OverviewAttr class="fullDisplay" attribute="Charisma" attr-shorthand="CHA"></OverviewAttr>
     <OverviewAttr class="fullDisplay" attribute="Intelligence" attr-shorthand="INT"></OverviewAttr>
     <OverviewAttr class="fullDisplay" attribute="Power" attr-shorthand="PWR"></OverviewAttr>
-    <GridDiplayAttr class="gridDisplay" attribute="Strength" attr-shorthand="STR"></GridDiplayAttr>
-    <GridDiplayAttr class="gridDisplay" attribute="Agility" attr-shorthand="AGI"></GridDiplayAttr>
-    <GridDiplayAttr class="gridDisplay" attribute="Health" attr-shorthand="HEA"></GridDiplayAttr>
-    <GridDiplayAttr class="gridDisplay" attribute="Willpower" attr-shorthand="WIL"></GridDiplayAttr>
+    <GridDiplayAttr
+      class="gridDisplay"
+      attribute="Strength"
+      attr-shorthand="STR"
+      :exceptionals="getStrengthExceptionals"
+      :inferiors="getStrengthInferiors"
+      :value="getStrength"
+      :attribute-status-modifiers="characterStore.attributeStatusModifiers"
+      :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
+      :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+    ></GridDiplayAttr>
+    <GridDiplayAttr
+      class="gridDisplay"
+      attribute="Agility"
+      attr-shorthand="AGI"
+      :exceptionals="getAgilityExceptionals"
+      :inferiors="getAgilityInferiors"
+      :value="getAgility"
+      :attribute-status-modifiers="characterStore.attributeStatusModifiers"
+      :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
+      :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+    ></GridDiplayAttr>
+    <GridDiplayAttr
+      class="gridDisplay"
+      attribute="Health"
+      attr-shorthand="HEA"
+      :exceptionals="gethealthExceptionals"
+      :inferiors="getHealthInferiors"
+      :value="getHealth"
+      :attribute-status-modifiers="characterStore.attributeStatusModifiers"
+      :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
+      :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+    ></GridDiplayAttr>
+    <GridDiplayAttr
+      class="gridDisplay"
+      attribute="Willpower"
+      attr-shorthand="WIL"
+      :exceptionals="getWillpowerExceptionals"
+      :inferiors="getWillpowerInferiors"
+      :value="getWillpower"
+      :attribute-status-modifiers="characterStore.attributeStatusModifiers"
+      :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
+      :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+    ></GridDiplayAttr>
     <GridDiplayAttr
       class="gridDisplay"
       attribute="Perception"
       attr-shorthand="PER"
+      :exceptionals="getperceptionExceptionals"
+      :inferiors="getPerceptionInferiors"
+      :value="getPerception"
+      :attribute-status-modifiers="characterStore.attributeStatusModifiers"
+      :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
+      :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
     ></GridDiplayAttr>
-    <GridDiplayAttr class="gridDisplay" attribute="Charisma" attr-shorthand="CHA"></GridDiplayAttr>
+    <GridDiplayAttr
+      class="gridDisplay"
+      attribute="Charisma"
+      attr-shorthand="CHA"
+      :exceptionals="getCharismaExceptionals"
+      :inferiors="getCharismaExceptionals"
+      :value="getCharisma"
+      :attribute-status-modifiers="characterStore.attributeStatusModifiers"
+      :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
+      :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+    ></GridDiplayAttr>
     <GridDiplayAttr
       class="gridDisplay"
       attribute="Intelligence"
       attr-shorthand="INT"
+      :exceptionals="getIntelligenceExceptionals"
+      :inferiors="getIntelligenceInferiors"
+      :value="getIntelligence"
+      :attribute-status-modifiers="characterStore.attributeStatusModifiers"
+      :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
+      :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
     ></GridDiplayAttr>
-    <GridDiplayAttr class="gridDisplay" attribute="Power" attr-shorthand="PWR"></GridDiplayAttr>
+    <GridDiplayAttr
+      class="gridDisplay"
+      attribute="Power"
+      attr-shorthand="PWR"
+      :exceptionals="getPowerExceptionals"
+      :inferiors="getPowerInferiors"
+      :value="getPower"
+      :attribute-status-modifiers="characterStore.attributeStatusModifiers"
+      :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
+      :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+    ></GridDiplayAttr>
   </div>
 </template>
 

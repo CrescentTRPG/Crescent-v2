@@ -2,36 +2,201 @@
   "Reverse Grapple": {
     "name": "Reverse Grapple",
     "mp_cost": "Passive",
-    "description": "The character can execute brawling specialization attacks while grappling/grappled. As part of acore action utilizing their brawling, they can attempt to reverse a grapple they're caught within. The character initiates a grapple check. On success, they choose between escaping or grappling the target. This action can only be taken once eachround."
+    "description": "The character can execute brawling specialization attacks while grappling/grappled. As part of a core action utilizing their brawling, they can attempt to reverse a grapple they're caught within. The character initiates a grapple check. On success, they choose between escaping or grappling the target. This action can only be taken once each round.",
+    "skillStats": {
+      "type": "Passive",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character can execute brawling specialization attacks while grappling/grappled. As part of a core action utilizing their brawling, they can attempt to reverse a grapple they're caught within. The character initiates a grapple check. On success, they choose between escaping or grappling the target. This action can only be taken once each round.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 0,
+      "costType": "none",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   },
   "Disarming Attack": {
     "name": "Disarming Attack",
     "mp_cost": "3 MP per strike",
-    "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the character's choosing."
+    "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the character's choosing.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the target's choice.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 3,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Disorienting Strike": {
     "name": "Disorienting Strike",
     "mp_cost": "2 MP per strike",
-    "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is a size category larger than the character, WIL save to negate."
+    "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is a size category larger than the character, WIL save to negate.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is a size category larger than the character, WIL save to negate.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": "WIL",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "If the target is a size category larger than the character",
+      "mpCost": 2,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Grappling Attack": {
     "name": "Grappling Attack",
     "mp_cost": "2 MP per strike",
-    "description": "The next successful strike this turn automatically grapples the target."
+    "description": "The next successful strike this turn automatically grapples the target.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Grappled": {
+          "name": "Grappled",
+          "short": "Grapple",
+          "groupIcon": "gi-handcuffs",
+          "description": "A grapple can be made with a successful melee attack roll, (inflicting no damage, though skill can alter grapples) pinning them on hit. The target is reduced to a core action (while grappled), and the grappler is slowed. The target regains their movement and swift action upon breaking the grapple. To maintain a grapple the character must spend a Core Action each round.\\nIt takes two arms to grapple a target of the character’s own size class, one arm to grapple a target of a smaller size class, and the character cannot effectively grapple a target of a larger size class.\\nGrappled targets can attempt to break by using a core action to attempt a new grapple check (contested might check.)"
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn automatically grapples the target.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 2,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Knockout": {
     "name": "Knockout",
     "mp_cost": "6 MP per strike",
-    "description": "The next successful strike this turn causes the target to lose a core action until the end of their next turn, or instead be knocked unconscious if they are below half their maximum HP, their choice of a WIL or HEA save to negate either effect. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect."
+    "description": "The next successful strike this turn causes the target to lose a core action until the end of their next turn, or instead be knocked unconscious if they are below half their maximum HP, their choice of a WIL or HEA save to negate either effect. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Depleted": {
+          "name": "Depleted",
+          "short": "Deplete",
+          "groupIcon": "gi-fulguro-punch",
+          "description": "the character loses their core action. or 2 action points if they are a rogue or have special action economies."
+        }
+      },
+      "alternateAppliesStatus": {
+        "Unconcious": {
+          "name": "Unconcious",
+          "short": "Unconcious",
+          "groupIcon": "gi-coma",
+          "description": "Unconscious targets have a number of distinctions:\\nCannot perform any kind of actions and automatically fail all AGI and STR checks."
+        }
+      },
+      "description": "The next successful strike this turn automatically grapples the target.",
+      "alternateDescription": "",
+      "causesSave": "WIL or HEA",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "If  the target is  below  half  their  maximum  HP",
+      "mpCost": 6,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Launch": {
     "name": "Launch",
     "mp_cost": "1 MP per rank",
-    "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself."
+    "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself.",
+    "skillStats": {
+      "type": "Executes an Action",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": "AGI or STR",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "If the skill is used on an enemy of a larger size class or the enemy is not grappled",
+      "mpCost": 1,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Lethal Barrage II": {
     "name": "Lethal Barrage II",
     "mp_cost": "1 MP per rank",
-    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+    "skillStats": {
+      "type": "All Successful Strikes",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "2",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
   }
 }

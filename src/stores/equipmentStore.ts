@@ -21,6 +21,11 @@ export enum itemType {
   Ingredient,
   Potion
 }
+export interface Passive {
+  modAmount: number
+  damageType: string
+  name: string
+}
 interface Equippable {
   ability: { name: string }
   passives: {}
@@ -84,6 +89,21 @@ export const useEquipmentStore = defineStore('equipment', {
   getters: {
     getArmorSpecs: (state): Item => state.equipment.items.Armor[state.equipment.wornArmor],
     getPrimarySpecs: (state): Item => state.equipment.items.Weapon[state.equipment.primaryHand],
+    getWornArmorPassives: (state) => {
+      return state.equipment.items.Armor[state.equipment.wornArmor]?.equippedStats?.passives || {}
+    },
+    getPrimaryHandheldPassives: (state) => {
+      return (
+        state.equipment.items.Weapon[state.equipment.primaryHand]?.equippedStats?.passives || {}
+      )
+    },
+    getSecondaryHandheldPassives: (state) => {
+      return (
+        state.equipment.items.Shield[state.equipment.secondaryHand]?.equippedStats?.passives ||
+        state.equipment.items.Weapon[state.equipment.secondaryHand]?.equippedStats?.passives ||
+        {}
+      )
+    },
     getSecondarySpecs: (state): Item =>
       state.equipment.items.Shield[state.equipment.secondaryHand] ||
       state.equipment.items.Weapon[state.equipment.secondaryHand],
@@ -97,16 +117,28 @@ export const useEquipmentStore = defineStore('equipment', {
           let obj = undefined
           if (name != '') {
             if (state.equipment.items.Generic[name]?.type === 'Generic') {
-              obj = state.equipment.items.Generic[name].equippedStats.ability
+              obj = {
+                ...state.equipment.items.Generic[name].equippedStats.ability,
+                isEquipment: true
+              }
             }
             if (state.equipment.items.Armor[name]?.type === 'Armor') {
-              obj = state.equipment.items.Armor[name].equippedStats.ability
+              obj = {
+                ...state.equipment.items.Armor[name].equippedStats.ability,
+                isEquipment: true
+              }
             }
             if (state.equipment.items.Weapon[name]?.type === 'Weapon') {
-              obj = state.equipment.items.Weapon[name].equippedStats.ability
+              obj = {
+                ...state.equipment.items.Weapon[name].equippedStats.ability,
+                isEquipment: true
+              }
             }
             if (state.equipment.items.Shield[name]?.type === 'Shield') {
-              obj = state.equipment.items.Shield[name].equippedStats.ability
+              obj = {
+                ...state.equipment.items.Shield[name].equippedStats.ability,
+                isEquipment: true
+              }
             }
             return obj
           }
@@ -117,6 +149,18 @@ export const useEquipmentStore = defineStore('equipment', {
   actions: {
     async setLocalEquipment(equipment: any) {
       this.equipment = equipment
+    },
+    async setArmorsWithAbilities(armorsWithAbilities: any) {
+      this.armorsWithAbilities = armorsWithAbilities
+    },
+    async setShieldsWithAbilities(shieldsWithAbilitites: any) {
+      this.shieldsWithAbilitites = shieldsWithAbilitites
+    },
+    async setWeaponsWithAbilities(weaponsWithAbilitites: any) {
+      this.weaponsWithAbilitites = weaponsWithAbilitites
+    },
+    async setGenericsWithAbilities(genericsWithAbilitites: any) {
+      this.genericsWithAbilitites = genericsWithAbilitites
     },
     updateWornArmor(equipped: string) {
       this.equipment.wornArmor = equipped
@@ -189,7 +233,13 @@ export const useEquipmentStore = defineStore('equipment', {
       this.setLocalEquipment(equipment)
       const ret = updateDoc(
         doc(db, 'User/' + useUserStore().id + '/Character/' + useCharacterStore().getCharacterId),
-        { equipment: equipment }
+        {
+          equipment: equipment,
+          armorsWithAbilities: this.armorsWithAbilities,
+          shieldsWithAbilitites: this.shieldsWithAbilitites,
+          weaponsWithAbilitites: this.weaponsWithAbilitites,
+          genericsWithAbilitites: this.genericsWithAbilitites
+        }
       )
       console.log(ret)
     }

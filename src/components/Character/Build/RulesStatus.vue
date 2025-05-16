@@ -340,6 +340,16 @@ export default {
     })
     const performanceStore = usePerformanceStore()
 
+    const arcaneBatteryRank = computed(() => {
+      return parseInt(spellsStore.arcaneBattery + '') >
+        parseInt(characterStore.attributes.power + '')
+        ? 'The character has selected ' +
+            spellsStore.arcaneBattery +
+            ' ranks of Arcane Battery, while their Power is only ' +
+            characterStore.attributes.power +
+            '. The maximum value a character can invest into Arcane Battery is Equal to their power stat.'
+        : ''
+    })
     const practicedPerformanceStylesViolation = computed(() => {
       let ret: Array<string> = []
       Object.values(performanceStore.practicedStyles).forEach((style) => {
@@ -520,6 +530,9 @@ export default {
       if (practicedPerformanceStylesViolation.value.length > 0) {
         ret = ret.concat(practicedPerformanceStylesViolation.value)
       }
+      if (arcaneBatteryRank.value != '') {
+        ret.push(arcaneBatteryRank.value)
+      }
       if (ret.length < 1) {
         return ['Good']
       }
@@ -530,7 +543,8 @@ export default {
       status,
       modal,
       shorthand,
-      practicedPerformanceStylesViolation
+      practicedPerformanceStylesViolation,
+      arcaneBatteryRank
     }
   },
   methods: {
@@ -557,7 +571,6 @@ export default {
     ></div>
     <div
       :style="{
-        fontFamily: designStore.titleFont,
         background: designStore.primaryTheme,
         color: designStore.primaryText,
         borderColor: designStore.secondaryTheme
@@ -576,9 +589,24 @@ export default {
         :style="{ borderColor: designStore.primaryTheme }"
       >
         <div style="display: flex; justify-content: flex-start">
-          <div style="align-self: center; font-size: large; margin-right: 1rem">Build Status:</div>
+          <div
+            style="align-self: center; font-size: large; margin-right: 1rem"
+            :style="{
+              fontFamily: designStore.titleFont
+            }"
+          >
+            Build Status:
+          </div>
 
-          <div style="display: flex; margin-top: 0.5rem; margin-left: 5%">
+          <div
+            style="
+              display: flex;
+              margin-top: 0.5rem;
+              margin-left: 5%;
+              width: 4rem;
+              font-family: sans-serif;
+            "
+          >
             <i
               class="bi bi-check2"
               style="

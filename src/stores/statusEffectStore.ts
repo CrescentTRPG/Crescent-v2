@@ -709,7 +709,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       return placed
     },
     getStrengthExceptionals() {
-      const baseExceptionalVal = useCharacterStore().exceptionals.strength
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.strength)
       let max = 0
       if (
         useEquipmentStore().getArmorSpecs?.equippedStats.passives['Add Exceptional(s) Strength']
@@ -760,7 +760,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
     },
     getAgilityExceptionals() {
-      const baseExceptionalVal = useCharacterStore().exceptionals.agility
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.agility)
       let max = 0
       if (useEquipmentStore().getArmorSpecs?.equippedStats.passives['Add Exceptional(s) Agility']) {
         max = Math.max(
@@ -808,7 +808,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
     },
     gethealthExceptionals() {
-      const baseExceptionalVal = useCharacterStore().exceptionals.health
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.health)
       let max = 0
       if (useEquipmentStore().getArmorSpecs?.equippedStats.passives['Add Exceptional(s) Health']) {
         max = Math.max(
@@ -855,7 +855,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
     },
     getWillpowerExceptionals() {
-      const baseExceptionalVal = useCharacterStore().exceptionals.willpower
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.willpower)
       let max = 0
       if (
         useEquipmentStore().getArmorSpecs?.equippedStats.passives['Add Exceptional(s) Willpower']
@@ -908,7 +908,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
     },
     getperceptionExceptionals() {
-      const baseExceptionalVal = useCharacterStore().exceptionals.perception
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.perception)
       let max = 0
       if (
         useEquipmentStore().getArmorSpecs?.equippedStats.passives['Add Exceptional(s) Perception']
@@ -961,7 +961,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
     },
     getCharismaExceptionals() {
-      const baseExceptionalVal = useCharacterStore().exceptionals.charisma
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.charisma)
       let max = 0
       if (
         useEquipmentStore().getArmorSpecs?.equippedStats.passives['Add Exceptional(s) Charisma']
@@ -1011,7 +1011,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
     },
     getIntelligenceExceptionals() {
-      const baseExceptionalVal = useCharacterStore().exceptionals.intelligence
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.intelligence)
       let max = 0
       if (
         useEquipmentStore().getArmorSpecs?.equippedStats.passives['Add Exceptional(s) Intelligence']
@@ -1066,7 +1066,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
     },
     getPowerExceptionals() {
-      const baseExceptionalVal = useCharacterStore().exceptionals.power
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.power)
       let max = 0
       if (useEquipmentStore().getArmorSpecs?.equippedStats.passives['Add Exceptional(s) Power']) {
         max = Math.max(
@@ -1146,7 +1146,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       if (mod === -1000) {
         mod = 0
       }
-      const baseExceptionalVal = useCharacterStore().exceptionals.strength
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.strength)
 
       const arr = Object.values(
         useCharacterStore().attributeStatusModifiers.strength['Add Inferior(s)'] || {}
@@ -1194,7 +1194,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       if (mod === -1000) {
         mod = 0
       }
-      const baseExceptionalVal = useCharacterStore().exceptionals.agility
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.agility)
 
       const arr = Object.values(
         useCharacterStore().attributeStatusModifiers.agility['Add Inferior(s)'] || {}
@@ -1240,7 +1240,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       if (mod === -1000) {
         mod = 0
       }
-      const baseExceptionalVal = useCharacterStore().exceptionals.health
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.health)
 
       const arr = Object.values(
         useCharacterStore().attributeStatusModifiers.health['Add Inferior(s)'] || {}
@@ -1291,7 +1291,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       if (mod === -1000) {
         mod = 0
       }
-      const baseExceptionalVal = useCharacterStore().exceptionals.willpower
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.willpower)
 
       const arr = Object.values(
         useCharacterStore().attributeStatusModifiers.willpower['Add Inferior(s)'] || {}
@@ -1343,7 +1343,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       if (mod === -1000) {
         mod = 0
       }
-      const baseExceptionalVal = useCharacterStore().exceptionals.perception
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.perception)
 
       const arr = Object.values(
         useCharacterStore().attributeStatusModifiers.perception['Add Inferior(s)'] || {}
@@ -1392,7 +1392,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       if (mod === -1000) {
         mod = 0
       }
-      const baseExceptionalVal = useCharacterStore().exceptionals.charisma
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.charisma)
 
       const arr = Object.values(
         useCharacterStore().attributeStatusModifiers.charisma['Add Inferior(s)'] || {}
@@ -1449,7 +1449,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       if (mod === -1000) {
         mod = 0
       }
-      const baseExceptionalVal = useCharacterStore().exceptionals.intelligence
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.intelligence)
 
       const arr = Object.values(
         useCharacterStore().attributeStatusModifiers.intelligence['Add Inferior(s)'] || {}
@@ -1498,7 +1498,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
       if (mod === -1000) {
         mod = 0
       }
-      const baseExceptionalVal = useCharacterStore().exceptionals.power
+      const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.power)
 
       const arr = Object.values(
         useCharacterStore().attributeStatusModifiers.power['Add Inferior(s)'] || {}

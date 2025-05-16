@@ -58,6 +58,7 @@ export default {
       if (trait.name.includes('Exceptional') && isDefault) {
         const attrArr = trait.name.split(' ')
         const attr = attrArr[attrArr.length - 1].toLowerCase()
+        console.log(attr)
         useCharacterStore().updateExceptionals(attr, trait.number)
       }
       if (trait.name.includes('Inferior') && isDefault) {

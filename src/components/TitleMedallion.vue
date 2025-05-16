@@ -37,11 +37,17 @@ export default {
       :style="{ color: designStore.secondaryTheme }"
       style="align-self: center; rotate: 180deg; position: relative; left: 0.2rem"
     ></v-icon>
-    <div
-      style="font-size: large; text-align: center; margin: 0.25rem"
-      :style="{ fontFamily: designStore.titleFont, color: props.color || designStore.sidebarText }"
-    >
-      {{ props.title }}
+    <div>
+      <div
+        style="font-size: large; text-align: center; margin: 0.25rem"
+        :style="{
+          fontFamily: designStore.titleFont,
+          color: props.color || designStore.sidebarText
+        }"
+      >
+        {{ props.title }}
+      </div>
+      <slot name="dropdown"></slot>
     </div>
     <v-icon
       name="gi-moon"

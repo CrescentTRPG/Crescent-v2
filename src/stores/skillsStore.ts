@@ -108,12 +108,15 @@ export const useSkillStore = defineStore('skill', {
     },
     setUpBuildDisplay(skillChanged) {
       if (this.effectiveSkills.length > 1) {
-        if (skillChanged != undefined && skillChanged.name) {
+        if (skillChanged != undefined && skillChanged.skill) {
           this.effectiveSkills[skillChanged.index].rank = skillChanged.rank
         }
       } else {
         this.setEffectiveSkills()
       }
+    },
+    setEffectiveOriginSkill(isOrigin: boolean, index: number) {
+      this.effectiveSkills[index].isOrigin = isOrigin
     },
     async setAllSkillsFromFirebase(skills: any) {
       this.allSkills = Object.values(skills)

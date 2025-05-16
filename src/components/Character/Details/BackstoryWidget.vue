@@ -27,7 +27,9 @@ export default {
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
     const backstory = ref(characterStore.backstory || '')
-
+    function setBackstory(){
+      characterStore.setBackstory(backstory.value)
+    }
     return {
       designStore,
       modal,
@@ -35,7 +37,8 @@ export default {
       characterStore,
       file,
       backstory,
-      localImg
+      localImg,
+      setBackstory
     }
   },
   computed: {
@@ -51,9 +54,9 @@ export default {
   <div style="flex-grow: 1; height: 100%">
     <TitleWidget title="Backstory"></TitleWidget>
     <BFormTextarea
+    debounce="300"
       v-model="backstory"
-      @change="characterStore.setBackstory(backstory)"
-      lazy
+      @change="setBackstory()"
       style="
         border-radius: 0;
         overflow-y: auto;

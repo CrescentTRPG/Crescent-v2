@@ -2,31 +2,322 @@
   "Modal": {
     "name": " Overcharged Shot",
     "mp_cost": "Passive",
-    "description": "Shotguns are modal weapons that can be adjusted with the usage of a Swift Action. There are two modes; Slugs and Buckshot. *  Buckshot inflicts 2d8 damage at ranges of 10’ and  below. The weapon inflicts 1d6 damage at ranges above 10’ * Slugs inflict 1d12 damage and gain a + 2 bonus to their attack roll."
+    "description": "Shotguns are modal weapons that can be adjusted with the usage of a Swift Action. There are two modes; Slugs and Buckshot. *  Buckshot inflicts 2d8 damage at ranges of 10’ and  below. The weapon inflicts 1d6 damage at ranges above 10’ * Slugs inflict 1d12 damage and gain a + 2 bonus to their attack roll.",
+    "skillStats": {
+      "modes": ["Buckshot", "Slugs"],
+      "Buckshot": {
+        "type": "Passive",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "Shotguns are modal weapons that can be adjusted with the usage of a Swift Action. There are two modes; Slugs and Buckshot. *  Buckshot inflicts 2d8 damage at ranges of 10’ and  below. The weapon inflicts 1d6 damage at ranges above 10’ * Slugs inflict 1d12 damage and gain a + 2 bonus to their attack roll.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "2d8",
+        "modifyToHit": "",
+        "condition": "",
+        "mpCost": 0,
+        "costType": "none",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "Slugs": {
+        "type": "Passive",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "Shotguns are modal weapons that can be adjusted with the usage of a Swift Action. There are two modes; Slugs and Buckshot. *  Buckshot inflicts 2d8 damage at ranges of 10’ and  below. The weapon inflicts 1d6 damage at ranges above 10’ * Slugs inflict 1d12 damage and gain a + 2 bonus to their attack roll.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "",
+        "overrideDamageDice": "1d12",
+        "mpCost": 0,
+        "modifyToHit": 2,
+        "costType": "none",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "isModal": true
+    }
   },
   "Overcharged Shot": {
     "name": "Overcharged Shot",
     "mp_cost": "2 MP per rank",
-    "description": "The character makes an altered strike. If it hits, they add their weapon's damage dice to their strike an additional time for every rank. Additionally, the strike gains the following effects on hit: * If the shotgun is in buckshot mode, the target is forced back 15' per rank. * If the shotgun is in slug mode, the target's movement speed is reduced by 15' per rank on their next movement action."
+    "description": "The character makes an altered strike. If it hits, they add their weapon's damage dice to their strike an additional time for every rank. Additionally, the strike gains the following effects on hit: * If the shotgun is in buckshot mode, the target is forced back 15' per rank. * If the shotgun is in slug mode, the target's movement speed is reduced by 15' per rank on their next movement action.",
+    "skillStats": {
+      "modes": ["Buckshot", "Slugs"],
+      "Buckshot": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The character makes an altered strike. If it hits, they add their weapon’s damage dice to their strike an additional time for every rank. Additionally, the target is forced back 15’ per rank. ",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateMinWeaponDamage": 0,
+        "damageString": "weaponDamage",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 2,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "Slugs": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {
+          "Shocked": {
+            "name": "Shocked",
+            "short": "Shock",
+            "groupIcon": "gi-snail",
+            "description": "The character's movement speed is reduced by 15' per rank on their next movement action"
+          }
+        },
+        "alternateAppliesStatus": {},
+        "description": "The character makes an altered strike. If it hits, they add their weapon’s damage dice to their strike an additional time for every rank. Additionally, the target's movement speed is reduced by 15' per rank on their next movement action.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateMinWeaponDamage": 0,
+        "damageString": "weaponDamage",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 2,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "isModal": true
+    }
   },
   "Area Attack": {
     "name": "Area Attack",
     "mp_cost": "4 MP per strike",
-    "description": "The altered strike affects all targets in a 10'X10' cone with buckshot or 20'X20' cone with slugs applying a single attack roll, adding any applicable bonuses from Lethal, Modal, and Concussive strike to all successfully struck."
+    "description": "The altered strike affects all targets in a 10'X10' cone with buckshot or 20'X20' cone with slugs applying a single attack roll, adding any applicable bonuses from Lethal, Modal, and Concussive strike to all successfully struck.",
+    "skillStats": {
+      "modes": ["Buckshot", "Slugs"],
+      "Buckshot": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The altered strike affects all targets in a 10'X10' cone, applying a single attack roll, adding any applicable bonuses from Lethal, Modal, and Concussive strike to all successfully struck.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateMinWeaponDamage": 0,
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 4,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "Slugs": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The altered strike affects all targets in a 20'X20' cone, applying a single attack roll, adding any applicable bonuses from Lethal, Modal, and Concussive strike to all successfully struck.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateMinWeaponDamage": 0,
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 4,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "isModal": true
+    }
   },
   "Stopping Power": {
     "name": "Stopping Power",
     "mp_cost": "1 MP per rank",
-    "description": "For every rank purchased, the target of the strike (Regardless of whether it hits or not) loses 5' of on all movement speeds until the start character's next turn. If they are reduced to 0 on all movement speeds, their movement DVs are halved."
+    "description": "For every rank purchased, the target of the strike (Regardless of whether it hits or not) loses 5' of on all movement speeds until the start character's next turn. If they are reduced to 0 on all movement speeds, their movement DVs are halved.",
+    "skillStats": {
+      "modes": ["Buckshot", "Slugs"],
+      "Buckshot": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "For every rank purchased, the target of the strike (Regardless of whether it hits or not) loses 5' of on all movement speeds until the start character's next turn. If they are reduced to 0 on all movement speeds, their movement DVs are halved.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateMinWeaponDamage": 0,
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 1,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "Slugs": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "For every rank purchased, the target of the strike (Regardless of whether it hits or not) loses 5' of on all movement speeds until the start character's next turn. If they are reduced to 0 on all movement speeds, their movement DVs are halved.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateMinWeaponDamage": 0,
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 1,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "isModal": true
+    }
   },
   "Blowback": {
     "name": "Blowback",
     "mp_cost": "1 MP per rank",
-    "description": "The character alters their strike; launching themselves (opposite the direction of the shot) or another target(in the direction of the shot) 20' + 10' per additional rank. If used on an unwilling target, the character contests their STR against the target's AGI or STR (target's choice.) If the target is of a similar size or smaller in comparison to thecharacter and the weapon is in buckshot mode, there is no check on hit."
+    "description": "The character alters their strike; launching themselves (opposite the direction of the shot) or another target(in the direction of the shot) 20' + 10' per additional rank. If used on an unwilling target, the character contests their STR against the target's AGI or STR (target's choice.) If the target is of a similar size or smaller in comparison to thecharacter and the weapon is in buckshot mode, there is no check on hit.",
+    "skillStats": {
+      "modes": ["Buckshot", "Slugs"],
+      "Buckshot": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The character alters their strike; launching themselves (opposite the direction of the shot) or another target(in the direction of the shot) 20' + 10' per additional rank. If used on an unwilling target, the character contests their STR against the target's AGI or STR (target's choice.) If the target is of a similar size or smaller in comparison to thecharacter and the weapon is in buckshot mode, there is no check on hit.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateCausesSave": true,
+        "alternateMinWeaponDamage": 0,
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "Used on unwilling target who is of a larger size class",
+        "mpCost": 1,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "Slugs": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "For every rank purchased, the target of the strike (Regardless of whether it hits or not) loses 5' of on all movement speeds until the start character's next turn. If they are reduced to 0 on all movement speeds, their movement DVs are halved.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateCausesSave": true,
+        "alternateMinWeaponDamage": 0,
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "Used on unwilling target",
+        "mpCost": 1,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false
+      },
+      "isModal": true
+    }
   },
   "Concussive Strike": {
     "name": "Concussive Strike",
     "mp_cost": "2 MP per strike",
-    "description": "The next successful strike this turn befuddles the target until the end of their next turn, WIL save to negate. If the weapon is in slug mode, there is no check on hit"
+    "description": "The next successful strike this turn befuddles the target until the end of their next turn, WIL save to negate. If the weapon is in slug mode, there is no check on hit",
+    "skillStats": {
+      "modes": ["Buckshot", "Slugs"],
+      "Buckshot": {
+        "type": "Next Successful Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {
+          "Befuddled": {
+            "name": "Befuddled",
+            "short": "Befuddle",
+            "groupIcon": "gi-laser-sparks",
+            "description": "The character loses their sense of self, spacing out occasionally. The character has a displaced roll on all PER and INT related checks as long as the condition lasts. A befuddled character cannot maintain Focus, any active focus spells are broken upon becoming befuddled."
+          }
+        },
+        "alternateAppliesStatus": {},
+        "description": "The next successful strike this turn befuddles the target until the end of their next turn, WIL save to negate.",
+        "alternateDescription": "",
+        "causesSave": "WIL",
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 2,
+        "additionalMpCost": 0,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "modifiesSomeCosts": 0,
+        "costMalleable": false,
+        "isApplicableToOffhand": true
+      },
+      "Slugs": {
+        "type": "Next Successful Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {
+          "Befuddled": {
+            "name": "Befuddled",
+            "short": "Befuddle",
+            "groupIcon": "gi-laser-sparks",
+            "description": "The character loses their sense of self, spacing out occasionally. The character has a displaced roll on all PER and INT related checks as long as the condition lasts. A befuddled character cannot maintain Focus, any active focus spells are broken upon becoming befuddled."
+          }
+        },
+        "alternateAppliesStatus": {},
+        "description": "The next successful strike this turn befuddles the target until the end of their next turn, WIL save to negate.",
+        "alternateDescription": "",
+        "causesSave": "",
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 2,
+        "additionalMpCost": 0,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "modifiesSomeCosts": 0,
+        "costMalleable": false,
+        "isApplicableToOffhand": true
+      },
+      "isModal": true
+    }
   }
 }

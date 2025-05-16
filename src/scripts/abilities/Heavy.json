@@ -1,0 +1,60 @@
+{
+  "Lethal": {
+    "description": "Each rank purchased allows the character to add 3 damage to a single strike they make this turn.",
+    "mp_cost": "1 MP per rank",
+    "name": "Lethal",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "description": "Each rank purchased allows the character to add 3 damage to a single strike they make this turn.",
+      "damageString": "3",
+      "mpCost": 1,
+      "costType": "rank",
+      "alternateMpCost": 0
+    }
+  },
+  "Multiattack": {
+    "description": "Every amount of martial points spent equal to the weapon’s multi-attack cost allows the character to make an extra strike.",
+    "mp_cost": "5 MP per strike",
+    "name": "Multiattack",
+    "skillStats": {
+      "type": "Executes an Action",
+      "grantsNewStrike": "Any",
+      "description": "Every amount of martial points spent equal to the weapon’s multi-attack cost allows the character to make an extra strike.",
+      "damageString": "",
+      "mpCost": 5,
+      "costType": "strike",
+      "alternateMpCost": 0
+    }
+  },
+  "Offhand Attack": {
+    "description": "Spending an amount of martial points equal to the offhand  attack cost allows the character to make an extra strike with their offhand weapon. This action can only be taken once each round.",
+    "mp_cost": "3 MP per strike",
+    "name": "Offhand Attack",
+    "skillStats": {
+      "type": "Executes an Action",
+      "grantsNewStrike": "Offhand",
+      "description": "Spending an amount of martial points equal to the offhand  attack cost allows the character to make an extra strike with their offhand weapon. This action can only be taken once each round.",
+      "damageString": "",
+      "mpCost": 3,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "restrictedTo": 1
+    }
+  },
+  "Precise": {
+    "description": "Every 3 martial points spent, the character receives a placed roll to all strikes made that turn.",
+    "mp_cost": "3 MP per rank",
+    "name": "Precise",
+    "skillStats": {
+      "type": "All Successful Strikes",
+      "grantsNewStrike": "",
+      "modifyToHit": "*rank",
+      "description": "Every 3 martial points spent, the character receives a placed roll to all strikes made that turn.",
+      "damageString": "",
+      "mpCost": 3,
+      "costType": "rank",
+      "alternateMpCost": 0
+    }
+  }
+}

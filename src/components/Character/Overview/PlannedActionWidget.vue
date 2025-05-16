@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ref } from 'vue'
+import { computed, ComputedRef, Ref, ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 
 import { useCharacterStore } from '@/stores/characterStore'
@@ -21,6 +21,8 @@ import AbilityDisplay from '@/components/AbilityDisplay.vue'
 import MartialSkillDisplay from '@/components/MartialSkillDisplay.vue'
 import IconPicker from '@/components/IconPicker.vue'
 import CustomCheckbox from '../CustomCheckbox.vue'
+import { usePartyStore } from '@/stores/partyStore'
+import { useAdventureStore } from '@/stores/adventureStore'
 
 export default {
   props: ['actionName', 'ability'],
@@ -32,12 +34,14 @@ export default {
     const characterStore = useCharacterStore()
     const spellsStore = useSpellStore()
     const { manualSpellgroups } = storeToRefs(spellsStore)
-
-    const characterName = ref(['self'])
+    const partyStore = usePartyStore()
+    const characterName: Ref<any> = ref(['self'])
     const statusName = ref(props.ability.name || '')
     const statusDuration = ref(props.ability.duration || '')
     const checkToBreak = ref(props.ability.resistance || '')
-
+    const party: ComputedRef<Array<any>> = computed(() => {
+      return Object.values(partyStore.characterObjects) || []
+    })
     const statusIcon = ref(
       manualSpellgroups.value[props.ability.spellgroup]?.groupIcon || props.ability.groupIcon || ''
     )
@@ -77,8 +81,38 @@ export default {
     function closeStatusModal() {
       statusModal.value = false
     }
+    const adventureStore = useAdventureStore()
 
     function addAsStatus() {
+      characterName.value.forEach((name) => {
+        if (name === 'self') {
+          characterStore.addCustomStatus({
+            name: statusName.value,
+            description: statusDescription.value,
+            duration: statusDuration.value,
+            icon: statusIcon.value,
+            checkToBreak: checkToBreak.value,
+            linkedModifiers: []
+          })
+        } else {
+          let obj = {
+            name: statusName.value,
+            description: statusDescription.value,
+            duration: statusDuration.value,
+            icon: statusIcon.value,
+            checkToBreak: checkToBreak.value,
+            linkedModifiers: []
+          }
+          let userId = ''
+          const cIds = adventureStore.characterIds
+          for (let i = 0; i < cIds.length; i++) {
+            if (cIds[i] === name) {
+              userId = adventureStore.userIds[i]
+            }
+          }
+          partyStore.addCustomStatus(obj, name, userId)
+        }
+      })
       if (characterName.value.includes('self')) {
         characterStore.addCustomStatus({
           name: statusName.value,
@@ -109,7 +143,9 @@ export default {
       openAndLoadStatusModal,
       addAsStatus,
       statusDuration,
-      checkToBreak
+      checkToBreak,
+      partyStore,
+      party
     }
   },
   components: {
@@ -505,7 +541,7 @@ export default {
             ></BFormInput>
           </div>
         </div>
-        <div style="display: flex; justify-content: flex-end">
+        <div style="display: flex; justify-content: flex-end; flex-wrap: wrap">
           <div style="align-self: center; margin-right: 0.5rem; margin-top: 0.5rem">
             <div>Apply to...</div>
           </div>
@@ -525,15 +561,30 @@ export default {
               borderColor: designStore.secondaryTheme
             }"
           >
-            <div style="align-self: center; margin-right: 0.5rem">
-              <div style="margin-right: 0.5rem">Self:</div>
+            <div style="display: flex; padding-right: 1rem">
+              <div style="align-self: center; margin-right: 0.5rem">
+                <div style="margin-right: 0.5rem">Self:</div>
+              </div>
+              <CustomCheckbox
+                style="margin-top: -0.5rem; width: 2rem"
+                @true="characterName.push('self')"
+                @false="characterName.splice(characterName.indexOf('self'), 1)"
+                :isChecked="characterName.includes('self')"
+              ></CustomCheckbox>
             </div>
-            <CustomCheckbox
-              style="margin-top: -0.5rem"
-              @true="characterName.push('self')"
-              @false="characterName.splice(characterName.indexOf('self'), 1)"
-              :isChecked="characterName.includes('self')"
-            ></CustomCheckbox>
+            <div v-for="partyMember in party" :key="partyMember">
+              <div style="display: flex; padding-right: 1rem">
+                <div style="align-self: center; margin-right: 0.5rem">
+                  <div style="margin-right: 0.5rem">{{ partyMember.name }}:</div>
+                </div>
+                <CustomCheckbox
+                  style="margin-top: -0.5rem; width: 2rem"
+                  @true="characterName.push(partyMember.id)"
+                  @false="characterName.splice(characterName.indexOf(partyMember.id), 1)"
+                  :isChecked="characterName.includes(partyMember.id)"
+                ></CustomCheckbox>
+              </div>
+            </div>
           </div>
         </div>
       </template>

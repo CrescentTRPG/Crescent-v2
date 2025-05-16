@@ -1,4 +1,5 @@
 <script lang="ts">
+import DropdownSelect from '@/components/DropdownSelect.vue'
 import { useCharacterStore } from '@/stores/characterStore'
 import { useDesignStore } from '@/stores/designStore'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
@@ -60,8 +61,8 @@ export default {
   components: {
     BFormInput,
     BButton,
-    BFormSelect,
-    BInputGroupText
+    BInputGroupText,
+    DropdownSelect
   }
 }
 </script>
@@ -70,7 +71,7 @@ export default {
     class="addStatusContainer"
     :style="{ borderColor: designStore.secondaryTheme, background: designStore.primaryTheme }"
   >
-    <div style="display: flex; width: 100%">
+    <div style="display: flex; flex-grow: 1">
       <BInputGroupText
         :style="{
           background: designStore.inputBacking,
@@ -82,19 +83,22 @@ export default {
       >
         Modifier :
       </BInputGroupText>
-      <BFormSelect
-        class="type"
-        v-model="selectedMod"
-        :options="props.modifierType"
+      <div class="nonMobileItem">Modifier Type</div>
+      <DropdownSelect
+        class="dropdown-fill modifierType"
+        :borderless="true"
         :style="{
           color: designStore.inputText,
           background: designStore.inputBacking,
           borderColor: designStore.secondaryTheme
         }"
-      ></BFormSelect>
+        :default="selectedMod"
+        :options="props.modifierType"
+        @selection="(selection) => (selectedMod = selection)"
+      ></DropdownSelect>
     </div>
     <div
-      style="display: flex; width: 100%"
+      style="display: flex; flex-grow: 1"
       v-if="
         selectedMod === 'Suffering' ||
         selectedMod === 'Resistance' ||
@@ -116,61 +120,83 @@ export default {
       >
         Damage Type:
       </BInputGroupText>
-      <BFormSelect
-        class="damage"
-        v-model="sufferingDamageType"
-        :options="damageTypes"
+      <div class="nonMobileItem">Damage Type</div>
+
+      <DropdownSelect
+        class="dropdown-fill damage"
+        style="border-left: 1px solid"
+        :borderless="true"
         :style="{
           color: designStore.inputText,
           background: designStore.inputBacking,
           borderColor: designStore.secondaryTheme
         }"
-      ></BFormSelect>
+        :default="sufferingDamageType"
+        :options="damageTypes"
+        @selection="(selection) => (sufferingDamageType = selection)"
+      ></DropdownSelect>
     </div>
-
-    <BFormInput
-      v-if="
-        selectedMod !== 'Resistance' &&
-        selectedMod !== 'Susceptibility' &&
-        selectedMod !== 'Immunity' &&
-        selectedMod !== 'Vulnerability'
-      "
+    <div
+      class="num"
+      style="width: 30%; border-left: 1px solid"
       :style="{
         background: designStore.inputBacking,
-        color: designStore.inputText,
+        color: designStore.primaryText,
         borderColor: designStore.secondaryTheme
       }"
-      type="number"
-      placeholder="value"
-      v-model="modAmount"
-      class="num"
-    ></BFormInput>
-    <div style="display: flex; width: 100%">
+    >
+      <div class="nonMobileItem">Value</div>
+
+      <BFormInput
+        v-if="
+          selectedMod !== 'Resistance' &&
+          selectedMod !== 'Susceptibility' &&
+          selectedMod !== 'Immunity' &&
+          selectedMod !== 'Vulnerability'
+        "
+        :style="{
+          background: designStore.inputBacking,
+          color: designStore.inputText,
+          borderColor: designStore.secondaryTheme
+        }"
+        style="border: 0"
+        type="number"
+        placeholder="value"
+        v-model="modAmount"
+        class="num"
+      ></BFormInput>
+    </div>
+
+    <div style="display: flex; flex-grow: 1">
       <BInputGroupText
         :style="{
           background: designStore.inputBacking,
           color: designStore.inputText,
           borderColor: designStore.secondaryTheme
         }"
-        style="border-radius: 0"
+        style="border-radius: 0; min-width: 7rem"
         class="numMobile"
       >
         Link Status :
       </BInputGroupText>
-      <BFormSelect
-        v-model="linkedStatus"
-        :options="statuses"
-        placeholder="Linked Status"
-        class="linkedStatus"
+      <div class="nonMobileItem">Linked Status</div>
+
+      <DropdownSelect
+        class="dropdown-fill linkedStatus"
+        style="border-left: 1px solid"
+        :borderless="true"
         :style="{
           color: designStore.inputText,
           background: designStore.inputBacking,
           borderColor: designStore.secondaryTheme
         }"
-      ></BFormSelect>
+        :default="linkedStatus"
+        :options="statuses"
+        @selection="(selection) => (linkedStatus = selection)"
+      ></DropdownSelect>
     </div>
 
-    <div style="display: flex; width: 100%">
+    <div style="display: flex; flex-grow">
       <BFormInput
         v-if="
           selectedMod !== 'Resistance' &&
@@ -190,7 +216,7 @@ export default {
       ></BFormInput>
 
       <BButton @click="add()" class="addButton">
-        Add Status <i class="bi bi-plus-lg" @click="add()"></i
+        Add Modifier <i class="bi bi-plus-lg" @click="add()"></i
       ></BButton>
     </div>
   </div>
@@ -204,19 +230,32 @@ export default {
 .numMobile {
   display: none;
 }
+
 .addStatusContainer {
   border: 2px solid;
   border-radius: 10px;
   margin-bottom: 1rem;
+  margin-top: 1rem;
   display: flex;
+}
+.modifierType {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
 }
 .linkedStatus {
   border-radius: 0;
   border-bottom: 1px solid;
 }
+.dropdown-fill {
+  max-height: 10rem;
+  min-width: 6rem;
+  flex: 1;
+}
 .addButton {
   border: none;
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+
   padding-right: 0.5rem;
   width: 100%;
   font-size: medium;
@@ -227,7 +266,23 @@ export default {
 .damage {
   border-radius: 0;
 }
+.nonMobileItem {
+  position: absolute;
+  margin-top: -1.5rem;
+}
 @media (max-width: 800px) {
+  .modifierType {
+    border-top-left-radius: 0rem;
+    border-bottom-left-radius: 0rem;
+  }
+  .nonMobileItem {
+    display: none;
+    position: absolute;
+    margin-top: -1.5rem;
+  }
+  .dropdown-fill {
+    border-bottom: 1px solid;
+  }
   .type {
     grid-row: 1 / 1;
     grid-column: span 2 / span 2;

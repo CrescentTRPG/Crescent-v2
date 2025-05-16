@@ -48,7 +48,7 @@ export default {
       fileObj
     }
   },
-  components: { BFormFile },
+  components: {},
   methods: {}
 }
 </script>

@@ -22,7 +22,9 @@ import { isTemplateExpression } from 'typescript'
 import { useEquipmentStore } from '@/stores/equipmentStore'
 import { usePerformanceStore } from '@/stores/performanceStore'
 import { useFaunaStore } from '@/stores/faunaStore'
+import { useManualStore } from '@/stores/manualStore'
 import CreatureDisplay from '../Build/Fauna/CreatureDisplay.vue'
+import MartialAttackDisplay from '../Matrial Attack Builder/MartialAttackDisplay.vue'
 
 export default {
   emits: ['ability'],
@@ -32,6 +34,8 @@ export default {
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
+    const manualStore = useManualStore()
+    const { martialAttacks } = storeToRefs(characterStore)
     const spellsStore = useSpellStore()
     const { spellgroups, buildDisplaySpells, manualSpellgroups } = storeToRefs(spellsStore)
     const martialSkillsStore = useMartialSkillsStore()
@@ -65,9 +69,11 @@ export default {
                   ? `${item.rank} Mana`
                   : item.perkGroup
                     ? `${item.type}`
-                    : item.style
-                      ? `${item.type}`
-                      : 'No Cost'
+                    : item.mp
+                      ? `${item.mp}` + ' MP'
+                      : item.style
+                        ? `${item.type}`
+                        : 'No Cost'
             : 'Something went wrong'
       },
 
@@ -85,9 +91,13 @@ export default {
                     ? item.style
                     : item.attributes
                       ? 'Combat Style'
-                      : item.combatStyles
-                        ? 'Specialization'
-                        : 'Skill'
+                      : `${item.mp}`
+                        ? 'Weapon Attack'
+                        : item.combatStyles
+                          ? 'Specialization'
+                          : item.groupIcon
+                            ? 'General Action'
+                            : 'Skill'
             : 'Something went wrong',
         label: 'Group'
       },
@@ -129,8 +139,45 @@ export default {
           knownSpells.push(knownSpell)
         })
 
-      return knownSpells
+      return knownSpells || []
     })
+    function getSpellsAtLoc(spellgroup) {
+      const groups: any = [spellgroups.value[spellgroup]]
+      let spells: Array<any> = []
+      groups.forEach((group) => {
+        let spellx = Object.values(group.spells)
+
+        spells = spells.concat(spellx)
+      })
+
+      const knownSpells: Array<any> = []
+      spells
+        .sort((a: any, b: any) => {
+          let aCode = a.spellgroup.charCodeAt(0)
+          let bCode = b.spellgroup.charCodeAt(0)
+          if (aCode - bCode == 0) {
+            if (aCode - bCode == 0) {
+              aCode = a.spellgroup.charCodeAt(2)
+              bCode = b.spellgroup.charCodeAt(2)
+              if (aCode - bCode == 0) {
+                aCode = a.rank
+                bCode = b.rank
+                if (aCode - bCode == 0) {
+                  aCode = a.name.charCodeAt(2)
+                  bCode = b.name.charCodeAt(2)
+                }
+              }
+            }
+          }
+          return aCode - bCode
+        })
+        .forEach((spell: any) => {
+          let knownSpell = buildDisplaySpells.value[spell.spellIndex]
+          knownSpells.push(knownSpell)
+        })
+
+      return knownSpells || []
+    }
 
     function getMedallion(group: string) {
       switch (group) {
@@ -144,6 +191,9 @@ export default {
           return 'gi-heart-shield'
       }
     }
+    const generalActions = computed(() => {
+      return Object.values(manualStore.generalActions) || []
+    })
 
     const knownPerks: ComputedRef<Array<any>> = computed(() => {
       const perks: any = Object.values(martialPerks.value)
@@ -172,7 +222,7 @@ export default {
           }
           knownPerks.push(perkx)
         })
-      return knownPerks
+      return knownPerks || []
     })
 
     const knownCombatStyles: ComputedRef<Array<any>> = computed(() => {
@@ -183,7 +233,7 @@ export default {
         let styley = { ...stylex, actionCost: 'Core Action' }
         styles.push(styley)
       })
-      return styles
+      return styles || []
     })
 
     const knownSpecializations: ComputedRef<Array<any>> = computed(() => {
@@ -195,7 +245,7 @@ export default {
 
         styles.push(specy)
       })
-      return styles
+      return styles || []
     })
 
     const knownSkillz: ComputedRef<Array<any>> = computed(() => {
@@ -205,7 +255,7 @@ export default {
         skillsRet.push({ ...effectiveSkills.value[skillx.index], name: skillx.skill })
       })
       console.log(skillsRet)
-      return skillsRet
+      return skillsRet || []
     })
 
     const knownTraits: ComputedRef<Array<any>> = computed(() => {
@@ -214,51 +264,71 @@ export default {
       traits.forEach((trait: any) => {
         if (trait.ability) abilities.push({ ...trait.ability, groupIcon: trait.icon })
       })
-      return abilities
+      return abilities || []
+    })
+    const knownMartialAttacks = computed(() => {
+      return Object.values(martialAttacks.value)
     })
 
     const tabObject: ComputedRef<any> = computed((): any => {
+      let index = 0
       let arr = {}
       if (knownSpells.value.length > 0) {
-        arr['Spells'] = { known: true, name: 'Spells', index: 0 }
-      } else {
-        arr['Spells'] = { known: false, name: 'Spells', index: 0 }
+        arr['Spells'] = { known: true, name: 'Spells', index: index++ }
+
+        Object.values(spellgroups.value).map(
+          (group: any) =>
+            (arr[group.name] = {
+              name: group.name,
+              index: index++,
+              known: true
+            })
+        )
+      }
+
+      if (knownPerks.value.length > 0) {
+        arr['Martial Perks'] = { known: true, name: 'Martial Perks', index: index++ }
       }
       if (knownCombatStyles.value.length > 0) {
-        arr['Combat Styles'] = { known: true, name: 'Combat Styles', index: 0 }
-      } else {
-        arr['Combat Styles'] = { known: false, name: 'Combat Styles', index: 0 }
+        arr['Combat Styles'] = { known: true, name: 'Combat Styles', index: index++ }
       }
       if (knownSpecializations.value.length > 0) {
-        arr['Specializations'] = { known: true, name: 'Specializations', index: 0 }
-      } else {
-        arr['Specializations'] = { known: false, name: 'Specializations', index: 0 }
+        arr['Specializations'] = { known: true, name: 'Specializations', index: index++ }
       }
       if (knownSkillz.value.length > 0) {
-        arr['Skills'] = { known: true, name: 'Skills', index: 0 }
-      } else {
-        arr['Skills'] = { known: false, name: 'Skills', index: 0 }
+        arr['Skills'] = { known: true, name: 'Skills', index: index++ }
       }
       if (knownTraits.value.length > 0) {
-        arr['Traits'] = { known: true, name: 'Traits', index: 0 }
-      } else {
-        arr['Traits'] = { known: false, name: 'Traits', index: 0 }
+        arr['Traits'] = { known: true, name: 'Traits', index: index++ }
       }
       if (equipmentStore.getAbilitites.length > 0) {
-        arr['Equipment'] = { known: true, name: 'Equipment', index: 0 }
-      } else {
-        arr['Equipment'] = { known: false, name: 'Equipment', index: 0 }
+        arr['Equipment'] = { known: true, name: 'Equipment', index: index++ }
       }
-      if (equipmentStore.getAbilitites.length > 0) {
-        arr['Performance'] = { known: true, name: 'Performance', index: 0 }
-      } else {
-        arr['Performance'] = { known: false, name: 'Performance', index: 0 }
+      if (performanceStore.getAbilities.length > 0) {
+        arr['Performance'] = { known: true, name: 'Performance', index: index++ }
       }
-      if (equipmentStore.getAbilitites.length > 0) {
-        arr['Fauna Transformations'] = { known: true, name: 'Fauna Transformations', index: 0 }
-      } else {
-        arr['Fauna Transformations'] = { known: false, name: 'Fauna Transformations', index: 0 }
+      if (faunaStore.getCreatures.length > 0) {
+        arr['Fauna Transformations'] = {
+          known: true,
+          name: 'Fauna Transformations',
+          index: index++
+        }
       }
+      if (knownMartialAttacks.value.length > 0) {
+        arr['Martial Attacks'] = {
+          known: true,
+          name: 'Martial Attacks',
+          index: index++
+        }
+      }
+      if (generalActions.value.length > 0) {
+        arr['General Actions'] = {
+          known: true,
+          name: 'General Actions',
+          index: index++
+        }
+      }
+
       return arr
     })
 
@@ -268,9 +338,6 @@ export default {
       let abilities: Array<any> = []
       if (selectedTabs.value && selectedTabs.value.length > 0) {
         selectedTabs.value.forEach((tab) => {
-          if (tab.name === 'Spells') {
-            abilities = abilities.concat(knownSpells.value)
-          }
           if (tab.name === 'Skills') {
             abilities = abilities.concat(knownSkillz.value)
           }
@@ -289,11 +356,38 @@ export default {
           if (tab.name === 'Performance') {
             abilities = abilities.concat(performanceStore.getAbilities)
           }
+          if (tab.name === 'Martial Perks') {
+            abilities = abilities.concat(knownPerks.value)
+          }
           if (tab.name === 'Fauna Transformations') {
             abilities = abilities.concat(faunaStore.getCreatures)
           }
+          if (tab.name == 'Martial Attacks') {
+            abilities = abilities.concat(knownMartialAttacks.value)
+          }
+          if (tab.name === 'General Actions') {
+            abilities = abilities.concat(generalActions.value)
+          }
+          if (tab.name === 'Spells') {
+            abilities = abilities.concat(knownSpells.value)
+          } else {
+            if (
+              tab.name != 'Skills' &&
+              tab.name != 'Specializations' &&
+              tab.name != 'Traits' &&
+              tab.name != 'Martial Perks' &&
+              tab.name != 'Combat Styles' &&
+              tab.name != 'Equipment' &&
+              tab.name != 'Performance' &&
+              tab.name != 'Fauna Transformations' &&
+              tab.name != 'General Actions' &&
+              tab.name != 'Martial Attacks'
+            ) {
+              abilities = abilities.concat(getSpellsAtLoc(tab.name) || [])
+            }
+          }
         })
-        return abilities
+        return abilities || []
       }
       return knownSpells.value
         .concat(knownPerks.value)
@@ -304,9 +398,37 @@ export default {
         .concat(equipmentStore.getAbilitites)
         .concat(performanceStore.getAbilities)
         .concat(faunaStore.getCreatures)
+        .concat(knownMartialAttacks.value)
+        .concat(generalActions.value)
     })
 
     const totalRows = ref(knownAbilities?.value?.length)
+
+    function getSortedSkills(spec) {
+      return spec.skills.sort(function (a, b) {
+        let aVal =
+          a.skillStats.type === 'Passive'
+            ? 0
+            : a.skillStats.modes
+              ? a.skillStats[a.skillStats.modes[0]].type === 'Passive'
+                ? 0
+                : 100
+              : 100
+        let bVal =
+          b.skillStats.type === 'Passive'
+            ? 0
+            : b.skillStats.modes
+              ? b.skillStats[b.skillStats.modes[0]].type === 'Passive'
+                ? 0
+                : 100
+              : 100
+        let ret = 0
+        if (aVal > bVal) ret = 1
+        else if (aVal < bVal) ret = -1
+
+        return ret
+      })
+    }
     return {
       designStore,
       userStore,
@@ -330,7 +452,8 @@ export default {
       tabObject,
       selectedTabs,
       infoModal,
-      manualPerformanceStyles
+      manualPerformanceStyles,
+      getSortedSkills
     }
   },
   components: {
@@ -344,7 +467,8 @@ export default {
     ArrayTabs,
     BDropdown,
     BDropdownItem,
-    CreatureDisplay
+    CreatureDisplay,
+    MartialAttackDisplay
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -470,7 +594,7 @@ export default {
                 v-if="
                   data.item.spellgroup ||
                   data.item.perkGroup ||
-                  (!(data.item.attributes || data.item.combatStyles) &&
+                  (!(data.item.attributes || data.item.combatStyles || data.item.mp) &&
                     !data.item.skill &&
                     !data.item.Movement)
                 "
@@ -487,13 +611,20 @@ export default {
                 :target="data.item.target || ''"
                 :type="data.item.type || ''"
               ></AbilityDisplay>
+              <MartialAttackDisplay
+                v-if="data.item.mp"
+                :description="data.item.description"
+                :weaponAttack="data.item.attackObj"
+                :icon="data.item.icon || 'gi-tec-9'"
+              ></MartialAttackDisplay>
+
               <CreatureDisplay v-if="data.item.Movement" :creature="data.item"></CreatureDisplay>
               <div
                 v-if="data.item.attributes || data.item.combatStyles"
                 style="padding-bottom: 0.5rem; border-top: 2px solid"
                 :style="{ borderColor: designStore.secondaryTheme }"
               >
-                <div v-for="skill in data.item.skills" :key="skill.name">
+                <div v-for="skill in getSortedSkills(data.item)" :key="skill.name">
                   <MartialSkillDisplay
                     :title="skill.name"
                     :description="skill.description"
@@ -510,10 +641,10 @@ export default {
         <div class="fullGroup">
           {{
             data.item
-              ? data.item.spellgroup
-                ? `${data.item.spellgroup}`
-                : data.item.isEquipment
-                  ? 'Equipment'
+              ? data.item.isEquipment
+                ? 'Equipment'
+                : data.item.spellgroup
+                  ? `${data.item.spellgroup}`
                   : data.item.perkGroup
                     ? `${data.item.perkGroup}`
                     : data.item.attributes
@@ -522,11 +653,15 @@ export default {
                         ? 'Specialization'
                         : data.item.isTrait
                           ? 'Trait'
-                          : data.item.Movement
-                            ? 'Fauna Transformation'
-                            : data.item.style
-                              ? data.item.style
-                              : 'Skill'
+                          : data.item.mp
+                            ? 'Martial Attack'
+                            : data.item.Movement
+                              ? 'Fauna Transformation'
+                              : data.item.style
+                                ? data.item.style
+                                : data.item.groupIcon
+                                  ? 'General Actions'
+                                  : 'Skill'
               : 'Something went wrong'
           }}
         </div>

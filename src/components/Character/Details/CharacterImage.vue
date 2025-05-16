@@ -108,6 +108,7 @@ export default {
           }"
         ></BCardImg>
         <div
+          @click="modal = true"
           v-if="!useImg"
           class="addIconContainer"
           :style="{ background: designStore.inputBacking, color: designStore.iconColor }"
@@ -120,9 +121,10 @@ export default {
           style="
             display: flex;
             flex-direction: row;
-            position: relative;
-            bottom: 0rem;
+            position: absolute;
+            bottom: 0.25rem;
             justify-content: center;
+            width: 90%;
           "
         >
           <RibbonTitle

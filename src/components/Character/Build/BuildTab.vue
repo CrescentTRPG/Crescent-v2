@@ -39,6 +39,7 @@ export default {
       @effigy="tab = 'effigy'"
       @fauna="tab = 'fauna'"
       @performance="tab = 'performance'"
+      @martialbuilder="tab = 'martialbuilder'"
     ></CharacterSidebar>
     <TabContents style="width: 100%; flex-grow: 1; height: fit-content" :tab="tab"></TabContents>
   </div>

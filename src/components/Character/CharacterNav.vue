@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../stores/designStore'
+import { useCharacterStore } from '@/stores/characterStore'
 
 export default {
   setup(props, context) {
@@ -11,8 +12,8 @@ export default {
     const router = useRouter()
     const designStore = useDesignStore()
     const navPos = ref('build')
-
-    return { designStore, navPos }
+    const characterStore = useCharacterStore()
+    return { designStore, navPos, characterStore }
   },
   computed: {
     width() {
@@ -69,6 +70,7 @@ export default {
         <i class="bi bi-tools"></i>
         <div v-if="navPos === 'build'">Build</div>
       </BNavItem>
+
       <BNavItem
         :style="{ color: navItemStyle('overview'), background: designStore.inputBacking }"
         @click="switchTab('overview')"
@@ -109,6 +111,14 @@ export default {
         class="navI"
         ><i class="bi bi-backpack4"></i>
         <div v-if="navPos === 'equipment'">Equipment</div>
+      </BNavItem>
+      <BNavItem
+        v-if="characterStore.adventure?.adventureId || false"
+        :style="{ color: navItemStyle('party'), background: designStore.inputBacking }"
+        @click="switchTab('party')"
+      >
+        <i class="bi bi-people"></i>
+        <div class="manText" v-if="navPos === 'party'">Party</div>
       </BNavItem>
       <BNavItem
         :style="{ color: navItemStyle('journal'), background: designStore.inputBacking }"

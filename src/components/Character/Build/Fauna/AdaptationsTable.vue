@@ -115,18 +115,28 @@ export default {
         >
           <BTd>
             <div
-              style="display: flex; flex-direction: column; justify-content: center; height: 5rem"
+              style="
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-height: 5rem;
+                text-wrap: wrap;
+                width: 100%;
+                max-width: 6rem;
+                word-wrap: break-word;
+              "
             >
               {{ adaptation.name }}
             </div>
           </BTd>
-          <BTd>
+          <BTd style="min-width: 10rem">
             <div
               style="
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 min-height: 5rem;
+                width: 100%;
               "
             >
               {{ adaptation.description }}

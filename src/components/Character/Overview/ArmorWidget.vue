@@ -2,11 +2,7 @@
 import { computed, ComputedRef, ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 
-import { useCharacterStore } from '@/stores/characterStore'
-
-import { useUserStore } from '@/stores/userStore'
 import MiniArmorWidget from './MiniArmorWidget.vue'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
 import { storeToRefs } from 'pinia'
 import CustomModal from '@/components/CustomModal.vue'
 import { BButton, BFormInput, BFormSelect, BInputGroup } from 'bootstrap-vue-next'
@@ -16,20 +12,31 @@ import ToggleSwitch from '@/components/ToggleSwitch.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
 import StatusEffectItem from './StatusEffectItem.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
-import { useEquipmentStore } from '@/stores/equipmentStore'
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
+import BPopover from 'bootstrap-vue-next/src/components/BPopover.vue'
 
 export default {
+  props: [
+    'secondaryHandheldPassives',
+    'primaryHandheldPassives',
+    'wornArmorPassives',
+    'armorStatusModifiers',
+    'statusEffects',
+    'wornArmor',
+    'wornShield',
+    'addNewArmorStatusModifier',
+    'removeArmorStatusModifier',
+    'martialPerks',
+    'traits',
+    'moveDvs',
+    'shieldDvs',
+    'armorDvs',
+    'bonusDvs',
+    'totalDvs'
+  ],
   setup(props, context) {
     const modal = ref(false)
-    const userStore = useUserStore()
     const designStore = useDesignStore()
-    const characterStore = useCharacterStore()
-    const equipmentStore = useEquipmentStore()
-    const { equipment } = storeToRefs(equipmentStore)
-    const { armorStatusModifiers, statusEffects } = storeToRefs(characterStore)
-    const martialPerksStore = useMartialPerksStore()
-    const { martialPerks } = storeToRefs(martialPerksStore)
     const isDodging = ref(false)
     const modifierType = [
       'Modify Armor Dvs',
@@ -43,53 +50,18 @@ export default {
     ]
 
     const isPinned: ComputedRef<boolean> = computed(() => {
-      return statusEffects.value['Pinned']?.description.length > 0 ? true : false
+      return props.statusEffects['Pinned']?.description.length > 0 ? true : false
     })
     const isStunned: ComputedRef<boolean> = computed(() => {
-      return statusEffects.value['Stunned']?.description.length > 0 ? true : false
-    })
-    const wornArmorPassives = computed(() => {
-      return equipment.value.items.Armor[equipment.value.wornArmor]?.equippedStats?.passives || {}
-    })
-
-    const primaryHandheldPassives = computed(() => {
-      return (
-        equipment.value.items.Weapon[equipment.value.primaryHand]?.equippedStats?.passives || {}
-      )
-    })
-
-    const secondaryHandheldPassives = computed(() => {
-      return (
-        equipment.value.items.Shield[equipment.value.secondaryHand]?.equippedStats?.passives ||
-        equipment.value.items.Weapon[equipment.value.secondaryHand]?.equippedStats?.passives ||
-        {}
-      )
+      return props.statusEffects['Stunned']?.description.length > 0 ? true : false
     })
 
     const isProne: ComputedRef<boolean> = computed(() => {
-      return statusEffects.value['Prone']?.description.length > 0 ? true : false
-    })
-
-    const wornArmor = computed(() => {
-      return (
-        equipment.value.items.Armor[equipment.value.wornArmor] || {
-          equippedStats: { value: 0 },
-          name: 'No Armor'
-        }
-      )
-    })
-
-    const wornShield = computed(() => {
-      return (
-        equipment.value.items.Shield[equipment.value.secondaryHand] || {
-          equippedStats: { value: 0 },
-          name: 'No Shield'
-        }
-      )
+      return props.statusEffects['Prone']?.description.length > 0 ? true : false
     })
 
     const statusModifiersList: ComputedRef<Array<any>> = computed(() => {
-      let modifiers = Object.values(armorStatusModifiers.value)
+      let modifiers = Object.values(props.armorStatusModifiers)
       let ret = []
       modifiers.forEach((modGroup: any) => {
         ret = ret.concat(Object.values(modGroup))
@@ -105,94 +77,20 @@ export default {
         linkedStatus: addedVal.linkedStatus,
         modAmount: addedVal.modAmount
       }
-      characterStore.addNewArmorStatusModifier(statusObj)
+      props.addNewArmorStatusModifier(statusObj)
     }
     function removeModifier(modifierType, modAmount, linkedStatus) {
-      characterStore.removeArmorStatusModifier({
+      props.removeArmorStatusModifier({
         modifierType: modifierType,
         modAmount: modAmount,
         linkedStatus: linkedStatus
       })
     }
 
-    const moveDvs: ComputedRef<number> = computed(() => {
-      let modifier = -1000
-      if (wornArmorPassives.value['Modify Move Dvs']) {
-        modifier = Math.max(
-          parseInt(wornArmorPassives.value['Modify Move Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (primaryHandheldPassives.value['Modify Move Dvs']) {
-        modifier = Math.max(
-          parseInt(primaryHandheldPassives.value['Modify Move Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (secondaryHandheldPassives.value['Modify Move Dvs']) {
-        modifier = Math.max(
-          parseInt(secondaryHandheldPassives.value['Modify Move Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (modifier == -1000) {
-        modifier = 0
-      }
-      if (armorStatusModifiers.value['Modify Move Dvs']) {
-        let max = Object.values(armorStatusModifiers.value['Modify Move Dvs']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          -1000
-        )
-        if (max != -1000) {
-          modifier = modifier + max
-        }
-      }
-      if (armorStatusModifiers.value['Override Move Dvs']) {
-        let max = Object.values(armorStatusModifiers.value['Override Move Dvs']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          0
-        )
-        if (max > 0) {
-          return isStunned.value || isPinned.value ? 0 : Math.max(max + modifier, 0)
-        }
-      }
-      if (wornArmorPassives.value['Override Move Dvs']) {
-        return isStunned.value || isPinned.value
-          ? 0
-          : parseInt(wornArmorPassives.value['Override Move Dvs']?.modAmount) + modifier
-      }
-      if (primaryHandheldPassives.value['Override Move Dvs']) {
-        return isStunned.value || isPinned.value
-          ? 0
-          : parseInt(primaryHandheldPassives.value['Override Move Dvs']?.modAmount) + modifier
-      }
-      if (secondaryHandheldPassives.value['Override Move Dvs']) {
-        return isStunned.value || isPinned.value
-          ? 0
-          : parseInt(secondaryHandheldPassives.value['Override Move Dvs']?.modAmount) + modifier
-      }
-      const perks = Object.values(martialPerks.value)
-      if (isDodging.value) {
-        return isStunned.value || isPinned.value
-          ? 0
-          : perks.reduce((acc: number, perk: any) => (perk.rank > acc ? perk.rank : acc), 0) +
-              15 +
-              modifier
-      }
-
-      if (characterStore.traits['Movement Dvs']) {
-        return isStunned.value || isPinned.value
-          ? 0
-          : Math.max(parseInt(characterStore.traits['Movement Dvs'].number) + modifier)
-      }
-      return isStunned.value || isPinned.value || isProne.value ? 0 : 10 + modifier
-    })
     const armorColor: ComputedRef<string> = computed(() => {
       if (
-        armorStatusModifiers.value['Modify Armor Dvs'] ||
-        armorStatusModifiers.value['Override Armor Dvs']
+        props.armorStatusModifiers['Modify Armor Dvs'] ||
+        props.armorStatusModifiers['Override Armor Dvs']
       ) {
         return designStore.alertTheme
       }
@@ -204,254 +102,17 @@ export default {
         return designStore.alertTheme
       }
       if (
-        armorStatusModifiers.value['Modify ' + type + ' Dvs'] ||
-        armorStatusModifiers.value['Override ' + type + ' Dvs']
+        props.armorStatusModifiers['Modify ' + type + ' Dvs'] ||
+        props.armorStatusModifiers['Override ' + type + ' Dvs']
       ) {
         return designStore.alertTheme
       }
       return designStore.secondaryTheme
     }
 
-    const armorDvs: ComputedRef<number> = computed(() => {
-      let modifier = -1000
-      if (isDodging.value) {
-        return 0
-      }
-      if (wornArmorPassives.value['Modify Armor Dvs']) {
-        modifier = Math.max(
-          parseInt(wornArmorPassives.value['Modify Armor Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (primaryHandheldPassives.value['Modify Armor Dvs']) {
-        modifier = Math.max(
-          parseInt(primaryHandheldPassives.value['Modify Armor Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (secondaryHandheldPassives.value['Modify Armor Dvs']) {
-        modifier = Math.max(
-          parseInt(secondaryHandheldPassives.value['Modify Armor Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (modifier === -1000) {
-        modifier = 0
-      }
-
-      if (armorStatusModifiers.value['Modify Armor Dvs']) {
-        let max = Object.values(armorStatusModifiers.value['Modify Armor Dvs']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          -1000
-        )
-        if (max != -1000) {
-          modifier = modifier + max
-        }
-      }
-      if (armorStatusModifiers.value['Override Armor Dvs']) {
-        let max = Object.values(armorStatusModifiers.value['Override Armor Dvs']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          0
-        )
-        if (max > 0) {
-          return Math.max(max + modifier, 0)
-        }
-      }
-      if (wornArmorPassives.value['Override Armor Dvs']) {
-        return Math.max(
-          parseInt(wornArmorPassives.value['Override Armor Dvs']?.modAmount) + modifier,
-          0
-        )
-      }
-      if (primaryHandheldPassives.value['Override Armor Dvs']) {
-        return Math.max(
-          parseInt(primaryHandheldPassives.value['Override Armor Dvs']?.modAmount) + modifier,
-          0
-        )
-      }
-      if (secondaryHandheldPassives.value['Override Armor Dvs']) {
-        return Math.max(
-          parseInt(secondaryHandheldPassives.value['Override Armor Dvs']?.modAmount) + modifier,
-          0
-        )
-      }
-
-      if (characterStore.traits['Armor Dvs']) {
-        return Math.max(
-          Math.max(
-            parseInt(characterStore.traits['Armor Dvs'].number) + modifier,
-            wornArmor.value?.equippedStats?.value
-          ),
-          0
-        )
-      }
-      return Math.max(wornArmor.value?.equippedStats?.value, 0)
-    })
-
-    const bonusDvs: ComputedRef<number> = computed(() => {
-      let modifier = -1000
-      if (wornArmorPassives.value['Modify Bonus Dvs']) {
-        modifier = Math.max(
-          parseInt(wornArmorPassives.value['Modify Bonus Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (primaryHandheldPassives.value['Modify Bonus Dvs']) {
-        modifier = Math.max(
-          parseInt(primaryHandheldPassives.value['Modify Bonus Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (secondaryHandheldPassives.value['Modify Bonus Dvs']) {
-        modifier = Math.max(
-          parseInt(secondaryHandheldPassives.value['Modify Bonus Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (modifier === -1000) {
-        modifier = 0
-      }
-      if (armorStatusModifiers.value['Modify Bonus Dvs']) {
-        let max = Object.values(armorStatusModifiers.value['Modify Bonus Dvs']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          -1000
-        )
-        if (max != -1000) {
-          modifier = modifier + max
-        }
-      }
-
-      if (armorStatusModifiers.value['Override Bonus Dvs']) {
-        let max = Object.values(armorStatusModifiers.value['Override Bonus Dvs']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          0
-        )
-        if (max > 0) {
-          return Math.max(max + modifier, 0)
-        }
-      }
-      if (wornArmorPassives.value['Override Bonus Dvs']) {
-        return Math.max(
-          parseInt(wornArmorPassives.value['Override Bonus Dvs']?.modAmount) + modifier,
-          0
-        )
-      }
-      if (primaryHandheldPassives.value['Override Bonus Dvs']) {
-        return Math.max(
-          parseInt(primaryHandheldPassives.value['Override Bonus Dvs']?.modAmount) + modifier,
-          0
-        )
-      }
-      if (secondaryHandheldPassives.value['Override Bonus Dvs']) {
-        return Math.max(
-          parseInt(secondaryHandheldPassives.value['Override Bonus Dvs']?.modAmount) + modifier,
-          0
-        )
-      }
-      if (characterStore.traits['Bonus Dvs']) {
-        return Math.max(parseInt(characterStore.traits['Bonus Dvs'].number) + modifier, 0)
-      }
-      return 0
-    })
-
-    const shieldDvs: ComputedRef<number> = computed(() => {
-      let modifier = -1000
-      if (isDodging.value) {
-        return 0
-      }
-      if (wornArmorPassives.value['Modify Shield Dvs']) {
-        modifier = Math.max(
-          parseInt(wornArmorPassives.value['Modify Shield Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (primaryHandheldPassives.value['Modify Shield Dvs']) {
-        modifier = Math.max(
-          parseInt(primaryHandheldPassives.value['Modify Shield Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (secondaryHandheldPassives.value['Modify Shield Dvs']) {
-        modifier = Math.max(
-          parseInt(secondaryHandheldPassives.value['Modify Shield Dvs']?.modAmount),
-          modifier
-        )
-      }
-      if (modifier === -1000) {
-        modifier = 0
-      }
-      if (armorStatusModifiers.value['Modify Shield Dvs']) {
-        let max = Object.values(armorStatusModifiers.value['Modify Shield Dvs']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          -1000
-        )
-        if (max != -1000) {
-          modifier = modifier + max
-        }
-      }
-
-      if (armorStatusModifiers.value['Override Shield Dvs']) {
-        let max = Object.values(armorStatusModifiers.value['Override Shield Dvs']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          0
-        )
-        if (max > 0) {
-          return Math.max(max + modifier, 0)
-        }
-      }
-      if (wornArmorPassives.value['Override Shield Dvs']) {
-        return Math.max(
-          parseInt(wornArmorPassives.value['Override Shield Dvs']?.modAmount) + modifier,
-          0
-        )
-      }
-      if (primaryHandheldPassives.value['Override Shield Dvs']) {
-        return Math.max(
-          parseInt(primaryHandheldPassives.value['Override Shield Dvs']?.modAmount) + modifier,
-          0
-        )
-      }
-      if (secondaryHandheldPassives.value['Override Shield Dvs']) {
-        return Math.max(
-          parseInt(secondaryHandheldPassives.value['Override Shield Dvs']?.modAmount) + modifier,
-          0
-        )
-      }
-      if (characterStore.traits['Shield Dvs']) {
-        return Math.max(
-          Math.max(
-            characterStore.traits['Shield Dvs'].number + modifier,
-            wornShield.value.equippedStats.value
-          ),
-          0
-        )
-      }
-      return Math.max(wornShield.value.equippedStats.value, 0)
-    })
-    const totalDvs: ComputedRef<number> = computed(() => {
-      return (
-        parseInt(armorDvs.value + '') +
-        parseInt(shieldDvs.value + '') +
-        parseInt(moveDvs.value + '') +
-        parseInt(bonusDvs.value + '')
-      )
-    })
     return {
       designStore,
       modal,
-      userStore,
-      characterStore,
-      moveDvs,
-      armorDvs,
-      bonusDvs,
-      shieldDvs,
-      totalDvs,
       modifierType,
       isDodging,
       statusModifiersList,
@@ -459,21 +120,20 @@ export default {
       removeModifier,
       armorColor,
       getColor,
-      wornArmor,
-      wornShield
+      props
     }
   },
   components: {
     MiniArmorWidget,
     CustomModal,
-    BFormInput,
     ToggleSwitch,
     BInputGroup,
     BInputGroupText,
     StatusModifierExplaination,
     TitleWidget,
     StatusEffectItem,
-    AddStatusEffectWidget
+    AddStatusEffectWidget,
+    BPopover
   }
 }
 </script>
@@ -517,13 +177,13 @@ export default {
             :color="getColor('Armor')"
             emblem="gi-visored-helm"
             margin-top="-1.2rem"
-            :value="armorDvs"
+            :value="props.armorDvs"
           ></MiniArmorWidget>
           <MiniArmorWidget
             :color="getColor('Shield')"
             emblem="gi-shield"
             margin-top="-1.2rem"
-            :value="shieldDvs"
+            :value="props.shieldDvs"
           ></MiniArmorWidget>
         </div>
         <div
@@ -536,7 +196,7 @@ export default {
             font-size: 3rem;
           "
         >
-          {{ totalDvs }}
+          {{ props.totalDvs }}
         </div>
 
         <div class="lilDVs">
@@ -544,13 +204,13 @@ export default {
             :color="getColor('Move')"
             emblem="gi-run"
             margin-top="-1.4rem"
-            :value="moveDvs"
+            :value="props.moveDvs"
           ></MiniArmorWidget>
           <MiniArmorWidget
             :color="getColor('Bonus')"
             emblem="gi-vibrating-shield"
             margin-top="-1.4rem"
-            :value="bonusDvs"
+            :value="props.bonusDvs"
           ></MiniArmorWidget>
         </div>
 
@@ -567,8 +227,8 @@ export default {
         <div
           style="font-size: x-large; text-align: center; margin-top: -1rem; margin-bottom: 0.25rem"
         >
-          {{ armorDvs }} Armor Dvs, {{ shieldDvs }} Shield Dvs, {{ moveDvs }} Move Dvs,
-          {{ bonusDvs }} Bonus Dvs
+          {{ props.armorDvs }} Armor Dvs, {{ props.shieldDvs }} Shield Dvs, {{ props.moveDvs }} Move
+          Dvs, {{ props.bonusDvs }} Bonus Dvs
         </div>
         <div class="equipment">
           <BInputGroupText
@@ -580,16 +240,37 @@ export default {
             class="wornArmorLabel"
             >Armor:
           </BInputGroupText>
-          <BFormInput
+          <BPopover
             :style="{
-              borderColor: designStore.secondaryTheme,
-              background: designStore.inputBacking,
-              color: designStore.inputText
+              background: designStore.primaryTheme,
+              borderColor: designStore.secondaryTheme
             }"
-            class="wornArmor"
-            v-model="wornArmor.name"
-            disabled
-          ></BFormInput>
+            class="popover"
+            :click="true"
+            :close-on-hide="true"
+            :delay="{ show: 0, hide: 0 }"
+          >
+            <template #target>
+              <div
+                :style="{
+                  borderColor: designStore.secondaryTheme,
+                  background: designStore.inputBacking,
+                  color: designStore.inputText
+                }"
+                class="wornArmor"
+              >
+                {{ props.wornArmor.name }}
+              </div>
+            </template>
+            <div
+              style="padding: 0.5rem; border-radius: 0.25rem; max-width: 20rem"
+              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
+            >
+              {{
+                'To Equip Armor, Navigate to the "Equipment" Page and add a piece of armor to your items.  Then you may equip the item in the equipped items banner on said equipment page.'
+              }}
+            </div>
+          </BPopover>
           <BInputGroupText
             :style="{
               borderColor: designStore.secondaryTheme,
@@ -600,16 +281,37 @@ export default {
           >
             Shield:
           </BInputGroupText>
-          <BFormInput
+          <BPopover
             :style="{
-              borderColor: designStore.secondaryTheme,
-              background: designStore.inputBacking,
-              color: designStore.inputText
+              background: designStore.primaryTheme,
+              borderColor: designStore.secondaryTheme
             }"
-            class="equippedShield"
-            v-model="wornShield.name"
-            disabled
-          ></BFormInput>
+            class="popover"
+            :click="true"
+            :close-on-hide="true"
+            :delay="{ show: 0, hide: 0 }"
+          >
+            <template #target>
+              <div
+                :style="{
+                  borderColor: designStore.secondaryTheme,
+                  background: designStore.inputBacking,
+                  color: designStore.inputText
+                }"
+                class="equippedShield"
+              >
+                {{ props.wornShield.name }}
+              </div>
+            </template>
+            <div
+              style="padding: 0.5rem; border-radius: 0.25rem; max-width: 20rem"
+              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
+            >
+              {{
+                'To Equip a Shield, Navigate to the "Equipment" Page and add a shield to your items.  Then you may equip the item as a secondary handheld in the equipped items banner on said equipment page.  Note that if you use both hands to hold a weapon you may be unable to equip a shield'
+              }}
+            </div>
+          </BPopover>
         </div>
         <BInputGroup
           style="border: 2px solid; border-radius: 10px; margin-bottom: 1rem; width: 12rem"
@@ -669,10 +371,14 @@ export default {
   padding: 0.5rem;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  border: 1px solid;
+  width: 100%;
 }
 .wornArmor {
   padding: 0.5rem;
   border-radius: 0;
+  border: 1px solid;
+  width: 100%;
 }
 .wornArmorLabel {
   border-top-right-radius: 0;
@@ -701,6 +407,7 @@ export default {
     padding: 0.5rem;
     border-radius: 0.375rem;
     border-top-left-radius: 0;
+    grid-area: 2 / 1 / 2 / 4;
 
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;

@@ -15,6 +15,7 @@ import IconPicker from '@/components/IconPicker.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import { useStatusEffectStore } from '@/stores/statusEffectStore'
 import { useTraitsStore } from '@/stores/traitsStore'
+import StatusEffectIcon from '@/StatusEffectIcon.vue'
 
 export default {
   props: ['tab'],
@@ -76,9 +77,8 @@ export default {
       modal.value = true
       isCustomStatus.value = isCustom
     }
-    function remove() {
-      characterStore.removeStatus(modalName.value)
-      modal.value = false
+    function remove(name) {
+      characterStore.removeStatus(name)
     }
     const getIcon: ComputedRef<string> = computed(() => {
       if (basicStatus.value.indexOf('X') === -1 && manualStatusEffect.value[basicStatus.value])
@@ -206,7 +206,8 @@ export default {
     BInputGroupText,
     BFormTextarea,
     IconPicker,
-    BFormSelect
+    BFormSelect,
+    StatusEffectIcon
   }
 }
 </script>
@@ -225,7 +226,19 @@ export default {
     >
       <div class="traitRibbon">
         <div v-for="t in traitArr" :key="t.name" @click="loadValuesAndShowModal(t, false)">
-          <div
+          <StatusEffectIcon
+            :icon="t.icon"
+            :status-obj="t"
+            :notRemoveable="true"
+            :color="designStore.primaryText"
+            :is-custom="false"
+            :boxShadow="
+              'inset -5px 0px 3px 1px ' + LightenDarkenColor(designStore.primaryTheme, 10)
+            "
+            borderBottom="1px solid"
+            :background="designStore.primaryTheme"
+          ></StatusEffectIcon>
+          <!-- <div
             class="iconContain"
             v-if="t.icon.substring(0, 2) == 'gi'"
             :style="{
@@ -254,9 +267,9 @@ export default {
             style="font-size: 1.5rem; cursor: pointer"
           >
             <i :class="t.icon"></i>
-          </div>
+          </div> -->
         </div>
-        <div style="display: flex">
+        <div style="display: flex" v-if="traitArr.length >= 1">
           <div
             style="
               width: 1rem;
@@ -273,7 +286,10 @@ export default {
           >
             {{ ' ' }}
           </div>
-          <div style="display: flex; flex-direction: column; z-index: 5; margin-bottom: 0.1rem">
+          <div
+            v-if="traitArr.length >= 1"
+            style="display: flex; flex-direction: column; z-index: 5; margin-bottom: 0.1rem"
+          >
             <div class="ribbon-top" :style="{ borderLeftColor: designStore.primaryTheme }"></div>
             <div class="ribbon-bottom" :style="{ borderLeftColor: designStore.primaryTheme }"></div>
           </div>
@@ -281,55 +297,23 @@ export default {
       </div>
       <div>
         <div class="statusRibbon">
-          <div v-for="t in statusArr" :key="t.name" @click="loadValuesAndShowModal(t, true)">
-            <div
-              class="iconContain"
-              v-if="t.icon?.substring(0, 2) == 'gi'"
-              :style="{ borderColor: designStore.secondaryTheme }"
-            >
-              <v-icon
-                scale="1.5"
-                :name="t.icon"
-                style="cursor: pointer"
-                :style="{ color: designStore.alertTheme }"
-              ></v-icon>
-            </div>
-            <div
-              class="iconContain"
-              :style="{
-                borderColor: designStore.alertTheme,
-                color: designStore.alertTheme
-              }"
-              v-if="t.icon?.substring(0, 2) == 'bi'"
-              style="font-size: 1.5rem; cursor: pointer"
-            >
-              <i :class="t.icon"></i>
-            </div>
+          <div v-for="t in statusArr" :key="t.name">
+            <StatusEffectIcon
+              :icon="t.icon"
+              :status-obj="t"
+              :remove-status="remove"
+              :is-custom="false"
+              style="margin-top: -0.25rem"
+            ></StatusEffectIcon>
           </div>
-          <div v-for="t in customStatusArr" :key="t.name" @click="loadValuesAndShowModal(t, true)">
-            <div
-              class="iconContain"
-              v-if="t.icon.substring(0, 2) == 'gi'"
-              :style="{ borderColor: designStore.secondaryTheme }"
-            >
-              <v-icon
-                scale="1.5"
-                :name="t.icon"
-                style="cursor: pointer"
-                :style="{ color: designStore.alertTheme }"
-              ></v-icon>
-            </div>
-            <div
-              class="iconContain"
-              :style="{
-                borderColor: designStore.alertTheme,
-                color: designStore.alertTheme
-              }"
-              v-if="t.icon.substring(0, 2) == 'bi'"
-              style="font-size: 1.5rem; cursor: pointer"
-            >
-              <i :class="t.icon"></i>
-            </div>
+          <div v-for="t in customStatusArr" :key="t.name">
+            <StatusEffectIcon
+              :icon="t.icon"
+              :status-obj="t"
+              :remove-status="remove"
+              :is-custom="true"
+              style="margin-top: -0.25rem"
+            ></StatusEffectIcon>
           </div>
           <div class="iconContain" style="display: flex; align-items: center; margin-top: 0.25rem">
             <BDropdown
@@ -704,30 +688,6 @@ export default {
             >Cancel</BButton
           ></template
         >
-      </CustomModal>
-
-      <CustomModal :showModal="modal" :title="modalName" @close="modal = false">
-        <template v-slot:body>
-          <div
-            v-html="formatHTML(modalDescription)"
-            style="z-index: 5; margin-left: 0.75rem; margin-right: 0.75rem; text-align: left"
-          ></div>
-          <div
-            style="display: flex; justify-content: flex-end"
-            v-if="modalDuration || modalCheckToBreak"
-          >
-            <div style="margin-right: 1rem">Duration: {{ modalDuration }}</div>
-            <div>Check to Break: {{ modalCheckToBreak }}</div>
-          </div>
-        </template>
-        <template v-slot:footer v-if="isCustomStatus">
-          <BButton
-            @click="remove()"
-            style="border: 1px solid"
-            :style="{ borderColor: designStore.secondaryTheme }"
-            >Remove Status</BButton
-          >
-        </template>
       </CustomModal>
     </div>
   </div>

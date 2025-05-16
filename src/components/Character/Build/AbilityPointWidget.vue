@@ -42,7 +42,8 @@ export default {
       specializations,
       martialPerks,
       spellgroups,
-      manualSpellgroups
+      manualSpellgroups,
+      spellsStore
     }
   },
   watch: {
@@ -59,6 +60,7 @@ export default {
     },
     spentAbilityPoints() {
       let counter = 0
+      counter += this.rankSum(parseInt(this.spellsStore.arcaneBattery + ''))
       Object.values(this.skills).forEach((val: any) => (counter += this.rankSum(val.rank)))
       Object.values(this.combatStyles).forEach((val: any) => (counter += this.rankSum(val.rank)))
       Object.values(this.specializations).forEach((val: any) => (counter += this.rankSum(val.rank)))

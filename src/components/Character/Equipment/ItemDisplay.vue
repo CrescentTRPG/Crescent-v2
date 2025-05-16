@@ -259,7 +259,7 @@ export default {
         style="margin-bottom: -0.25rem; margin-top: 0.25rem"
       />
       <PassiveListObj
-        v-for="passive in Object.values(props.item.equippedStats.passives)"
+        v-for="passive in Object.values(props.item.equippedStats.passives) as Array<any>"
         :key="passive.modifierType"
         :mod-amount="passive.modAmount"
         :modifier-type="passive.name"

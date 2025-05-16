@@ -21,6 +21,7 @@ import TitleMedallion from '@/components/TitleMedallion.vue'
 import MoonDisplay from './MoonDisplay.vue'
 import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
 import { giIcons } from '@/components/icons/giIcons'
+import DropdownSelect from '@/components/DropdownSelect.vue'
 
 export default {
   setup(props, context) {
@@ -31,7 +32,6 @@ export default {
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
     const story = ref('')
-    const motivation = ref(characterStore.motivation || 'Select Motivation')
     const options = [
       'Discovery',
       'Immortality',
@@ -42,8 +42,10 @@ export default {
       'Envy',
       'Wayward'
     ]
-    function update() {
-      characterStore.setMotivation(motivation.value)
+    const motivation = ref(characterStore.motivation)
+    function update(motive) {
+      motivation.value = motive
+      characterStore.setMotivation(motive)
     }
     const descriptions = {
       Discovery: {
@@ -102,11 +104,11 @@ export default {
       characterStore,
       file,
       story,
-      motivation,
       localImg,
       options,
       update,
-      descriptions
+      descriptions,
+      motivation
     }
   },
   computed: {
@@ -114,7 +116,7 @@ export default {
       return this.designStore.secondaryTheme + ' ' + this.designStore.primaryTheme
     }
   },
-  components: { TitleMedallion, MoonDisplay, BFormSelect }
+  components: { TitleMedallion, MoonDisplay, DropdownSelect }
 }
 </script>
 
@@ -157,24 +159,13 @@ export default {
       >
         <TitleMedallion :title="motivation" :color="designStore.sidebarText"></TitleMedallion>
         <div>{{ descriptions[motivation]?.description }}</div>
-        <BFormSelect
-          @change="update"
-          v-model="motivation"
+
+        <DropdownSelect
+          style="text-align: center; font-size: large; z-index: 5; cursor: pointer; width: 18rem"
           :options="options"
-          style="
-            border: 1px solid;
-            text-align: center;
-            font-size: large;
-            padding: 0.5rem;
-            z-index: 5;
-            cursor: pointer;
-          "
-          :style="{
-            background: designStore.primaryTheme,
-            color: designStore.primaryText,
-            borderColor: designStore.secondaryTheme
-          }"
-        ></BFormSelect>
+          :default="motivation"
+          @selection="(selection) => update(selection)"
+        ></DropdownSelect>
       </div>
     </div>
     <div class="mobileMotive" style="cursor: pointer">
@@ -186,20 +177,17 @@ export default {
         <hr :style="{ borderColor: designStore.secondaryTheme }" style="margin-bottom: -0.5rem" />
         <div style="display: flex; justify-content: center">
           <v-icon scale="2" name="wi-moon-waxing-crescent-2" style="align-self: center"></v-icon>
-          <v-icon scale="4" :name="descriptions[motivation].icon || 'gi-uncertainty'"></v-icon>
+          <v-icon scale="4" :name="descriptions[motivation]?.icon || 'gi-uncertainty'"></v-icon>
           <v-icon scale="2" name="wi-moon-waning-crescent-4" style="align-self: center"></v-icon>
         </div>
         <div style="display: flex; justify-content: center"></div>
-        <BFormSelect
-          v-model="motivation"
-          :options="options"
+
+        <DropdownSelect
           style="border: 1px solid; font-size: medium; text-align: center; padding: 0.5rem"
-          :style="{
-            background: designStore.primaryTheme,
-            color: designStore.primaryText,
-            borderColor: designStore.secondaryTheme
-          }"
-        ></BFormSelect>
+          :options="options"
+          :default="''"
+          @selection="(selection) => update(selection)"
+        ></DropdownSelect>
       </div>
     </div>
   </div>

@@ -3,10 +3,11 @@
     <div style="flex-grow: 1"></div>
     <div class="container">
       <CharacterCard
-        v-for="(character, index) in characters"
+        v-for="(character, index) in props.charList"
         :key="index"
         :character="character"
         :name="character.name"
+        :image="character.image"
         :useImg="true"
         @click="selectCharacter(character)"
       >
@@ -36,44 +37,35 @@ import { useSpellStore } from '@/stores/spellsStore'
 import { useMartialPerksStore } from '@/stores/martialPerksStore'
 import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
 import { useSkillStore } from '@/stores/skillsStore'
+import { useFaunaStore } from '@/stores/faunaStore'
+import { usePerformanceStore } from '@/stores/performanceStore'
 
 export default {
+  props: ['charList'],
   setup(props, context) {
-    const characters = ref([])
     const router = useRouter()
-    onMounted(() => {
-      let collectionRef = collection(db, 'User/' + useUserStore().getUserId + '/Character')
-      onSnapshot(
-        collectionRef,
-        (snap) => {
-          let results = []
-          snap.docs.forEach((doc) => {
-            results.push({ ...doc.data(), id: doc.id })
-          })
-          characters.value = results
-        },
-        (err) => {
-          console.log(err.message)
-        }
-      )
-      //characters.value = await getCollectionOnce('User/' + useUserStore().getUserId + '/Character')
-    })
-    return { characters, router }
+
+    return { router, props }
   },
   components: {
     CharacterCard
   },
   methods: {
     addCharacter() {
-      useCharacterStore().addCharacter(useUserStore().getUserId)
+      if (this.props.charList.length < 2) {
+        useCharacterStore().addCharacter(useUserStore().getUserId)
+      } else {
+        alert('User is not entitled to more than two characters')
+      }
     },
     selectCharacter(character) {
+      usePerformanceStore().clearPerformance()
+      useFaunaStore().clearFauna()
       useSpellStore().clearBuildDisplay()
       useMartialPerksStore().clearBuildDisplay()
       useMartialSkillsStore().clearMartialSkillsBuild()
       useSkillStore().clearEffectiveSkills()
       useCharacterStore().setLocalCharacter(character)
-      useCharacterStore().pullCharacterFromFirebase(useUserStore().getUserId, character.id, true)
       this.router.push({ name: 'character' })
     }
   }

@@ -13,6 +13,7 @@ import { useUserStore } from './userStore.js'
 import { Details } from '@/components/Character/Details/CoreTraits.vue'
 import { useEquipmentStore } from './equipmentStore.js'
 import { usePerformanceStore } from './performanceStore.js'
+import { DEFAULT_CHARCTER, DEFAULT_DESIGN } from '@/bases.js'
 
 interface Character {
   id: string
@@ -139,7 +140,7 @@ export const useCharacterStore = defineStore('character', {
     spentAbilityPoints: 0,
     totalAbilityPoints: 10,
     originSkills: ['', ''],
-    adventure: null,
+    adventure: { gameMasterId: null, adventureId: null },
     condition: null,
     attributes: {
       strength: 0,
@@ -152,19 +153,19 @@ export const useCharacterStore = defineStore('character', {
       charisma: 0
     },
     plannedCoreAction: {
-      ability: {},
+      ability: { spellgroup: '', groupIcon: '', name: '' },
       rogueActions: []
     },
     plannedSwiftAction: {
-      ability: {},
+      ability: { spellgroup: '', groupIcon: '', name: '' },
       rogueActions: []
     },
     plannedReaction: {
-      ability: {},
+      ability: { spellgroup: '', groupIcon: '', name: '' },
       rogueActions: []
     },
     plannedMovementAction: {
-      ability: {},
+      ability: { spellgroup: '', groupIcon: '', name: '' },
       rogueActions: []
     },
     exceptionals: {
@@ -185,7 +186,52 @@ export const useCharacterStore = defineStore('character', {
     martialSkills: null,
     spells: null,
     martialPerks: null,
-    martialAttacks: null
+    martialAttacks: {},
+    overviewValues: {
+      //   totalHp: 0,
+      //   totalMana: 0,
+      //   bonusDvs: 0,
+      //   armorDvs: 0,
+      //   mp: 0,
+      //   shieldDvs: 0,
+      //   moveDvs: 0,
+      isDodging: false
+      //   base: 30,
+      //   flight: 0,
+      //   climbing: 0,
+      //   swimming: 0,
+      //   burrowing: 0,
+      //   attributes: {
+      //     strength: 0,
+      //     agility: 0,
+      //     perception: 0,
+      //     willpower: 0,
+      //     health: 0,
+      //     intelligence: 0,
+      //     power: 0,
+      //     charisma: 0
+      //   },
+      //   exceptionals: {
+      //     strength: 0,
+      //     agility: 0,
+      //     perception: 0,
+      //     willpower: 0,
+      //     health: 0,
+      //     intelligence: 0,
+      //     power: 0,
+      //     charisma: 0
+      //   },
+      //   inferiors: {
+      //     strength: 0,
+      //     agility: 0,
+      //     perception: 0,
+      //     willpower: 0,
+      //     health: 0,
+      //     intelligence: 0,
+      //     power: 0,
+      //     charisma: 0
+      //   }
+    }
   }),
   getters: {
     getLocalCharacter() {},
@@ -193,11 +239,87 @@ export const useCharacterStore = defineStore('character', {
     getCharacterId: (state): string => state.id,
     getArchetype: (state): string => state.archetype,
     getAttributes: (state): any => state.attributes,
-    getOriginSkills: (state): Array<string> => state.originSkills
+    getOriginSkills: (state): Array<string> => state.originSkills,
+    getMp: (state): number => {
+      const combatStyles = useMartialSkillsStore().combatStyles
+      const equipmentStore = useEquipmentStore()
+      const styles = Object.values(combatStyles)
+      let ret = styles.reduce((acc: number, style: any) => (style.rank > acc ? style.rank : acc), 0)
+      if (state.mpStatusModifiers['Override Mp']) {
+        const max = Object.values(state.mpStatusModifiers['Override Mp']).reduce(
+          (acc: number, mod: any) =>
+            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
+          0
+        )
+        if (max > 0) {
+          ret = max
+        }
+      }
+      if (state.traits['Bonus MP']) {
+        ret += parseInt(state.traits['Bonus MP'].number)
+      }
+      if (equipmentStore.getWornArmorPassives['Override Mp']) {
+        ret = parseInt(equipmentStore.getWornArmorPassives['Override Mp']?.modAmount)
+      }
+      if (equipmentStore.getPrimaryHandheldPassives['Override Mp']) {
+        ret = parseInt(equipmentStore.getPrimaryHandheldPassives['Override Mp']?.modAmount)
+      }
+      if (equipmentStore.getSecondaryHandheldPassives['Override Mp']) {
+        ret = parseInt(equipmentStore.getSecondaryHandheldPassives['Override Mp']?.modAmount)
+      }
+      let modifier = -1000
+
+      if (equipmentStore.getWornArmorPassives['Modify Mp']) {
+        modifier = Math.max(
+          parseInt(equipmentStore.getWornArmorPassives['Modify Mp']?.modAmount),
+          modifier
+        )
+      }
+      if (equipmentStore.getPrimaryHandheldPassives['Modify Mp']) {
+        modifier = Math.max(
+          parseInt(equipmentStore.getPrimaryHandheldPassives['Modify Mp']?.modAmount),
+          modifier
+        )
+      }
+      if (equipmentStore.getSecondaryHandheldPassives['Modify Mp']) {
+        modifier = Math.max(
+          parseInt(equipmentStore.getSecondaryHandheldPassives['Modify Mp']?.modAmount),
+          modifier
+        )
+      }
+      if (modifier == -1000) {
+        modifier = 0
+      }
+
+      if (state.mpStatusModifiers['Modify Mp']) {
+        const max = Object.values(state.mpStatusModifiers['Modify Mp']).reduce(
+          (acc: number, mod: any) =>
+            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
+          -1000
+        )
+        if (max != -1000) {
+          modifier = modifier + max
+        }
+      }
+
+      return Math.max(ret + modifier, 0)
+    }
   },
   actions: {
+    addMartialAttack(weaponAttacks) {
+      this.martialAttacks = weaponAttacks
+      this.setMartialAttacks()
+    },
+    removeMartialAttack(name) {
+      delete this.martialAttacks[name]
+      this.setMartialAttacks()
+    },
+    setLocalMartialAttacks(attacks) {
+      this.martialAttacks = attacks
+    },
     addBasicStatus(status, statusObj) {
       this.statusEffects[status] = statusObj
+      this.updateStatusEffects()
     },
     removeMovementStatusModifier(modifier: GenericModifier) {
       const modRef = this.movementStatusModifiers[modifier.modifierType]
@@ -208,6 +330,7 @@ export const useCharacterStore = defineStore('character', {
       if (Object.values(this.movementStatusModifiers[modifier.modifierType] || {}).length == 0) {
         delete this.movementStatusModifiers[modifier.modifierType]
       }
+      this.updateStatusModifiers()
     },
     addNewMovementStatusModifier(modifier: GenericModifier) {
       const modRef = this.movementStatusModifiers[modifier.modifierType]
@@ -218,6 +341,7 @@ export const useCharacterStore = defineStore('character', {
           'Move: ' + modifier.modifierType + ' : ' + modifier.modAmount
         )
       }
+      this.updateStatusModifiers()
     },
     removeDiceStatusModifier(modifier: DiceModifier) {
       const attribute = modifier.target.toLowerCase()
@@ -238,7 +362,36 @@ export const useCharacterStore = defineStore('character', {
       ) {
         delete this.attributeStatusModifiers[attribute][modifier.modifierType]
       }
+      this.updateStatusModifiers()
     },
+    // setTotalHp(hp) {
+    //   this.overviewValues.totalHp = hp
+    //   this.setOverviewValues()
+    // },
+    // setTotalMana(mana) {
+    //   this.overviewValues.totalMana = mana
+    //   this.setOverviewValues()
+    // },
+    // setBonusDvs(dvs) {
+    //   this.overviewValues.bonusDvs = dvs
+    //   this.setOverviewValues()
+    // },
+    // setMp(mp) {
+    //   this.overviewValues.mp = mp
+    //   this.setOverviewValues()
+    // },
+    // setShieldDvs(dvs) {
+    //   this.overviewValues.shieldDvs = dvs
+    //   this.setOverviewValues()
+    // },
+    // setMoveDvs(dvs) {
+    //   this.overviewValues.moveDvs = dvs
+    //   this.setOverviewValues()
+    // },
+    // setIsDodging(isDodging) {
+    //   this.overviewValues.isDodging = isDodging
+    //   this.setOverviewValues()
+    // },
     addNewDiceStatusModifier(modifier: DiceModifier) {
       const attribute = modifier.target.toLowerCase()
       const modRef = this.diceStatusModifiers[attribute][modifier.modifierType]
@@ -252,6 +405,7 @@ export const useCharacterStore = defineStore('character', {
           'Roll, ' + attribute + ': ' + modifier.modifierType + ' : ' + modifier.modAmount
         )
       }
+      this.updateStatusModifiers()
     },
     removeAttributeStatusModifier(modifier: AttributeModifier) {
       const attribute = modifier.attribute.toLowerCase()
@@ -272,6 +426,7 @@ export const useCharacterStore = defineStore('character', {
       ) {
         delete this.attributeStatusModifiers[attribute][modifier.modifierType]
       }
+      this.updateStatusModifiers()
     },
     addNewAttributeStatusModifier(modifier: AttributeModifier) {
       const attribute = modifier.attribute.toLowerCase()
@@ -286,6 +441,7 @@ export const useCharacterStore = defineStore('character', {
           'attribute, ' + attribute + ': ' + modifier.modifierType + ' : ' + modifier.modAmount
         )
       }
+      this.updateStatusModifiers()
     },
     removeMpStatusModifier(modifier: GenericModifier) {
       const modRef = this.mpStatusModifiers[modifier.modifierType]
@@ -296,6 +452,7 @@ export const useCharacterStore = defineStore('character', {
       if (Object.values(this.mpStatusModifiers[modifier.modifierType] || {}).length == 0) {
         delete this.mpStatusModifiers[modifier.modifierType]
       }
+      this.updateStatusModifiers()
     },
     addNewMpStatusModifier(modifier: GenericModifier) {
       const modRef = this.mpStatusModifiers[modifier.modifierType]
@@ -306,6 +463,7 @@ export const useCharacterStore = defineStore('character', {
           'Mp: ' + modifier.modifierType + ' : ' + modifier.modAmount
         )
       }
+      this.updateStatusModifiers()
     },
     removeManaStatusModifier(modifier: GenericModifier) {
       console.log(modifier.modifierType)
@@ -318,6 +476,7 @@ export const useCharacterStore = defineStore('character', {
       if (Object.values(this.manaStatusModifiers[modifier.modifierType] || {}).length == 0) {
         delete this.manaStatusModifiers[modifier.modifierType]
       }
+      this.updateStatusModifiers()
     },
     addNewManaStatusModifier(modifier: GenericModifier) {
       const modRef = this.manaStatusModifiers[modifier.modifierType]
@@ -328,6 +487,7 @@ export const useCharacterStore = defineStore('character', {
           'Mana: ' + modifier.modifierType + ' : ' + modifier.modAmount
         )
       }
+      this.updateStatusModifiers()
     },
     removeArmorStatusModifier(modifier: GenericModifier) {
       const modRef = this.armorStatusModifiers[modifier.modifierType]
@@ -336,6 +496,7 @@ export const useCharacterStore = defineStore('character', {
       if (Object.values(this.armorStatusModifiers[modifier.modifierType] || {}).length == 0) {
         delete this.armorStatusModifiers[modifier.modifierType]
       }
+      this.updateStatusModifiers()
     },
     addNewArmorStatusModifier(modifier: GenericModifier) {
       const modRef = this.armorStatusModifiers[modifier.modifierType]
@@ -346,6 +507,7 @@ export const useCharacterStore = defineStore('character', {
           'Armor: ' + modifier.modifierType + ' : ' + modifier.modAmount
         )
       }
+      this.updateStatusModifiers()
     },
     removeHpStatusModifier(modifier: HpModifier) {
       const modRef = this.hpStatusModifiers[modifier.modifierType]
@@ -356,6 +518,7 @@ export const useCharacterStore = defineStore('character', {
       if (Object.values(this.hpStatusModifiers[modifier.modifierType] || {}).length == 0) {
         delete this.hpStatusModifiers[modifier.modifierType]
       }
+      this.updateStatusModifiers()
     },
     addNewHpStatusModifier(modifier: HpModifier) {
       const modRef = this.hpStatusModifiers[modifier.modifierType]
@@ -366,6 +529,7 @@ export const useCharacterStore = defineStore('character', {
           'HP: ' + modifier.modifierType + ' : ' + modifier.modAmount
         )
       }
+      this.updateStatusModifiers()
     },
     setLocalCurrentandBarrierHp(newHP, newBarrier) {
       this.currentHp = newHP
@@ -383,6 +547,7 @@ export const useCharacterStore = defineStore('character', {
     addCustomStatus(status: any) {
       console.log(this.customStatusEffects)
       this.customStatusEffects[status.name] = status
+      this.updateStatusEffects()
     },
     removeStatus(name: string) {
       if (this.customStatusEffects[name]) {
@@ -392,6 +557,7 @@ export const useCharacterStore = defineStore('character', {
       if (this.statusEffects[name]) {
         delete this.statusEffects[name]
       }
+      this.updateStatusEffects()
     },
     removeLinkedModifiers(customStatus: any) {
       customStatus.linkedModifiers.forEach((mod) => {
@@ -500,6 +666,7 @@ export const useCharacterStore = defineStore('character', {
     },
     setLocalCharacter(character: Character) {
       this.id = character.id
+      this.details = character.details
       this.name = character.name
       this.image = character.image
       this.archetype = character.archetype
@@ -513,124 +680,143 @@ export const useCharacterStore = defineStore('character', {
       this.currentHp = character.currentHp
       this.barrierHp = character.barrierHp
       this.currentMana = character.currentMana
+      this.motivation = character.motivation
     },
     async setCharacter(character: Character, uid: string, cid) {
       const char = await useCollection('User/' + uid + '/Character/' + cid, character)
       console.log(char)
     },
     async addCharacter(uid: string) {
-      const char = {
-        name: 'Crescent Character',
-        image: '',
-        archetype: '',
-        totalAbilityPoints: 10,
-        originSkills: ['', ''],
-        adventure: null,
-        backstory: '',
-        creatures: {},
-        barrierHp: 0,
-        currentHp: 0,
-        currentMana: 0,
-        equipment: {
-          coins: {
-            '0': { name: 'Copper', amount: 0, exchangeRate: 10, num: 0 },
-            '1': { name: 'Silver', amount: 0, exchangeRate: 10, num: 1 },
-            '2': { name: 'Gold', amount: 0, exchangeRate: 10, num: 2 },
-            '3': { name: 'Platninum', amount: 0, exchangeRate: 10, num: 3 }
-          },
-          wornArmor: '',
-          primaryHand: '',
-          secondaryHand: '',
-          attunedItems: [],
-          items: {
-            Generic: {},
-            Armor: {},
-            Shield: {},
-            Weapon: {},
-            Ingredient: {},
-            Potion: {}
-          }
-        },
-        combatStyleChanged: {},
-        performanceStyleChanged: {},
-        performanceStyles: {},
-        practicedStyles: {},
-        skillChanged: {},
-        skills: {},
-        specializationChanged: {},
-        specializations: {},
-        spellChanged: {},
-        spells: {},
-
-        details: {
-          age: '',
-          weight: '',
-          hairColor: '',
-          eyeColor: '',
-          height: '',
-          background: '',
-          strengths: '',
-          goal: '',
-          weaknesses: '',
-          shorthandDescriptors: ''
-        },
-        motivation: '',
-        condition: null,
-        attributes: {
-          strength: 0,
-          agility: 0,
-          perception: 0,
-          willpower: 0,
-          health: 0,
-          intelligence: 0,
-          power: 0,
-          charisma: 0
-        },
-        exceptionals: {
-          strength: 0,
-          agility: 0,
-          perception: 0,
-          willpower: 0,
-          health: 0,
-          intelligence: 0,
-          power: 0,
-          charisma: 0
-        },
-        traits: {},
-        perks: {},
-        combatStyles: {},
-        perkChanged: {},
-        perkGain: ['', '', '', '', '']
-      }
-      const defaultDesign = {
-        primaryTheme: '#422c58',
-        secondaryTheme: '#c2b172',
-        inputBacking: '#f1eef1',
-        inputText: '#000000',
-        sidebarBacking: '#e7e2e9',
-        sidebarText: '#000000',
-        primaryText: '#dfdfdf',
-        pageBackdrop: '#dfdfdf',
-        alertTheme: '#c15be6',
-        font: 'Bahnschrift',
-        titleFont: 'Bahnschrift',
-        icon: 'bi bi-square',
-        iconFill: 'bi bi-check',
-        charIconFlair: 'bi bi-stars',
-        charIcon: 'bi bi-moon-stars-fill',
-        iconColor: '#000000'
-      }
+      const char = DEFAULT_CHARCTER
+      const defaultDesign = DEFAULT_DESIGN
       const ret = await useCollection('User/' + uid + '/Character', char)
       ret && this.setId(ret.id)
 
-      useDesignStore().setDesign(defaultDesign, uid, this.getCharacterId)
+      useDesignStore().setDesign(defaultDesign, uid, false)
       updateDoc(doc(db, 'User/' + uid + '/Character/' + this.getCharacterId), {
         id: this.getCharacterId
       })
       console.log(ret)
+      return this.getCharacterId
     },
     unsubscribe() {
       this.characterRef()
+    },
+    async updateCharacterFromAdventure(char: any) {
+      const character = {
+        id: char.id,
+        name: char.name,
+        image: char.image,
+        details: char.details || {},
+        archetype: char.archetype,
+        backstory: char.backstory,
+        motivation: char.motivation,
+        totalAbilityPoints: char.totalAbilityPoints,
+        originSkills: char.originSkills,
+        adventure: char.adventure,
+        condition: char.condition,
+        attributes: char.attributes,
+        exceptionals: char.exceptionals,
+        traits: char.traits || {},
+        currentHp: char.currentHp || 0,
+        barrierHp: char.barrierHp || 0,
+        currentMana: char.currentMana || 0
+      }
+      this.statusEffects = char.statusEffects
+      this.setLocalCharacter(character)
+      this.setLocalMartialAttacks(char.martialAttacks || {})
+      useMartialPerksStore().setLocalPerkGain(char.perkGain)
+      useDesignStore().setLocalDesign(char.design)
+      useSkillStore().setCharacterSkillsFromFirebase(char.skills)
+      useMartialSkillsStore().setCharacterCombatStylesFromFirebase(char.combatStyles)
+      useMartialSkillsStore().setCharacterSpecializationsFromFirebase(char.specializations)
+      useMartialPerksStore().pullManualMartialPerksFromFirebase()
+      useMartialPerksStore().setCharacterMartialPerksFromFirebase(char.martialPerks)
+      useSpellStore().setCharacterSpellgroupsFromFirebase(char.spellgroups)
+      useSpellStore().pullManualSpellgroupsFromFirebase()
+      useSpellStore().setUpBuildDisplay(char.spellChanged)
+      useMartialPerksStore().setUpBuildDisplay(char.perkChanged)
+      useMartialSkillsStore().setUpBuildSpecializationDisplay(char.specializationChanged)
+      useMartialSkillsStore().setUpBuildDisplay(char.combatStyleChanged)
+      useSkillStore().setUpBuildDisplay(char.skillChanged)
+      useEquipmentStore().setLocalEquipment(char.equipment)
+      useEquipmentStore().setArmorsWithAbilities(char.armorsWithAbilities || [''])
+      useEquipmentStore().setGenericsWithAbilities(char.genericsWithAbilitites || [''])
+      useEquipmentStore().setWeaponsWithAbilities(char.weaponsWithAbilitites || [''])
+      useEquipmentStore().setShieldsWithAbilities(char.shieldsWithAbilitites || [''])
+      usePerformanceStore().setLocalPracticedStyles(char.practicedStyles)
+      usePerformanceStore().setLocalPerformanceStyles(char.performanceStyles)
+      usePerformanceStore().setUpBuildDisplay(char.performanceStyleChanged)
+    },
+    async setCharacterFromAdventure(char: any) {
+      this.loading = true
+      useSpellStore().clearBuildDisplay()
+      useMartialPerksStore().clearBuildDisplay()
+      useMartialSkillsStore().clearMartialSkillsBuild()
+      useSkillStore().clearEffectiveSkills()
+      const character = {
+        id: char.id,
+        name: char.name,
+        image: char.image,
+        details: char.details || {},
+        archetype: char.archetype,
+        backstory: char.backstory,
+        motivation: char.motivation,
+        totalAbilityPoints: char.totalAbilityPoints,
+        originSkills: char.originSkills,
+        adventure: char.adventure,
+        condition: char.condition,
+        attributes: char.attributes,
+        exceptionals: char.exceptionals,
+        traits: char.traits || {},
+        currentHp: char.currentHp || 0,
+        barrierHp: char.barrierHp || 0,
+        currentMana: char.currentMana || 0
+      }
+      this.statusEffects = char.statusEffects
+      this.setLocalCharacter(character)
+      this.setLocalMartialAttacks(char.martialAttacks || {})
+      useMartialPerksStore().setLocalPerkGain(char.perkGain)
+      useDesignStore().setLocalDesign(char.design)
+      useSkillStore().setCharacterSkillsFromFirebase(char.skills)
+      useMartialSkillsStore().setCharacterCombatStylesFromFirebase(char.combatStyles)
+      useMartialSkillsStore().setCharacterSpecializationsFromFirebase(char.specializations)
+      useMartialPerksStore().pullManualMartialPerksFromFirebase()
+      useMartialPerksStore().setCharacterMartialPerksFromFirebase(char.martialPerks)
+      useSpellStore().setCharacterSpellgroupsFromFirebase(char.spellgroups)
+      useSpellStore().pullManualSpellgroupsFromFirebase()
+      useSpellStore().setUpBuildDisplay(char.spellChanged)
+      useMartialPerksStore().setUpBuildDisplay(char.perkChanged)
+      useMartialSkillsStore().setUpBuildSpecializationDisplay(char.specializationChanged)
+      useMartialSkillsStore().setUpBuildDisplay(char.combatStyleChanged)
+      useSkillStore().setUpBuildDisplay(char.skillChanged)
+      useEquipmentStore().setLocalEquipment(char.equipment)
+      useEquipmentStore().setArmorsWithAbilities(char.armorsWithAbilities || [''])
+      useEquipmentStore().setGenericsWithAbilities(char.genericsWithAbilitites || [''])
+      useEquipmentStore().setWeaponsWithAbilities(char.weaponsWithAbilitites || [''])
+      useEquipmentStore().setShieldsWithAbilities(char.shieldsWithAbilitites || [''])
+      usePerformanceStore().setLocalPracticedStyles(char.practicedStyles)
+      usePerformanceStore().setLocalPerformanceStyles(char.performanceStyles)
+      usePerformanceStore().setUpBuildDisplay(char.performanceStyleChanged)
+      this.delay(2000).then(() => {
+        useCharacterStore().setLoadingFalse()
+      })
+    },
+    async dispatchHardReset() {
+      this.loading = true
+      useMartialPerksStore().buildDisplayMartialPerks = []
+      useMartialSkillsStore().buildDisplaySpecializations = []
+      useMartialSkillsStore().buildDisplayCombatStyles = []
+      useSpellStore().buildDisplaySpells = []
+      useSpellStore().buildDisplaySpellgroups = []
+      useSkillStore().effectiveSkills = []
+      useMartialPerksStore().setUpBuildDisplayFromScratch()
+      useMartialSkillsStore().setUpBuildDisplayFromScratch()
+      useSkillStore().setEffectiveSkills()
+      useSpellStore().setUpBuildDisplayFromScratch()
+      this.delay(2000).then(() => {
+        this.setLoadingFalse()
+      })
     },
     async pullCharacterFromFirebase(uid: string, cid: string, fromScratch = false) {
       this.loading = true
@@ -655,6 +841,7 @@ export const useCharacterStore = defineStore('character', {
           barrierHp: doc.data()?.barrierHp || 0,
           currentMana: doc.data()?.currentMana || 0
         }
+        this.backstory = doc.data()?.backstory || ''
         this.setLocalCharacter(character)
         const design = {
           primaryTheme: doc.data()?.design.primaryTheme,
@@ -674,6 +861,10 @@ export const useCharacterStore = defineStore('character', {
           iconFill: doc.data()?.design.iconFill,
           iconColor: doc.data()?.design.iconColor
         }
+        this.statusEffects = doc.data()?.statusEffects || {}
+        this.customStatusEffects = doc.data()?.customStatusEffects || {}
+        this.setLocalMartialAttacks(doc.data()?.martialAttacks || {})
+        useSpellStore().setLocalArcaneBattery(doc.data()?.arcaneBattery || 0)
         useManualStore().pullManualFromFirebase()
         useMartialPerksStore().setLocalPerkGain(doc.data()?.perkGain)
         useDesignStore().setLocalDesign(design)
@@ -691,6 +882,10 @@ export const useCharacterStore = defineStore('character', {
         useMartialSkillsStore().setUpBuildDisplay(doc.data()?.combatStyleChanged)
         useSkillStore().setUpBuildDisplay(doc.data()?.skillChanged)
         useEquipmentStore().setLocalEquipment(doc.data()?.equipment)
+        useEquipmentStore().setArmorsWithAbilities(doc.data()?.armorsWithAbilities || [''])
+        useEquipmentStore().setGenericsWithAbilities(doc.data()?.genericsWithAbilitites || [''])
+        useEquipmentStore().setWeaponsWithAbilities(doc.data()?.weaponsWithAbilitites || [''])
+        useEquipmentStore().setShieldsWithAbilities(doc.data()?.shieldsWithAbilitites || [''])
         usePerformanceStore().setLocalPracticedStyles(doc.data()?.practicedStyles)
         usePerformanceStore().setLocalPerformanceStyles(doc.data()?.performanceStyles)
         usePerformanceStore().setUpBuildDisplay(doc.data()?.performanceStyleChanged)
@@ -800,6 +995,46 @@ export const useCharacterStore = defineStore('character', {
         doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
         {
           image: image
+        }
+      )
+    },
+    async setMartialAttacks() {
+      const ret = updateDoc(
+        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        {
+          martialAttacks: this.martialAttacks
+        }
+      )
+    },
+    async setOverviewValues() {
+      const ret = updateDoc(
+        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        {
+          overviewValues: this.overviewValues
+        }
+      )
+    },
+
+    async updateStatusEffects() {
+      const ret = updateDoc(
+        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        {
+          statusEffects: this.statusEffects,
+          customStatusEffects: this.customStatusEffects
+        }
+      )
+    },
+    async updateStatusModifiers() {
+      const ret = updateDoc(
+        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        {
+          hpStatusModifiers: this.hpStatusModifiers,
+          armorStatusModifiers: this.armorStatusModifiers,
+          movementStatusModifiers: this.movementStatusModifiers,
+          attributeStatusModifiers: this.attributeStatusModifiers,
+          diceStatusModifiers: this.diceStatusModifiers,
+          mpStatusModifiers: this.mpStatusModifiers,
+          manaStatusModifiers: this.manaStatusModifiers
         }
       )
     }

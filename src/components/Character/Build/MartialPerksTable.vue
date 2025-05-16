@@ -229,7 +229,7 @@ export default {
           >
             <template v-slot:body>
               <AbilityDisplay
-                :medallion="getMedallion(data.item.perkGroup)"
+                :medallion="getMedallion(data.item.perkGroup as string)"
                 :description="data.item.description"
                 :area="data.item.area"
                 :duration="data.item.duration"
@@ -245,33 +245,35 @@ export default {
         </div>
       </template>
       <template #cell(known)="data">
-        <CustomCheckbox
-          :overrideBox="''"
-          :overrideFill="''"
-          :isChecked="data.item.known"
-          style="margin-left: 0.5rem; margin-right: 1rem"
-          :update="0"
-          @true="
-            update(
-              data.item.name,
-              data.item.rank,
-              data.item.source,
-              true,
-              data.item.perkGroup,
-              data.item.perkIndex
-            )
-          "
-          @false="
-            update(
-              data.item.name,
-              data.item.rank,
-              data.item.source,
-              false,
-              data.item.perkGroup,
-              data.item.perkIndex
-            )
-          "
-        ></CustomCheckbox>
+        <div>
+          <CustomCheckbox
+            :overrideBox="''"
+            :overrideFill="''"
+            :isChecked="buildDisplayMartialPerks[data.item.perkIndex as number].known || false"
+            style="margin-left: 0.5rem; margin-right: 1rem"
+            :update="data.index"
+            @true="
+              update(
+                data.item.name,
+                data.item.rank as number,
+                data.item.source,
+                true,
+                data.item.perkGroup as string,
+                data.item.perkIndex as number
+              )
+            "
+            @false="
+              update(
+                data.item.name,
+                data.item.rank as number,
+                data.item.source,
+                false,
+                data.item.perkGroup as string,
+                data.item.perkIndex as number
+              )
+            "
+          ></CustomCheckbox>
+        </div>
       </template>
       <template #cell(rank)="data">
         <div style="margin-left: 1rem">{{ data.item.rank }}</div>

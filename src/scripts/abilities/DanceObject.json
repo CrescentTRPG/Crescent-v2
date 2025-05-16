@@ -9,7 +9,7 @@
     "type": "Focus",
     "duration": "Instantaneous",
     "resistance": "N/A",
-    "description": "The performer has mastered sound manipulation; allowing them to transport music to a 5’ sphere within\nrange, nullifying the effect of cover or invisibility in the target area. If the performer casts magic, the\nmagic stems from that location. This ability persists as long as the performer retains focus."
+    "description": "The dancer partners with a willing target; the dance persists as long as one partner maintains their focus on the dance. While dancing together, wherever one partner moves, so do the other. If one of the dancers is grappled or pinned, the dance is broken."
   },
   "Ballet": {
     "rank": 1,

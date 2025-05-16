@@ -2,36 +2,203 @@
   "Impaling Weapon": {
     "name": "Impaling Weapon",
     "mp_cost": "Passive",
-    "description": "All successful strikes inflict an instance of suffering (piercing.) When striking a prone or pin ned target, the character's attack roll has a minimum value of 14."
+    "description": "All successful strikes inflict an instance of suffering (piercing.) When striking a prone or pin ned target, the character's attack roll has a minimum value of 14.",
+    "skillStats": {
+      "type": "Passive",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Suffering": {
+          "name": "Suffering",
+          "short": "Suffer",
+          "groupIcon": "gi-bleeding-heart",
+          "description": "Each instance of Suffering inflicts a d6 of a damage type at the start of a character’s turn until cleared. Targets under the effects of  suffering  can  remove all instances of it by expending their swift action."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "All successful strikes inflict an instance of suffering (piercing.) When striking a prone or pin ned target, the character's attack roll has a minimum value of 14.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "1d6",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 0,
+      "additionalMpCost": 0,
+      "costType": "none",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Fulcrum": {
     "name": "Fulcrum",
     "mp_cost": "1 MP per rank",
-    "description": "The character executes an action. For every rank purchased the character propels themselves 30' into the air and reduces the MP cost of Sky Strike on their next turn by 1. The character begins falling at the start of their next turn. This ability can also be used to mitigate 30' worth of fall damage as the character deftly maneuvers through the air."
+    "description": "The character executes an action. For every rank purchased the character propels themselves 30' into the air and reduces the MP cost of Sky Strike on their next turn by 1. The character begins falling at the start of their next turn. This ability can also be used to mitigate 30' worth of fall damage as the character deftly maneuvers through the air.",
+    "skillStats": {
+      "type": "Executes an Action",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character executes an action. For every rank purchased the character propels themselves 30' into the air and reduces the MP cost of Sky Strike on their next turn by 1. The character begins falling at the start of their next turn. This ability can also be used to mitigate 30' worth of fall damage as the character deftly maneuvers through the air.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Sky Strike": {
     "name": "Sky Strike",
     "mp_cost": "3 MP per strike, only usable in air",
-    "description": "The character executes an action, moving 30', returning to the ground without fall damage, and alters their next strike. On a successful strike, they pin the target, AGI or STR save to negate (target'schoice) if the target is a size category larger than the character. On a successful pin, the character's weapon stays in the target, requiring a swift action to remove it (Anyone can, and doing so Inflicts three instances of suffering (Piercing) when done.)"
+    "description": "The character executes an action, moving 30', returning to the ground without fall damage, and alters their next strike. On a successful strike, they pin the target, AGI or STR save to negate (target'schoice) if the target is a size category larger than the character. On a successful pin, the character's weapon stays in the target, requiring a swift action to remove it (Anyone can, and doing so Inflicts three instances of suffering (Piercing) when done.)",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Pinned": {
+          "name": "Pinned",
+          "short": "Pin",
+          "groupIcon": "gi-sticky-boot",
+          "description": "Affected target suffers a number of penalties:\\nA pinned target’s movement speed is always 0.\\nA pinned target’s movement DVs are set to 0.\\nHas two displaced rolls on all AGI checks and loses any placed rolls."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The character executes an action, moving 30', returning to the ground without fall damage, and alters their next strike. On a successful strike, they pin the target, AGI or STR save to negate (target'schoice) if the target is a size category larger than the character. On a successful pin, the character's weapon stays in the target, requiring a swift action to remove it (Anyone can, and doing so Inflicts three instances of suffering (Piercing) when done.)",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "If the target is a larger size category than the character",
+      "mpCost": 3,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": true,
+      "isApplicableToOffhand": true
+    }
   },
   "Radial Attack": {
     "name": "Radial Attack",
     "mp_cost": "4 MP per strike",
-    "description": "The character uses their altered strike to extend their attack to all targets within the weapon's reach, making an individual attack roll against them. They then make a single damage roll against all targets successfully struck, adding any applicable bonuses from Tripping Attack, Fending Strike, Lethal, or Impaling Weapon to all successfully struck."
+    "description": "The character uses their altered strike to extend their attack to all targets within the weapon's reach, making an individual attack roll against them. They then make a single damage roll against all targets successfully struck, adding any applicable bonuses from Tripping Attack, Fending Strike, Lethal, or Impaling Weapon to all successfully struck.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character uses their altered strike to extend their attack to all targets within the weapon's reach, making an individual attack roll against them. They then make a single damage roll against all targets successfully struck, adding any applicable bonuses from Tripping Attack, Fending Strike, Lethal, or Impaling Weapon to all successfully struck.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 4,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Tripping Attack": {
     "name": "Tripping Attack",
     "mp_cost": "2 MP per strike",
-    "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate."
+    "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "false",
+      "appliesStatus": {
+        "Prone": {
+          "name": "Prone",
+          "short": "Prone",
+          "groupIcon": "gi-falling",
+          "description": "Target is knocked to the ground, gaining a number of effects until they utilize half of their movement to stand up.\\nThe target’s movement DVs are reduced to zero\\nAttacks against the target gain a placed roll.\\nThe target’s movement speed is halved.\\nThe target suffers a displaced roll on AGI checks"
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": "AGI",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "If the target is a size category larger than the character",
+      "mpCost": 2,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
   },
   "Throw": {
     "name": "Throw",
     "mp_cost": "1 MP per rank",
-    "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check."
+    "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": true
+    }
   },
   "Lethal IV": {
     "name": "Lethal IV",
     "mp_cost": "1 MP per rank",
-    "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn."
+    "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": false,
+      "damageString": "4",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   }
 }

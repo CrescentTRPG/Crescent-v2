@@ -14,7 +14,6 @@ export default {
   },
   watch: {
     update() {
-      console.log('heyy')
       this.$forceUpdate()
     },
     isChecked() {

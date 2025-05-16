@@ -2,36 +2,196 @@
   "Momentum": {
     "name": "Momentum",
     "mp_cost": "Passive",
-    "description": "Attacks made with the weapon, hit or miss, drive the target and attacker 5' in a direction of thecharacter's choosing, if the target is of the same size or smaller than the attacker."
+    "description": "Attacks made with the weapon, hit or miss, drive the target and attacker 5' in a direction of thecharacter's choosing, if the target is of the same size or smaller than the attacker.",
+    "skillStats": {
+      "type": "Passive",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "Attacks made with the weapon, hit or miss, drive the target and attacker 5' in a direction of thecharacter's choosing, if the target is of the same size or smaller than the attacker.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 0,
+      "costType": "none",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": true
+    }
   },
   "Charge": {
     "name": "Charge",
     "mp_cost": "3 MP + 1 per rank",
-    "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from Momentum, Cleave Armor, Lethal, or Pierce Cover to all successfully struck."
+    "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from Momentum, Cleave Armor, Lethal, or Pierce Cover to all successfully struck.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from all other sword specialization abilities to all successfully struck.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "overrideDamageDice": "",
+      "modifyToHit": 0,
+      "condition": "",
+      "mpCost": 3,
+      "additionalMpCost": 1,
+      "costType": "activation + rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false,
+      "modifiesSomeCosts": 0
+    }
   },
   "Cleave Armor": {
     "name": "Cleave Armor",
     "mp_cost": "1 MP per rank",
-    "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0."
+    "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Armor Reduction": {
+          "name": "Armor Reduction",
+          "short": "Armor Reduction",
+          "groupIcon": "gi-armor-downgrade",
+          "description": "Reduce the targets’ armor DVs by 1 per rank."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "overrideDamageDice": "",
+      "modifyToHit": 0,
+      "condition": "",
+      "mpCost": 1,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false,
+      "modifiesSomeCosts": 0
+    }
   },
   "Embed": {
     "name": "Embed",
     "mp_cost": "1 MP per rank",
-    "description": "The next successful strike this turn inflicts a d10 of the relevant damage type per rank. While the weapon is embedded in the target, it is unusable until retrieved. The character cannot be moved by mundane means, and receives a placed roll on any magical attempts to move them while they hold onto the embedded object. The character also travels with the embedded object while it is held."
+    "description": "The next successful strike this turn inflicts a d10 of the relevant damage type per rank. While the weapon is embedded in the target, it is unusable until retrieved. The character cannot be moved by mundane means, and receives a placed roll on any magical attempts to move them while they hold onto the embedded object. The character also travels with the embedded object while it is held.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "overrideDamageDice": "",
+      "modifyToHit": 0,
+      "condition": "",
+      "mpCost": 1,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false,
+      "modifiesSomeCosts": 0
+    }
   },
   "Lethal Offhand Attack": {
     "name": "Lethal Offhand Attack",
     "mp_cost": "3 MP / 4 MP per strike",
-    "description": "The character makes an extra strike using their offhand weapon, adding any lethal bonuses to the attack. They can only take this action once each round. This ability costs 3 MP for versatile weapons and 4 MP for heavy."
+    "description": "The character makes an extra strike using their offhand weapon, adding any lethal bonuses to the attack. They can only take this action once each round. This ability costs 3 MP for versatile weapons and 4 MP for heavy.",
+    "skillStats": {
+      "type": "Executes an Action",
+      "grantsNewStrike": "Offhand",
+      "newStrikeMirror": "Lethal III:Lethal II",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character makes an extra strike using their offhand weapon, adding any lethal bonuses to the attack. They can only take this action once each round. This ability costs 3 MP for versatile weapons and 4 MP for heavy.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "overrideDamageDice": "",
+      "modifyToHit": 0,
+      "condition": "",
+      "mpCost": 3,
+      "additionalMpCost": 1,
+      "heavyCostsMore": true,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": false,
+      "typeMalleable": false,
+      "modifiesSomeCosts": 0,
+      "restrictedTo": 1
+    }
   },
   "Pierce Cover": {
     "name": "Pierce Cover",
     "mp_cost": "1 MP per rank",
-    "description": "For every rank purchased, all strikes ignore up to 6'' of stone and wood, 3\" of iron and steel, or 1\" of adamantite, and 2 shield DVs until the start of their next turn. This ability does not allow attacks to ignore armor DVs."
+    "description": "For every rank purchased, all strikes ignore up to 6'' of stone and wood, 3\" of iron and steel, or 1\" of adamantite, and 2 shield DVs until the start of their next turn. This ability does not allow attacks to ignore armor DVs.",
+    "skillStats": {
+      "type": "All Strikes",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "For every rank purchased, all strikes ignore up to 6'' of stone and wood, 3\" of iron and steel, or 1\" of adamantite, and 2 shield DVs until the start of their next turn. This ability does not allow attacks to ignore armor DVs.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateMinWeaponDamage": 0,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   },
   "Throw": {
     "name": "Throw",
     "mp_cost": "1 MP per rank",
-    "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check."
+    "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": true
+    }
   }
 }

@@ -15,6 +15,7 @@ import ItemDisplay from './ItemDisplay.vue'
 import { storeToRefs } from 'pinia'
 import EditItem from './EditItem.vue'
 import { Ref } from 'vue'
+import DropdownSelect from '@/components/DropdownSelect.vue'
 
 export default {
   setup(props, context) {
@@ -59,8 +60,8 @@ export default {
     const displayItem: ComputedRef = computed(() => {
       return equipped.value != '' ? true : false
     })
-    function updateSecondaryHand() {
-      equipmentStore.updateSecondary(equipped.value)
+    function updateSecondaryHand(item) {
+      equipmentStore.updateSecondary(item)
     }
     const itemToEdit = ref({})
     const editItemModal = ref(false)
@@ -96,11 +97,10 @@ export default {
   },
   components: {
     CustomModal,
-    BFormSelect,
-    BInputGroup,
     BInputGroupText,
     ItemDisplay,
     BButton,
+    DropdownSelect,
     EditItem
   },
   watch: {
@@ -232,27 +232,41 @@ export default {
           >
             Secondary Hand
           </div>
-          <BInputGroup
-            style="border: 3px solid; border-radius: 10px; margin-bottom: 1rem"
-            :style="{
-              borderColor: designStore.secondaryTheme,
-              background: designStore.inputBacking,
-              color: designStore.inputText
-            }"
-          >
-            <BInputGroupText
-              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-              style="padding: 0.5rem"
-              >Equipped Secondary:
-            </BInputGroupText>
-            <BFormSelect
-              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-              style="padding: 0.5rem"
-              :options="armors"
-              v-model="equipped"
-              @change="updateSecondaryHand()"
-            ></BFormSelect>
-          </BInputGroup>
+          <div style="padding-bottom: 2rem">
+            <div
+              style="border: 2px solid; border-radius: 0.5rem; display: flex; margin-bottom: 1rem"
+              :style="{
+                borderColor: designStore.secondaryTheme,
+                background: designStore.inputBacking,
+                color: designStore.inputText
+              }"
+            >
+              <BInputGroupText
+                :style="{
+                  background: designStore.inputBacking,
+                  color: designStore.inputText,
+                  borderColor: designStore.secondaryTheme
+                }"
+                class="secondaryLabel"
+                >Equipped Secondary:
+              </BInputGroupText>
+
+              <DropdownSelect
+                class="dropdown-fill"
+                :borderless="true"
+                :options="armors"
+                :default="equipmentStore.equipment.secondaryHand"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                @selection="(selection) => updateSecondaryHand(selection)"
+                DropdownSelect
+              ></DropdownSelect>
+            </div>
+          </div>
+
           <ItemDisplay
             v-if="displayItem"
             :item="
@@ -263,6 +277,7 @@ export default {
         </template>
         <template v-slot:footer>
           <BButton
+            v-if="equipmentStore.equipment.secondaryHand"
             style="border: 1px solid; margin-right: 0.5rem"
             :style="{
               background: designStore.primaryTheme,
@@ -271,13 +286,14 @@ export default {
             }"
             @click="
               editItem(
-                equipmentStore.equipment.items.Weapon[equipped] ||
-                  equipmentStore.equipment.items.Shield[equipped]
+                equipmentStore.equipment.items.Weapon[equipmentStore.equipment.secondaryHand] ||
+                  equipmentStore.equipment.items.Shield[equipmentStore.equipment.secondaryHand]
               )
             "
             >Edit Item</BButton
           >
           <BButton
+            v-if="equipmentStore.equipment.secondaryHand"
             style="border: 1px solid; margin-right: 0.5rem"
             :style="{
               background: designStore.primaryTheme,
@@ -329,6 +345,18 @@ export default {
   font-size: 2rem;
   z-index: 5;
   width: 13rem;
+}
+.dropdown-fill {
+  margin-right: 0.25rem;
+  width: calc(100% - 11.5rem);
+  flex-grow: 1;
+}
+.secondaryLabel {
+  border: 0px;
+  border-right: 2px solid;
+  width: 11rem;
+  border-radius: 0;
+  margin-left: 0.25rem;
 }
 .lilDVs {
   display: flex;

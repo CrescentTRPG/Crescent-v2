@@ -12,7 +12,15 @@ export default {
 </script>
 <template>
   <div
-    style="position: relative; left: -0.9rem; top: -0.6rem; z-index: 2; height: 4rem; width: 4rem"
+    style="
+      position: relative;
+      left: -0.9rem;
+      top: -0.6rem;
+      z-index: 2;
+      height: 4rem;
+      width: 4rem;
+      font-family: sans-serif;
+    "
   >
     <i
       class="bi bi-circle"
@@ -21,7 +29,8 @@ export default {
         z-index: 3;
         position: absolute;
         left: 0.9rem;
-        font-family: 'Segoe UI Light';
+        top: 0.2rem;
+        font-family: sans-serif;
       "
       :style="{ color: designStore.secondaryTheme }"
     ></i>

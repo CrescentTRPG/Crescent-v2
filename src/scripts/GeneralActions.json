@@ -1,0 +1,189 @@
+{
+  "Activate Magic Item": {
+    "name": "Activate Magic Item",
+    "description": "The character activates a magic item. If the magic item replicates an effect, it replicates the action requirements of the effect. Otherwise, it is a core action.",
+    "actionCost": "Swift Action",
+    "area": "Single Item",
+    "type": "Activated",
+    "groupIcon": "gi-frozen-ring",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Coup de Grace": {
+    "name": "Coup de Grace",
+    "description": "The character kills an unconscious target.",
+    "actionCost": "Core Action",
+    "area": "Single Target",
+    "type": "Activated",
+    "groupIcon": "gi-guillotine",
+    "target": "Melee Reach",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Draw Item": {
+    "name": "Draw Item",
+    "description": "The character draws a handheld item of their choice, typically a weapon. If the item weighs more than 10 kilograms, the action cost will increase, as determined by the GM.",
+    "actionCost": "Swift Action",
+    "area": "Single Item",
+    "type": "Activated",
+    "groupIcon": "gi-switch-weapon",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Drop": {
+    "name": "Drop",
+    "description": "The character drops the equipment in their hands — shield, weapon, item, or any combination of these.",
+    "actionCost": "None",
+    "area": "Single Item",
+    "type": "Activated",
+    "groupIcon": "gi-drop-weapon",
+    "target": "Melee Reach",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Drop Spell": {
+    "name": "Drop Spell",
+    "description": "The character immediately ends a focus or continuous spell.",
+    "actionCost": "Swift Action",
+    "area": "Single Spell",
+    "type": "Activated",
+    "groupIcon": "gi-concentration-orb",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Hold Action": {
+    "name": "Hold Action",
+    "description": "The character holds their action, consuming their reaction in the process — waiting for a specified cue.",
+    "actionCost": "Reaction",
+    "area": "Single Action",
+    "type": "Activated",
+    "groupIcon": "gi-clockwork",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Impale": {
+    "name": "Impale",
+    "description": " For every 15’ the character moves, they add a d6 of damage — adding this damage to the weapon to the weapon’s base damage upon a successful hit. The character must utilize their entire movement action in a single direction to impale a target. The maximum damage that they can inflict with this action is 12d6.",
+    "actionCost": "Core Action",
+    "area": "Single Target",
+    "type": "Activated",
+    "groupIcon": "gi-sun-spear",
+    "target": "Melee Reach",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Mount": {
+    "name": "Mount",
+    "description": "The character utilizes their swift action to mount or dismount a willing target under the character’s command.",
+    "actionCost": "Swift Action",
+    "area": "Single Steed",
+    "type": "Activated",
+    "groupIcon": "gi-mounted-knight",
+    "target": "Single Target",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Move": {
+    "name": "Move",
+    "description": "The character uses up their movement action, going up to a maximum of their movement speed.",
+    "actionCost": "Movement Action",
+    "area": "Self",
+    "type": "Activated",
+    "groupIcon": "gi-move",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Re-Attempt": {
+    "name": "Re-Attempt",
+    "description": "Characters can typically re-attempt a resistance check. Most re-attempts require a swift action unless otherwise stated.",
+    "actionCost": "Variable",
+    "area": "Self",
+    "type": "Activated",
+    "groupIcon": "gi-back-pain",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Remove": {
+    "name": "Remove",
+    "description": "The character removes all instances of Suffering.",
+    "actionCost": "Swift Action",
+    "area": "Self",
+    "type": "Activated",
+    "groupIcon": "gi-bandage-roll",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Strike": {
+    "name": "Strike",
+    "description": "The character makes an attack roll, inflicting the weapon’s damage on hit.",
+    "actionCost": "Core Action",
+    "area": "Single Target",
+    "type": "Activated",
+    "groupIcon": "gi-striking-splinter",
+    "target": "Weapon's Reach",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Weapon Attack": {
+    "name": "Weapon Attack",
+    "description": "When using the Weapon Attack ability, the character gains the ability to make a single strike with a weapon they are using, and gain Martial Points (MP) equal to their ranks in the weapon’s combat style.",
+    "actionCost": "Core Action",
+    "area": "Variable",
+    "type": "Activated",
+    "groupIcon": "gi-sword-clash",
+    "target": "Weapon's Reach",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Stand": {
+    "name": "Stand",
+    "description": "The character uses up ½ of their movement to stand up from prone.",
+    "actionCost": "Movement Action",
+    "area": "Self",
+    "type": "Activated",
+    "groupIcon": "gi-person",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Instantaneous"
+  },
+  "Maintain Focus": {
+    "name": "Maintain Focus",
+    "description": "The character maintains a focus ability. A character can only ever maintain focus on a single ability at once.",
+    "actionCost": "None",
+    "area": "Self",
+    "type": "Activated",
+    "groupIcon": "gi-brain",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Variable"
+  },
+  "Take Cover": {
+    "name": "Take Cover",
+    "description": "The character takes cover in a location, gaining 2 bonus DVs. They only retain the beneits of cover as long as the cover would reasonably defend them against attack rolls. The character loses the beneits of cover as soon as they move from cover, or they leave the cover to cast a spell, make an attack roll, etc. Exceptionally protective cover grants 4 bonus DVs and blocks line of sight to the target.",
+    "actionCost": "Swift Action",
+    "area": "Self",
+    "type": "Activated",
+    "groupIcon": "gi-defensive-wall",
+    "target": "Character",
+    "resistance": "N/A",
+    "duration": "Variable"
+  },
+  "Throw": {
+    "name": "Throw",
+    "description": " The character launches an item in their hand by doing a might check. The character launches the item a number of feet equal to twice the might check.",
+    "actionCost": "Swift Action",
+    "area": "Single Item",
+    "type": "Activated",
+    "groupIcon": "gi-throwing-ball",
+    "target": "Single Item",
+    "resistance": "N/A",
+    "duration": "Variable"
+  }
+}

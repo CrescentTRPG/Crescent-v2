@@ -57,8 +57,8 @@ export default {
     const fields = ref([
       { key: 'Name', label: 'Name' },
       { key: 'groupIcon', label: 'Type' },
-      { key: 'adaptations', label: 'Adaptations' },
-      { key: 'Traits', label: 'Traits' },
+      // { key: 'adaptations', label: 'Adaptations' },
+      // { key: 'Traits', label: 'Traits' },
       { key: 'actions', label: 'Actions' }
     ])
     function showModal(index) {
@@ -102,7 +102,6 @@ export default {
     BTable,
     BButton,
     CustomModal,
-    TraitDisplay,
     CreatureDisplay
   },
   methods: {
@@ -218,12 +217,12 @@ export default {
       <template #cell(groupIcon)="data">
         <v-icon scale="1.5" :name="data.item.groupIcon"></v-icon>
       </template>
-      <template #cell(adaptations)="data">
+      <!-- <template #cell(adaptations)="data">
         <div style="margin-left: 1rem; margin-top: 0.5rem">
           {{ data.item.adaptations || 'None' }}
         </div>
-      </template>
-      <template #cell(Traits)="data">
+      </template> -->
+      <!-- <template #cell(Traits)="data">
         <div style="margin-left: 1rem; margin-top: 0.5rem; display: flex; flex-wrap: wrap">
           <div
             v-for="(trait, index) in data.item.Traits"
@@ -233,7 +232,7 @@ export default {
             <TraitDisplay :trait="trait"></TraitDisplay>
           </div>
         </div>
-      </template>
+      </template> -->
       <template #cell(actions)="data">
         <BButton
           style="border: 2px solid"

@@ -14,6 +14,7 @@ import { Item, useEquipmentStore } from '@/stores/equipmentStore'
 import ItemDisplay from './ItemDisplay.vue'
 import { storeToRefs } from 'pinia'
 import EditItem from './EditItem.vue'
+import DropdownSelect from '@/components/DropdownSelect.vue'
 
 export default {
   setup(props, context) {
@@ -56,8 +57,8 @@ export default {
     const displayItem: ComputedRef = computed(() => {
       return equipped.value != '' ? true : false
     })
-    function updatePrimaryHand() {
-      equipmentStore.updatePrimary(equipped.value)
+    function updatePrimaryHand(primary) {
+      equipmentStore.updatePrimary(primary)
     }
     const itemToEdit = ref({})
     const editItemModal = ref(false)
@@ -93,8 +94,7 @@ export default {
   },
   components: {
     CustomModal,
-    BFormSelect,
-    BInputGroup,
+    DropdownSelect,
     BInputGroupText,
     ItemDisplay,
     BButton,
@@ -217,8 +217,9 @@ export default {
           >
             Primary Hand
           </div>
-          <BInputGroup
-            style="border: 3px solid; border-radius: 10px; margin-bottom: 1rem"
+
+          <div
+            style="border: 2px solid; border-radius: 0.5rem; display: flex; margin-bottom: 1rem"
             :style="{
               borderColor: designStore.secondaryTheme,
               background: designStore.inputBacking,
@@ -226,18 +227,29 @@ export default {
             }"
           >
             <BInputGroupText
-              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-              style="padding: 0.5rem"
+              :style="{
+                background: designStore.inputBacking,
+                color: designStore.inputText,
+                borderColor: designStore.secondaryTheme
+              }"
+              class="primaryLabel"
               >Equipped Primary:
             </BInputGroupText>
-            <BFormSelect
-              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-              style="padding: 0.5rem"
+
+            <DropdownSelect
+              class="dropdown-fill"
+              :borderless="true"
               :options="armors"
-              v-model="equipped"
-              @change="updatePrimaryHand()"
-            ></BFormSelect>
-          </BInputGroup>
+              :default="equipmentStore.equipment.primaryHand"
+              :style="{
+                color: designStore.inputText,
+                background: designStore.inputBacking,
+                borderColor: designStore.secondaryTheme
+              }"
+              @selection="(selection) => updatePrimaryHand(selection)"
+              DropdownSelect
+            ></DropdownSelect>
+          </div>
           <ItemDisplay
             v-if="displayItem"
             :item="equipmentStore.equipment.items.Weapon[equipped]"
@@ -245,16 +257,20 @@ export default {
         </template>
         <template v-slot:footer>
           <BButton
+            v-if="equipmentStore.equipment.primaryHand"
             style="border: 1px solid; margin-right: 0.5rem"
             :style="{
               background: designStore.primaryTheme,
               color: designStore.primaryText,
               borderColor: designStore.secondaryTheme
             }"
-            @click="editItem(equipmentStore.equipment.items.Weapon[equipped])"
+            @click="
+              editItem(equipmentStore.equipment.items.Weapon[equipmentStore.equipment.primaryHand])
+            "
             >Edit Item</BButton
           >
           <BButton
+            v-if="equipmentStore.equipment.primaryHand"
             style="border: 1px solid; margin-right: 0.5rem"
             :style="{
               background: designStore.primaryTheme,
@@ -301,6 +317,18 @@ export default {
 </template>
 
 <style scoped>
+.primaryLabel {
+  border: 0px;
+  border-right: 2px solid;
+  width: 11rem;
+  border-radius: 0;
+  margin-left: 0.25rem;
+}
+.dropdown-fill {
+  margin-right: 0.25rem;
+  width: calc(100% - 11.5rem);
+  flex-grow: 1;
+}
 .armorTxt {
   position: absolute;
   font-size: 2rem;

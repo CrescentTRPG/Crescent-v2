@@ -85,7 +85,7 @@ export const usePerformanceStore = defineStore('performance', {
           })
         )
       }
-      return ret
+      return ret || []
     }
   },
   actions: {
@@ -186,6 +186,15 @@ export const usePerformanceStore = defineStore('performance', {
       }
 
       this.setPracticedStyles(this.practicedStyles, obj)
+    },
+    async clearPerformance() {
+      this.manualPerformanceStyles = {}
+      this.practicedStyles = {
+        Instrumental: {},
+        Vocal: {},
+        Dance: {}
+      }
+      this.performanceStyles = { style1: '', style2: '', style3: '' }
     },
     setPracticedStyles(styles: any, style) {
       const ret = updateDoc(

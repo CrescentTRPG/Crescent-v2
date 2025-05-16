@@ -57,9 +57,11 @@ export default {
         <div class="iconsCont">
           <div>
             <v-icon
+              v-if="characterStore.plannedCoreAction.ability.name"
               :name="
                 manualSpellgroups[characterStore.plannedCoreAction.ability.spellgroup]?.groupIcon ||
-                characterStore.plannedCoreAction.ability.groupIcon
+                characterStore.plannedCoreAction.ability.groupIcon ||
+                'gi-uncertainty'
               "
             ></v-icon>
 
@@ -75,6 +77,7 @@ export default {
         :
         <div class="iconsCont">
           <v-icon
+            v-if="characterStore.plannedSwiftAction.ability.name"
             :name="
               manualSpellgroups[characterStore.plannedSwiftAction.ability.spellgroup]?.groupIcon ||
               characterStore.plannedSwiftAction.ability.groupIcon

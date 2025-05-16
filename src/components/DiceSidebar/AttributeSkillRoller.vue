@@ -45,12 +45,14 @@ export default {
       let exep = 0
       if (props.attributes[selectedRoll.value]?.attribute) {
         exep = Math.max(
-          props.attributes[props.attributes[selectedRoll.value].attribute.toLowerCase()]
-            .exceptionalVal,
+          parseInt(
+            props.attributes[props.attributes[selectedRoll.value].attribute.toLowerCase()]
+              .exceptionalVal + ''
+          ),
           0
         )
       } else {
-        exep = Math.max(props.attributes[selectedRoll.value].exceptionalVal, 0)
+        exep = Math.max(parseInt(props.attributes[selectedRoll.value].exceptionalVal + ''), 0)
       }
 
       const val: number = props.attributes[selectedRoll.value]?.modifier + exep

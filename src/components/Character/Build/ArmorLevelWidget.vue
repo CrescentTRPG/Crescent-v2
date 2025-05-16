@@ -71,7 +71,7 @@ export default {
               height: 100%;
               display: flex;
               flex-direction: row;
-              padding: 0.5rem;
+              padding: 0.35rem;
               padding-left: 0.75rem;
             "
             :style="{

@@ -83,18 +83,18 @@ export default {
         <div style="display: flex; justify-content: center">
           <ArchetypeSelector
             style="position: relative; top: 13.5rem; width: 80%"
-            @breaker="updateIcon('gi-broken-shield'), (descriptionPosition = 'Breaker')"
-            @augur="updateIcon('gi-juggler'), (descriptionPosition = 'Augur')"
-            @paladin="updateIcon('gi-healing'), (descriptionPosition = 'Paladin')"
-            @warden="updateIcon('gi-energy-shield'), (descriptionPosition = 'Warden')"
-            @mage="updateIcon('gi-spell-book'), (descriptionPosition = 'Mage')"
-            @monk="updateIcon('gi-high-kick'), (descriptionPosition = 'Monk')"
-            @rogue="updateIcon('gi-rogue'), (descriptionPosition = 'Rogue')"
-            @mystic="updateIcon('gi-gooey-sword'), (descriptionPosition = 'Mystic')"
-            @nomad="updateIcon('gi-intricate-necklace'), (descriptionPosition = 'Nomad')"
-            @priest="updateIcon('gi-sun-priest'), (descriptionPosition = 'Priest')"
-            @elementalist="updateIcon('gi-frostfire'), (descriptionPosition = 'Elementalist')"
-            @sorcerer="updateIcon('gi-brain-stem'), (descriptionPosition = 'Sorcerer')"
+            @breaker="(updateIcon('gi-broken-shield'), (descriptionPosition = 'Breaker'))"
+            @augur="(updateIcon('gi-juggler'), (descriptionPosition = 'Augur'))"
+            @paladin="(updateIcon('gi-healing'), (descriptionPosition = 'Paladin'))"
+            @warden="(updateIcon('gi-energy-shield'), (descriptionPosition = 'Warden'))"
+            @mage="(updateIcon('gi-spell-book'), (descriptionPosition = 'Mage'))"
+            @monk="(updateIcon('gi-high-kick'), (descriptionPosition = 'Monk'))"
+            @rogue="(updateIcon('gi-rogue'), (descriptionPosition = 'Rogue'))"
+            @mystic="(updateIcon('gi-gooey-sword'), (descriptionPosition = 'Mystic'))"
+            @nomad="(updateIcon('gi-intricate-necklace'), (descriptionPosition = 'Nomad'))"
+            @priest="(updateIcon('gi-sun-priest'), (descriptionPosition = 'Priest'))"
+            @elementalist="(updateIcon('gi-frostfire'), (descriptionPosition = 'Elementalist'))"
+            @sorcerer="(updateIcon('gi-brain-stem'), (descriptionPosition = 'Sorcerer'))"
           ></ArchetypeSelector>
         </div>
         <i

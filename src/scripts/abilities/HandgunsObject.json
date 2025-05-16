@@ -2,31 +2,156 @@
   "Akimbo": {
     "name": "Akimbo",
     "mp_cost": "Passive",
-    "description": "When choosing to dual wield this weapon, each strike this character makes with their primary hand is replicated onto their offhand. When using this ability the MP cost of all specialization skills and combat styles is increased by 1. Furthermore, Assasination's cost increases by one for each additional rank purchased."
+    "description": "When choosing to dual wield this weapon, each strike this character makes with their primary hand is replicated onto their offhand. When using this ability the MP cost of all specialization skills and combat styles is increased by 1. Furthermore, Assasination's cost increases by one for each additional rank purchased.",
+    "skillStats": {
+      "type": "Passive",
+      "grantsNewStrike": "Offhand",
+      "newStrikeMirror": "*",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "When choosing to dual wield this weapon, each strike this character makes with their primary hand is replicated onto their offhand. When using this ability the MP cost of all specialization skills and combat styles is increased by 1. Furthermore, Assasination's cost increases by one for each additional rank purchased.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 0,
+      "costType": "none",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 1,
+      "isApplicableToOffhand": false
+    }
   },
   "Assassination": {
     "name": "Assassination",
     "mp_cost": "2 MP per rank",
-    "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank. The damage dice rolled is doubled if the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents."
+    "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank. The damage dice rolled is doubled if the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank.",
+      "alternateDescription": "The character uses their altered strike to inflict 2d10 piercing damage per rank.",
+      "causesSave": false,
+      "damageString": "1d10",
+      "alternateDamageString": "2d10",
+      "condition": "If the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents.",
+      "mpCost": 2,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": true,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
   },
   "Crippling Attack": {
     "name": "Crippling Attack",
     "mp_cost": "3 MP per strike",
-    "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again."
+    "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Crippled": {
+          "name": "Crippled",
+          "short": "Cripple",
+          "groupIcon": "gi-arm-sling",
+          "description": "Target loses functionality of a limb. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again.",
+      "alternateDescription": "",
+      "causesSave": "AGI or STR",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 3,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
   },
   "Lethal Barrage II": {
     "name": "Lethal Barrage II",
     "mp_cost": "1 MP per rank",
-    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+    "skillStats": {
+      "type": "All Successful Strikes",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "2",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
   },
   "Pinpoint": {
     "name": "Pinpoint",
     "mp_cost": "2 MP per rank",
-    "description": "For every rank purchased, the character gains a placed roll to a single strike they make this turn."
+    "description": "For every rank purchased, the character gains a placed roll to a single strike they make this turn.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "modifyToHit": "*rank",
+      "alternateAppliesStatus": {},
+      "description": "For every rank purchased, the character gains a placed roll to a single strike they make this turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 2,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
   },
   "Tripping Attack": {
     "name": "Tripping Attack",
     "mp_cost": "2 MP per strike",
-    "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate."
+    "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "false",
+      "appliesStatus": {
+        "Prone": {
+          "name": "Prone",
+          "short": "Prone",
+          "groupIcon": "gi-falling",
+          "description": "Target is knocked to the ground, gaining a number of effects until they utilize half of their movement to stand up.\\nThe target’s movement DVs are reduced to zero\\nAttacks against the target gain a placed roll.\\nThe target’s movement speed is halved.\\nThe target suffers a displaced roll on AGI checks"
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn knocks the target prone. If the target is a size category larger than the character, AGI save to negate.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": "AGI",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "If the target is a size category larger than the character",
+      "mpCost": 2,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
   }
 }

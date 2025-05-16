@@ -6,7 +6,7 @@ import { useCharacterStore } from './characterStore.js'
 import { getCollectionOnce } from '@/composable/getCollection.js'
 import SpellsTable from '@/components/Character/Build/SpellsTable.vue'
 
-interface ManualSpell {
+export interface ManualSpell {
   name: string
   description: string
   area: string
@@ -112,10 +112,15 @@ export const useSpellStore = defineStore('spell', {
           spell.groupNumber = index
           spell.spellIndex = spellIndex
           spell.groupSpellIndex = groupSpellIndex
+          console.log(spellgroup)
+          if (spell.known) {
+            this.spellgroups[spellgroup].spells[spell.name].spellIndex = spellIndex
+            this.spellgroups[spellgroup].spells[spell.name].groupSpellIndex = groupSpellIndex
+            this.spellgroups[spellgroup].spells[spell.name].groupNumber = index
+          }
           groupSpellIndex += 1
           spellIndex += 1
         })
-
         spells.push(...spellsArray)
 
         spellgroups.push({
@@ -167,6 +172,9 @@ export const useSpellStore = defineStore('spell', {
       }
       return ret
     },
+    // validateSpells(spell){ // spellIndex
+    //   Object.values(this.spellgroups).forEach((group))
+    // },
     pullManualSpellgroupsFromFirebase() {
       const manualSpellgroupRef = query(collection(db, 'Ability/Base/Spellgroup'))
       onSnapshot(
@@ -193,6 +201,23 @@ export const useSpellStore = defineStore('spell', {
         spellsObj[spell.name] = spell
       })
       return spellsObj
+    },
+    setLocalArcaneBattery(val) {
+      this.arcaneBattery = val
+    },
+    async setArcaneBattery(val: number) {
+      if (val > 10) {
+        val = 10
+      } else if (val < 0) {
+        val = 0
+      }
+      this.setLocalArcaneBattery(val)
+      const ret = updateDoc(
+        doc(db, 'User/' + useUserStore().id + '/Character/' + useCharacterStore().getCharacterId),
+        {
+          arcaneBattery: val
+        }
+      )
     },
     setLocalSpell(spell: any) {
       this.spellgroups[spell.spellgroup].spells[spell.name] = spell

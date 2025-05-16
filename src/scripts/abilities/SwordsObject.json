@@ -1,58 +1,392 @@
 {
-    "Duelist": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becab6"
-        },
-        "name": "Duelist",
-        "mp_cost": "Passive",
-        "description": "Swords are modal weapons that can be adjusted with the usage of a swift action. There are two modes; Offense and Defense. In order to use an offensive stance, the character must have 4 ranks in this specialization. * Offense: The MP cost of staggering blow for the first strike made each turn is reduced to 0. * Defense: At the end of their turn, for every distinct target the character has made a successful strike against on that turn, the character gains 1 bonus DV until the start of their next turn."
-    },
-    "Charge": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becab7"
-        },
-        "name": "Charge",
-        "mp_cost": "3 MP + 1 per rank",
-        "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from all other sword specialization abilities to all successfully struck."
-    },
-    "Disarming Attack": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becab8"
-        },
-        "name": "Disarming Attack",
-        "mp_cost": "3 MP per strike",
-        "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the character's choice."
-    },
-    "Disorienting Strike": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becab9"
-        },
-        "name": "Disorienting Strike",
-        "mp_cost": "2 MP per strike",
-        "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is one or more size categories larger than the character, WIL save to negate."
-    },
-    "Staggering Blow": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becaba"
-        },
-        "name": "Staggering Blow",
-        "mp_cost": "3 MP per strike",
-        "description": "The next successful strike this turn knocks the target 10' backwards, opening them up to other attacks. All attack rolls against the target have a placed roll until the end of the character's next turn."
-    },
-    "Lethal Barrage II": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becabb"
-        },
-        "name": "Lethal Barrage II",
-        "mp_cost": "1 MP per rank",
-        "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
-    },
-    "Lethal IV": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becabc"
-        },
-        "name": "Lethal IV",
-        "mp_cost": "1 MP per rank",
-        "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn."
+  "Duelist": {
+    "name": "Duelist",
+    "mp_cost": "Passive",
+    "description": "Swords are modal weapons that can be adjusted with the usage of a swift action. There are two modes; Offense and Defense. In order to use an offensive stance, the character must have 4 ranks in this specialization. * Offense: The MP cost of staggering blow for the first strike made each turn is reduced to 0. * Defense: At the end of their turn, for every distinct target the character has made a successful strike against on that turn, the character gains 1 bonus DV until the start of their next turn.",
+    "skillStats": {
+      "modes": ["Defensive", "Offensive"],
+      "Defensive": {
+        "type": "Passive",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "Swords are modal weapons that can be adjusted with the usage of a swift action. There are two modes; Offense and Defense. In order to use an offensive stance, the character must have 4 ranks in this specialization. * Offense: The MP cost of staggering blow for the first strike made each turn is reduced to 0. * Defense: At the end of their turn, for every distinct target the character has made a successful strike against on that turn, the character gains 1 bonus DV until the start of their next turn.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "",
+        "modifyToHit": 0,
+        "condition": "",
+        "mpCost": 0,
+        "costType": "none",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "modifiesSomeCosts": 0
+      },
+      "Offensive": {
+        "type": "Passive",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "Swords are modal weapons that can be adjusted with the usage of a swift action. There are two modes; Offense and Defense. In order to use an offensive stance, the character must have 4 ranks in this specialization. * Offense: The MP cost of staggering blow for the first strike made each turn is reduced to 0. * Defense: At the end of their turn, for every distinct target the character has made a successful strike against on that turn, the character gains 1 bonus DV until the start of their next turn.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "",
+        "alternateDamageString": "",
+        "condition": "",
+        "overrideDamageDice": "",
+        "mpCost": 0,
+        "modifyToHit": 0,
+        "costType": "none",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "minRankToSelect": 4,
+        "overridesFirstCost": true
+      },
+      "isModal": true
     }
+  },
+  "Charge": {
+    "name": "Charge",
+    "mp_cost": "3 MP + 1 per rank",
+    "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from all other sword specialization abilities to all successfully struck.",
+    "skillStats": {
+      "modes": ["Defensive", "Offensive"],
+      "Defensive": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from all other sword specialization abilities to all successfully struck.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "",
+        "modifyToHit": 0,
+        "condition": "",
+        "mpCost": 3,
+        "additionalMpCost": 1,
+        "costType": "actviation + rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "modifiesSomeCosts": 0
+      },
+      "Offensive": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from all other sword specialization abilities to all successfully struck.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "",
+        "modifyToHit": 0,
+        "condition": "",
+        "mpCost": 3,
+        "additionalMpCost": 1,
+        "costType": "actviation + rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "modifiesSomeCosts": 0
+      },
+      "isModal": true
+    }
+  },
+  "Disarming Attack": {
+    "name": "Disarming Attack",
+    "mp_cost": "3 MP per strike",
+    "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the character's choice.",
+    "skillStats": {
+      "modes": ["Defensive", "Offensive"],
+      "Defensive": {
+        "type": "Next Successful Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the character's choice.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "",
+        "modifyToHit": 0,
+        "condition": "",
+        "mpCost": 3,
+        "additionalMpCost": 0,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "modifiesSomeCosts": 0
+      },
+      "Offensive": {
+        "type": "Next Successful Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the character's choice.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "",
+        "modifyToHit": 0,
+        "condition": "",
+        "mpCost": 3,
+        "additionalMpCost": 0,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "modifiesSomeCosts": 0
+      },
+      "isModal": true
+    }
+  },
+  "Disorienting Strike": {
+    "name": "Disorienting Strike",
+    "mp_cost": "2 MP per strike",
+    "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is one or more size categories larger than the character, WIL save to negate.",
+    "skillStats": {
+      "modes": ["Defensive", "Offensive"],
+      "Defensive": {
+        "type": "Next Successful Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is one or more size categories larger than the character, WIL save to negate.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateCausesSave": "WIL",
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "",
+        "modifyToHit": 0,
+        "condition": "If the target is one or more size categories larger than the character",
+        "mpCost": 2,
+        "additionalMpCost": 0,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "modifiesSomeCosts": 0
+      },
+      "Offensive": {
+        "type": "Next Successful Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "The next successful strike this turn causes the target to lose their reaction until the end of their next turn. If the target is one or more size categories larger than the character, WIL save to negate.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateCausesSave": "WIL",
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "",
+        "modifyToHit": 0,
+        "condition": "If the target is one or more size categories larger than the character",
+        "mpCost": 2,
+        "additionalMpCost": 0,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "modifiesSomeCosts": 0
+      },
+      "isModal": true
+    }
+  },
+  "Staggering Blow": {
+    "name": "Staggering Blow",
+    "mp_cost": "3 MP per strike",
+    "description": "The next successful strike this turn knocks the target 10' backwards, opening them up to other attacks. All attack rolls against the target have a placed roll until the end of the character's next turn.",
+    "skillStats": {
+      "modes": ["Defensive", "Offensive"],
+      "Defensive": {
+        "type": "Next Successful Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {
+          "Marked": {
+            "name": "Marked",
+            "short": "Mark",
+            "groupIcon": "gi-cross-mark",
+            "description": "All attacks against the target to gain a placed roll, until the end of the character's next turn"
+          }
+        },
+        "alternateAppliesStatus": {},
+        "description": "The next successful strike this turn knocks the target 10' backwards, opening them up to other attacks. All attack rolls against the target have a placed roll until the end of the character's next turn.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateCausesSave": "WIL",
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "",
+        "modifyToHit": 0,
+        "condition": "",
+        "mpCost": 3,
+        "additionalMpCost": 0,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "modifiesSomeCosts": 0
+      },
+      "Offensive": {
+        "type": "Next Successful Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {
+          "Marked": {
+            "name": "Marked",
+            "short": "Mark",
+            "groupIcon": "gi-cross-mark",
+            "description": "All attacks against the target to gain a placed roll, until the end of the character's next turn"
+          }
+        },
+        "alternateAppliesStatus": {},
+        "description": "The next successful strike this turn knocks the target 10' backwards, opening them up to other attacks. All attack rolls against the target have a placed roll until the end of the character's next turn.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateCausesSave": "WIL",
+        "damageString": "",
+        "alternateDamageString": "",
+        "overrideDamageDice": "",
+        "modifyToHit": 0,
+        "condition": "",
+        "mpCost": 3,
+        "additionalMpCost": 0,
+        "costType": "strike",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true,
+        "typeMalleable": false,
+        "modifiesSomeCosts": 0
+      },
+      "isModal": true
+    }
+  },
+  "Lethal Barrage II": {
+    "name": "Lethal Barrage II",
+    "mp_cost": "1 MP per rank",
+    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+    "skillStats": {
+      "modes": ["Defensive", "Offensive"],
+      "Defensive": {
+        "type": "All Successful Strikes",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "2",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 1,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true
+      },
+      "Offensive": {
+        "type": "All Successful Strikes",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "damageString": "2",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 1,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "isApplicableToOffhand": true
+      },
+      "isModal": true
+    }
+  },
+  "Lethal IV": {
+    "name": "Lethal IV",
+    "mp_cost": "1 MP per rank",
+    "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn.",
+    "skillStats": {
+      "modes": ["Defensive", "Offensive"],
+      "Defensive": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateCausesSave": false,
+        "damageString": "4",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 1,
+        "additionalMpCost": 0,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "modifiesSomeCosts": 0,
+        "costMalleable": false,
+        "isApplicableToOffhand": true
+      },
+      "Offensive": {
+        "type": "Altered Strike",
+        "grantsNewStrike": "",
+        "appliesStatus": {},
+        "alternateAppliesStatus": {},
+        "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn.",
+        "alternateDescription": "",
+        "causesSave": false,
+        "alternateCausesSave": false,
+        "damageString": "4",
+        "alternateDamageString": "",
+        "condition": "",
+        "mpCost": 1,
+        "additionalMpCost": 0,
+        "costType": "rank",
+        "alternateMpCost": 0,
+        "isCompoundingCost": false,
+        "increasesCostOfAllEffects": 0,
+        "modifiesSomeCosts": 0,
+        "costMalleable": false,
+        "isApplicableToOffhand": true
+      },
+      "isModal": true
+    }
+  }
 }

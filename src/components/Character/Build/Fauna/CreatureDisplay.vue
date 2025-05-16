@@ -12,8 +12,8 @@ import AdaptationDisplay from './AdaptationDisplay.vue'
 import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
 
 export default {
-  props: ['creature'],
-  setup(props) {
+  props: ['creature', 'editable'],
+  setup(props, context) {
     const designStore = useDesignStore()
     const faunaStore = useFaunaStore()
     const { manualTraits, manualAdaptations } = storeToRefs(faunaStore)
@@ -45,7 +45,14 @@ export default {
       }
       return ret.substring(0, ret.length - 2) || ''
     })
-    return { manualTraits, designStore, props, attributes }
+
+    function removeTrait(trait) {
+      context.emit('deleteTrait', props.creature.Traits.indexOf(trait))
+    }
+    function removeAdaptation(trait) {
+      context.emit('deleteAdaptation', props.creature.Adaptations.indexOf(trait))
+    }
+    return { manualTraits, designStore, props, attributes, removeTrait, removeAdaptation }
   },
   components: { AbilityDisplayMedallion, TraitDisplay, AdaptationDisplay }
 }
@@ -116,13 +123,21 @@ export default {
     <div style="display: flex; justify-content: flex-end">
       <div style="align-self: center; font-size: large; padding-right: 0.5rem">Traits:</div>
       <div v-for="trait in creature.Traits" :key="trait">
-        <TraitDisplay :trait="trait"></TraitDisplay>
+        <TraitDisplay
+          @delete="(item) => removeTrait(item)"
+          :editable="props.editable"
+          :trait="trait"
+        ></TraitDisplay>
       </div>
     </div>
     <div style="display: flex; justify-content: flex-end">
       <div style="align-self: center; font-size: large; padding-right: 0.5rem">Adaptations:</div>
       <div v-for="adaptation in creature.Adaptations" :key="adaptation">
-        <AdaptationDisplay :adaptation="adaptation"></AdaptationDisplay>
+        <AdaptationDisplay
+          @delete="(item) => removeAdaptation(item)"
+          :editable="props.editable"
+          :adaptation="adaptation"
+        ></AdaptationDisplay>
       </div>
     </div>
     <AbilityDisplayMedallion :medallion="creature.groupIcon"></AbilityDisplayMedallion>

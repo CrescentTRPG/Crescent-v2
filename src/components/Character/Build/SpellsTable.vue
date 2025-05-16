@@ -10,6 +10,7 @@ import CustomCheckbox from '../CustomCheckbox.vue'
 import CustomPagination from '@/components/CustomPagination.vue'
 import ArrayTabs from '@/components/ArrayTabs.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
+import ArcaneBattery from './ArcaneBattery.vue'
 
 export default {
   setup() {
@@ -44,6 +45,7 @@ export default {
       let ret: Array<any> = []
       if (selectedTabs.value && selectedTabs.value.length > 0) {
         selectedTabs.value.forEach((tab: { name: string; index: number }) => {
+          console.log(buildDisplaySpellgroups.value[tab.index])
           buildDisplaySpellgroups.value[tab.index].spells.forEach((spell) => {
             ret.push(spell)
           })
@@ -87,7 +89,8 @@ export default {
     CustomCheckbox,
     CustomPagination,
     ArrayTabs,
-    TitleWidget
+    TitleWidget,
+    ArcaneBattery
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -166,6 +169,7 @@ export default {
 </script>
 <template>
   <div>
+    <ArcaneBattery></ArcaneBattery>
     <TitleWidget title="Spells" :info-message="spellsMessage"></TitleWidget>
     <ArrayTabs
       filteringMessage="Spellgroup"
@@ -270,7 +274,7 @@ export default {
         <CustomCheckbox
           :overrideBox="''"
           :overrideFill="''"
-          :isChecked="data.item.known"
+          :isChecked="buildDisplaySpells[data.item.spellIndex as number].known || false"
           style="margin-left: 0.5rem; margin-right: 1rem"
           :update="0"
           @true="

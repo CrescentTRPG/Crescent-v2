@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import { useCollection } from '@/composable/useCollection.js'
 import { db } from '@/firebase/config.js'
 import { collection, setDoc, doc, addDoc, updateDoc } from 'firebase/firestore'
+import { useAdventureStore } from './adventureStore.js'
+import { useCharacterStore } from './characterStore.js'
 
 interface Design {
   primaryTheme: string
@@ -94,9 +96,19 @@ export const useDesignStore = defineStore('design', {
       this.iconFill = design.iconFill
       this.iconColor = design.iconColor
     },
-    async setDesign(des: Design, uid: string, cid: string) {
+    async setDesign(des: Design, uid: string, isAdventure: boolean) {
       this.setLocalDesign(des)
-      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { design: des })
+      let ret: any = ''
+      if (isAdventure) {
+        ret = updateDoc(doc(db, 'User/' + uid + '/Adventure/' + useAdventureStore().id), {
+          design: des
+        })
+      } else {
+        ret = updateDoc(
+          doc(db, 'User/' + uid + '/Character/' + useCharacterStore().getCharacterId),
+          { design: des }
+        )
+      }
       console.log(ret)
     }
   },

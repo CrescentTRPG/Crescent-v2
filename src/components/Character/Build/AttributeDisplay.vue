@@ -72,7 +72,7 @@ export default {
         style="
           display: flex;
           justify-content: space-between;
-          z-index: 4;
+          z-index: 2;
           margin-left: 1rem;
           width: 100%;
         "
@@ -181,7 +181,7 @@ export default {
 
 <style>
 .attributeMessage {
-  z-index: 4;
+  z-index: 3;
   display: flex;
   justify-content: flex-start;
   margin-left: 2rem;
@@ -189,7 +189,7 @@ export default {
 }
 .attributeLabel {
   font-size: xx-large;
-  z-index: 4;
+  z-index: 3;
   width: 45%;
   margin-left: 1.5rem;
 }
@@ -212,7 +212,7 @@ export default {
 }
 .line {
   display: flex;
-  z-index: 4;
+  z-index: 3;
   margin-top: -1rem;
   margin-bottom: -1rem;
 }

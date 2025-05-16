@@ -3,15 +3,20 @@ import {} from 'vue-router'
 import { useDesignStore } from '../../../../stores/designStore'
 import TitleWidget from '@/components/TitleWidget.vue'
 import { BNavbar } from 'bootstrap-vue-next'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import BNavItem from 'bootstrap-vue-next/src/components/BNav/BNavItem.vue'
 import CreaturesTable from './CreaturesTable.vue'
 import CreatureBuilder from './CreatureBuilder.vue'
 import AdaptationsTable from './AdaptationsTable.vue'
+import { useFaunaStore } from '@/stores/faunaStore'
+import BuildCustomCreature from './BuildCustomCreature.vue'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import { useSpellStore, ManualSpell } from '@/stores/spellsStore'
 
 export default {
   setup(props, context) {
     const designStore = useDesignStore()
+    const spellsStore = useSpellStore()
     const navPos = ref('creature')
     function switchTab(tab: string) {
       navPos.value = tab
@@ -22,10 +27,33 @@ export default {
       }
       return designStore.getInputText
     }
-    return { designStore, props, switchTab, navPos, navItemStyle }
+    function shiftMode(newMode) {
+      mode.value = newMode
+    }
+
+    const knownTraitsList = computed(() => {
+      let arr: Array<any> = []
+      useFaunaStore().getCreatures.forEach((creature) => {
+        arr = arr.concat(creature.Traits)
+      })
+      const s = new Set(arr)
+      return [...s]
+    })
+    const mode = ref('table')
+
+    return { designStore, props, switchTab, navPos, navItemStyle, mode, shiftMode, spellsStore }
   },
   methods: {},
-  components: { TitleWidget, BNavbar, BNavItem, CreaturesTable, CreatureBuilder, AdaptationsTable }
+  components: {
+    TitleWidget,
+    BNavbar,
+    BNavItem,
+    CreaturesTable,
+    CreatureBuilder,
+    AdaptationsTable,
+    BuildCustomCreature,
+    BButton
+  }
 }
 </script>
 
@@ -36,6 +64,7 @@ export default {
       :info-message="'When buying ranks in the fauna spellgroup, a character gains the ability to morph their body few a few mechanisms: Base Creatures, Adaptations, and for some characters: Custom Creatures.'"
     ></TitleWidget>
     <BNavbar
+      style="border-left: 0; border-right: 0"
       class="navClass"
       :style="{
         borderColor: designStore.secondaryTheme,
@@ -87,7 +116,61 @@ export default {
       </BNavItem>
     </BNavbar>
     <div v-if="navPos === 'creature'">
-      <CreaturesTable></CreaturesTable>
+      <div
+        style="display: flex; justify-content: flex-end; border-bottom: 2px solid"
+        :style="{
+          background: designStore.pageBackdrop,
+          color: designStore.sidebarText,
+          borderColor: designStore.secondaryTheme
+        }"
+      >
+        <BButton
+          v-if="
+            mode === 'table' &&
+            spellsStore.isSpellKnown({ name: 'Transformation' } as ManualSpell, 'Fauna')
+          "
+          style="
+            border-radius: 0;
+            font-size: large;
+            border: 2px solid;
+            border-bottom: 0;
+            border-top: 0;
+          "
+          :style="{
+            background: designStore.sidebarBacking,
+            color: designStore.sidebarText,
+            borderColor: designStore.secondaryTheme
+          }"
+          @click="shiftMode('buildCustom')"
+        >
+          <v-icon name="gi-wyvern" scale="1.5" style="transform: scaleX(-1)"></v-icon> Build Custom
+          Transformation <v-icon name="gi-griffin-symbol" scale="1.5"></v-icon
+        ></BButton>
+        <BButton
+          v-if="mode != 'table'"
+          style="
+            border-radius: 0;
+            font-size: large;
+            border: 2px solid;
+            border-bottom: 0;
+            border-top: 0;
+          "
+          :style="{
+            background: designStore.sidebarBacking,
+            color: designStore.sidebarText,
+            borderColor: designStore.secondaryTheme
+          }"
+          @click="shiftMode('table')"
+        >
+          <i class="bi bi-arrow-90deg-left"></i>
+          Discard Custom Transformation
+        </BButton>
+      </div>
+      <CreaturesTable v-if="mode === 'table'"></CreaturesTable>
+      <BuildCustomCreature
+        @added="shiftMode('table')"
+        v-if="mode === 'buildCustom'"
+      ></BuildCustomCreature>
     </div>
     <div v-if="navPos === 'adapt'">
       <AdaptationsTable></AdaptationsTable>

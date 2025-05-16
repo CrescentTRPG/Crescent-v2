@@ -5,6 +5,7 @@ import { useDesignStore } from '@/stores/designStore'
 import CustomModal from '@/components/CustomModal.vue'
 import { useMartialPerksStore } from '@/stores/martialPerksStore'
 import { storeToRefs } from 'pinia'
+import DropdownSelect from '@/components/DropdownSelect.vue'
 
 export default {
   setup(context) {
@@ -110,17 +111,6 @@ export default {
       return ret
     },
     showModal(id: number) {
-      if (id === 1) {
-        this.optionsI = this.perkGain[0]
-      } else if (id === 2) {
-        this.optionsII = this.perkGain[1]
-      } else if (id === 3) {
-        this.optionsIII = this.perkGain[2]
-      } else if (id === 4) {
-        this.optionsIV = this.perkGain[3]
-      } else if (id === 5) {
-        this.optionsV = this.perkGain[4]
-      }
       this.currentModal = id
       this.modal = !this.modal
     },
@@ -139,8 +129,7 @@ export default {
     BButton,
     CustomModal,
     BInputGroupText,
-    BFormSelect,
-    BInputGroup
+    DropdownSelect
   }
 }
 </script>
@@ -231,32 +220,39 @@ export default {
               In Order to select Perk Rank I, you must buy a rank 1 Martial Perk.
             </div>
           </div>
-          <BInputGroup
-            v-if="entitledGain >= 1"
-            style="border: 2px solid; border-radius: 0.5rem"
-            :style="{
-              color: designStore.inputText,
-              background: designStore.inputBacking,
-              borderColor: designStore.secondaryTheme
-            }"
-            ><BInputGroupText
+          <div style="padding-bottom: 3rem">
+            <div
+              v-if="entitledGain >= 1"
+              style="border: 2px solid; border-radius: 0.5rem; display: flex"
               :style="{
                 color: designStore.inputText,
                 background: designStore.inputBacking,
                 borderColor: designStore.secondaryTheme
               }"
-              >Perk Gain I</BInputGroupText
-            ><BFormSelect
-              v-model="optionsI"
-              :options="options(1)"
-              :style="{
-                color: designStore.inputText,
-                background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-              @change="setMartialPerkGain(0, optionsI)"
-            ></BFormSelect
-          ></BInputGroup>
+            >
+              <BInputGroupText
+                class="perkLabel"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                >Perk Gain I</BInputGroupText
+              >
+              <DropdownSelect
+                class="dropdown-fill"
+                :borderless="true"
+                :default="martialPerksStore.perkGain[0]"
+                :options="options(1)"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                @selection="(selection) => setMartialPerkGain(0, selection)"
+              ></DropdownSelect>
+            </div>
+          </div>
         </template>
       </CustomModal>
       <div class="spacer"></div>
@@ -309,32 +305,39 @@ export default {
               </div>
             </div>
           </div>
-          <BInputGroup
-            v-if="entitledGain >= 2"
-            style="border: 2px solid; border-radius: 0.5rem"
-            :style="{
-              color: designStore.inputText,
-              background: designStore.inputBacking,
-              borderColor: designStore.secondaryTheme
-            }"
-            ><BInputGroupText
+          <div style="padding-bottom: 3rem">
+            <div
+              v-if="entitledGain >= 2"
+              style="border: 2px solid; border-radius: 0.5rem; display: flex"
               :style="{
                 color: designStore.inputText,
                 background: designStore.inputBacking,
                 borderColor: designStore.secondaryTheme
               }"
-              >Perk Gain I</BInputGroupText
-            ><BFormSelect
-              @change="setMartialPerkGain(1, optionsII)"
-              v-model="optionsII"
-              :options="options(2)"
-              :style="{
-                color: designStore.inputText,
-                background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-            ></BFormSelect
-          ></BInputGroup>
+            >
+              <BInputGroupText
+                class="perkLabel"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                >Perk Gain II</BInputGroupText
+              >
+              <DropdownSelect
+                class="dropdown-fill"
+                :borderless="true"
+                :default="martialPerksStore.perkGain[1]"
+                :options="options(2)"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                @selection="(selection) => setMartialPerkGain(1, selection)"
+              ></DropdownSelect>
+            </div>
+          </div>
         </template>
       </CustomModal>
       <div class="spacer"></div>
@@ -387,33 +390,39 @@ export default {
               </div>
             </div>
           </div>
-
-          <BInputGroup
-            v-if="entitledGain >= 3"
-            style="border: 2px solid; border-radius: 0.5rem"
-            :style="{
-              color: designStore.inputText,
-              background: designStore.inputBacking,
-              borderColor: designStore.secondaryTheme
-            }"
-            ><BInputGroupText
+          <div style="padding-bottom: 3rem">
+            <div
+              v-if="entitledGain >= 3"
+              style="border: 2px solid; border-radius: 0.5rem; display: flex"
               :style="{
                 color: designStore.inputText,
                 background: designStore.inputBacking,
                 borderColor: designStore.secondaryTheme
               }"
-              >Perk Gain I</BInputGroupText
-            ><BFormSelect
-              @change="setMartialPerkGain(2, optionsIII)"
-              v-model="optionsIII"
-              :options="options(3)"
-              :style="{
-                color: designStore.inputText,
-                background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-            ></BFormSelect
-          ></BInputGroup>
+            >
+              <BInputGroupText
+                class="perkLabel"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                >Perk Gain I</BInputGroupText
+              >
+              <DropdownSelect
+                class="dropdown-fill"
+                :borderless="true"
+                :default="martialPerksStore.perkGain[2]"
+                :options="options(3)"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                @selection="(selection) => setMartialPerkGain(2, selection)"
+              ></DropdownSelect>
+            </div>
+          </div>
         </template>
       </CustomModal>
       <div class="spacer"></div>
@@ -465,32 +474,39 @@ export default {
               </div>
             </div>
           </div>
-          <BInputGroup
-            v-if="entitledGain >= 4"
-            style="border: 2px solid; border-radius: 0.5rem"
-            :style="{
-              color: designStore.inputText,
-              background: designStore.inputBacking,
-              borderColor: designStore.secondaryTheme
-            }"
-            ><BInputGroupText
+          <div style="padding-bottom: 3rem">
+            <div
+              v-if="entitledGain >= 4"
+              style="border: 2px solid; border-radius: 0.5rem; display: flex"
               :style="{
                 color: designStore.inputText,
                 background: designStore.inputBacking,
                 borderColor: designStore.secondaryTheme
               }"
-              >Perk Gain I</BInputGroupText
-            ><BFormSelect
-              @change="setMartialPerkGain(3, optionsIV)"
-              v-model="optionsIV"
-              :options="options(4)"
-              :style="{
-                color: designStore.inputText,
-                background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-            ></BFormSelect
-          ></BInputGroup>
+            >
+              <BInputGroupText
+                class="perkLabel"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                >Perk Gain I</BInputGroupText
+              >
+              <DropdownSelect
+                class="dropdown-fill"
+                :borderless="true"
+                :default="martialPerksStore.perkGain[3]"
+                :options="options(4)"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                @selection="(selection) => setMartialPerkGain(3, selection)"
+              ></DropdownSelect>
+            </div>
+          </div>
         </template>
       </CustomModal>
       <div class="spacer"></div>
@@ -543,32 +559,39 @@ export default {
               </div>
             </div>
           </div>
-          <BInputGroup
-            v-if="entitledGain >= 5"
-            style="border: 2px solid; border-radius: 0.5rem"
-            :style="{
-              color: designStore.inputText,
-              background: designStore.inputBacking,
-              borderColor: designStore.secondaryTheme
-            }"
-            ><BInputGroupText
+          <div style="padding-bottom: 3rem">
+            <div
+              v-if="entitledGain >= 5"
+              style="border: 2px solid; border-radius: 0.5rem; display: flex"
               :style="{
                 color: designStore.inputText,
                 background: designStore.inputBacking,
                 borderColor: designStore.secondaryTheme
               }"
-              >Perk Gain I</BInputGroupText
-            ><BFormSelect
-              @change="setMartialPerkGain(4, optionsV)"
-              v-model="optionsV"
-              :options="options(5)"
-              :style="{
-                color: designStore.inputText,
-                background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-            ></BFormSelect
-          ></BInputGroup>
+            >
+              <BInputGroupText
+                class="perkLabel"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                >Perk Gain I</BInputGroupText
+              >
+              <DropdownSelect
+                class="dropdown-fill"
+                :borderless="true"
+                :options="options(5)"
+                :default="martialPerksStore.perkGain[4]"
+                :style="{
+                  color: designStore.inputText,
+                  background: designStore.inputBacking,
+                  borderColor: designStore.secondaryTheme
+                }"
+                @selection="(selection) => setMartialPerkGain(4, selection)"
+              ></DropdownSelect>
+            </div>
+          </div>
         </template>
       </CustomModal>
     </div>
@@ -576,6 +599,13 @@ export default {
 </template>
 
 <style scoped>
+.perkLabel {
+  border: 0px;
+  border-right: 2px solid;
+  min-width: 7rem;
+  border-radius: 0;
+  margin-left: 0.25rem;
+}
 .perkGainItem {
   cursor: pointer;
   border-radius: 0;
@@ -586,6 +616,11 @@ export default {
   padding-left: 0.3rem;
   padding-right: 0.3rem;
   width: fit-content;
+}
+.dropdown-fill {
+  margin-right: 0.25rem;
+  width: calc(100% - 7.5rem);
+  flex-grow: 1;
 }
 .perkGain {
   cursor: pointer;

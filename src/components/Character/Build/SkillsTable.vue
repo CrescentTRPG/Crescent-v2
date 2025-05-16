@@ -14,11 +14,12 @@ import {
 } from 'bootstrap-vue-next'
 import CustomModal from '@/components/CustomModal.vue'
 import CustomCheckbox from '../CustomCheckbox.vue'
-import { ref, onMounted, toRaw } from 'vue'
+import { ref, onMounted, toRaw, watch } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 import { storeToRefs } from 'pinia'
 import TitleWidget from '@/components/TitleWidget.vue'
 import OneToTenDropdown from '@/components/OneToTenDropdown.vue'
+import DropdownSelect from '@/components/DropdownSelect.vue'
 
 interface Skill {
   skill: string
@@ -53,6 +54,10 @@ export default {
       { value: 9, text: '9' },
       { value: 10, text: '10' }
     ]
+    watch(effectiveSkills, async (newEffectiveSkills, old) => {
+      console.log(newEffectiveSkills, 'hoorah')
+      effectiveSkillsClone.value = structuredClone(toRaw(effectiveSkills.value))
+    })
     const modal = ref(false)
     const currentModal = ref(0)
     const fields = ref([{ key: 'skill' }, { key: 'isOrigin?' }, { key: 'ranks' }])
@@ -70,11 +75,6 @@ export default {
       currentModal,
       skillsMessage,
       options
-    }
-  },
-  watch: {
-    effectiveSkills() {
-      this.effectiveSkillsClone = ref(structuredClone(toRaw(this.effectiveSkills)))
     }
   },
   methods: {
@@ -104,9 +104,10 @@ export default {
       this.currentModal = id
       this.modal = !this.modal
     },
+    delay(time: number) {
+      return new Promise((resolve) => setTimeout(resolve, time))
+    },
     updateSkill(skill: any, id: any, rank: any, source: any, index: number, attribute: string) {
-      console.log('wahty')
-      this.effectiveSkillsClone[index].rank = rank
       let skillObj = {
         skill: skill,
         id: id,
@@ -115,23 +116,26 @@ export default {
         attribute: attribute,
         index: index
       }
+
       this.skillStore.setSkill(skillObj)
     },
-    addOrigin(origin: any) {
+    addOrigin(origin: any, index: number) {
       let origins = this.characterStore.getOriginSkills.concat(origin)
       this.characterStore.setOrigin(
         origins,
         this.userStore.getUserId,
         this.characterStore.getCharacterId
       )
+      this.skillStore.setEffectiveOriginSkill(true, index)
     },
-    removeOrigin(origin: any) {
+    removeOrigin(origin: any, index: number) {
       let origins = this.characterStore.originSkills.filter((e) => e != origin)
       this.characterStore.setOrigin(
         origins,
         this.userStore.getUserId,
         this.characterStore.getCharacterId
       )
+      this.skillStore.setEffectiveOriginSkill(false, index)
     }
   },
   components: {
@@ -144,7 +148,7 @@ export default {
     CustomModal,
     CustomCheckbox,
     TitleWidget,
-    BFormSelect
+    DropdownSelect
   }
 }
 </script>
@@ -216,7 +220,8 @@ export default {
             <CustomCheckbox
               :overrideBox="''"
               :overrideFill="''"
-              :isChecked="skill.isOrigin"
+              :update="index"
+              :isChecked="effectiveSkills[index as number].isOrigin || false"
               style="
                 position: relative;
                 bottom: 2.65rem;
@@ -224,13 +229,28 @@ export default {
                 height: 0rem;
                 width: inherit;
               "
-              :update="0"
-              @true="addOrigin(skill.skill)"
-              @false="removeOrigin(skill.skill)"
+              @true="addOrigin(skill.skill, index)"
+              @false="removeOrigin(skill.skill, index)"
             ></CustomCheckbox>
           </BTd>
           <BTd>
-            <BFormSelect
+            <DropdownSelect
+              :default="effectiveSkillsClone[index].rank"
+              style="font-size: large; width: 4.5rem; cursor: pointer; border-width: 2px"
+              :options="options"
+              @selection="
+                (selection) =>
+                  updateSkill(
+                    skill.skill,
+                    skill.id,
+                    selection,
+                    skill.source,
+                    skill.index,
+                    skill.attribute
+                  )
+              "
+            ></DropdownSelect>
+            <!-- <BFormSelect
               :options="options"
               v-model="effectiveSkillsClone[index].rank"
               :style="{
@@ -249,7 +269,7 @@ export default {
                 )
               "
               style="font-size: large; width: 4rem; cursor: pointer; border-width: 2px"
-            ></BFormSelect>
+            ></BFormSelect> -->
           </BTd>
           <BTd></BTd>
         </BTr>

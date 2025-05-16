@@ -2,34 +2,37 @@
 import { computed, ComputedRef, ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 
-import { useCharacterStore } from '@/stores/characterStore'
-
 import { useUserStore } from '@/stores/userStore'
-import { storeToRefs } from 'pinia'
-import { useSpellStore } from '@/stores/spellsStore'
+
 import CustomModal from '@/components/CustomModal.vue'
-import { BFormInput, BFormSelect, BInputGroup } from 'bootstrap-vue-next'
+import { BFormInput, BInputGroup } from 'bootstrap-vue-next'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
 import StatusEffectItem from './StatusEffectItem.vue'
-import { useEquipmentStore } from '@/stores/equipmentStore'
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
 
 export default {
+  props: [
+    'setCurrentMana',
+    'wornArmorPassives',
+    'secondaryHandheldPassives',
+    'primaryHandheldPassives',
+    'traits',
+    'manaStatusModifiers',
+    'currentMana',
+    'totalMana',
+    'addNewManaStatusModifier',
+    'removeManaStatusModifier',
+    'customStatusEffects'
+  ],
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
-    const characterStore = useCharacterStore()
-    const spellsStore = useSpellStore()
-    const { spellgroups } = storeToRefs(spellsStore)
-    const { currentMana, manaStatusModifiers } = storeToRefs(characterStore)
     const manaMod = ref(0)
-    const equipmentStore = useEquipmentStore()
-    const { equipment } = storeToRefs(equipmentStore)
     const modifierType = ['mana regen', 'modify base mana', 'override base mana']
-    const currentManaCopy = ref(currentMana.value)
+    const currentManaCopy = ref(props.currentMana)
 
     function addManaStatusModifier(addedVal) {
       let statusObj = {
@@ -38,11 +41,11 @@ export default {
         modAmount: addedVal.modAmount
       }
 
-      characterStore.addNewManaStatusModifier(statusObj)
+      props.addNewManaStatusModifier(statusObj)
     }
 
     function removeModifier(modifierType, modAmount, linkedStatus) {
-      characterStore.removeManaStatusModifier({
+      props.removeManaStatusModifier({
         modifierType: modifierType,
         modAmount: modAmount,
         linkedStatus: linkedStatus
@@ -51,8 +54,8 @@ export default {
 
     function getColor() {
       if (
-        manaStatusModifiers.value['override base mana'] ||
-        manaStatusModifiers.value['modify base mana']
+        props.manaStatusModifiers['override base mana'] ||
+        props.manaStatusModifiers['modify base mana']
       ) {
         return designStore.alertTheme
       }
@@ -60,138 +63,39 @@ export default {
     }
 
     function getCurrentColor() {
-      if (manaStatusModifiers.value['mana regen']) {
+      if (props.manaStatusModifiers['mana regen']) {
         return designStore.alertTheme
       }
       return designStore.primaryText
     }
-    const wornArmorPassives = computed(() => {
-      return equipment.value.items.Armor[equipment.value.wornArmor]?.equippedStats?.passives || {}
-    })
-
-    const primaryHandheldPassives = computed(() => {
-      return (
-        equipment.value.items.Weapon[equipment.value.primaryHand]?.equippedStats?.passives || {}
-      )
-    })
-
-    const secondaryHandheldPassives = computed(() => {
-      return (
-        equipment.value.items.Shield[equipment.value.secondaryHand]?.equippedStats?.passives ||
-        equipment.value.items.Weapon[equipment.value.secondaryHand]?.equippedStats?.passives ||
-        {}
-      )
-    })
 
     const statusModifiersList: ComputedRef<Array<any>> = computed(() => {
-      let modifiers = Object.values(manaStatusModifiers.value)
+      let modifiers = Object.values(props.manaStatusModifiers)
       let ret = []
       modifiers.forEach((modGroup: any) => {
         ret = ret.concat(Object.values(modGroup))
       })
-      console.log(ret)
 
       return ret
     })
 
     const statuses: ComputedRef = computed(() => {
       let ret = ['']
-      return ret.concat(Object.keys(characterStore.customStatusEffects))
-    })
-
-    const totalMana: ComputedRef = computed(() => {
-      let sum = 0
-
-      let groups: Array<any> = Object.values(spellsStore.spellgroups)
-      groups.forEach((spellgroup: any) => {
-        const maxRank = Object.values(spellgroup?.spells)?.reduce(
-          (acc: number, spell: any) => (spell.rank > acc ? spell.rank : acc),
-          0
-        )
-
-        sum += spellgroup?.manaGain * maxRank
-      })
-      if (characterStore.traits['Bonus Mana']) {
-        sum += parseInt(characterStore.traits['Bonus Mana'].number)
-      }
-      if (wornArmorPassives.value['Override Base Mana']) {
-        sum = parseInt(wornArmorPassives.value['Override Base Mana'].modAmount)
-      }
-      if (primaryHandheldPassives.value['Override Base Mana']) {
-        sum = parseInt(primaryHandheldPassives.value['Override Base Mana'].modAmount)
-      }
-      if (secondaryHandheldPassives.value['Override Base Mana']) {
-        sum = parseInt(secondaryHandheldPassives.value['Override Base Mana'].modAmount)
-      }
-      if (manaStatusModifiers.value['override base mana']) {
-        let max = Object.values(manaStatusModifiers.value['override base mana']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          0
-        )
-        if (max > 0) {
-          sum = max
-        }
-      }
-      let modifier = -1000
-      if (wornArmorPassives.value['Modify Base Mana']) {
-        modifier = Math.max(
-          parseInt(wornArmorPassives.value['Modify Base Mana'].modAmount),
-          modifier
-        )
-      }
-      if (primaryHandheldPassives.value['Modify Base Mana']) {
-        modifier = Math.max(
-          parseInt(primaryHandheldPassives.value['Modify Base Mana'].modAmount),
-          modifier
-        )
-      }
-      if (secondaryHandheldPassives.value['Modify Base Mana']) {
-        modifier = Math.max(
-          parseInt(secondaryHandheldPassives.value['Modify Base Mana'].modAmount),
-          modifier
-        )
-      }
-      if (modifier == -1000) {
-        modifier = 0
-      }
-
-      if (manaStatusModifiers.value['modify base mana']) {
-        const baseModifier = manaStatusModifiers.value['modify base mana']
-
-        if (baseModifier) {
-          let arr = Object.values(baseModifier)
-          console.log(arr)
-          let max = arr.reduce(
-            (acc: number, mod: any) =>
-              parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-            -1000
-          )
-
-          if (max != -1000) {
-            modifier = modifier + max
-          }
-        }
-      }
-
-      if (currentMana.value > sum + modifier) {
-        setNewCurrentValue(parseInt(sum + ''))
-      }
-      return sum + modifier
+      return ret.concat(Object.keys(props.customStatusEffects))
     })
 
     function gainMana() {
-      const finalMana = currentMana.value + parseInt(manaMod.value + '')
-      characterStore.setCurrentMana(Math.min(finalMana, totalMana.value))
+      const finalMana = props.currentMana + parseInt(manaMod.value + '')
+      props.setCurrentMana(Math.min(finalMana, props.totalMana))
     }
 
     function loseMana() {
-      const finalMana = currentMana.value - manaMod.value
-      characterStore.setCurrentMana(finalMana)
+      const finalMana = props.currentMana - manaMod.value
+      props.setCurrentMana(finalMana)
     }
 
     function setNewCurrentValue(mana = currentManaCopy.value) {
-      characterStore.setCurrentMana(Math.min(parseInt(mana + ''), totalMana.value))
+      props.setCurrentMana(Math.min(parseInt(mana + ''), props.totalMana))
     }
     function showModal() {
       modal.value = true
@@ -204,13 +108,9 @@ export default {
       designStore,
       modal,
       userStore,
-      characterStore,
-      currentMana,
       manaMod,
       currentManaCopy,
-
       statuses,
-      totalMana,
       modifierType,
       gainMana,
       loseMana,

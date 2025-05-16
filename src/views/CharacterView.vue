@@ -3,13 +3,14 @@
     class="fill"
     v-if="character.loading"
     style="font-size: xx-large; display: flex; justify-content: center; padding-top: 10rem"
+    :style="{ fontFamily: design.font + ', sans-serif' }"
   >
     <v-icon scale="4" :name="leftmoon" animation="float"></v-icon>
     <div>{{ message }}</div>
     <v-icon scale="4" :name="rightmoon" animation="float"></v-icon>
   </div>
   <div
-    class="fill"
+    :class="props.isGameMaster ? 'none' : 'fill'"
     style="display: flex; flex-direction: column"
     :style="{
       background: design.pageBackdrop
@@ -17,6 +18,7 @@
     v-if="!character.loading"
   >
     <div
+      v-if="!props.isGameMaster"
       style="display: flex; justify-content: space-between; height: 4.5rem"
       :style="{ background: design.inputBacking }"
     >
@@ -60,15 +62,33 @@
         <div class="dazzle2" :style="{ background: design.secondaryTheme }"></div>
       </div>
       <div style="padding-right: 1rem; padding-top: 0.5rem; min-width: 8.5rem; display: flex">
-        <DesignButton></DesignButton>
         <div>
           <BButton
+            class="button"
+            style="margin-right: 0.25rem; margin-bottom: 1rem"
+            :style="{ background: design.primaryTheme, color: design.primaryText }"
+            @click="goToHome()"
+          >
+            <i class="bi bi-arrow-return-left"></i>
+          </BButton>
+        </div>
+        <DesignButton :isAdventure="false"></DesignButton>
+        <div>
+          <BButton
+            @click="settingsModal = !settingsModal"
             class="button"
             style="margin-right: 0.25rem; margin-bottom: 1rem"
             :style="{ background: design.primaryTheme, color: design.primaryText }"
           >
             <i class="bi bi-gear-fill"></i>
           </BButton>
+          <CustomModal
+            :showModal="settingsModal"
+            :title="character.name + ' Settings'"
+            @close="settingsModal = !settingsModal"
+          >
+            <template v-slot:body> <CharacterSettings></CharacterSettings> </template>
+          </CustomModal>
         </div>
         <div>
           <BButton
@@ -91,10 +111,41 @@
               '--bs-btn-close-color': design.primaryText
             }"
           >
-            <DiceSidebar></DiceSidebar>
+            <DiceSidebar
+              @rolled="
+                (rollObj) => {
+                  logRoll(rollObj)
+                }
+              "
+            ></DiceSidebar>
           </BOffcanvas>
         </div>
       </div>
+    </div>
+    <div v-if="props.isGameMaster">
+      <BButton
+        style="
+          position: absolute;
+          display: flex;
+          right: 2rem;
+          margin-top: 0.15rem;
+          z-index: 5;
+          border: 1px solid;
+        "
+        :style="{
+          borderColor: design.secondaryTheme,
+          background: design.primaryTheme,
+          color: design.primaryText
+        }"
+        @click="props.exit()"
+      >
+        <i class="bi bi-escape"></i>
+        <div class="non-Mobile" style="margin-left: 0.25rem">Exit Detailed View</div></BButton
+      >
+      <TitleWidget
+        style="margin-top: 0rem; padding-top: 0.5rem"
+        :title="character.name"
+      ></TitleWidget>
     </div>
     <CharacterNav
       @build="navPos = 'build'"
@@ -102,12 +153,16 @@
       @details="navPos = 'details'"
       @equipment="navPos = 'equipment'"
       @journal="navPos = 'journal'"
+      @party="navPos = 'party'"
       @manual="navPos = 'manual'"
     ></CharacterNav>
     <BuildTab v-if="navPos === 'build'" style="flex-grow: 1"></BuildTab>
     <OverviewTab v-if="navPos === 'overview'"></OverviewTab>
     <DetailsTab v-if="navPos === 'details'"></DetailsTab>
     <EquipmentTab v-if="navPos === 'equipment'"></EquipmentTab>
+    <BeingBuilt v-if="navPos === 'journal'"></BeingBuilt>
+    <BeingBuilt v-if="navPos === 'manual'"></BeingBuilt>
+    <CharacterPartyTab v-if="navPos === 'party'"></CharacterPartyTab>
   </div>
 </template>
 
@@ -127,8 +182,22 @@ import BOffcanvas from 'bootstrap-vue-next/src/components/BOffcanvas/BOffcanvas.
 import DiceSidebar from '@/components/DiceSidebar/DiceSidebar.vue'
 import DetailsTab from '@/components/Character/Details/DetailsTab.vue'
 import EquipmentTab from '@/components/Character/Equipment/EquipmentTab.vue'
+import router from '@/router'
+import { useRouter } from 'vue-router'
+import { useSpellStore } from '@/stores/spellsStore'
+import { useMartialPerksStore } from '@/stores/martialPerksStore'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
+import { useSkillStore } from '@/stores/skillsStore'
+import BeingBuilt from '@/components/BeingBuilt.vue'
+import TitleWidget from '@/components/TitleWidget.vue'
+import { useAdventureStore } from '@/stores/adventureStore'
+import CharacterPartyTab from '@/components/Character/Build/Party/CharacterPartyTab.vue'
+import { validateHeaderName } from 'http'
+import CharacterSettings from '@/components/Character/CharacterSettings.vue'
+import CustomModal from '@/components/CustomModal.vue'
 
 export default {
+  props: ['isGameMaster', 'exit'],
   setup(props, context) {
     const navPos = ref('build')
     let design = useDesignStore()
@@ -136,6 +205,7 @@ export default {
     const leftmoon = ref('wi-moon-alt-full')
     const rightmoon = ref('wi-moon-alt-new')
     const showDice = ref(false)
+    const settingsModal = ref(false)
     const loadMessage = function () {
       let val = Math.floor(Math.random() * 15)
       switch (val) {
@@ -172,6 +242,28 @@ export default {
         default:
           return 'Counting Coins'
       }
+    }
+    const userStore = useUserStore()
+    onUnmounted(() => {
+      character.loading = true
+      character.unsubscribe()
+    })
+    function logRoll(rollObj: { rollsObj: {}; timestamp: string; rolltitle: string }) {
+      let message = 'DICE ROLL: ' + rollObj.rolltitle + '\n'
+      let arr = Object.values(rollObj.rollsObj)
+      arr.forEach((roll: any) => {
+        let label = roll.label ? roll.label : '(' + roll.str + ')'
+        message += label + ' = ' + roll.subtotal + '\n'
+      })
+      console.log(message)
+      useAdventureStore().addChat(
+        message,
+        character.name,
+        userStore.getUserId,
+        false,
+        [],
+        design.charIcon
+      )
     }
     const message = ref(loadMessage())
     const delay = (time: number) => {
@@ -218,16 +310,42 @@ export default {
         animate(time)
       }
     }
+    let router = useRouter()
+
     onMounted(() => {
+      character.loading = true
       animate(300)
-      if (character.here == 0) {
-        character.pullCharacterFromFirebase(useUserStore().getUserId, character.getCharacterId)
+
+      if (!props.isGameMaster) {
+        useCharacterStore().pullCharacterFromFirebase(useUserStore().getUserId, character.id, true)
+        if (character.adventure.adventureId && character.adventure.gameMasterId) {
+          useAdventureStore().pullAdventureAsCharacterFromFirebase(
+            character.adventure.adventureId,
+            character.adventure.gameMasterId
+          )
+        }
       }
     })
-    onUnmounted(() => {
-      character.unsubscribe()
-    })
-    return { design, navPos, character, leftmoon, rightmoon, message, showDice }
+    function goToHome() {
+      useSpellStore().clearBuildDisplay()
+      useMartialPerksStore().clearBuildDisplay()
+      useMartialSkillsStore().clearMartialSkillsBuild()
+      useSkillStore().clearEffectiveSkills()
+      router.push({ name: 'home' })
+    }
+    return {
+      logRoll,
+      props,
+      design,
+      navPos,
+      character,
+      leftmoon,
+      rightmoon,
+      message,
+      showDice,
+      goToHome,
+      settingsModal
+    }
   },
   components: {
     BButton,
@@ -239,7 +357,12 @@ export default {
     BOffcanvas,
     DiceSidebar,
     DetailsTab,
-    EquipmentTab
+    EquipmentTab,
+    BeingBuilt,
+    TitleWidget,
+    CharacterPartyTab,
+    CharacterSettings,
+    CustomModal
   },
   methods: {
     delay: function (time) {
@@ -254,11 +377,15 @@ export default {
   border: none;
   font-size: 1.75rem;
 }
+
 @media (max-width: 450px) {
   .diceButton {
     border: none;
     font-size: 1rem;
     margin-bottom: 1rem;
+  }
+  .non-Mobile {
+    display: none;
   }
 }
 .btn-close {

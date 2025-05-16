@@ -2,31 +2,167 @@
   "Recurve Shot": {
     "name": "Recurve Shot",
     "mp_cost": "Passive",
-    "description": "Strikes made with this weapon curve. Should a strike with this weapon miss a target, the character can redirect the attack roll to a different target within the weapon's range. The character can only make use of this ability once eachround."
+    "description": "Strikes made with this weapon curve. Should a strike with this weapon miss a target, the character can redirect the attack roll to a different target within the weapon's range. The character can only make use of this ability once eachround.",
+    "skillStats": {
+      "type": "Passive",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "Strikes made with this weapon curve. Should a strike with this weapon miss a target, the character can redirect the attack roll to a different target within the weapon's range. The character can only make use of this ability once eachround.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 0,
+      "costType": "none",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   },
   "Burst Shot": {
     "name": "Burst Shot",
     "mp_cost": "2 MP per rank",
-    "description": "The character makes an altered strike. If it hits, they then roll damage for extra strikes equal to the ranks of this ability purchased."
+    "description": "The character makes an altered strike. If it hits, they then roll damage for extra strikes equal to the ranks of this ability purchased.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character makes an altered strike. If it hits, they then roll damage for extra strikes equal to the ranks of this ability purchased.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateMinWeaponDamage": 0,
+      "damageString": "weaponDamage",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 2,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   },
   "Tipped Arrows": {
     "name": "Tipped Arrows",
     "mp_cost": "2 MP per rank",
-    "description": "For every rank purchased, the character can choose to add one stacking instance of theirchoice of toxic, fire or piercing suffering to all successful strikes this turn."
+    "description": "For every rank purchased, the character can choose to add one stacking instance of theirchoice of toxic, fire or piercing suffering to all successful strikes this turn.",
+    "skillStats": {
+      "type": "All Successful Strikes",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Suffering": {
+          "name": "Suffering",
+          "short": "Suffer",
+          "groupIcon": "gi-bleeding-heart",
+          "description": "Each instance of Suffering inflicts a d6 of a damage type at the start of a character’s turn until cleared. Targets under the effects of  suffering  can  remove all instances of it by expending their swift action."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "For every rank purchased, the character can choose to add one stacking instance of theirchoice of toxic, fire or piercing suffering to all successful strikes this turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "1d6",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 2,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   },
   "Object Shot": {
     "name": "Object Shot",
     "mp_cost": "1 MP per strike",
-    "description": "The character makes an altered strike. They load an object weighing less than 40 kilograms into their weapon and fire it at a target, passing the object onto the target should it at least meet their movement DVs. Unless otherwise specified, objects fired this way will inflict a d6 blunt damage. The character can choose to forgo weapon damage when using this ability."
+    "description": "The character makes an altered strike. They load an object weighing less than 40 kilograms into their weapon and fire it at a target, passing the object onto the target should it at least meet their movement DVs. Unless otherwise specified, objects fired this way will inflict a d6 blunt damage. The character can choose to forgo weapon damage when using this ability.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character makes an altered strike. They load an object weighing less than 40 kilograms into their weapon and fire it at a target, passing the object onto the target should it at least meet their movement DVs. Unless otherwise specified, objects fired this way will inflict a d6 blunt damage. The character can choose to forgo weapon damage when using this ability.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "d6",
+      "alternateDamageString": "0",
+      "condition": "If the character choses to forgo damage",
+      "mpCost": 1,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   },
   "Whistling Shot": {
     "name": "Whistling Shot",
     "mp_cost": "3 MP per strike",
-    "description": "The next successful strike this turn causes the target to become Frighten ed of the character until the end of their next turn."
+    "description": "The next successful strike this turn causes the target to become Frightened of the character until the end of their next turn.",
+    "skillStats": {
+      "type": "Next Sucessful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Frightened": {
+          "name": "Frightened",
+          "short": "Frighten",
+          "groupIcon": "gi-terror",
+          "description": "Target is terrified by the source of this condition and will utilize its movement action to put space between itself and the source. In addition:\\nThey have a displaced roll on any check stemming from the source of the condition.\\nThey have a displaced roll when making an attack roll against the source of the condition."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn causes the target to become Frightened of the character until the end of their next turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 3,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   },
   "Volley": {
     "name": "Volley",
     "mp_cost": "4 MP per strike",
-    "description": "With this altered strike, the character may choose a point within their weapon's range, and make an individual attack roll against all targets within a 10' radius of the point, adding any applicable bonuses from Lethal, Burst Attack, Tipped Arrows and Whistling Shot."
+    "description": "With this altered strike, the character may choose a point within their weapon's range, and make an individual attack roll against all targets within a 10' radius of the point, adding any applicable bonuses from Lethal, Burst Attack, Tipped Arrows and Whistling Shot.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Frightened": {
+          "name": "Frightened",
+          "short": "Frighten",
+          "groupIcon": "gi-terror",
+          "description": "Target is terrified by the source of this condition and will utilize its movement action to put space between itself and the source. In addition:\\nThey have a displaced roll on any check stemming from the source of the condition.\\nThey have a displaced roll when making an attack roll against the source of the condition."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "With this altered strike, the character may choose a point within their weapon's range, and make an individual attack roll against all targets within a 10' radius of the point, adding any applicable bonuses from Lethal, Burst Attack, Tipped Arrows and Whistling Shot.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 4,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   }
 }

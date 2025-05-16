@@ -1,10 +1,17 @@
 <template>
   <BCard class="characterCard">
     <BCardImg
-      v-if="useImg"
-      :src="getCharacterImage()"
+      v-if="props.image && useImg"
+      :src="props.image"
       style="border: 4px solid #dfdfdf; border-radius: 0; background-color: #dfdfdf"
     ></BCardImg>
+    <div
+      v-if="useImg && !props.image"
+      class="addIconContainer"
+      :style="{ background: designStore.inputBacking }"
+    >
+      <i class="bi bi-person" style="position: relative"></i>
+    </div>
     <div v-if="!useImg" class="addIconContainer" :style="{ background: designStore.inputBacking }">
       <i class="bi bi-person-add" style="position: relative; right: 1rem"></i>
     </div>
@@ -19,13 +26,13 @@ import { BCard, BCardImg, BCardTitle } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 
 export default {
-  props: ['characterProp', 'name', 'useImg'],
+  props: ['characterProp', 'name', 'useImg', 'image'],
   setup(props, context) {
     const character = ref(props.characterProp)
     const designStore = useDesignStore()
     const name = ref(props.name)
     const useImg = ref(props.useImg)
-    return { character, designStore }
+    return { character, designStore, props }
   },
   components: {
     BCard,

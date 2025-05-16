@@ -17,6 +17,8 @@ import { BAccordion, BAccordionItem } from 'bootstrap-vue-next'
 import ActionsRepresentationWidget from './ActionsRepresentationWidget.vue'
 import BPopover from 'bootstrap-vue-next/src/directives/BPopover.js'
 import BarPlannerDisplay from './BarPlannerDisplay.vue'
+import { useCharacterComputedStore } from '@/stores/characterComputedStore'
+import { storeToRefs } from 'pinia'
 
 export default {
   setup(props, context) {
@@ -24,11 +26,39 @@ export default {
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
+    const characterComputedStore = useCharacterComputedStore()
+
+    const {
+      secondaryHandheldPassives,
+      primaryHandheldPassives,
+      wornArmorPassives,
+      isStunned,
+      isPinned,
+      isProne,
+      isSlowed,
+      base,
+      flight,
+      swimming,
+      climbing,
+      burrowing
+    } = storeToRefs(characterComputedStore)
     return {
       designStore,
       modal,
       userStore,
-      characterStore
+      characterStore,
+      secondaryHandheldPassives,
+      primaryHandheldPassives,
+      wornArmorPassives,
+      isStunned,
+      isPinned,
+      isProne,
+      isSlowed,
+      base,
+      flight,
+      swimming,
+      climbing,
+      burrowing
     }
   },
   components: {
@@ -81,7 +111,25 @@ export default {
       </div>
       <EffectsRibbon></EffectsRibbon>
       <OverviewAttributes></OverviewAttributes>
-      <MovespeedWidget></MovespeedWidget>
+      <MovespeedWidget
+        :traits="characterStore.traits"
+        :secondaryHandheldPassives="secondaryHandheldPassives"
+        :primaryHandheldPassives="primaryHandheldPassives"
+        :wornArmorPassives="wornArmorPassives"
+        :movementStatusModifiers="characterStore.movementStatusModifiers"
+        :statusEffects="characterStore.statusEffects"
+        :removeMovementStatusModifier="characterStore.removeMovementStatusModifier"
+        :addNewMovementStatusModifier="characterStore.addNewMovementStatusModifier"
+        :isStunned="isStunned"
+        :isPinned="isPinned"
+        :isProne="isProne"
+        :isSlowed="isSlowed"
+        :base="base"
+        :flight="flight"
+        :swimming="swimming"
+        :climbing="climbing"
+        :burrowing="burrowing"
+      ></MovespeedWidget>
       <TitleWidget title="Abilities" style="margin-top: -0.25rem"></TitleWidget>
       <AbilitiesTable></AbilitiesTable>
     </div>

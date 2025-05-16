@@ -7,8 +7,10 @@ import { useCharacterStore } from '../../stores/characterStore'
 import CustomModal from '../CustomModal.vue'
 import CustomCheckbox from './CustomCheckbox.vue'
 import IconPicker from '../IconPicker.vue'
+import { DEFAULT_DESIGN } from '@/bases'
 
 export default {
+  props: ['isAdventure'],
   setup(props, context) {
     const design = useDesignStore()
     const modal = ref(false)
@@ -196,7 +198,8 @@ export default {
       update,
       sidebarBacking,
       sidebarText,
-      designs
+      designs,
+      props
     }
   },
   methods: {
@@ -219,31 +222,14 @@ export default {
         iconFill: this.iconFill,
         iconColor: this.iconColor
       }
-      this.design.setDesign(designObj, useUserStore().getUserId, useCharacterStore().getCharacterId)
+      this.design.setDesign(designObj, useUserStore().getUserId, this.props.isAdventure)
     },
     reset() {
-      let designObj = {
-        primaryTheme: '#422c58',
-        secondaryTheme: '#c2b172',
-        inputBacking: '#f1eef1',
-        inputText: '#000000',
-        sidebarBacking: '#e7e2e9',
-        sidebarText: '#000000',
-        primaryText: '#dfdfdf',
-        pageBackdrop: '#dfdfdf',
-        alertTheme: '#c15be6',
-        font: 'Bahnschrift',
-        titleFont: 'Bahnschrift',
-        icon: 'bi bi-square',
-        iconFill: 'bi bi-check',
-        charIconFlair: 'bi bi-stars',
-        charIcon: 'bi bi-moon-stars-fill',
-        iconColor: '#000000'
-      }
-      this.design.setDesign(designObj, useUserStore().getUserId, useCharacterStore().getCharacterId)
+      let designObj = DEFAULT_DESIGN
+      this.design.setDesign(designObj, useUserStore().getUserId, this.props.isAdventure)
     },
     setFromDropdown(obj) {
-      this.design.setDesign(obj, useUserStore().getUserId, useCharacterStore().getCharacterId)
+      this.design.setDesign(obj, useUserStore().getUserId, this.props.isAdventure)
     }
   },
   components: {

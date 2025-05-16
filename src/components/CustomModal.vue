@@ -1,16 +1,31 @@
 <script lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue'
+import { onKeyStroke, useEventListener, useFocus } from '@vueuse/core'
+
 import { useDesignStore } from '../stores/designStore'
 
 export default {
   emits: ['close'],
-  props: ['showModal', 'title'],
-  setup(props) {
+  props: ['showModal', 'title', 'background', 'color', 'secondary'],
+  setup(props, context) {
     const designStore = useDesignStore()
+    const element = ref<HTMLElement | null>(null)
+
+    onKeyStroke(
+      'Escape',
+      () => {
+        context.emit('close')
+      },
+      { target: element }
+    )
+
     return { designStore, props }
   },
   computed: {
     scrollbarColor() {
-      return this.designStore.secondaryTheme + ' ' + this.designStore.primaryTheme
+      let sec = this.props.secondary || this.designStore.secondaryTheme
+      let prim = this.props.background || this.designStore.primaryTheme
+      return sec + ' ' + prim
     }
   },
   methods: {
@@ -32,13 +47,13 @@ export default {
           class="modale"
           style="padding: 1rem"
           :style="{
-            background: designStore.primaryTheme,
-            color: designStore.primaryText,
+            background: props.background || designStore.primaryTheme,
+            color: props.color || designStore.primaryText,
             fontFamily: designStore.font
           }"
         >
           <div
-            style="overflow-y: auto; max-height: 40rem"
+            style="overflow-y: auto; max-height: 40rem; overscroll-behavior: contain"
             :style="{ scrollbarColor: scrollbarColor }"
           >
             <span
@@ -57,12 +72,12 @@ export default {
             <span
               style="display: flex"
               :style="{
-                borderColor: designStore.secondaryTheme,
-                color: designStore.secondaryTheme
+                borderColor: props.secondary || designStore.secondaryTheme,
+                color: props.secondary || designStore.secondaryTheme
               }"
             >
               <v-icon name="gi-abstract-119" style="position: relative; left: 0.25rem"></v-icon>
-              <hr :style="{ borderColor: designStore.secondaryTheme }" />
+              <hr :style="{ borderColor: props.secondary || designStore.secondaryTheme }" />
               <v-icon name="gi-abstract-119" style="position: relative; right: 0.25rem"></v-icon>
             </span>
             <section class="modal-body">
@@ -93,6 +108,7 @@ export default {
   justify-content: center;
   align-items: flex-start;
   padding-top: 10rem;
+  overflow: hidden;
 }
 
 hr {
@@ -118,6 +134,7 @@ hr {
   max-width: 60rem;
   min-height: 10rem;
   height: fit-content;
+  max-height: calc(100vh - 5%);
 }
 
 .modal-body {

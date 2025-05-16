@@ -50,8 +50,8 @@ export default {
     <BFormInput
       class="detailInputStyles"
       @change="change()"
-      lazy
       v-model="fieldValue"
+      debounce="100"
       :style="{
         background: designStore.inputBacking,
         color: designStore.inputText,

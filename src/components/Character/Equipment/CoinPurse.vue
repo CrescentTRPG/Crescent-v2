@@ -22,13 +22,14 @@ export default {
     function organizeIntoStacks() {
       let coins = localCurrencyObj.value
       let overflow = 0
-      currency.value.forEach((coin) => {
+      currency.value.forEach((coin, index) => {
         let amount = parseInt(coin.amount + '') + overflow
         coins[coin.num + ''] = {
           num: coin.num,
           name: coin.name,
           exchangeRate: coin.exchangeRate,
-          amount: amount % parseInt(coin.exchangeRate + '')
+          amount:
+            index < currency.value.length - 1 ? amount % parseInt(coin.exchangeRate + '') : amount
         }
         overflow = Math.floor(amount / parseInt(coin.exchangeRate + ''))
       })

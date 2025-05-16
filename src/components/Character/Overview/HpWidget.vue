@@ -2,50 +2,42 @@
 import { computed, ComputedRef, ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 
-import { useCharacterStore } from '@/stores/characterStore'
-
 import { useUserStore } from '@/stores/userStore'
-import { storeToRefs } from 'pinia'
 import CustomModal from '@/components/CustomModal.vue'
-import {
-  BButton,
-  BFormInput,
-  BFormSelect,
-  BInputGroup,
-  BInputGroupText,
-  BPopover
-} from 'bootstrap-vue-next'
-import { describe } from 'node:test'
-import { Ref } from 'vue'
+import { BButton, BFormInput, BFormSelect, BInputGroup } from 'bootstrap-vue-next'
+import { Ref, watch } from 'vue'
 import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
 import StatusEffectItem from './StatusEffectItem.vue'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
-import { useSkillStore } from '@/stores/skillsStore'
-import { useEquipmentStore } from '@/stores/equipmentStore'
+
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
 
 export default {
+  props: [
+    'setCurrentAndBarrier',
+    'totalHp',
+    'traits',
+    'statusEffects',
+    'hpStatusModifiers',
+    'storeRef',
+    'currentHp',
+    'barrierHp',
+    'wornArmorPassives',
+    'secondaryHandheldPassives',
+    'primaryHandheldPassives',
+    'addNewHpStatusModifier',
+    'removeHpStatusModifier'
+  ],
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
-    const characterStore = useCharacterStore()
-    const { totalAbilityPoints, currentHp, barrierHp, hpStatusModifiers, statusEffects } =
-      storeToRefs(characterStore)
-    const martialPerksStore = useMartialPerksStore()
-    const { perkGain } = storeToRefs(martialPerksStore)
-    const skillsStore = useSkillStore()
-    const { skills } = storeToRefs(skillsStore)
-    const equipmentStore = useEquipmentStore()
-    const { equipment } = storeToRefs(equipmentStore)
     const damage: Ref<number> = ref(0)
     const dice: Ref<number> = ref(0)
     const heal: Ref<number> = ref(0)
     const barrier: Ref<number> = ref(0)
-    const currentHpCopy = ref(currentHp.value)
-    const currentBarrierCopy = ref(barrierHp.value)
-
+    const currentHpCopy = ref(props.currentHp)
+    const currentBarrierCopy = ref(props.barrierHp)
     const damageTypes = [
       'Un-typed',
       'Fire',
@@ -62,24 +54,6 @@ export default {
       'Pure Magic'
     ]
 
-    const wornArmorPassives = computed(() => {
-      return equipment.value.items.Armor[equipment.value.wornArmor]?.equippedStats?.passives || {}
-    })
-
-    const primaryHandheldPassives = computed(() => {
-      return (
-        equipment.value.items.Weapon[equipment.value.primaryHand]?.equippedStats?.passives || {}
-      )
-    })
-
-    const secondaryHandheldPassives = computed(() => {
-      return (
-        equipment.value.items.Shield[equipment.value.secondaryHand]?.equippedStats?.passives ||
-        equipment.value.items.Weapon[equipment.value.secondaryHand]?.equippedStats?.passives ||
-        {}
-      )
-    })
-
     const modifierType = [
       'Rot',
       'Suffering',
@@ -91,33 +65,10 @@ export default {
 
     const damageType = ref('un-typed')
 
-    function getPerkAndSkillGain() {
-      const perks = perkGain.value
-      let perkBonus = 0
-      if (perks[0] == 'hitpoints') {
-        perkBonus += 3
-      }
-      if (perks[1] == 'hitpoints') {
-        perkBonus += 6
-      }
-      if (perks[2] == 'hitpoints') {
-        perkBonus += 9
-      }
-      if (perks[3] == 'hitpoints') {
-        perkBonus += 12
-      }
-      if (perks[4] == 'hitpoints') {
-        perkBonus += 15
-      }
-
-      let skillBonus = skills.value['Fitness']?.skill ? skills.value['Fitness'].rank * 3 : 0
-      return perkBonus + skillBonus
-    }
-
     function getTotalColor() {
       if (
-        hpStatusModifiers.value['Override Base Hp'] ||
-        hpStatusModifiers.value['Modify Base Hp']
+        props.hpStatusModifiers['Override Base Hp'] ||
+        props.hpStatusModifiers['Modify Base Hp']
       ) {
         return designStore.alertTheme
       }
@@ -125,7 +76,7 @@ export default {
     }
 
     function getBarrierColor() {
-      if (hpStatusModifiers.value['Barrier Regen']) {
+      if (props.hpStatusModifiers['Barrier Regen']) {
         return designStore.alertTheme
       }
       return designStore.secondaryTheme
@@ -133,91 +84,18 @@ export default {
 
     function getCurrentColor() {
       if (
-        hpStatusModifiers.value['Rot'] ||
-        hpStatusModifiers.value['Hp Regen'] ||
-        hpStatusModifiers.value['Suffering'] ||
-        statusEffects.value['Suffering']
+        props.hpStatusModifiers['Rot'] ||
+        props.hpStatusModifiers['Hp Regen'] ||
+        props.hpStatusModifiers['Suffering'] ||
+        props.statusEffects['Suffering']
       ) {
         return designStore.alertTheme
       }
       return designStore.primaryText
     }
-    const totalHp: ComputedRef<number> = computed(() => {
-      let ret = 0
-      const level = Math.floor(totalAbilityPoints.value / 10)
-      if (level < 3) {
-        ret = 10 + level * 8
-      } else if (level < 15) {
-        ret = 34 + (level - 3) * 4
-      } else if (level < 40) {
-        ret = 82 + (level - 15) * 2
-      } else {
-        ret = Math.floor(152 + (level - 40) * 0.1)
-      }
-      ret += getPerkAndSkillGain()
-      if (characterStore.traits['Bonus HP']) {
-        ret += parseInt(characterStore.traits['Bonus HP'].number)
-      }
-      if (wornArmorPassives.value['Override Base Hp']) {
-        ret = parseInt(wornArmorPassives.value['Override Base Hp'].modAmount)
-      }
-      if (primaryHandheldPassives.value['Override Base Hp']) {
-        ret = parseInt(primaryHandheldPassives.value['Override Base Hp'].modAmount)
-      }
-      if (secondaryHandheldPassives.value['Override Base Hp']) {
-        ret = parseInt(secondaryHandheldPassives.value['Override Base Hp'].modAmount)
-      }
-      if (hpStatusModifiers.value['Override Base Hp']) {
-        let max = Object.values(hpStatusModifiers.value['Override Base Hp']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          0
-        )
-        if (max > 0) {
-          ret = max
-        }
-      }
-      let modifier = -1000
-      if (wornArmorPassives.value['Modify Base Hp']) {
-        modifier = Math.max(
-          parseInt(wornArmorPassives.value['Modify Base Hp']?.modAmount),
-          modifier
-        )
-      }
-      if (primaryHandheldPassives.value['Modify Base Hp']) {
-        modifier = Math.max(
-          parseInt(primaryHandheldPassives.value['Modify Base Hp']?.modAmount),
-          modifier
-        )
-      }
-      if (secondaryHandheldPassives.value['Modify Base Hp']) {
-        modifier = Math.max(
-          parseInt(secondaryHandheldPassives.value['Modify Base Hp']?.modAmount),
-          modifier
-        )
-      }
-      if (modifier == -1000) {
-        modifier = 0
-      }
-
-      if (hpStatusModifiers.value['Modify Base Hp']) {
-        let max = Object.values(hpStatusModifiers.value['Modify Base Hp']).reduce(
-          (acc: number, mod: any) =>
-            parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
-          -1000
-        )
-        if (max != -1000) {
-          modifier = modifier + max
-        }
-      }
-      if (currentHp.value > ret + modifier) {
-        setNewCurrentHpValue(parseInt(ret + modifier + ''))
-      }
-      return Math.max(ret + modifier, 0)
-    })
 
     const statusModifiersList: ComputedRef<Array<any>> = computed(() => {
-      let modifiers = Object.values(hpStatusModifiers.value)
+      let modifiers = Object.values(props.hpStatusModifiers)
       let ret = []
       modifiers.forEach((modGroup: any) => {
         ret = ret.concat(Object.values(modGroup))
@@ -239,12 +117,12 @@ export default {
         modAmount: addedVal.modAmount,
         sufferingDamageType: addedVal.sufferingDamageType
       }
-      characterStore.addNewHpStatusModifier(statusObj)
+      props.addNewHpStatusModifier(statusObj)
     }
 
     function dealDamage() {
-      let finalBarrier = barrierHp.value
-      let finalCurrent = currentHp.value
+      let finalBarrier = props.barrierHp
+      let finalCurrent = props.currentHp
 
       finalBarrier = finalBarrier - getRealDamageValue(damageType.value, damage.value)
       if (finalBarrier < 0) {
@@ -252,7 +130,7 @@ export default {
         finalBarrier = 0
         console.log(finalBarrier)
       }
-      characterStore.setCurrentAndBarrierHP(finalCurrent, finalBarrier)
+      props.setCurrentAndBarrier(finalCurrent, finalBarrier)
     }
 
     function getRealDamageValue(damageType: string, damage: number) {
@@ -260,42 +138,42 @@ export default {
         return damage
       }
       let resistance =
-        characterStore.traits[damageType + ' Resistance'] ||
-        statusEffects.value[damageType + ' Resistance'] ||
-        secondaryHandheldPassives.value[damageType + ' Resistance'] ||
-        primaryHandheldPassives.value[damageType + ' Resistance'] ||
-        wornArmorPassives.value[damageType + ' Resistance']
+        props.traits[damageType + ' Resistance'] ||
+        props.statusEffects[damageType + ' Resistance'] ||
+        props.secondaryHandheldPassives[damageType + ' Resistance'] ||
+        props.primaryHandheldPassives[damageType + ' Resistance'] ||
+        props.wornArmorPassives[damageType + ' Resistance']
       let susceptibility =
-        characterStore.traits[damageType + ' Susceptibility'] ||
-        statusEffects.value[damageType + ' Susceptibility'] ||
-        secondaryHandheldPassives.value[damageType + ' Susceptibility'] ||
-        primaryHandheldPassives.value[damageType + ' Susceptibility'] ||
-        wornArmorPassives.value[damageType + ' Susceptibility']
+        props.traits[damageType + ' Susceptibility'] ||
+        props.statusEffects[damageType + ' Susceptibility'] ||
+        props.secondaryHandheldPassives[damageType + ' Susceptibility'] ||
+        props.primaryHandheldPassives[damageType + ' Susceptibility'] ||
+        props.wornArmorPassives[damageType + ' Susceptibility']
       let immunity =
-        characterStore.traits[damageType + ' Immunity'] ||
-        statusEffects.value[damageType + ' Immunity'] ||
-        secondaryHandheldPassives.value[damageType + ' Immunity'] ||
-        primaryHandheldPassives.value[damageType + ' Immunity'] ||
-        wornArmorPassives.value[damageType + ' Immunity']
+        props.traits[damageType + ' Immunity'] ||
+        props.statusEffects[damageType + ' Immunity'] ||
+        props.secondaryHandheldPassives[damageType + ' Immunity'] ||
+        props.primaryHandheldPassives[damageType + ' Immunity'] ||
+        props.wornArmorPassives[damageType + ' Immunity']
       let vulnerability =
-        characterStore.traits[damageType + ' Vulnerability'] ||
-        statusEffects.value[damageType + ' Vulnerability'] ||
-        secondaryHandheldPassives.value[damageType + ' Vulnerability'] ||
-        primaryHandheldPassives.value[damageType + ' Vulnerability'] ||
-        wornArmorPassives.value[damageType + ' Vulnerability']
+        props.traits[damageType + ' Vulnerability'] ||
+        props.statusEffects[damageType + ' Vulnerability'] ||
+        props.secondaryHandheldPassives[damageType + ' Vulnerability'] ||
+        props.primaryHandheldPassives[damageType + ' Vulnerability'] ||
+        props.wornArmorPassives[damageType + ' Vulnerability']
       let damageReduction =
-        characterStore.traits[damageType + ' Damage Reduction'] ||
-        statusEffects.value[damageType + ' Damage Reduction'] ||
-        secondaryHandheldPassives.value[damageType + ' Damage Reduction'] ||
-        primaryHandheldPassives.value[damageType + ' Damage Reduction'] ||
-        wornArmorPassives.value[damageType + ' Damage Reduction']
+        props.traits[damageType + ' Damage Reduction'] ||
+        props.statusEffects[damageType + ' Damage Reduction'] ||
+        props.secondaryHandheldPassives[damageType + ' Damage Reduction'] ||
+        props.primaryHandheldPassives[damageType + ' Damage Reduction'] ||
+        props.wornArmorPassives[damageType + ' Damage Reduction']
       let damageAmplification =
-        characterStore.traits[damageType + ' Damage Amplification'] ||
-        statusEffects.value[damageType + ' Damage Amplification'] ||
-        secondaryHandheldPassives.value[damageType + 'Damage Amplification'] ||
-        primaryHandheldPassives.value[damageType + ' Damage Amplification'] ||
-        wornArmorPassives.value[damageType + ' Damage Amplification']
-      if (characterStore.statusEffects['Petrified']) {
+        props.traits[damageType + ' Damage Amplification'] ||
+        props.statusEffects[damageType + ' Damage Amplification'] ||
+        props.secondaryHandheldPassives[damageType + 'Damage Amplification'] ||
+        props.primaryHandheldPassives[damageType + ' Damage Amplification'] ||
+        props.wornArmorPassives[damageType + ' Damage Amplification']
+      if (props.statusEffects['Petrified']) {
         if (
           damageType == 'Fire' ||
           damageType == 'Ice' ||
@@ -316,41 +194,41 @@ export default {
       ) {
         resistance =
           resistance ||
-          characterStore.traits['Elemental Resistance'] ||
-          secondaryHandheldPassives.value[damageType + ' Elemental Resistance'] ||
-          primaryHandheldPassives.value[damageType + ' Elemental Resistance'] ||
-          wornArmorPassives.value[damageType + ' Elemental Resistance']
+          props.traits['Elemental Resistance'] ||
+          props.secondaryHandheldPassives[damageType + ' Elemental Resistance'] ||
+          props.primaryHandheldPassives[damageType + ' Elemental Resistance'] ||
+          props.wornArmorPassives[damageType + ' Elemental Resistance']
         susceptibility =
           susceptibility ||
-          characterStore.traits['Elemental Susceptibility'] ||
-          secondaryHandheldPassives.value[damageType + ' Elemental Susceptibility'] ||
-          primaryHandheldPassives.value[damageType + ' Elemental Susceptibility'] ||
-          wornArmorPassives.value[damageType + ' Elemental Susceptibility']
+          props.traits['Elemental Susceptibility'] ||
+          props.secondaryHandheldPassives[damageType + ' Elemental Susceptibility'] ||
+          props.primaryHandheldPassives[damageType + ' Elemental Susceptibility'] ||
+          props.wornArmorPassives[damageType + ' Elemental Susceptibility']
         immunity =
           immunity ||
-          characterStore.traits['Elemental Immunity'] ||
-          characterStore.statusEffects['Ethereal'] ||
-          secondaryHandheldPassives.value[damageType + ' Elemental Immunity'] ||
-          primaryHandheldPassives.value[damageType + ' Elemental Immunity'] ||
-          wornArmorPassives.value[damageType + ' Elemental Immunity']
+          props.traits['Elemental Immunity'] ||
+          props.statusEffects['Ethereal'] ||
+          props.secondaryHandheldPassives[damageType + ' Elemental Immunity'] ||
+          props.primaryHandheldPassives[damageType + ' Elemental Immunity'] ||
+          props.wornArmorPassives[damageType + ' Elemental Immunity']
         vulnerability =
           vulnerability ||
-          characterStore.traits['Elemental Vulnerability'] ||
-          secondaryHandheldPassives.value[damageType + ' Elemental Vulnerability'] ||
-          primaryHandheldPassives.value[damageType + ' Elemental Vulnerability'] ||
-          wornArmorPassives.value[damageType + ' Elemental Vulnerability']
+          props.traits['Elemental Vulnerability'] ||
+          props.secondaryHandheldPassives[damageType + ' Elemental Vulnerability'] ||
+          props.primaryHandheldPassives[damageType + ' Elemental Vulnerability'] ||
+          props.wornArmorPassives[damageType + ' Elemental Vulnerability']
         damageReduction =
           damageReduction ||
-          characterStore.traits['Elemental Damage Reduction'] ||
-          secondaryHandheldPassives.value[damageType + ' Elemental Damage Reduction'] ||
-          primaryHandheldPassives.value[damageType + ' Elemental Damage Reduction'] ||
-          wornArmorPassives.value[damageType + ' Elemental Damage Reduction']
+          props.traits['Elemental Damage Reduction'] ||
+          props.secondaryHandheldPassives[damageType + ' Elemental Damage Reduction'] ||
+          props.primaryHandheldPassives[damageType + ' Elemental Damage Reduction'] ||
+          props.wornArmorPassives[damageType + ' Elemental Damage Reduction']
         damageAmplification =
           damageAmplification ||
-          characterStore.traits['Elemental Damage Amplification'] ||
-          secondaryHandheldPassives.value[damageType + ' Elemental Damage Amplification'] ||
-          primaryHandheldPassives.value[damageType + ' Elemental Damage Amplification'] ||
-          wornArmorPassives.value[damageType + ' Elemental Damage Amplification']
+          props.traits['Elemental Damage Amplification'] ||
+          props.secondaryHandheldPassives[damageType + ' Elemental Damage Amplification'] ||
+          props.primaryHandheldPassives[damageType + ' Elemental Damage Amplification'] ||
+          props.wornArmorPassives[damageType + ' Elemental Damage Amplification']
       }
 
       if (
@@ -362,41 +240,41 @@ export default {
       ) {
         resistance =
           resistance ||
-          characterStore.traits['Mundane Resistance'] ||
-          secondaryHandheldPassives.value[damageType + ' Mundane Resistance'] ||
-          primaryHandheldPassives.value[damageType + ' Mundane Resistance'] ||
-          wornArmorPassives.value[damageType + ' Mundane Resistance']
+          props.traits['Mundane Resistance'] ||
+          props.secondaryHandheldPassives[damageType + ' Mundane Resistance'] ||
+          props.primaryHandheldPassives[damageType + ' Mundane Resistance'] ||
+          props.wornArmorPassives[damageType + ' Mundane Resistance']
         susceptibility =
           susceptibility ||
-          characterStore.traits['Mundane Susceptibility'] ||
-          secondaryHandheldPassives.value[damageType + ' Mundane Susceptibility'] ||
-          primaryHandheldPassives.value[damageType + ' Mundane Susceptibility'] ||
-          wornArmorPassives.value[damageType + ' Mundane Susceptibility']
+          props.traits['Mundane Susceptibility'] ||
+          props.secondaryHandheldPassives[damageType + ' Mundane Susceptibility'] ||
+          props.primaryHandheldPassives[damageType + ' Mundane Susceptibility'] ||
+          props.wornArmorPassives[damageType + ' Mundane Susceptibility']
         immunity =
           immunity ||
-          characterStore.traits['Mundane Immunity'] ||
-          characterStore.statusEffects['Ethereal'] ||
-          secondaryHandheldPassives.value[damageType + ' Mundane Immunity'] ||
-          primaryHandheldPassives.value[damageType + ' Mundane Immunity'] ||
-          wornArmorPassives.value[damageType + ' Mundane Immunity']
+          props.traits['Mundane Immunity'] ||
+          props.statusEffects['Ethereal'] ||
+          props.secondaryHandheldPassives[damageType + ' Mundane Immunity'] ||
+          props.primaryHandheldPassives[damageType + ' Mundane Immunity'] ||
+          props.wornArmorPassives[damageType + ' Mundane Immunity']
         vulnerability =
           vulnerability ||
-          characterStore.traits['Mundane Vulnerability'] ||
-          secondaryHandheldPassives.value[damageType + ' Mundane Vulnerability'] ||
-          primaryHandheldPassives.value[damageType + ' Mundane Vulnerability'] ||
-          wornArmorPassives.value[damageType + ' Mundane Vulnerability']
+          props.traits['Mundane Vulnerability'] ||
+          props.secondaryHandheldPassives[damageType + ' Mundane Vulnerability'] ||
+          props.primaryHandheldPassives[damageType + ' Mundane Vulnerability'] ||
+          props.wornArmorPassives[damageType + ' Mundane Vulnerability']
         damageReduction =
           damageReduction ||
-          characterStore.traits['Mundane Damage Reduction'] ||
-          secondaryHandheldPassives.value[damageType + ' Mundane Damage Reduction'] ||
-          primaryHandheldPassives.value[damageType + ' Mundane Damage Reduction'] ||
-          wornArmorPassives.value[damageType + ' Mundane Damage Reduction']
+          props.traits['Mundane Damage Reduction'] ||
+          props.secondaryHandheldPassives[damageType + ' Mundane Damage Reduction'] ||
+          props.primaryHandheldPassives[damageType + ' Mundane Damage Reduction'] ||
+          props.wornArmorPassives[damageType + ' Mundane Damage Reduction']
         damageAmplification =
           damageAmplification ||
-          characterStore.traits['Mundane Damage Amplification'] ||
-          secondaryHandheldPassives.value[damageType + ' Mundane Damage Amplification'] ||
-          primaryHandheldPassives.value[damageType + ' Mundane Damage Amplification'] ||
-          wornArmorPassives.value[damageType + ' Mundane Damage Amplification']
+          props.traits['Mundane Damage Amplification'] ||
+          props.secondaryHandheldPassives[damageType + ' Mundane Damage Amplification'] ||
+          props.primaryHandheldPassives[damageType + ' Mundane Damage Amplification'] ||
+          props.wornArmorPassives[damageType + ' Mundane Damage Amplification']
       }
 
       let damageAmp = 0
@@ -428,56 +306,53 @@ export default {
     }
 
     function dealDamageIgnoreShield() {
-      let finalCurrent = currentHp.value
+      let finalCurrent = props.currentHp
 
       finalCurrent = finalCurrent - damage.value
-      characterStore.setCurrentAndBarrierHP(finalCurrent, barrierHp.value)
+      props.setCurrentAndBarrier(finalCurrent, props.barrierHp)
     }
     function applyHeal() {
-      let finalCurrent: number = currentHp.value
+      let finalCurrent: number = props.currentHp
 
       finalCurrent = finalCurrent + parseInt(heal.value + '')
-      if (finalCurrent > totalHp.value) {
-        finalCurrent = totalHp.value
+      if (finalCurrent > props.totalHp) {
+        finalCurrent = props.totalHp
       }
-      characterStore.setCurrentAndBarrierHP(finalCurrent, barrierHp.value)
+      props.setCurrentAndBarrier(finalCurrent, props.barrierHp)
     }
     function applyHealWithOvershield() {
-      let finalCurrent = currentHp.value
-      let finalBarrier = barrierHp.value
+      let finalCurrent = props.currentHp
+      let finalBarrier = props.barrierHp
 
       finalCurrent = finalCurrent + parseInt(heal.value + '')
-      if (finalCurrent > totalHp.value) {
-        finalBarrier += finalCurrent - totalHp.value
-        console.log(finalCurrent - totalHp.value, ' vibes')
-        finalCurrent = totalHp.value
+      if (finalCurrent > props.totalHp) {
+        finalBarrier += finalCurrent - props.totalHp
+        console.log(finalCurrent - props.totalHp, ' vibes')
+        finalCurrent = props.totalHp
       }
-      characterStore.setCurrentAndBarrierHP(finalCurrent, finalBarrier)
+      props.setCurrentAndBarrier(finalCurrent, finalBarrier)
     }
     function applyBarrier() {
-      let finalCurrent = currentHp.value
-      let finalBarrier = barrierHp.value
+      let finalCurrent = props.currentHp
+      let finalBarrier = props.barrierHp
 
       finalBarrier = finalBarrier + parseInt(barrier.value + '')
 
-      characterStore.setCurrentAndBarrierHP(finalCurrent, finalBarrier)
+      props.setCurrentAndBarrier(finalCurrent, finalBarrier)
     }
     function setNewCurrentBarrierValue() {
-      let finalCurrent = currentHp.value
+      let finalCurrent = props.currentHp
 
-      characterStore.setCurrentAndBarrierHP(finalCurrent, parseInt(currentBarrierCopy.value + ''))
+      props.setCurrentAndBarrier(finalCurrent, parseInt(currentBarrierCopy.value + ''))
     }
     function setNewCurrentHpValue(val = currentHpCopy.value) {
-      let finalBarrier = barrierHp.value
+      let finalBarrier = props.barrierHp
 
-      characterStore.setCurrentAndBarrierHP(
-        Math.min(parseInt(val + ''), totalHp.value),
-        finalBarrier
-      )
+      props.setCurrentAndBarrier(Math.min(parseInt(val + ''), props.totalHp), finalBarrier)
     }
 
     function removeModifier(modifierType, modAmount, linkedStatus) {
-      characterStore.removeHpStatusModifier({
+      props.removeHpStatusModifier({
         modifierType: modifierType,
         modAmount: modAmount,
         linkedStatus: linkedStatus,
@@ -489,10 +364,6 @@ export default {
       designStore,
       modal,
       userStore,
-      characterStore,
-      totalHp,
-      currentHp,
-      barrierHp,
       damage,
       heal,
       damageType,
@@ -508,14 +379,13 @@ export default {
       setNewCurrentBarrierValue,
       setNewCurrentHpValue,
       addHpStatusModifier,
-      hpStatusModifiers,
       statusModifiersList,
       getCurrentColor,
       getBarrierColor,
       getTotalColor,
       dice,
-      wornArmorPassives,
-      damageTypes
+      damageTypes,
+      props
     }
   },
   components: {
@@ -627,7 +497,7 @@ export default {
               :style="{ color: getTotalColor() }"
             >
               <div style="align-self: center; margin: 0.5rem; margin-bottom: -1rem" class="bigText">
-                {{ totalHp }}
+                {{ props.totalHp }}
               </div>
               <div style="align-self: center; font-size: 0.75rem" class="liltext">Total</div>
             </div>
@@ -695,7 +565,7 @@ export default {
         <div
           style="font-size: x-large; text-align: center; margin-top: -1rem; margin-bottom: 0.25rem"
         >
-          {{ currentHp }} Current with {{ barrierHp }} Barrier / {{ totalHp }} Total
+          {{ currentHp }} Current with {{ barrierHp }} Barrier / {{ props.totalHp }} Total
         </div>
         <TitleWidget
           class="expandingInput"

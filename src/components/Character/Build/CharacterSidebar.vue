@@ -5,12 +5,14 @@ import { useDesignStore } from '../../../stores/designStore'
 import { useCharacterStore } from '@/stores/characterStore'
 import { useSpellStore } from '@/stores/spellsStore'
 import { useSkillStore } from '@/stores/skillsStore'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
 
 export default {
   setup(props, context) {
     const designStore = useDesignStore()
     const spellsStore = useSpellStore()
     const skillsStore = useSkillStore()
+    const martialSkillsStore = useMartialSkillsStore()
 
     const hasFauna: ComputedRef<Boolean> = computed(() => {
       if (spellsStore.spellgroups['Fauna'] != undefined) {
@@ -33,8 +35,15 @@ export default {
       return false
     })
 
+    const hasCombatStyles: ComputedRef<Boolean> = computed(() => {
+      if (Object.keys(martialSkillsStore.combatStyles).length > 0) {
+        return true
+      }
+      return false
+    })
+
     const navPos = ref('corestats')
-    return { designStore, navPos, hasFauna, hasEffigy, hasPerformance }
+    return { designStore, navPos, hasFauna, hasEffigy, hasPerformance, hasCombatStyles }
   },
   methods: {
     navItemStyle(item: string) {
@@ -142,6 +151,17 @@ export default {
           <span class="textI short">Perform</span>
         </div>
       </BNavItem>
+      <BNavItem
+        v-if="hasCombatStyles"
+        :style="{ color: navItemStyle('martialbuilder') }"
+        @click="switchTab('martialbuilder')"
+      >
+        <div class="vertical">
+          <v-icon scale="1.5" name="gi-wide-arrow-dunk" />
+          <span class="textI long"> Martial Builder </span>
+          <span class="textI short"> Martial Builder </span>
+        </div>
+      </BNavItem>
     </BNav>
   </div>
 </template>
@@ -168,6 +188,8 @@ li {
   --bs-nav-link-hover-color: color !important;
   margin-left: 0;
   max-width: 9rem;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   border-right: solid 4px;
   /* box-shadow: inset -2px -3px 10px 2px; */

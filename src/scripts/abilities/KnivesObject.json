@@ -2,36 +2,183 @@
   "Blitz": {
     "name": "Blitz",
     "mp_cost": "Passive",
-    "description": "Spending the appropriate martial points to activate Bleed, Blinding Attack, Crippling Attack, and Throw causes every successful strike made with a knife to apply these specialization effects."
+    "description": "Spending the appropriate martial points to activate Bleed, Blinding Attack, Crippling Attack, and Throw causes every successful strike made with a knife to apply these specialization effects.",
+    "skillStats": {
+      "type": "Passive",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "Spending the appropriate martial points to activate Bleed, Blinding Attack, Crippling Attack, and Throw causes every successful strike made with a knife to apply these specialization effects.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 0,
+      "costType": "none",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": false,
+      "forceTypeMalleableToBe": "All Successful Strikes",
+      "typeMalleable": false
+    }
   },
   "Assassination": {
     "name": "Assassination",
     "mp_cost": "2 MP per rank",
-    "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank. The damage dice rolled is doubled if the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents."
+    "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank. The damage dice rolled is doubled if the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character uses their altered strike to inflict 1d10 piercing damage per rank.",
+      "alternateDescription": "The character uses their altered strike to inflict 2d10 piercing damage per rank.",
+      "causesSave": false,
+      "damageString": "1d10",
+      "alternateDamageString": "2d10",
+      "condition": "If the character has at least one placed roll on the attack or if the target of the attack is adjacent to at least one of their opponents.",
+      "mpCost": 2,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": true,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   },
   "Bleed": {
     "name": "Bleed",
     "mp_cost": "2 MP per strike",
-    "description": "The next successful strike this turn prevents the target from recovering any HP until the end of their next turn."
+    "description": "The next successful strike this turn prevents the target from recovering any HP until the end of their next turn.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn prevents the target from recovering any HP until the end of their next turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 2,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": true
+    }
   },
   "Blinding Attack": {
     "name": "Blinding Attack",
     "mp_cost": "3 MP per strike",
-    "description": "The next successful strike this turn blinds the target until the end of their next turn."
+    "description": "The next successful strike this turn blinds the target until the end of their next turn.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Blinded": {
+          "name": "Blinded",
+          "short": "Blind",
+          "groupIcon": "gi-sight-disabled",
+          "description": "Target cannot utilize its sight to perceive its surroundings, and has their LOS restricted to 10’. The target automatically fails any checks that require sight.\\nTrue blindness prevents all means of sight, even those  provided by magical or unnatural senses. Magical darkness inflicts True Blindness, limiting LOS to touch.\\nThe affected target suffers 2 displaced rolls on all PER checks.\\nAll attack rolls against the target gain a placed roll."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn blinds the target until the end of their next turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 3,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": true
+    }
   },
   "Crippling Attack": {
     "name": "Crippling Attack",
     "mp_cost": "3 MP per strike",
-    "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again."
+    "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Crippled": {
+          "name": "Crippled",
+          "short": "Cripple",
+          "groupIcon": "gi-arm-sling",
+          "description": "Target loses functionality of a limb. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn causes the target to lose functionality of a limb, AGI or STR save (target's choice) to negate. Should all of the targets' means of mobility be crippled, they no longer have access to movement DVs. The target must recover any amount of HP for the limb to function again.",
+      "alternateDescription": "",
+      "causesSave": "AGI or STR",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 3,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": true
+    }
   },
   "Throw": {
     "name": "Throw",
     "mp_cost": "1 MP per rank",
-    "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acro- -batics check."
+    "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character uses their altered strike to throw their weapon 30' per rank without a might or acrobatics check.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": true
+    }
   },
   "Lethal Barrage II": {
     "name": "Lethal Barrage II",
     "mp_cost": "1 MP per rank",
-    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
+    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+    "skillStats": {
+      "type": "All Successful Strikes",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "2",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
   }
 }

@@ -3,7 +3,7 @@ import { useCharacterStore } from '@/stores/characterStore'
 import { useDesignStore } from '@/stores/designStore'
 import BNavItem from 'bootstrap-vue-next/src/components/BNav/BNavItem.vue'
 import BNavbar from 'bootstrap-vue-next/src/components/BNavbar/BNavbar.vue'
-import { computed, ComputedRef, ref } from 'vue'
+import { computed, ComputedRef, Ref, ref } from 'vue'
 import TitleWidget from '../TitleWidget.vue'
 import AttributeSkillRoller from './AttributeSkillRoller.vue'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
@@ -14,6 +14,8 @@ import GuiDice from './GuiDice.vue'
 import MultifactedTextRoller from './MultifactedTextRoller.vue'
 import RollerPickerTab from './RollerPickerTab.vue'
 import RollModifiers from './RollModifiers.vue'
+import MartialDieRoller from './MartialDieRoller.vue'
+import TitleMedallion from '../TitleMedallion.vue'
 
 interface RollAttr {
   modifier: number
@@ -23,13 +25,45 @@ interface RollAttr {
 }
 
 export default {
-  setup() {
+  setup(props, context) {
     let designStore = useDesignStore()
     const characterStore = useCharacterStore()
     const statusEffectsStore = useStatusEffectStore()
     //rollsObj = {"roll group": str: "original string", subtotal: number, resultsArr: [{operator: '', dVal, isD, val, accepted, rejected}]}
 
     const rollDisplay = ref({})
+    const sortedRollDisplayArray = computed(() => {
+      let ret = Object.values(rollDisplay.value)
+      ret = ret.sort((a: any, b: any) => {
+        let aVal = JSON.parse(JSON.stringify(a))
+        let bVal = JSON.parse(JSON.stringify(b))
+        let aindex = aVal.str.indexOf('|')
+        let bindex = bVal.str.indexOf('|')
+        if (aindex > 0 && bindex > 0) {
+          let aKey =
+            aVal.str.indexOf('Roll') < 0
+              ? aVal.str.indexOf('Strike') + 6
+              : aVal.str.indexOf('Roll') + 4
+          let bKey =
+            bVal.str.indexOf('Roll') < 0
+              ? bVal.str.indexOf('Strike') + 6
+              : bVal.str.indexOf('Roll') + 4
+          let aNum = parseInt(aVal.str.substring(aKey, aindex))
+          let bNum = parseInt(bVal.str.substring(bKey, bindex))
+          if (aNum === bNum) {
+            if (aVal.label === 'Perception') return 1
+            else if (bVal.label == 'Perception') return 1
+          }
+          return aNum - bNum
+        } else if (aindex > 0) {
+          return 1
+        } else {
+          return -1
+        }
+      })
+      console.log(ret)
+      return ret
+    })
     const rolltitle = ref('')
     const override = ref('')
     const {
@@ -174,31 +208,58 @@ export default {
       let arr: Array<string> = []
       let innerArr: Array<string> = []
       let rollsObj = processRollString(rollString)
+
       rollDisplay.value = rollsObj
       const time = new Date().toDateString() + ': ' + new Date().toTimeString().substring(0, 8)
       let rollHistoryPackage = diceRollHistory.value
       rollHistoryPackage[time] = { rollsObj: rollsObj, timestamp: time, rolltitle: rolltitle.value }
+      context.emit('rolled', rollHistoryPackage[time])
       statusEffectsStore.addDiceRollHistory(rollHistoryPackage)
     }
 
     function processRollString(rollString: string) {
+      console.log(rollString)
       let rollsArr: Array<string> | string = createRollsArray(rollString)
+      console.log(rollsArr)
 
       if (typeof rollsArr === 'string') {
         return rollsArr
       }
       let rollsObj = {}
-      rollsArr.forEach((roll) => {
+      rollsArr.forEach((rollI) => {
+        console.log(rollI, 'rolli')
+        let roll = rollI
+        const labelStart = roll.indexOf('#')
+        const labelEnd = roll.lastIndexOf('#')
+        if (labelStart > -1 && labelEnd > -1) {
+          roll = roll.substring(0, labelStart) || ''
+          roll = roll + (rollI.substring(labelEnd + 1) || '')
+        }
+        console.log('roll ', roll)
+
         rollsObj[roll] = {
           str: roll,
           subtotal: 0,
           resultsArr: [],
-          leadingOperator: '+'
+          leadingOperator: '+',
+          minValue: 0,
+          label: rollI.substring(labelStart + 1, labelEnd)
         }
       })
-      rollsArr.forEach((roll) => {
-        let rollArr = splitDie(roll)
+      console.log(rollsObj)
+      rollsArr.forEach((rollI) => {
+        let roll = rollI
+        const labelStart = roll.indexOf('#')
+        const labelEnd = roll.lastIndexOf('#')
+        if (labelStart > -1 && labelEnd > -1) {
+          roll = roll.substring(0, labelStart) || ''
+          roll = roll + (rollI.substring(labelEnd + 1) || '')
+          console.log(roll, 'inside')
+        }
+        const rawRoll = roll.substring(roll.indexOf('|') + 1) || roll
 
+        let rollArr = splitDie(rawRoll)
+        console.log(rollArr)
         let prevDieNum = 1
         let len = rollArr.length
         let i = 0
@@ -224,15 +285,25 @@ export default {
         }
 
         for (; i < len; i++) {
+          if (rollArr[i].includes('Roll')) {
+            console.log('wawwa')
+            i++
+          }
           if (rollArr[i] === '+') {
             i++
             if (i < len) {
               let rollObj = processValue(rollArr[i])
+              console.log(rollObj)
               if (typeof rollObj === 'string') {
                 return rollObj
               } else {
-                rollsObj[roll].subtotal = rollsObj[roll].subtotal + rollObj.val
-                rollsObj[roll].resultsArr.push({ ...rollObj, operator: '+' })
+                if (rollObj.minValue === 0 || rollObj.minValue < rollObj.val) {
+                  rollsObj[roll].subtotal = rollsObj[roll].subtotal + rollObj.val
+                  rollsObj[roll].resultsArr.push({ ...rollObj, operator: '+' })
+                } else {
+                  rollsObj[roll].subtotal = rollsObj[roll].subtotal + rollObj.minValue
+                  rollsObj[roll].resultsArr.push({ ...rollObj, operator: '+' })
+                }
               }
             } else {
               return 'Expected value following operator: +'
@@ -244,8 +315,13 @@ export default {
               if (typeof rollObj === 'string') {
                 return rollObj
               } else {
-                rollsObj[roll].subtotal = rollsObj[roll].subtotal - rollObj.val
-                rollsObj[roll].resultsArr.push({ ...rollObj, operator: '-' })
+                if (rollObj.minValue === 0 || rollObj.minValue < rollObj.val) {
+                  rollsObj[roll].subtotal = rollsObj[roll].subtotal - rollObj.val
+                  rollsObj[roll].resultsArr.push({ ...rollObj, operator: '-' })
+                } else {
+                  rollsObj[roll].subtotal = rollsObj[roll].subtotal - rollObj.minValue
+                  rollsObj[roll].resultsArr.push({ ...rollObj, operator: '-' })
+                }
               }
             } else {
               return 'Expected value following operator: -'
@@ -282,8 +358,14 @@ export default {
               if (typeof rollObj === 'string') {
                 return rollObj
               } else {
-                rollsObj[roll].subtotal = rollsObj[roll].subtotal + rollObj.val
-                rollsObj[roll].resultsArr.push({ ...rollObj, operator: '' })
+                if (rollObj.minValue === 0 || rollObj.minValue < rollObj.val) {
+                  console.log(roll)
+                  rollsObj[roll].subtotal = rollsObj[roll].subtotal + rollObj.val
+                  rollsObj[roll].resultsArr.push({ ...rollObj, operator: '' })
+                } else {
+                  rollsObj[roll].subtotal = rollsObj[roll].subtotal + rollObj.minValue
+                  rollsObj[roll].resultsArr.push({ ...rollObj, operator: '+' })
+                }
               }
             } else {
               return 'Did...did you write anything?'
@@ -307,9 +389,16 @@ export default {
         val: number
         accepted: Array<number>
         rejected: Array<number>
-      } = { dVal: 0, isD: false, val: 0, accepted: [], rejected: [] }
+        minValue: number
+      } = { dVal: 0, isD: false, val: 0, accepted: [], rejected: [], minValue: 0 }
       if (rollString.includes('d')) {
         ret.isD = true
+        let minValue = 0
+        if (rollString.includes('}')) {
+          minValue = parseInt(rollString.substring(1, rollString.indexOf('}')))
+          rollString = rollString.substring(rollString.indexOf('}') + 1)
+        }
+        ret.minValue = minValue
         if (rollString.includes('*-')) {
           // DISPLACED ROLLS
           let vals = rollString.split('*-')
@@ -353,7 +442,14 @@ export default {
           return ret
         }
       } else {
-        return { val: parseInt(rollString), isD: false, dVal: 0, accepted: [], rejected: [] }
+        return {
+          val: parseInt(rollString),
+          isD: false,
+          dVal: 0,
+          accepted: [],
+          rejected: [],
+          minValue: 0
+        }
       }
     }
 
@@ -446,6 +542,7 @@ export default {
       let str = rollString.replace(/ /g, '')
 
       let rollsArr: Array<string> = []
+      let rollCountObj = {}
       if (rollString.includes('(')) {
         let leadingMod = ''
         while (str.length > 0) {
@@ -454,11 +551,20 @@ export default {
             if (end < 0) {
               return 'Error: missing closing parenthesis'
             } else {
-              if (leadingMod + str.substring(1, end)) {
+              let nextRoll = leadingMod + str.substring(1, end)
+              if (nextRoll) {
                 if (leadingMod != '') {
                   leadingMod += '!'
                 }
-                rollsArr.push(leadingMod + str.substring(1, end))
+                rollCountObj[nextRoll] = rollCountObj[nextRoll] ? rollCountObj[nextRoll] + 1 : 1
+                if (nextRoll.includes('Strike')) {
+                  if (nextRoll.indexOf('Strike') >= 0) {
+                    nextRoll = nextRoll.replace('Strike', 'Strike ')
+                  }
+                  rollsArr.push(nextRoll)
+                } else {
+                  rollsArr.push('Roll' + rollCountObj[nextRoll] + ' | ' + nextRoll)
+                }
               }
               if (end == str.length) {
                 return rollsArr
@@ -527,6 +633,7 @@ export default {
       rollerItemStyle,
       setTitle,
       rolltitle,
+      sortedRollDisplayArray,
       diceRollHistory
     }
   },
@@ -539,7 +646,8 @@ export default {
     GuiDice,
     MultifactedTextRoller,
     RollerPickerTab,
-    RollModifiers
+    RollModifiers,
+    MartialDieRoller
   },
   computed: {
     scrollbarColor() {
@@ -632,6 +740,20 @@ export default {
           <v-icon scale="1.5" name="gi-skills"></v-icon>
         </BNavItem>
         <BNavItem
+          :style="{ color: rollerItemStyle('martial') }"
+          @click="switchRoller('martial')"
+          v-if="rollerType === 'martial'"
+        >
+          <RollerPickerTab icon="gi-bowman"></RollerPickerTab>
+        </BNavItem>
+        <BNavItem
+          v-if="rollerType !== 'martial'"
+          :style="{ color: rollerItemStyle('martial') }"
+          @click="switchRoller('martial')"
+        >
+          <v-icon scale="1.5" name="gi-bowman"></v-icon>
+        </BNavItem>
+        <BNavItem
           v-if="rollerType !== 'text'"
           :style="{ color: rollerItemStyle('text') }"
           @click="switchRoller('text')"
@@ -668,6 +790,13 @@ export default {
           @as="(title) => setTitle(title)"
           @rollString="(rollString) => stageRollString(rollString)"
         ></AttributeSkillRoller>
+        <MartialDieRoller
+          v-if="rollerType === 'martial'"
+          :attributes="attrs"
+          :skills="attributes"
+          @as="(title) => setTitle(title)"
+          @rollString="(rollString) => stageRollString(rollString)"
+        ></MartialDieRoller>
         <MultifactedTextRoller
           v-if="rollerType === 'text'"
           @rollString="
@@ -697,11 +826,18 @@ export default {
         <div style="overflow-y: auto; margin-left: 0.5rem">
           <div
             id="here"
-            v-for="(display, index) in Object.values(rollDisplay)"
+            v-for="(display, index) in sortedRollDisplayArray as Array<any>"
             style="position: relative"
             :style="{ color: designStore.primaryText }"
             :key="index"
           >
+            <div v-if="display.label === 'Perception'">
+              <div>{{ display.str.substring(0, display.str.indexOf('|')) || '' }}</div>
+              <hr
+                style="margin-top: 0.25rem; margin-bottom: 0rem"
+                :style="{ color: designStore.secondaryTheme }"
+              />
+            </div>
             <div
               style="
                 font-size: x-large;
@@ -720,7 +856,10 @@ export default {
               style="display: flex; align-items: center; flex-wrap: wrap; width: 90%"
             >
               <div style="display: flex; align-items: center; width: 90%">
-                <div style="font-size: large" v-if="rolltitle">{{ rolltitle }}:</div>
+                <div style="font-size: large" v-if="display.label">{{ display.label }}:</div>
+                <div v-else>
+                  <div style="font-size: large" v-if="rolltitle">{{ rolltitle }}:</div>
+                </div>
                 <div
                   style="
                     font-size: large;
@@ -731,7 +870,7 @@ export default {
                   "
                 >
                   {{ display.leadingOperator == '-' ? display.leadingOperator : ' ' }}
-                  { {{ display.str }} }
+                  { {{ display.str.substring(display.str.indexOf('|') + 1) || display.str }} }
                 </div>
               </div>
               <div
@@ -756,7 +895,11 @@ export default {
                 }"
               >
                 <div style="display: flex; flex-wrap: wrap" v-if="group.isD">
-                  <div>{{ group.operator }}d{{ group.dVal }}'s{{ group.accepted }}</div>
+                  <div v-if="group.minValue > 0">
+                    {{ group.operator }}d{{ group.dVal }}'s{{ group.accepted }}( min
+                    {{ group.minValue }} )
+                  </div>
+                  <div v-else>{{ group.operator }}d{{ group.dVal }}'s{{ group.accepted }}</div>
                   <div v-if="group.rejected.length > 0" :style="{ color: designStore.alertTheme }">
                     {{ group.rejected }}
                   </div>
@@ -793,7 +936,10 @@ export default {
       </div>
       <TitleWidget title="Roll History" style="margin-top: -1rem"></TitleWidget>
       <div style="overflow-y: auto; margin-left: 0.5rem">
-        <div v-for="(roll, index) in Object.values(diceRollHistory).reverse()" :key="index">
+        <div
+          v-for="(roll, index) in Object.values(diceRollHistory).reverse() as Array<any>"
+          :key="index"
+        >
           <div style="font-size: small">{{ roll.timestamp }}</div>
           <hr
             style="margin-bottom: -0.25rem; margin-top: 0.25rem"
@@ -801,7 +947,7 @@ export default {
           />
           <div
             id="here"
-            v-for="(display, index) in Object.values(roll.rollsObj)"
+            v-for="(display, index) in Object.values(roll.rollsObj) as Array<any>"
             style="position: relative"
             :style="{ color: designStore.primaryText }"
             :key="index"

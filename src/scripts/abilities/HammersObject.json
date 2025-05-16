@@ -2,36 +2,215 @@
   "Grazing Strike": {
     "name": "Grazing Strike",
     "mp_cost": "Passive",
-    "description": "Strikes made with this weapon inflict half damage and inflict appropriate weapon skill effects if the strike at least matches the target's combined movement and bonus DVs."
+    "description": "Strikes made with this weapon inflict half damage and inflict appropriate weapon skill effects if the strike at least matches the target's combined movement and bonus DVs.",
+    "skillStats": {
+      "type": "Passive",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "Strikes made with this weapon inflict half damage and inflict appropriate weapon skill effects if the strike at least matches the target's combined movement and bonus DVs.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 0,
+      "costType": "none",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false
+    }
   },
   "Charge": {
     "name": "Charge",
     "mp_cost": "3 MP + 1 per rank",
-    "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from Grazing Strike, Cleave Armor, Knockout, Lethal, or Concussive Strike to all successfully struck."
+    "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from Grazing Strike, Cleave Armor, Knockout, Lethal, or Concussive Strike to all successfully struck.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character uses their altered strike to rush 10' forward + 5' per additional rank in a straight line, making an attack roll against every target whose space they move through. They then make a single damage roll against all targets they hit, adding any applicable bonuses from all other sword specialization abilities to all successfully struck.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "overrideDamageDice": "",
+      "modifyToHit": 0,
+      "condition": "",
+      "mpCost": 3,
+      "additionalMpCost": 1,
+      "costType": "activation + rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false,
+      "modifiesSomeCosts": 0
+    }
   },
   "Cleave Armor": {
     "name": "Cleave Armor",
     "mp_cost": "1 MP per rank",
-    "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0."
+    "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Armor Reduction": {
+          "name": "Armor Reduction",
+          "short": "Armor Reduction",
+          "groupIcon": "gi-armor-downgrade",
+          "description": "Reduce the targets’ armor DVs by 1 per rank."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn reduces the target's armor DVs by 1 per rank until the start of the character's next turn. Cleave armor cannot reduce the target's armor DVs below 0.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "overrideDamageDice": "",
+      "modifyToHit": 0,
+      "condition": "",
+      "mpCost": 1,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": false,
+      "modifiesSomeCosts": 0
+    }
   },
   "Concussive": {
     "name": "Concussive",
     "mp_cost": "2 MP per strike",
-    "description": "The next successful strike this turn befuddles the target until the end of their next turn, HE save to negate."
+    "description": "The next successful strike this turn befuddles the target until the end of their next turn, HE save to negate.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Befuddled": {
+          "name": "Befuddled",
+          "short": "Befuddle",
+          "groupIcon": "gi-laser-sparks",
+          "description": "The character loses their sense of self, spacing out occasionally. The character has a displaced roll on all PER and INT related checks as long as the condition lasts. A befuddled character cannot maintain Focus, any active focus spells are broken upon becoming befuddled."
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn befuddles the target until the end of their next turn, WIL save to negate.",
+      "alternateDescription": "",
+      "causesSave": "WIL",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 2,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Knockout": {
     "name": "Knockout",
     "mp_cost": "6 MP per strike",
-    "description": "The next successful strike this turn causes the target to lose a core action until the end of their next turn, or instead be knocked unconscious if they are below half their maximum HP, their choice of a WIL or HEA save to negate either effect."
+    "description": "The next successful strike this turn causes the target to lose a core action until the end of their next turn, or instead be knocked unconscious if they are below half their maximum HP, their choice of a WIL or HEA save to negate either effect.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Depleted": {
+          "name": "Depleted",
+          "short": "Deplete",
+          "groupIcon": "gi-fulguro-punch",
+          "description": "the character loses their core action. or 2 action points if they are a rogue or have special action economies."
+        }
+      },
+      "alternateAppliesStatus": {
+        "Unconcious": {
+          "name": "Unconcious",
+          "short": "Unconcious",
+          "groupIcon": "gi-coma",
+          "description": "Unconscious targets have a number of distinctions:\\nCannot perform any kind of actions and automatically fail all AGI and STR checks."
+        }
+      },
+      "description": "The next successful strike this turn automatically grapples the target.",
+      "alternateDescription": "",
+      "causesSave": "WIL or HEA",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "If  the target is  below  half  their  maximum  HP",
+      "mpCost": 6,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Launch": {
     "name": "Launch",
     "mp_cost": "1 MP per rank",
-    "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself."
+    "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself.",
+    "skillStats": {
+      "type": "Executes an Action",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character executes an action, launching themselves or another target 20' per rank in any direction, AGI or STR save (target's choice) to negate. If the target is of a similar size or smaller in comparison to the character and grappled, they cannot resist the effect. This ability requires a suitable surface to push off of if used on oneself.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": "AGI or STR",
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "If the skill is used on an enemy of a larger size class or the enemy is not grappled",
+      "mpCost": 1,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   },
   "Lethal IV": {
     "name": "Lethal IV",
     "mp_cost": "1 MP per rank",
-    "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn."
+    "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "Each rank purchased allows the character to add 4 damage to a single strike they make this turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": false,
+      "damageString": "4",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
   }
 }

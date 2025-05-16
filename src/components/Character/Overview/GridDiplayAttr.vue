@@ -1,97 +1,35 @@
 <script lang="ts">
 import { computed, ComputedRef, ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
-
-import { useCharacterStore } from '@/stores/characterStore'
-
 import { useUserStore } from '@/stores/userStore'
-import { storeToRefs } from 'pinia'
 import CustomModal from '@/components/CustomModal.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import BInputGroup from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroup.vue'
-import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+
 import TitleWidget from '@/components/TitleWidget.vue'
 import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import RibbonTitle from '@/components/RibbonTitle.vue'
 import StatusEffectItem from './StatusEffectItem.vue'
-import { useStatusEffectStore } from '@/stores/statusEffectStore'
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
 
 export default {
-  props: ['attribute', 'attrShorthand'],
+  props: [
+    'attribute',
+    'attrShorthand',
+    'exceptionals',
+    'inferiors',
+    'value',
+    'attributeStatusModifiers',
+    'addNewAttributeStatusModifier',
+    'removeAttributeStatusModifier'
+  ],
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
-    const characterStore = useCharacterStore()
-    const { attributes, exceptionals, attributeStatusModifiers } = storeToRefs(characterStore)
-    const lowercaseAttr = props.attribute.toLowerCase()
-    const statusEffectsStore = useStatusEffectStore()
-    const {
-      getStrength,
-      getAgility,
-      getPerception,
-      getHealth,
-      getCharisma,
-      getIntelligence,
-      getPower,
-      getWillpower,
-      getStrengthExceptionals,
-      getStrengthInferiors,
-      getAgilityExceptionals,
-      getAgilityInferiors,
-      getHealthInferiors,
-      gethealthExceptionals,
-      getWillpowerExceptionals,
-      getWillpowerInferiors,
-      getPerceptionInferiors,
-      getperceptionExceptionals,
-      getCharismaExceptionals,
-      getCharismaInferiors,
-      getIntelligenceExceptionals,
-      getIntelligenceInferiors,
-      getPowerExceptionals,
-      getPowerInferiors
-    } = storeToRefs(statusEffectsStore)
-    const baseAttributeVal = ref(attributes.value[lowercaseAttr])
-    const baseExceptionalVal = ref(exceptionals.value[lowercaseAttr])
-    const numExceptionals: ComputedRef<number> = computed(() => {
-      if (props.attribute === 'Strength') return getStrengthExceptionals.value
-      else if (props.attribute === 'Agility') return getAgilityExceptionals.value
-      else if (props.attribute === 'Perception') return getperceptionExceptionals.value
-      else if (props.attribute === 'Willpower') return getWillpowerExceptionals.value
-      else if (props.attribute === 'Charisma') return getCharismaExceptionals.value
-      else if (props.attribute === 'Health') return gethealthExceptionals.value
-      else if (props.attribute === 'Intelligence') return getIntelligenceExceptionals.value
-      else return getPowerExceptionals.value
-    })
-
-    const numInferiors: ComputedRef<number> = computed(() => {
-      if (props.attribute === 'Strength') return getStrengthInferiors.value
-      else if (props.attribute === 'Agility') return getAgilityInferiors.value
-      else if (props.attribute === 'Perception') return getPerceptionInferiors.value
-      else if (props.attribute === 'Willpower') return getWillpowerInferiors.value
-      else if (props.attribute === 'Charisma') return getCharismaInferiors.value
-      else if (props.attribute === 'Health') return getHealthInferiors.value
-      else if (props.attribute === 'Intelligence') return getIntelligenceInferiors.value
-      else return getPowerInferiors.value
-    })
 
     const exceptionalVal: ComputedRef = computed(() => {
-      return numExceptionals.value - numInferiors.value
+      return props.exceptionals - props.inferiors
     })
 
-    const attributeVal: ComputedRef = computed(() => {
-      if (props.attribute === 'Strength') return getStrength.value
-      else if (props.attribute === 'Agility') return getAgility.value
-      else if (props.attribute === 'Perception') return getPerception.value
-      else if (props.attribute === 'Willpower') return getWillpower.value
-      else if (props.attribute === 'Charisma') return getCharisma.value
-      else if (props.attribute === 'Health') return getHealth.value
-      else if (props.attribute === 'Intelligence') return getIntelligence.value
-      else return getPower.value
-    })
     const modifierType = [
       'Override Attribute',
       'Modify Attribute',
@@ -101,55 +39,40 @@ export default {
 
     const titleMessage: ComputedRef = computed(() => {
       if (exceptionalVal.value < 0) {
-        return (
-          attributeVal.value + ' ' + props.attribute + ', ' + exceptionalVal.value + ' Inferior(s)'
-        )
+        return props.value + ' ' + props.attribute + ', ' + exceptionalVal.value + ' Inferior(s)'
       } else if (exceptionalVal.value > 0) {
-        return (
-          attributeVal.value +
-          ' ' +
-          props.attribute +
-          ', ' +
-          exceptionalVal.value +
-          ' Exceptional(s)'
-        )
+        return props.value + ' ' + props.attribute + ', ' + exceptionalVal.value + ' Exceptional(s)'
       } else {
-        return attributeVal.value + ' ' + props.attribute
+        return props.value + ' ' + props.attribute
       }
     })
 
     function getAttributeColor() {
-      return !useCharacterStore().attributeStatusModifiers[props.attribute.toLowerCase()][
-        'Modify Attribute'
-      ] &&
-        !useCharacterStore().attributeStatusModifiers[props.attribute.toLowerCase()][
-          'Override Attribute'
-        ]
+      return !props.attributeStatusModifiers[props.attribute.toLowerCase()]['Modify Attribute'] &&
+        !props.attributeStatusModifiers[props.attribute.toLowerCase()]['Override Attribute']
         ? designStore.sidebarText
         : designStore.alertTheme
     }
     function getExceptionalColor() {
-      return !useCharacterStore().attributeStatusModifiers[props.attribute.toLowerCase()][
-        'Add Inferior(s)'
-      ] &&
-        !useCharacterStore().attributeStatusModifiers[props.attribute.toLowerCase()][
-          'Add Exceptional(s)'
-        ]
+      return !props.attributeStatusModifiers[props.attribute.toLowerCase()]['Add Inferior(s)'] &&
+        !props.attributeStatusModifiers[props.attribute.toLowerCase()]['Add Exceptional(s)']
         ? designStore.secondaryTheme
         : designStore.alertTheme
     }
     function addAttributeStatusModifier(addedVal) {
-      let statusObj = {
-        modifierType: addedVal.selectedMod,
-        linkedStatus: addedVal.linkedStatus,
-        modAmount: addedVal.modAmount,
-        attribute: props.attribute
+      if (addedVal.selectedMod && addedVal.modAmount) {
+        let statusObj = {
+          modifierType: addedVal.selectedMod,
+          linkedStatus: addedVal.linkedStatus,
+          modAmount: addedVal.modAmount,
+          attribute: props.attribute
+        }
+        props.addNewAttributeStatusModifier(statusObj)
       }
-      characterStore.addNewAttributeStatusModifier(statusObj)
     }
 
     function removeModifier(modifierType, modAmount, linkedStatus) {
-      characterStore.removeAttributeStatusModifier({
+      props.removeAttributeStatusModifier({
         modifierType: modifierType,
         modAmount: modAmount,
         linkedStatus: linkedStatus,
@@ -158,7 +81,7 @@ export default {
     }
 
     const statusModifiersList: ComputedRef<Array<any>> = computed(() => {
-      let modifiers = Object.values(attributeStatusModifiers.value[props.attribute.toLowerCase()])
+      let modifiers = Object.values(props.attributeStatusModifiers[props.attribute.toLowerCase()])
       let ret = []
       modifiers.forEach((modGroup: any) => {
         ret = ret.concat(Object.values(modGroup))
@@ -171,19 +94,13 @@ export default {
       designStore,
       modal,
       userStore,
-      characterStore,
-      attributeVal,
       exceptionalVal,
-      baseAttributeVal,
-      baseExceptionalVal,
       props,
       modifierType,
       titleMessage,
       addAttributeStatusModifier,
       statusModifiersList,
       removeModifier,
-      numInferiors,
-      numExceptionals,
       getExceptionalColor,
       getAttributeColor
     }
@@ -230,7 +147,7 @@ export default {
     >
       <div class="attrz">
         <div style="width: 0.25rem; padding-right: 1.5rem"></div>
-        <div style="">{{ attributeVal }}</div>
+        <div style="">{{ props.value }}</div>
         <div class="exec" v-if="exceptionalVal != 0" :style="{ color: getAttributeColor() }">
           <div style="display: flex; justify-content: center; width: 100%">
             <v-icon
@@ -275,19 +192,23 @@ export default {
         </div>
         <div v-else style="width: 0.25rem; padding-right: 1.5rem"></div>
       </div>
-      <div
-        class="shorthand"
-        style="font-size: medium; align-self: center"
-        :style="{ fontFamily: designStore.titleFont }"
-      >
-        {{ attrShorthand }}
+      <div style="width: 100%; display: flex; justify-content: center">
+        <div
+          class="shorthand"
+          style="font-size: medium; align-self: center"
+          :style="{ fontFamily: designStore.titleFont }"
+        >
+          {{ attrShorthand }}
+        </div>
       </div>
-      <div
-        class="fullName"
-        style="align-self: center"
-        :style="{ fontFamily: designStore.titleFont, color: getAttributeColor() }"
-      >
-        {{ attribute }}
+      <div style="width: 100%; display: flex; justify-content: center">
+        <div
+          class="fullName"
+          style="align-self: center"
+          :style="{ fontFamily: designStore.titleFont, color: getAttributeColor() }"
+        >
+          {{ attribute }}
+        </div>
       </div>
     </div>
     <CustomModal :title="'Modify ' + props.attribute" :showModal="modal" @close="modal = !modal">

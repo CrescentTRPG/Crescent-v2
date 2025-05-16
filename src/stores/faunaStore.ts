@@ -56,12 +56,11 @@ export const useFaunaStore = defineStore('fauna', {
         return []
       }
     },
-    getTraitsList: (state): Array<string> => Object.keys(state.manualAdaptations),
     getAdaptationsList: (state): Array<string> => Object.keys(state.manualAdaptations),
     getAdaptations: (state): Array<any> => Object.values(state.manualAdaptations),
     getCreatures: (state): Array<any> => {
       if (useSpellStore().spellgroups['Fauna']?.name) {
-        return Object.keys(state.manualCreatures)
+        return Object.values(state.manualCreatures)
           .filter((creature) => {
             const faunaSpells = useSpellStore().spellgroups['Fauna']?.spells
             const BR1 = faunaSpells[['Butterfly / Raven I']] ? true : false
@@ -72,28 +71,28 @@ export const useFaunaStore = defineStore('fauna', {
             const WB2 = faunaSpells[['Wolf / Bear II']] ? true : false
             const WB4 = faunaSpells[['Wolf / Bear IV']] ? true : false
             const WB5 = faunaSpells[['Wolf / Bear V']] ? true : false
-            if (creature === 'Bear' || creature === 'Wolf') {
+            if (creature.Name === 'Bear' || creature.Name === 'Wolf') {
               return WB1
             }
-            if (creature === 'Great Butterfly' || creature === 'Great Raven') {
+            if (creature.Name === 'Great Butterfly' || creature.Name === 'Great Raven') {
               return BR1
             }
-            if (creature === 'Dire Bear' || creature === 'Dire Wolf') {
+            if (creature.Name === 'Dire Bear' || creature.Name === 'Dire Wolf') {
               return WB2
             }
-            if (creature === 'Eruraven' || creature === 'Mawfly') {
+            if (creature.Name === 'Eruraven' || creature.Name === 'Mawfly') {
               return BR2
             }
-            if (creature === 'EarthenBear' || creature === 'Leechwolf') {
+            if (creature.Name === 'EarthenBear' || creature.Name === 'Leechwolf') {
               return WB4
             }
-            if (creature === 'Solar Starfly' || creature === 'Roc') {
+            if (creature.Name === 'Solar Starfly' || creature.Name === 'Roc') {
               return BR4
             }
-            if (creature === 'Elemental Bear' || creature === 'Duskhunter') {
+            if (creature.Name === 'Elemental Bear' || creature.Name === 'Duskhunter') {
               return WB5
             }
-            if (creature === 'Strygarii' || creature === 'Astral Wanderer') {
+            if (creature.Name === 'Strygarii' || creature.Name === 'Astral Wanderer') {
               return BR5
             }
             return false
@@ -140,6 +139,11 @@ export const useFaunaStore = defineStore('fauna', {
         doc(db, 'User/' + useUserStore().id + '/Character/' + useCharacterStore().getCharacterId),
         { creatures: creatures, customCreatures: customCreatures }
       )
+    },
+    async clearFauna() {
+      this.manualAdaptations = {}
+      this.manualCreatures = { bubby: { Name: '', traits: [] } }
+      this.manualTraits = {}
     },
     async setLocalCreatures(creatures: any) {
       this.customCreatures = creatures

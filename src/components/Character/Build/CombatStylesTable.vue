@@ -21,6 +21,7 @@ import { storeToRefs } from 'pinia'
 import CustomModal from '@/components/CustomModal.vue'
 import MartialSkillsDisplay from '@/components/MartialSkillDisplay.vue'
 import OneToTenDropdown from '@/components/OneToTenDropdown.vue'
+import DropdownSelect from '@/components/DropdownSelect.vue'
 
 interface Skill {
   skill: string
@@ -144,7 +145,7 @@ export default {
     BButton,
     CustomModal,
     MartialSkillsDisplay,
-    BFormSelect
+    DropdownSelect
   }
 }
 </script>
@@ -215,7 +216,7 @@ export default {
         ></BTd>
         <BTd class="w-40">{{ attrString(combatStyle.attributes) }}</BTd>
         <BTd>
-          <BFormSelect
+          <!-- <BFormSelect
             :options="options"
             v-model="buildDisplayCombatStylesClone[index].rank"
             :style="{
@@ -234,7 +235,29 @@ export default {
               )
             "
             style="font-size: large; width: 4rem; cursor: pointer; border-width: 2px"
-          ></BFormSelect>
+          ></BFormSelect> -->
+          <DropdownSelect
+            :default="buildDisplayCombatStylesClone[index].rank"
+            style="
+              font-size: large;
+              width: 4.5rem;
+              cursor: pointer;
+              border-width: 2px;
+              margin-left: 0rem;
+            "
+            :options="options"
+            @selection="
+              (selection) =>
+                updateCombatStyle(
+                  combatStyle.name,
+                  combatStyle.name,
+                  selection,
+                  combatStyle.source,
+                  combatStyle.attributes,
+                  combatStyle.index
+                )
+            "
+          ></DropdownSelect>
         </BTd>
         <BTd></BTd>
       </BTr>

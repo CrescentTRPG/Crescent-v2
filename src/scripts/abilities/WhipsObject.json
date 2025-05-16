@@ -1,58 +1,185 @@
 {
-    "Inertia": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becabe"
-        },
-        "name": "Inertia",
-        "mp_cost": "Passive",
-        "description": "For every 30' a character physically moves in one round, the damage of their next successful strike is increased by 5 of the weapon's relevant damage type."
-    },
-    "Disarming Attack": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becabf"
-        },
-        "name": "Disarming Attack",
-        "mp_cost": "3 MP per strike",
-        "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in the direction of the character's choice."
-    },
-    "Extending Reach": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becac0"
-        },
-        "name": "Extending Reach",
-        "mp_cost": "1 MP per rank",
-        "description": "For every rank purchased, the character adds 5' of reach to all strikes made this round."
-    },
-    "Grappling Attack": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becac1"
-        },
-        "name": "Grappling Attack",
-        "mp_cost": "2 MP per strike",
-        "description": "The next successful strike this turn automatically grapples the target."
-    },
-    "Lethal Barrage II": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becac2"
-        },
-        "name": "Lethal Barrage II",
-        "mp_cost": "1 MP per rank",
-        "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn."
-    },
-    "Swing": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becac3"
-        },
-        "name": "Swing",
-        "mp_cost": "2 MP per activation",
-        "description": "The character executes an action, they may fling their weapon, latching onto a suitable support, target, or object, within reach, AGI or STR save (target's choice) to negate. If the target is another person, one of them acts as support. The character may launch themselves or the target anywhere within reach of the support."
-    },
-    "Radial Attack": {
-        "_id": {
-            "$oid": "606ffd7f8cecf126c0becac4"
-        },
-        "name": "Radial Attack",
-        "mp_cost": "4 MP per strike",
-        "description": "The character uses their altered strike to extend their attack to all targets within the weapon's reach, making an individual attack roll against them. They then make a single damage roll against all targets successfully struck, adding any applicable bonuses from Lethal, Disarming Attack, and Extending Reach to all successfully struck."
+  "Inertia": {
+    "name": "Inertia",
+    "mp_cost": "Passive",
+    "description": "For every 30' a character physically moves in one round, the damage of their next successful strike is increased by 5 of the weapon's relevant damage type.",
+    "skillStats": {
+      "type": "Passive",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "For every 30' a character physically moves in one round, the damage of their next successful strike is increased by 5 of the weapon's relevant damage type.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "bonusToFirstSuccessfulStrike": "5",
+      "condition": "",
+      "mpCost": 0,
+      "costType": "none",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true,
+      "typeMalleable": true
     }
+  },
+  "Disarming Attack": {
+    "name": "Disarming Attack",
+    "mp_cost": "3 MP per strike",
+    "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in the direction of the character's choice.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn knocks whatever the target is holding in their hands 10' away in a direction of the target's choice.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 3,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
+  },
+  "Extending Reach": {
+    "name": "Extending Reach",
+    "mp_cost": "1 MP per rank",
+    "description": "For every rank purchased, the character adds 5' of reach to all strikes made this round.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "For every rank purchased, the character adds 5' of reach to all strikes made this round.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "additionalMpCost": 0,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
+  },
+  "Grappling Attack": {
+    "name": "Grappling Attack",
+    "mp_cost": "2 MP per strike",
+    "description": "The next successful strike this turn automatically grapples the target.",
+    "skillStats": {
+      "type": "Next Successful Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {
+        "Grappled": {
+          "name": "Grappled",
+          "short": "Grapple",
+          "groupIcon": "gi-handcuffs",
+          "description": "A grapple can be made with a successful melee attack roll, (inflicting no damage, though skill can alter grapples) pinning them on hit. The target is reduced to a core action (while grappled), and the grappler is slowed. The target regains their movement and swift action upon breaking the grapple. To maintain a grapple the character must spend a Core Action each round.\\nIt takes two arms to grapple a target of the character’s own size class, one arm to grapple a target of a smaller size class, and the character cannot effectively grapple a target of a larger size class.\\nGrappled targets can attempt to break by using a core action to attempt a new grapple check (contested might check.)"
+        }
+      },
+      "alternateAppliesStatus": {},
+      "description": "The next successful strike this turn automatically grapples the target.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 2,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
+  },
+  "Lethal Barrage II": {
+    "name": "Lethal Barrage II",
+    "mp_cost": "1 MP per rank",
+    "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+    "skillStats": {
+      "type": "All Successful Strikes",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "For every rank purchased, the character adds 2 damage to all successful strikes this turn.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "2",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 1,
+      "costType": "rank",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
+  },
+  "Swing": {
+    "name": "Swing",
+    "mp_cost": "2 MP per activation",
+    "description": "The character executes an action, they may fling their weapon, latching onto a suitable support, target, or object, within reach, AGI or STR save (target's choice) to negate. If the target is another person, one of them acts as support. The character may launch themselves or the target anywhere within reach of the support.",
+    "skillStats": {
+      "type": "Executes an Action",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character executes an action, they may fling their weapon, latching onto a suitable support, target, or object, within reach, AGI or STR save (target's choice) to negate. If the target is another person, one of them acts as support. The character may launch themselves or the target anywhere within reach of the support.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 2,
+      "costType": "activation",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "isApplicableToOffhand": true
+    }
+  },
+  "Radial Attack": {
+    "name": "Radial Attack",
+    "mp_cost": "4 MP per strike",
+    "description": "The character uses their altered strike to extend their attack to all targets within the weapon's reach, making an individual attack roll against them. They then make a single damage roll against all targets successfully struck, adding any applicable bonuses from Lethal, Disarming Attack, and Extending Reach to all successfully struck.",
+    "skillStats": {
+      "type": "Altered Strike",
+      "grantsNewStrike": "",
+      "appliesStatus": {},
+      "alternateAppliesStatus": {},
+      "description": "The character uses their altered strike to extend their attack to all targets within the weapon's reach, making an individual attack roll against them. They then make a single damage roll against all targets successfully struck, adding any applicable bonuses from Tripping Attack, Fending Strike, Lethal, or Impaling Weapon to all successfully struck.",
+      "alternateDescription": "",
+      "causesSave": false,
+      "alternateCausesSave": false,
+      "damageString": "",
+      "alternateDamageString": "",
+      "condition": "",
+      "mpCost": 4,
+      "additionalMpCost": 0,
+      "costType": "strike",
+      "alternateMpCost": 0,
+      "isCompoundingCost": false,
+      "increasesCostOfAllEffects": 0,
+      "modifiesSomeCosts": 0,
+      "costMalleable": false,
+      "isApplicableToOffhand": true
+    }
+  }
 }
