@@ -51,7 +51,7 @@ export default {
           let aNum = parseInt(aVal.str.substring(aKey, aindex))
           let bNum = parseInt(bVal.str.substring(bKey, bindex))
           if (aNum === bNum) {
-            if (aVal.label === 'Perception') return 1
+            if (aVal.label === 'Perception') return -1
             else if (bVal.label == 'Perception') return 1
           }
           return aNum - bNum
