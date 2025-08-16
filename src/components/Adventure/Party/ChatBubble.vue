@@ -85,7 +85,7 @@ export default {
         }"
       >
         <div
-          style="position: absolute; z-index: 4; margin-top: -1rem"
+          style="position: relative; z-index: 4; margin-top: -1rem"
           v-if="isSender && props.messageObj.isStarred"
         >
           <v-icon
@@ -114,7 +114,7 @@ export default {
           >
             <v-icon
               :style="{ color: designStore.alertTheme }"
-              style="position: absolute; font-size: 2rem; margin-left: 1rem"
+              style="position: relative; font-size: 2rem; margin-left: 1rem"
               scale="2.25"
               name="gi-riposte"
             ></v-icon>

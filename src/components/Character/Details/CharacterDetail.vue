@@ -48,7 +48,7 @@ export default {
       <div style="flex-grow: 1"></div>
     </div>
     <BFormInput
-      class="detailInputStyles"
+      class="detailInputStyles inputColorBackdrop"
       @change="change()"
       v-model="fieldValue"
       debounce="100"

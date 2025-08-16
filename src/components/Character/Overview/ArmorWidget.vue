@@ -14,6 +14,7 @@ import StatusEffectItem from './StatusEffectItem.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
 import BPopover from 'bootstrap-vue-next/src/components/BPopover.vue'
+import BasicInput from '../BasicInput.vue'
 
 export default {
   props: [
@@ -32,7 +33,9 @@ export default {
     'shieldDvs',
     'armorDvs',
     'bonusDvs',
-    'totalDvs'
+    'totalDvs',
+    'isEditing',
+    'setDvs'
   ],
   setup(props, context) {
     const modal = ref(false)
@@ -133,13 +136,15 @@ export default {
     TitleWidget,
     StatusEffectItem,
     AddStatusEffectWidget,
-    BPopover
+    BPopover,
+    BasicInput
   }
 }
 </script>
 
 <template>
   <div
+    class="hoverableIconOnSidebar"
     @click="modal = !modal"
     style="width: 13.5rem; height: 10rem; margin-top: -0.65rem"
     :style="{ fontFamily: designStore.font }"
@@ -222,7 +227,12 @@ export default {
         </div>
       </div>
     </div>
-    <CustomModal title="Modify Armor" :showModal="modal" @close="modal = !modal">
+    <CustomModal
+      v-if="!props.isEditing"
+      title="Modify Armor"
+      :showModal="modal"
+      @close="modal = !modal"
+    >
       <template v-slot:body>
         <div
           style="font-size: x-large; text-align: center; margin-top: -1rem; margin-bottom: 0.25rem"
@@ -353,6 +363,50 @@ export default {
             :linkedStatus="mod.linkedStatus"
           ></StatusEffectItem>
         </div>
+      </template>
+    </CustomModal>
+    <CustomModal
+      v-if="props.isEditing"
+      title="Modify Dvs"
+      :showModal="modal"
+      @close="modal = !modal"
+    >
+      <template v-slot:body>
+        <BasicInput
+          style="margin-bottom: 1rem"
+          label="Armor Dvs"
+          type="number"
+          :value="props.armorDvs"
+          :min="0"
+          :max="999"
+          @newValue="(val) => props.setDvs(val, props.shieldDvs, props.bonusDvs, props.moveDvs)"
+        ></BasicInput>
+        <BasicInput
+          style="margin-bottom: 1rem"
+          label="Shield Dvs"
+          type="number"
+          :value="props.shieldDvs"
+          :min="0"
+          :max="999"
+          @newValue="(val) => props.setDvs(props.armorDvs, val, props.bonusDvs, props.moveDvs)"
+        ></BasicInput>
+        <BasicInput
+          style="margin-bottom: 1rem"
+          label="Bonus Dvs"
+          type="number"
+          :value="props.bonusDvs"
+          :min="0"
+          :max="999"
+          @newValue="(val) => props.setDvs(props.armorDvs, props.shieldDvs, val, props.moveDvs)"
+        ></BasicInput>
+        <BasicInput
+          label="Move Dvs"
+          type="number"
+          :value="props.moveDvs"
+          :min="0"
+          :max="999"
+          @newValue="(val) => props.setDvs(props.armorDvs, props.shieldDvs, props.bonusDvs, val)"
+        ></BasicInput>
       </template>
     </CustomModal>
   </div>

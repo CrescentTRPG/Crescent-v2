@@ -247,7 +247,9 @@ export default {
       </template>
       <template #cell(spellgroup)="data">
         <div style="margin-top: 0.5rem; cursor: pointer" @click="showSpellgroupModal(data.index)">
-          {{ data.item.spellgroup }}
+          <a>
+            {{ data.item.spellgroup }}
+          </a>
         </div>
         <CustomModal
           :showModal="spellgroupModal && currentModal == data.index"

@@ -227,8 +227,17 @@ export const useSpellStore = defineStore('spell', {
     },
     async setSpell(spell: any) {
       console.log(spell.groupNumber)
+
       if (!this.spellgroups[spell.spellgroup]) {
         this.setLocalSpellgroup(spell.spellgroup)
+        this.setLocalSpell(spell)
+        updateDoc(
+          doc(
+            db,
+            'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
+          ),
+          { spells: this.spellgroups, spellChanged: spell }
+        )
         //set all rank zeros
         if (spell.rank > 0) {
           for (let i = 0; i < this.buildDisplaySpellgroups[spell.groupNumber].spells.length; i++) {
@@ -258,20 +267,29 @@ export const useSpellStore = defineStore('spell', {
             }
           }
         }
+      } else {
+        this.setLocalSpell(spell)
+        await updateDoc(
+          doc(
+            db,
+            'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
+          ),
+          { spells: this.spellgroups, spellChanged: spell }
+        )
       }
+    },
+    async removeSpell(spell: any) {
       this.setLocalSpell(spell)
-      await updateDoc(
+      delete this.spellgroups[spell.spellgroup].spells[spell.name]
+      updateDoc(
         doc(
           db,
           'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
         ),
         { spells: this.spellgroups, spellChanged: spell }
       )
-    },
-    async removeSpell(spell: any) {
-      this.setLocalSpell(spell)
-      delete this.spellgroups[spell.spellgroup].spells[spell.name]
       if (
+        this.spellgroups[spell.spellgroup].inOrder &&
         Object.values(this.spellgroups[spell.spellgroup].spells).reduce(
           (acc, spell: any) => acc + spell.rank,
           0
@@ -289,15 +307,24 @@ export const useSpellStore = defineStore('spell', {
             { spellChanged: { ...spell, known: false } }
           )
         })
+        console.log(this.spellgroups[spell.spellgroup])
+
         delete this.spellgroups[spell.spellgroup]
       }
 
-      await updateDoc(
+      if (
+        this.spellgroups[spell.spellgroup]?.spells &&
+        Object.values(this.spellgroups[spell.spellgroup]?.spells).length < 1
+      ) {
+        console.log('deleteme')
+        delete this.spellgroups[spell.spellgroup]
+      }
+      updateDoc(
         doc(
           db,
           'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
         ),
-        { spells: this.spellgroups, spellChanged: spell }
+        { spells: this.spellgroups }
       )
     }
   },

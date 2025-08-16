@@ -25,9 +25,9 @@ interface RollAttr {
 }
 
 export default {
+  props: ['attrs', 'rollAs'],
   setup(props, context) {
     let designStore = useDesignStore()
-    const characterStore = useCharacterStore()
     const statusEffectsStore = useStatusEffectStore()
     //rollsObj = {"roll group": str: "original string", subtotal: number, resultsArr: [{operator: '', dVal, isD, val, accepted, rejected}]}
 
@@ -65,110 +65,9 @@ export default {
     })
     const rolltitle = ref('')
     const override = ref('')
-    const {
-      diceRollHistory,
-      getStrength,
-      getAgility,
-      getPerception,
-      getHealth,
-      getCharisma,
-      getIntelligence,
-      getPower,
-      getWillpower,
-      getStrengthExceptionals,
-      getStrengthInferiors,
-      getAgilityExceptionals,
-      getAgilityInferiors,
-      getHealthInferiors,
-      gethealthExceptionals,
-      getWillpowerExceptionals,
-      getWillpowerInferiors,
-      getPerceptionInferiors,
-      getperceptionExceptionals,
-      getCharismaExceptionals,
-      getCharismaInferiors,
-      getIntelligenceExceptionals,
-      getIntelligenceInferiors,
-      getPowerExceptionals,
-      getPowerInferiors,
-      getStrengthPlaced,
-      getAgilityPlaced,
-      getHealthPlaced,
-      getCharismaPlaced,
-      getIntelligencePlaced,
-      getPerceptionPlaced,
-      getPowerPlaced,
-      getWillpowerPlaced,
-      getSkills
-    } = storeToRefs(statusEffectsStore)
-
-    const { attributes, exceptionals } = storeToRefs(characterStore)
+    const { diceRollHistory } = storeToRefs(statusEffectsStore)
 
     const navPos = ref('roll')
-
-    const attrs: ComputedRef<any> = computed(() => {
-      let attrs = {
-        strength: {
-          placed: getStrengthInferiors.value * -1 + getStrengthPlaced.value,
-          exceptionalVal: getStrengthExceptionals.value - getStrengthInferiors.value,
-          modifiers: [],
-          name: 'strength',
-          modifier: getStrength.value
-        },
-        agility: {
-          placed: getAgilityInferiors.value * -1 + getAgilityPlaced.value,
-          exceptionalVal: getAgilityExceptionals.value - getAgilityInferiors.value,
-          modifiers: [],
-          name: 'agility',
-          modifier: getAgility.value
-        },
-        perception: {
-          placed: getPerceptionInferiors.value * -1 + getPerceptionPlaced.value,
-          exceptionalVal: getperceptionExceptionals.value - getPerceptionInferiors.value,
-          modifiers: [],
-          name: 'perception',
-          modifier: getPerception.value
-        },
-        willpower: {
-          placed: getWillpowerInferiors.value * -1 + getWillpowerPlaced.value,
-          exceptionalVal: getWillpowerExceptionals.value,
-          modifiers: [],
-          name: 'willpower',
-          modifier: getWillpower.value
-        },
-        health: {
-          placed: getHealthInferiors.value * -1 + getHealthPlaced.value,
-          exceptionalVal: gethealthExceptionals.value,
-          modifiers: [],
-          name: 'health',
-          modifier: getHealth.value
-        },
-        intelligence: {
-          placed: getIntelligenceInferiors.value * -1 + getIntelligencePlaced.value,
-          exceptionalVal: getIntelligenceExceptionals.value - getIntelligenceInferiors.value,
-          modifiers: [],
-          name: 'intelligence',
-          modifier: getIntelligence.value
-        },
-        power: {
-          exceptionalVal: getPowerExceptionals.value - getPowerInferiors.value,
-          placed: getPowerInferiors.value * -1 + getPowerPlaced.value,
-          modifiers: [],
-          name: 'power',
-          modifier: getPower.value
-        },
-        charisma: {
-          exceptionalVal: getCharismaExceptionals.value - getCharismaInferiors.value,
-          placed: getCharismaInferiors.value * -1 + getCharismaPlaced.value,
-          modifiers: [],
-          name: 'charisma',
-          modifier: getCharisma.value
-        }
-      }
-      let skills = getSkills.value
-      attrs = { ...attrs, ...skills }
-      return attrs
-    })
 
     const rollerType = ref('attributes')
 
@@ -612,8 +511,7 @@ export default {
       navItemStyleBg,
       designStore,
       navPos,
-      attributes,
-      attrs,
+
       stageRollString,
       rollDisplay,
       override,
@@ -623,7 +521,8 @@ export default {
       setTitle,
       rolltitle,
       sortedRollDisplayArray,
-      diceRollHistory
+      diceRollHistory,
+      props
     }
   },
   components: {
@@ -647,6 +546,7 @@ export default {
 </script>
 <template>
   <div class="mainMenu" :style="{ fontFamily: designStore.font, scrollbarColor: scrollbarColor }">
+    <div style="margin: 0.25rem" v-if="props.rollAs">{{ 'Rolling as ' + props.rollAs }}</div>
     <BNavbar
       style="margin-bottom: 0.5rem; margin-top: 0rem"
       class="navClass"
@@ -774,15 +674,13 @@ export default {
       <div>
         <AttributeSkillRoller
           v-if="rollerType === 'attributes'"
-          :attributes="attrs"
-          :skills="attributes"
+          :attributes="props.attrs"
           @as="(title) => setTitle(title)"
           @rollString="(rollString) => stageRollString(rollString)"
         ></AttributeSkillRoller>
         <MartialDieRoller
           v-if="rollerType === 'martial'"
           :attributes="attrs"
-          :skills="attributes"
           @as="(title) => setTitle(title)"
           @rollString="(rollString) => stageRollString(rollString)"
         ></MartialDieRoller>

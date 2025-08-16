@@ -310,7 +310,7 @@ export default {
       >
       <BButton
         @click="addModal = true"
-        class="indivs"
+        class="indivs inputColorBackdrop"
         style="
           border: 1px solid;
           font-size: medium;

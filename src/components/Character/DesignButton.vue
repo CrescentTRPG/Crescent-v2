@@ -1,5 +1,12 @@
 <script lang="ts">
-import { BButton, BFormSelect, BFormInput, BDropdown, BDropdownItem } from 'bootstrap-vue-next'
+import {
+  BButton,
+  BFormSelect,
+  BFormInput,
+  BDropdown,
+  BDropdownItem,
+  BFormSelectOption
+} from 'bootstrap-vue-next'
 import { ref } from 'vue'
 import { useDesignStore } from '../../stores/designStore'
 import { useUserStore } from '../../stores/userStore'
@@ -33,28 +40,44 @@ export default {
     const iconColor = ref(JSON.parse(JSON.stringify(design.iconColor)))
     const update = ref(0)
     const fontList = ref([
-      'Helvetica',
-      'Arial',
+      'Andalé Mono',
       'Arial Black',
-      'Verdana',
-      'Tahoma',
-      'Trebuchet MS',
+      'Arial',
+      'Astloch',
+      'Bad Script',
+      'Bahnschrift',
+      'Bitter',
+      'Book Antiqua',
+      'Bookman Old Style',
+      'Brush Script MT',
+      'Comic Sans MS',
+      'Courier',
+      'Edu QLD Hand',
+      'Franklin Gothic Medium',
+      'Gentium Book Plus',
+      'Helvetica',
       'Impact',
       'Ink Free',
-      'Times New Roman',
-      'Book Antiqua',
-      'Franklin Gothic Medium',
-      'Roboto',
-      'Andalé Mono',
-      'Courier',
+      'Lexend',
+      'Libre Caslon Display',
       'Lucida',
-      'Signika',
-      'Bookman Old Style',
+      'Megrim',
+      'Meow Script',
+      'Nova Mono',
+      'Nunito Sans',
+      'REM',
+      'Roboto Condensed',
+      'Roboto',
+      'Saira',
       'Segoe UI Light',
-      'Brush Script MT',
-      'Bitter',
-      'Comic Sans MS',
-      'Bahnschrift'
+      'Shantell Sans',
+      'Signika',
+      'Tahoma',
+      'Times New Roman',
+      'Trade Winds',
+      'Trebuchet MS',
+      'Uncial Antiqua',
+      'Verdana'
     ])
 
     const checkboxBacking = ref([
@@ -225,10 +248,30 @@ export default {
       this.design.setDesign(designObj, useUserStore().getUserId, this.props.isAdventure)
     },
     reset() {
-      let designObj = DEFAULT_DESIGN
+      let designObj = {
+        primaryTheme: '#422c58',
+        secondaryTheme: '#c2b172',
+        inputBacking: '#f1eef1',
+        inputText: '#000000',
+        sidebarBacking: '#e7e2e9',
+        sidebarText: '#000000',
+        primaryText: '#dfdfdf',
+        pageBackdrop: '#dfdfdf',
+        alertTheme: '#c15be6',
+        font: 'Bahnschrift',
+        titleFont: 'Bahnschrift',
+        icon: 'bi bi-square',
+        iconFill: 'bi bi-check',
+        charIconFlair: 'bi bi-stars',
+        charIcon: 'bi bi-moon-stars-fill',
+        iconColor: '#000000'
+      }
+      console.log(designObj)
       this.design.setDesign(designObj, useUserStore().getUserId, this.props.isAdventure)
     },
     setFromDropdown(obj) {
+      console.log(obj)
+
       this.design.setDesign(obj, useUserStore().getUserId, this.props.isAdventure)
     }
   },
@@ -240,7 +283,8 @@ export default {
     CustomModal,
     BDropdown,
     BDropdownItem,
-    CustomCheckbox
+    CustomCheckbox,
+    BFormSelectOption
   }
 }
 </script>
@@ -299,28 +343,42 @@ export default {
           <div class="fontWithLabel">
             <div class="fontLabel">Main Font</div>
             <BFormSelect
-              :options="fontList"
               v-model="font"
               style="min-width: 12rem; margin-bottom: 1rem; flex-grow: 1"
               :style="{
                 borderColor: design.secondaryTheme,
                 color: design.inputText,
-                background: design.inputBacking
+                background: design.inputBacking,
+                fontFamily: font
               }"
-            ></BFormSelect>
+              ><BFormSelectOption
+                v-for="fontVal in fontList"
+                :key="fontVal"
+                :value="fontVal"
+                :style="{ fontFamily: fontVal }"
+                >{{ fontVal }}</BFormSelectOption
+              ></BFormSelect
+            >
           </div>
           <div class="fontWithLabel">
             <div class="fontLabel">Title Font</div>
             <BFormSelect
-              :options="fontList"
               v-model="titleFont"
               style="min-width: 12rem; margin-bottom: 1rem; flex-grow: 1"
               :style="{
                 borderColor: design.secondaryTheme,
                 color: design.inputText,
-                background: design.inputBacking
+                background: design.inputBacking,
+                fontFamily: titleFont
               }"
-            ></BFormSelect>
+              ><BFormSelectOption
+                v-for="fontVal in fontList"
+                :key="fontVal"
+                :value="fontVal"
+                :style="{ fontFamily: fontVal }"
+                >{{ fontVal }}</BFormSelectOption
+              ></BFormSelect
+            >
           </div>
         </div>
         <div style="display: flex; flex-wrap: wrap; justify-content: center; flex-direction: row">

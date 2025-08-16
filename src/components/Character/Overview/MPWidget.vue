@@ -7,9 +7,17 @@ import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
 import StatusEffectItem from './StatusEffectItem.vue'
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
+import BasicInput from '../BasicInput.vue'
 
 export default {
-  props: ['mpStatusModifiers', 'removeMpStatusModifier', 'addNewMpStatusModifier', 'getMp'],
+  props: [
+    'mpStatusModifiers',
+    'removeMpStatusModifier',
+    'addNewMpStatusModifier',
+    'getMp',
+    'setMp',
+    'isEditing'
+  ],
   setup(props, context) {
     const modal = ref(false)
     const designStore = useDesignStore()
@@ -65,7 +73,8 @@ export default {
     CustomModal,
     AddStatusEffectWidget,
     StatusModifierExplaination,
-    StatusEffectItem
+    StatusEffectItem,
+    BasicInput
   }
 }
 </script>
@@ -73,6 +82,7 @@ export default {
 <template>
   <div
     @click="modal = !modal"
+    class="hoverableIconOnSidebar"
     style="
       width: 12.5rem;
       height: 10rem;
@@ -110,7 +120,7 @@ export default {
     >
       <v-icon name="gi-swords-emblem" scale="10.75"></v-icon>
     </div>
-    <CustomModal title="Modify MP " :showModal="modal" @close="modal = !modal">
+    <CustomModal v-if="!isEditing" title="Modify MP " :showModal="modal" @close="modal = !modal">
       <template v-slot:body>
         <div style="font-size: x-large; text-align: center; margin-bottom: 0.25rem">
           {{ props.getMp }} Martial Points
@@ -135,6 +145,24 @@ export default {
             :linkedStatus="mod.linkedStatus"
           ></StatusEffectItem>
         </div>
+      </template>
+    </CustomModal>
+    <CustomModal
+      v-if="props.isEditing"
+      title="Modify MP"
+      :showModal="modal"
+      @close="modal = !modal"
+    >
+      <template v-slot:body>
+        <BasicInput
+          style="margin-bottom: 1rem"
+          label="MP"
+          type="number"
+          :value="props.getMp"
+          :min="0"
+          :max="999"
+          @newValue="(val) => props.setMp(val)"
+        ></BasicInput>
       </template>
     </CustomModal>
   </div>

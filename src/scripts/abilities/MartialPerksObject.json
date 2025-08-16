@@ -13,6 +13,48 @@
     "resistance": "N/A",
     "description": "The character has learned how to channel their focus. The character may choose between any of the following three effects as a swift action: \\nTransfer the focus of a willing target onto themselves. The character is now the one maintaining the focus for that effect. The character must have focus available to do so. \\nReplicate a target's armor or weapon utilizing their focus, causing a copy to appear in their hands. The item persists for as long as the character retains their focus. \\nUse their focus to give another character their ranks in an origin skill. This effect persists for as long as the character retains their focus. "
   },
+  "Improviser": {
+    "source": "Base",
+    "rank": 1,
+    "perkGroup": "Utility Perks",
+    "passive": false,
+    "name": "Improviser",
+    "actionCost": "Swift / Core Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Focus",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": " The character sizes up a weapon that they do not have skill in, or random object that could be reasonably used as a weapon.  While Focusing on this ability, the character may spend up to their MP/2 in whatever weapon skills are appropriate for the weapon.  Unorthadox weapons may be appropriated as any reasonable specialization/combat style. The base damage, depends on the chosen combat style: 1d6(Light), 1d12(Versatile) 2d8(Heavy).  Additionally, they gain access to the following actions... \\nAs a core action, the weilder may knock an opponent in their melee reach senseless: slowing and befuddling the target until the end of their next turn.  HEA save to avoid both effects.  \\nAs a core action, the wielder may sacrifice their improvised weapon, smashing it to bits dealing 2d8/P to a target as a melee attack roll.  The improvised weapon is renered unusable whether it hits or not."
+  },
+  "Flexible": {
+    "source": "Base",
+    "rank": 2,
+    "perkGroup": "Offensive Perks",
+    "passive": false,
+    "name": "Flexible",
+    "actionCost": "Swift Action",
+    "target": "Character",
+    "area": "Self",
+    "type": "Charged (4)",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": " The character juggles multiple disciplines.  As a swift action, they may perform a Weapon Attack with 2MP.  At perk rank 5 this ability upgrades to use 3MP.  \n If any specializations are utilized in this attack, that specialization may not be utilized in a Weapon Attack(Core Action) in that same round."
+  },
+  "Mana Blitz": {
+    "source": "Base",
+    "rank": 4,
+    "perkGroup": "Offensive Perks",
+    "passive": false,
+    "name": "Mana Blitz",
+    "actionCost": "Swift Action",
+    "target": "Character",
+    "area": "Weapon",
+    "type": "Charged (2)",
+    "duration": "One Round",
+    "resistance": "N/A",
+    "description": "If the character cast a spell that costs mana during their last turn, they may channel their magical energies into their weapon, granting it the ability to recover 1 mana per succesful weapon strike made during this turn.  At maximum they may recover an amount of mana equal to the rank of the last spell they cast.  If the character recovers all the mana they spent on their last spell through Mana Blitz, they can immediately chose to recast that spell as a free action. "
+  },
   "Auric Defense": {
     "source": "Base",
     "rank": 5,
@@ -110,6 +152,20 @@
     "duration": "Instantaneous",
     "resistance": "STR",
     "description": "The character gains access to several abilities they can use to disrupt others. \\nAs a reaction to being successfully struck by a target, the character strikes back with a concussive counterattack. The character makes an attack roll against the target if they are within range/reach. On hit, the target is unable to make any further strikes until the end of their turn. \\nAs a swift action, the character contests their strength with an adjacent target. On success, the target is thrown 30' in the direction of the character's choice. If thrown onto another target, the character makes a ranged attack roll, inflicting 1d8/P blunt to both targets' damage on a successful hit. \\nAs a reaction to a target leaving the character's melee reach, they can execute a melee strike against the target. "
+  },
+  "Tag Team": {
+    "source": "Base",
+    "rank": 1,
+    "perkGroup": "Supportive Perks",
+    "passive": true,
+    "name": "Tag Team",
+    "actionCost": "Swift / Core Action",
+    "target": "LOS 10'",
+    "area": "Variable",
+    "type": "Activated",
+    "duration": "Instantaneous",
+    "resistance": "N/A",
+    "description": "The character gains a number of actions that allows their allies to spring into action.  \\nAs a swift action, the character may allow another willing target to take their turn immediately.  This only works if that target has not yet taken their turn and it does expend their turn.\\nAs a Core Action, the player can call for a team meeting.  Up to 2 targets within 10'can gain the following effects:  The player who called for the huddle can perfom a Knowledge Heal or apply a potion to each target. You may chose to use the same effect on both targets but you will expend the relevant resources for both. Alternatively, the player can encourage them, granting them a placed roll on their next resistance check."
   },
   "Defensive Maneuvers": {
     "source": "Base",

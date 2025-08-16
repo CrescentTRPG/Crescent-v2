@@ -13,7 +13,7 @@ import { idText } from 'typescript'
 
 export default {
   emits: ['render'],
-  props: ['character', 'editable'],
+  props: ['character', 'editable', 'initiative'],
   setup(props, context) {
     const modal = ref(false)
     const designStore = useDesignStore()
@@ -107,8 +107,8 @@ export default {
         ret = Math.floor(152 + (level - 40) * 0.1)
       }
       ret += getPerkAndSkillGainHp()
-      if (props.character.traits['Bonus HP']) {
-        ret += parseInt(props.character.traits['Bonus HP'].number)
+      if (props.character.traits['Modified HP']) {
+        ret += parseInt(props.character.traits['Modified HP'].number)
       }
       if (wornArmorPassives.value['Override Base Hp']) {
         ret = parseInt(wornArmorPassives.value['Override Base Hp'].modAmount)
@@ -181,8 +181,8 @@ export default {
         sum += spellgroup?.manaGain * maxRank
       })
 
-      if (props.character.traits['Bonus Mana']) {
-        sum += parseInt(props.character.traits['Bonus Mana'].number)
+      if (props.character.traits['Modified Mana']) {
+        sum += parseInt(props.character.traits['Modified Mana'].number)
       }
 
       if (wornArmorPassives.value['Override Base Mana']) {
@@ -660,7 +660,8 @@ export default {
       addStatus,
       removeStatus,
       addCustomStatus,
-      removeCustomStatus
+      removeCustomStatus,
+      adventureStore
     }
   },
   components: {
@@ -670,7 +671,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div style="height: fit-content">
     <StatBlockQuickReference
       :id="props.character.id"
       :image="props.character.image"
@@ -699,6 +700,10 @@ export default {
       :removeCustomStatus="removeCustomStatus"
       :customStatusEffects="props.character.customStatusEffects"
       :removeStatus="removeStatus"
+      :initiative="props.initiative"
+      :changeInitiative="adventureStore.addCharacterInitiative"
+      :agi="props.character.attributes.agility"
+      :keyVal="props.character.id"
     ></StatBlockQuickReference>
   </div>
 </template>

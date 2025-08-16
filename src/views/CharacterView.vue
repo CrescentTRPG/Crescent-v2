@@ -1,19 +1,15 @@
 <template>
-  <div
-    class="fill"
-    v-if="character.loading"
-    style="font-size: xx-large; display: flex; justify-content: center; padding-top: 10rem"
-    :style="{ fontFamily: design.font + ', sans-serif' }"
-  >
-    <v-icon scale="4" :name="leftmoon" animation="float"></v-icon>
-    <div>{{ message }}</div>
-    <v-icon scale="4" :name="rightmoon" animation="float"></v-icon>
-  </div>
+  <LoadingDisplay class="fill" v-if="character.loading"></LoadingDisplay>
   <div
     :class="props.isGameMaster ? 'none' : 'fill'"
     style="display: flex; flex-direction: column"
     :style="{
-      background: design.pageBackdrop
+      background: design.pageBackdrop,
+      '--hover-color': hoverShade,
+      '--hover-blend': design.primaryTheme,
+      '--hover-blend-input': design.inputBacking,
+      '--hover-blend-sidebar': design.sidebarBacking,
+      '--mixed-color': mixedShade
     }"
     v-if="!character.loading"
   >
@@ -49,7 +45,7 @@
               v-if="design.charIconFlair.substring(0, 2) == 'gi'"
               :name="design.charIconFlair"
               scale="1.5"
-              style="position: absolute; z-index: 5; right: -10"
+              style="position: absolute; z-index: 5; transform: translate(0.75rem)"
               :style="{ color: design.secondaryTheme }"
             ></v-icon>
           </div>
@@ -111,17 +107,75 @@
               '--bs-btn-close-color': design.primaryText
             }"
           >
-            <DiceSidebar
+            <CharacterDiceSidebar
               @rolled="
                 (rollObj) => {
                   logRoll(rollObj)
                 }
               "
-            ></DiceSidebar>
+            ></CharacterDiceSidebar>
           </BOffcanvas>
         </div>
       </div>
     </div>
+    <CustomModal
+      :showModal="promptForCharacterInitiative"
+      title="A Fight Has Started! Roll Initiative!!"
+    >
+      <template v-slot:body>
+        <BFormInput
+          style="border: 2px solid; padding: 0.25rem; padding-top: 0.25rem"
+          :style="{
+            background: design.inputBacking,
+            color: design.inputText,
+            borderColor: design.secondaryTheme,
+            '--bs-secondary-color': design.inputText
+          }"
+          type="number"
+          v-model="init"
+        ></BFormInput>
+      </template>
+      <template v-slot:footer>
+        <BButton
+          style="border: 2px solid; padding: 0.25rem; padding-top: 0.25rem; margin-right: 0.5rem"
+          :style="{
+            background: design.primaryTheme,
+            color: design.primaryText,
+            borderColor: design.secondaryTheme,
+            '--bs-secondary-color': design.inputText
+          }"
+          @click="
+            adventureStore.addCharacterInitiative(
+              character.id,
+              parseInt('' + init),
+              character.attributes.agility
+            )
+          "
+          ><div
+            style="display: flex; flex-direction: row; justify-content: center; font-size: large"
+            :style="{ color: design.secondaryTheme }"
+          >
+            <div :style="{ color: design.primaryText }">Add from Input</div>
+            <v-icon scale="1.5" name="gi-leapfrog"></v-icon></div
+        ></BButton>
+        <BButton
+          style="border: 2px solid; padding: 0.25rem; padding-top: 0.25rem"
+          :style="{
+            background: design.primaryTheme,
+            color: design.primaryText,
+            borderColor: design.secondaryTheme,
+            '--bs-secondary-color': design.inputText
+          }"
+          @click="rollAgi()"
+          ><div
+            style="display: flex; flex-direction: row; justify-content: center; font-size: large"
+            :style="{ color: design.secondaryTheme }"
+          >
+            <div :style="{ color: design.primaryText }">Roll Agility!</div>
+            <v-icon scale="1.5" name="gi-rolling-dice-cup"></v-icon></div
+        ></BButton>
+      </template>
+    </CustomModal>
     <div v-if="props.isGameMaster">
       <BButton
         style="
@@ -163,12 +217,86 @@
     <BeingBuilt v-if="navPos === 'journal'"></BeingBuilt>
     <BeingBuilt v-if="navPos === 'manual'"></BeingBuilt>
     <CharacterPartyTab v-if="navPos === 'party'"></CharacterPartyTab>
+    <div style="display: flex; justify-content: space-between; height: 3rem">
+      <div
+        style="
+          align-self: right;
+          display: flex;
+          justify-content: space-between;
+          border-top: 2px solid;
+          position: fixed;
+          width: 100%;
+          bottom: 0;
+          z-index: 5;
+        "
+        :style="{
+          background: design.primaryTheme,
+          color: design.sidebarText,
+          borderColor: design.secondaryTheme
+        }"
+      >
+        <div style="display: flex">
+          <div style="margin-left: 0.75rem">
+            <InitiativeDisplay
+              style="z-index: 6"
+              :initiative="initiativeVal.initiativeScore"
+              :changeInitiative="adventureStore.addCharacterInitiative"
+            ></InitiativeDisplay>
+          </div>
+          <div
+            style="padding: 0.5rem"
+            :style="{
+              background: design.primaryTheme,
+              color: design.primaryText,
+              borderColor: design.secondaryTheme
+            }"
+          >
+            3 Turns Before your turn
+          </div>
+        </div>
+
+        <div style="display: flex; margin: 0.2rem; z-index: 5">
+          <BButton
+            class="footerButtons"
+            :style="{
+              background: design.primaryTheme,
+              color: design.primaryText,
+              borderColor: design.secondaryTheme
+            }"
+            @click="showInitiativeSidebar = !showInitiativeSidebar"
+          >
+            <i class="bi bi-arrow-bar-left"></i>
+            <div style="margin-left: 0.5rem">View Initiative</div>
+          </BButton>
+        </div>
+      </div>
+    </div>
+    <BOffcanvas
+      v-model="showInitiativeSidebar"
+      placement="end"
+      :backdrop="true"
+      shadow="false"
+      :teleportDisabled="false"
+      :style="{
+        background: design.primaryTheme,
+        color: design.primaryText,
+        '--bs-btn-close-color': design.primaryText
+      }"
+    >
+      <CombatantList
+        :overrideFull="true"
+        :noToolbar="true"
+        style="flex-grow: 1"
+        :combat="adventureStore.activeCombat"
+        mode="run"
+      ></CombatantList>
+    </BOffcanvas>
   </div>
 </template>
 
 <script lang="ts">
 import { BButton } from 'bootstrap-vue-next'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import CharacterNav from '../components/Character/CharacterNav.vue'
 import IconStackCloud from '../components/IconStackCloud.vue'
 import BuildTab from '../components/Character/Build/BuildTab.vue'
@@ -179,7 +307,7 @@ import { useUserStore } from '@/stores/userStore'
 import { FileExtensionInfo } from 'typescript'
 import OverviewTab from '@/components/Character/Overview/OverviewTab.vue'
 import BOffcanvas from 'bootstrap-vue-next/src/components/BOffcanvas/BOffcanvas.vue'
-import DiceSidebar from '@/components/DiceSidebar/DiceSidebar.vue'
+import CharacterDiceSidebar from '@/components/DiceSidebar/CharacterDiceSidebar.vue'
 import DetailsTab from '@/components/Character/Details/DetailsTab.vue'
 import EquipmentTab from '@/components/Character/Equipment/EquipmentTab.vue'
 import router from '@/router'
@@ -195,6 +323,14 @@ import CharacterPartyTab from '@/components/Character/Build/Party/CharacterParty
 import { validateHeaderName } from 'http'
 import CharacterSettings from '@/components/Character/CharacterSettings.vue'
 import CustomModal from '@/components/CustomModal.vue'
+import LoadingDisplay from '@/components/LoadingDisplay.vue'
+import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import { useCharacterComputedStore } from '@/stores/characterComputedStore'
+import { storeToRefs } from 'pinia'
+import { useStatusEffectStore } from '@/stores/statusEffectStore'
+import { now, timestamp } from '@vueuse/core'
+import InitiativeDisplay from '@/components/Adventure/Stat Blocks/initiativeDisplay.vue'
+import CombatantList from '@/components/Adventure/Combat/CombatantList.vue'
 
 export default {
   props: ['isGameMaster', 'exit'],
@@ -202,47 +338,13 @@ export default {
     const navPos = ref('build')
     let design = useDesignStore()
     const character = useCharacterStore()
-    const leftmoon = ref('wi-moon-alt-full')
-    const rightmoon = ref('wi-moon-alt-new')
     const showDice = ref(false)
     const settingsModal = ref(false)
-    const loadMessage = function () {
-      let val = Math.floor(Math.random() * 15)
-      switch (val) {
-        case 0:
-          return 'Calibrating Crossbows'
-        case 1:
-          return 'Scouting the Dungeon'
-        case 2:
-          return 'Stealthily Casting Fireball'
-        case 3:
-          return 'Applying Ambiance'
-        case 4:
-          return 'Fetching Quests'
-        case 5:
-          return 'Slaying the Dragon'
-        case 6:
-          return 'Leveling Up'
-        case 7:
-          return 'Gearing Up'
-        case 8:
-          return 'Building a Worthy Rival'
-        case 9:
-          return 'Brewing Potions'
-        case 10:
-          return 'Stressing my Exceptional Intelligence'
-        case 11:
-          return 'Rolling the Dice'
-        case 12:
-          return 'Running on Water'
-        case 13:
-          return 'Testing out a new Spell'
-        case 14:
-          return 'Sharpening Blades'
-        default:
-          return 'Counting Coins'
-      }
-    }
+    const adventureStore = useAdventureStore()
+    const statusStore = useStatusEffectStore()
+    const { getAgility, getAgilityExceptionals, getAgilityInferiors, getAgilityPlaced } =
+      storeToRefs(statusStore)
+
     const userStore = useUserStore()
     onUnmounted(() => {
       character.loading = true
@@ -255,8 +357,7 @@ export default {
         let label = roll.label ? roll.label : '(' + roll.str + ')'
         message += label + ' = ' + roll.subtotal + '\n'
       })
-      console.log(message)
-      useAdventureStore().addChat(
+      adventureStore.addChat(
         message,
         character.name,
         userStore.getUserId,
@@ -265,66 +366,80 @@ export default {
         design.charIcon
       )
     }
-    const message = ref(loadMessage())
-    const delay = (time: number) => {
-      return new Promise((resolve) => setTimeout(resolve, time))
-    }
-    const animate = async function (time) {
-      await delay(time)
-      leftmoon.value = 'wi-moon-alt-waxing-gibbous-5'
-      rightmoon.value = 'wi-moon-alt-waxing-crescent-2'
-      await delay(time)
-      leftmoon.value = 'wi-moon-alt-waxing-gibbous-4'
-      rightmoon.value = 'wi-moon-alt-waxing-crescent-3'
-      await delay(time)
-      leftmoon.value = 'wi-moon-alt-waxing-gibbous-3'
-      rightmoon.value = 'wi-moon-alt-waxing-crescent-4'
-      await delay(time)
-      leftmoon.value = 'wi-moon-alt-waxing-gibbous-2'
-      rightmoon.value = 'wi-moon-alt-waxing-crescent-5'
-      await delay(time)
-      leftmoon.value = 'wi-moon-alt-waxing-gibbous-1'
-      rightmoon.value = 'wi-moon-alt-waxing-crescent-6'
-      await delay(time)
-      leftmoon.value = 'wi-moon-alt-first-quarter'
-      rightmoon.value = 'wi-moon-alt-first-quarter'
-      await delay(time)
-      rightmoon.value = 'wi-moon-alt-waxing-gibbous-1'
-      leftmoon.value = 'wi-moon-alt-waxing-crescent-6'
-      await delay(time)
-      rightmoon.value = 'wi-moon-alt-waxing-gibbous-2'
-      leftmoon.value = 'wi-moon-alt-waxing-crescent-5'
-      await delay(time)
-      rightmoon.value = 'wi-moon-alt-waxing-gibbous-3'
-      leftmoon.value = 'wi-moon-alt-waxing-crescent-4'
-      await delay(time)
-      rightmoon.value = 'wi-moon-alt-waxing-gibbous-4'
-      leftmoon.value = 'wi-moon-alt-waxing-crescent-3'
-      await delay(time)
-      rightmoon.value = 'wi-moon-alt-waxing-gibbous-5'
-      leftmoon.value = 'wi-moon-alt-waxing-crescent-2'
-      animate(time)
-      rightmoon.value = 'wi-moon-alt-waxing-gibbous-6'
-      leftmoon.value = 'wi-moon-alt-waxing-crescent-1'
-      if (character.loading) {
-        animate(time)
+    function rollAgi() {
+      let rolls: Array<number> = []
+      for (let i = 0; i < 2 + Math.abs(getAgilityPlaced.value); i++) {
+        rolls.push(Math.ceil(Math.random() * 10))
       }
-    }
-    let router = useRouter()
+      rolls = rolls.sort()
+      let roll1 = rolls[0]
+      let roll2 = rolls[1]
+      let accepted: Array<number> = rolls
+      let rejected: Array<number> = []
 
+      let str = '2d10'
+      if (getAgilityPlaced.value != 0) {
+        str += '*' + getAgilityPlaced.value
+        if (getAgilityPlaced.value > 0) {
+          roll1 = rolls[rolls.length - 1]
+          roll2 = rolls[rolls.length - 2]
+          accepted = rolls.slice(Math.abs(getAgilityPlaced.value))
+          rejected = rolls.slice(0, Math.abs(getAgilityPlaced.value))
+        } else {
+          rejected = rolls.slice(Math.abs(getAgilityPlaced.value))
+          accepted = rolls.slice(0, Math.abs(getAgilityPlaced.value))
+        }
+      }
+      str += '+' + getAgility.value
+      console.log(str)
+
+      logRoll({
+        rollsObj: {
+          'roll 1': {
+            'roll group': 'Initiative',
+            str: str,
+            subtotal: roll1 + roll2 + getAgility.value,
+            resultsArr: [
+              {
+                operator: '',
+                dVal: 10,
+                isD: true,
+                val: roll1 + roll2,
+                accepted: accepted,
+                rejected: rejected
+              }
+            ]
+          }
+        },
+        timestamp: new Date().toDateString(),
+        rolltitle: 'Initiative'
+      })
+      adventureStore.addCharacterInitiative(
+        character.id,
+        roll1 + roll2 + getAgility.value,
+        getAgility.value
+      )
+    }
+
+    let router = useRouter()
+    const init = ref(0)
     onMounted(() => {
       character.loading = true
-      animate(300)
-
       if (!props.isGameMaster) {
         useCharacterStore().pullCharacterFromFirebase(useUserStore().getUserId, character.id, true)
         if (character.adventure.adventureId && character.adventure.gameMasterId) {
-          useAdventureStore().pullAdventureAsCharacterFromFirebase(
+          adventureStore.pullAdventureAsCharacterFromFirebase(
             character.adventure.adventureId,
             character.adventure.gameMasterId
           )
         }
       }
+    })
+    let promptForCharacterInitiative = computed(() => {
+      return adventureStore.characterInitiatives &&
+        adventureStore.characterInitiatives[character.id]?.initiativeScore
+        ? false
+        : true
     })
     function goToHome() {
       useSpellStore().clearBuildDisplay()
@@ -333,18 +448,55 @@ export default {
       useSkillStore().clearEffectiveSkills()
       router.push({ name: 'home' })
     }
+    const hoverShade = computed(() => {
+      const r = parseInt(design.alertTheme.substring(1, 3), 16)
+      const g = parseInt(design.alertTheme.substring(3, 5), 16)
+      const b = parseInt(design.alertTheme.substring(5, 7), 16)
+      return 'rgb(' + r + ',' + g + ',' + b + ',.2)'
+    })
+    const mixedShade = computed(() => {
+      const r = Math.floor(
+        (parseInt(design.alertTheme.substring(1, 3), 16) +
+          parseInt(design.primaryTheme.substring(1, 3), 16)) /
+          2
+      )
+
+      const g = Math.floor(
+        (parseInt(design.alertTheme.substring(3, 5), 16) +
+          parseInt(design.primaryTheme.substring(3, 5), 16)) /
+          2
+      )
+
+      const b = Math.floor(
+        (parseInt(design.alertTheme.substring(5, 7), 16) +
+          parseInt(design.primaryTheme.substring(5, 7), 16)) /
+          2
+      )
+      return 'rgb(' + r + ',' + g + ',' + b + ')'
+    })
+    const initiativeVal = adventureStore.characterInitiatives
+      ? adventureStore.characterInitiatives[character.id] || 0
+      : 0
+
+    const showInitiativeSidebar = ref(false)
+
     return {
       logRoll,
       props,
       design,
       navPos,
       character,
-      leftmoon,
-      rightmoon,
-      message,
       showDice,
       goToHome,
-      settingsModal
+      settingsModal,
+      promptForCharacterInitiative,
+      init,
+      adventureStore,
+      rollAgi,
+      hoverShade,
+      mixedShade,
+      initiativeVal,
+      showInitiativeSidebar
     }
   },
   components: {
@@ -355,19 +507,18 @@ export default {
     DesignButton,
     OverviewTab,
     BOffcanvas,
-    DiceSidebar,
+    CharacterDiceSidebar,
     DetailsTab,
     EquipmentTab,
     BeingBuilt,
     TitleWidget,
     CharacterPartyTab,
     CharacterSettings,
-    CustomModal
-  },
-  methods: {
-    delay: function (time) {
-      return new Promise((resolve) => setTimeout(resolve, time))
-    }
+    CustomModal,
+    LoadingDisplay,
+    BFormInput,
+    InitiativeDisplay,
+    CombatantList
   }
 }
 </script>

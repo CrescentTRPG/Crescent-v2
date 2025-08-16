@@ -157,20 +157,21 @@ export default {
         style="font-size: medium"
         :style="{
           '--bs-btn-color': designStore.inputText,
-          '--bs-btn-hover-bg': designStore.inputBacking,
+          '--bs-btn-hover-bg': 'transparent',
           '--bs-btn-active-color': designStore.inputText,
-          '--bs-btn-active-bg:': designStore.inputBacking,
+          '--bs-btn-active-bg:': 'transparent',
           '--bs-dropdown-color': designStore.inputText,
           '--bs-dropdown-bg': designStore.inputBacking,
           '--bs-dropdown-link-hover-color': designStore.alertTheme,
-          '--bs-dropdown-link-hover-bg': designStore.inputBacking,
+          '--bs-dropdown-link-hover-bg': 'transparent',
           '--bs-dropdown-link-active-color': designStore.alertTheme,
-          '--bs-dropdown-link-active-bg': designStore.inputBacking,
+          '--bs-dropdown-link-active-bg': 'transparent',
           scrollbarColor: designStore.secondaryTheme + ' ' + designStore.inputBacking
         }"
       >
         <template #button-content>
           <BButton
+            class="hoverableAttr"
             :style="{
               '--dropdownBg': designStore.inputBacking
             }"

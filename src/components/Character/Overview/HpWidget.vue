@@ -11,6 +11,9 @@ import TitleWidget from '@/components/TitleWidget.vue'
 import StatusEffectItem from './StatusEffectItem.vue'
 
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
+import BasicInput from '../BasicInput.vue'
+import BForm from 'bootstrap-vue-next/src/components/BForm/BForm.vue'
+import HpWidgetModal from './HpWidgetModal.vue'
 
 export default {
   props: [
@@ -26,7 +29,9 @@ export default {
     'secondaryHandheldPassives',
     'primaryHandheldPassives',
     'addNewHpStatusModifier',
-    'removeHpStatusModifier'
+    'removeHpStatusModifier',
+    'isEditing',
+    'setHp'
   ],
   setup(props, context) {
     const modal = ref(false)
@@ -390,14 +395,9 @@ export default {
   },
   components: {
     CustomModal,
-    BFormInput,
-    BInputGroup,
-    BFormSelect,
-    BButton,
-    StatusModifierExplaination,
-    TitleWidget,
-    StatusEffectItem,
-    AddStatusEffectWidget
+    BasicInput,
+    BForm,
+    HpWidgetModal
   }
 }
 </script>
@@ -405,6 +405,7 @@ export default {
 <template>
   <div
     style="width: 13.5rem; height: 10rem"
+    class="hoverableIconOnSidebar"
     :style="{ fontFamily: designStore.font }"
     @click="modal = !modal"
   >
@@ -460,7 +461,12 @@ export default {
               <div style="align-self: center; margin: 0.5rem; margin-bottom: -1rem" class="bigText">
                 {{ currentHp }}
               </div>
-              <div style="align-self: center; font-size: 0.75rem" class="liltext">Current</div>
+              <div
+                style="align-self: center; font-size: 0.75rem; padding-top: 0.15rem"
+                class="liltext"
+              >
+                Current
+              </div>
             </div>
           </div>
           <div style="display: flex; justify-content: center; position: absolute; width: 100%">
@@ -499,7 +505,12 @@ export default {
               <div style="align-self: center; margin: 0.5rem; margin-bottom: -1rem" class="bigText">
                 {{ props.totalHp }}
               </div>
-              <div style="align-self: center; font-size: 0.75rem" class="liltext">Total</div>
+              <div
+                style="align-self: center; font-size: 0.75rem; padding-top: 0.15rem"
+                class="liltext"
+              >
+                Total
+              </div>
             </div>
           </div>
         </div>
@@ -560,246 +571,50 @@ export default {
         </div>
       </div>
     </div>
-    <CustomModal title="Modify HP" :showModal="modal" @close="modal = !modal">
+    <HpWidgetModal
+      v-if="!props.isEditing"
+      :setCurrentAndBarrier="props.setCurrentAndBarrier"
+      :totalHp="props.totalHp"
+      :traits="props.traits"
+      :secondaryHandheldPassives="secondaryHandheldPassives"
+      :primaryHandheldPassives="primaryHandheldPassives"
+      :wornArmorPassives="wornArmorPassives"
+      :current-hp="props.currentHp"
+      :barrier-hp="props.barrierHp"
+      :hpStatusModifiers="hpStatusModifiers"
+      :statusEffects="props.statusEffects"
+      :removeHpStatusModifier="props.removeHpStatusModifier"
+      :addNewHpStatusModifier="props.addNewHpStatusModifier"
+      :setHp="props.setHp"
+      :modal="modal"
+      :setModal="(newVal) => (modal = newVal)"
+    ></HpWidgetModal>
+    <CustomModal
+      v-if="props.isEditing"
+      title="Modify HP"
+      :showModal="modal"
+      @close="modal = !modal"
+    >
       <template v-slot:body>
-        <div
-          style="font-size: x-large; text-align: center; margin-top: -1rem; margin-bottom: 0.25rem"
-        >
-          {{ currentHp }} Current with {{ barrierHp }} Barrier / {{ props.totalHp }} Total
-        </div>
-        <TitleWidget
-          class="expandingInput"
-          title="Modify Values"
-          style="margin-top: -1rem"
-        ></TitleWidget>
-
-        <div class="damageInput" :style="{ background: designStore.primaryTheme }">
-          <div style="display: flex; width: 100%">
-            <div style="display: flex; flex-direction: column" class="infoHeader">
-              <div style="flex-grow: 1; padding-left: 2.5%; display: flex; width: min-content">
-                <div style="align-self: end; width: min-content">Damage</div>
-              </div>
-              <BFormInput
-                class="rightField"
-                :style="{
-                  background: designStore.inputBacking,
-                  color: designStore.inputText,
-                  borderColor: designStore.secondaryTheme
-                }"
-                type="number"
-                min="0"
-                v-model="damage"
-              ></BFormInput>
-            </div>
-            <div style="display: flex; flex-direction: column" class="infoHeader">
-              <div style="flex-grow: 1; padding-left: 2.5%; display: flex">
-                <div style="align-self: end; padding-left: 0.25rem">Damage Type</div>
-              </div>
-              <BFormSelect
-                v-model="damageType"
-                :options="damageTypes"
-                class="damageType"
-                :style="{
-                  color: designStore.inputText,
-                  background: designStore.inputBacking,
-                  borderColor: designStore.secondaryTheme
-                }"
-              ></BFormSelect>
-            </div>
-            <div style="display: flex; flex-direction: column" class="infoHeader">
-              <div style="flex-grow: 1; padding-left: 2.5%"># Damage Dice</div>
-              <BFormInput
-                :style="{
-                  color: designStore.inputText,
-                  background: designStore.inputBacking,
-                  borderColor: designStore.secondaryTheme
-                }"
-                class="damageDice"
-                v-model="dice"
-                placeholder="# Damage Dice"
-                type="number"
-                min="0"
-              ></BFormInput>
-            </div>
-          </div>
-          <div style="display: flex; width: 100%">
-            <BButton
-              class="leftDamageButton"
-              :style="{ borderColor: designStore.secondaryTheme }"
-              @click="dealDamage()"
-              >Damage</BButton
-            >
-            <BButton
-              class="rightDamageButton"
-              :style="{ borderColor: designStore.secondaryTheme }"
-              @click="dealDamageIgnoreShield()"
-              ><span style="display: flex; justify-content: center">
-                Damage Ignore<v-icon
-                  class="superMobile"
-                  name="gi-heart-shield"
-                  style="font-size: large"
-                ></v-icon>
-                <span class="norm">&nbsp;Barrier</span></span
-              ></BButton
-            >
-          </div>
-        </div>
-        <div class="expandingInput">
-          <BInputGroup
-            style="border: 2px solid; border-radius: 10px; margin-bottom: 1rem"
-            :style="{
-              borderColor: designStore.secondaryTheme,
-              background: designStore.primaryTheme
-            }"
-          >
-            <BFormInput
-              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-              type="number"
-              min="0"
-              v-model="heal"
-            ></BFormInput>
-            <BButton
-              style="width: 5rem; padding-top: 0.5rem; padding-left: 0.5rem"
-              @click="applyHeal()"
-              >Heal</BButton
-            >
-            <BButton
-              style="
-                width: 5.5rem;
-                padding-top: 0.5rem;
-                padding-left: 0.5rem;
-                border-left: 1px solid;
-              "
-              :style="{ borderColor: designStore.secondaryTheme }"
-              @click="applyHealWithOvershield()"
-            >
-              Overheal</BButton
-            >
-          </BInputGroup>
-        </div>
-        <div class="expandingInput">
-          <BInputGroup
-            style="border: 3px solid; border-radius: 10px; margin-bottom: 1rem"
-            :style="{
-              borderColor: designStore.secondaryTheme,
-              background: designStore.primaryTheme
-            }"
-          >
-            <BFormInput
-              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-              type="number"
-              min="0"
-              v-model="barrier"
-            ></BFormInput>
-
-            <BButton
-              style="
-                width: 10.5rem;
-                padding-top: 0.5rem;
-                padding-left: 0.5rem;
-                border-left: 1px solid;
-              "
-              :style="{ borderColor: designStore.secondaryTheme }"
-              @click="applyBarrier()"
-              >Apply Barrier</BButton
-            >
-          </BInputGroup>
-        </div>
-        <TitleWidget
-          class="expandingInput"
-          title="Override Values"
-          style="margin-top: -1rem"
-        ></TitleWidget>
-        <div class="expandingInput">
-          <BInputGroup
-            style="border: 2px solid; border-radius: 10px; margin-bottom: 1rem"
-            :style="{
-              borderColor: designStore.secondaryTheme,
-              background: designStore.primaryTheme
-            }"
-          >
-            <BFormInput
-              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-              type="number"
-              min="0"
-              v-model="currentHpCopy"
-            ></BFormInput>
-
-            <BButton
-              style="
-                width: 10.5rem;
-                padding-top: 0.5rem;
-                padding-left: 0.5rem;
-                border-left: 1px solid;
-              "
-              :style="{ borderColor: designStore.secondaryTheme }"
-              @click="setNewCurrentHpValue()"
-              >Set Current Hp</BButton
-            >
-          </BInputGroup>
-        </div>
-        <div class="expandingInput">
-          <BInputGroup
-            style="border: 3px solid; border-radius: 10px; margin-bottom: 1rem"
-            :style="{
-              borderColor: designStore.secondaryTheme,
-              background: designStore.primaryTheme
-            }"
-          >
-            <BFormInput
-              :style="{ background: designStore.inputBacking, color: designStore.inputText }"
-              type="number"
-              min="0"
-              v-model="currentBarrierCopy"
-            ></BFormInput>
-
-            <BButton
-              style="
-                width: 10.5rem;
-                padding-top: 0.5rem;
-                padding-left: 0.5rem;
-                border-left: 1px solid;
-              "
-              :style="{ borderColor: designStore.secondaryTheme }"
-              @click="setNewCurrentBarrierValue()"
-              >Set Barrier Hp</BButton
-            >
-          </BInputGroup>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; margin-top: -2rem">
-          <TitleWidget
-            class="expandingInput"
-            title="Status Modifiers"
-            style="width: 100%"
-          ></TitleWidget>
-          <StatusModifierExplaination
-            style="position: relative; top: 2.5rem"
-          ></StatusModifierExplaination>
-        </div>
-
-        <AddStatusEffectWidget
-          class="expandingInput"
-          :modifierType="modifierType"
-          @added="(addedVal) => addHpStatusModifier(addedVal)"
-        ></AddStatusEffectWidget>
-        <div v-for="mod in statusModifiersList" :key="mod">
-          <StatusEffectItem
-            v-if="mod.modifierType == 'Suffering'"
-            @delete="removeModifier(mod.modifierType, mod.modAmount, mod.linkedStatus)"
-            :modifierType="mod.modifierType"
-            :modAmount="mod.modAmount"
-            :linkedStatus="mod.linkedStatus"
-            :unlockableCondition="mod.sufferingDamageType"
-          ></StatusEffectItem>
-          <StatusEffectItem
-            v-else
-            @delete="removeModifier(mod.modifierType, mod.modAmount, mod.linkedStatus)"
-            :modifierType="mod.modifierType"
-            :modAmount="mod.modAmount"
-            :linkedStatus="mod.linkedStatus"
-          ></StatusEffectItem>
-        </div>
+        <BForm>
+          <BasicInput
+            style="margin-bottom: 1rem"
+            label="Total Hp"
+            type="number"
+            :value="props.totalHp"
+            :min="0"
+            :max="999"
+            @newValue="(val) => props.setHp(props.currentHp, val)"
+          ></BasicInput>
+          <BasicInput
+            label="Current Hp"
+            type="number"
+            :value="props.currentHp"
+            :min="0"
+            :max="999"
+            @newValue="(val) => props.setHp(val, props.totalHp)"
+          ></BasicInput>
+        </BForm>
       </template>
     </CustomModal>
   </div>

@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import { useUserStore } from './userStore.js'
 import { useCharacterStore } from './characterStore.js'
 
-interface ManualMartialPerk {
+export interface ManualMartialPerk {
   name: string
   description: string
   area: string
@@ -16,11 +16,6 @@ interface ManualMartialPerk {
   source: string
   perkGroup: string
   rank: number
-}
-
-interface ManualMartialPerk {
-  name: string
-  source: string
 }
 
 export const useMartialPerksStore = defineStore('martialPerk', {

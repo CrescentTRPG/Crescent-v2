@@ -9,6 +9,10 @@ import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import RibbonTitle from '@/components/RibbonTitle.vue'
 import StatusEffectItem from './StatusEffectItem.vue'
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
+import BInputGroup from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroup.vue'
+import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
+import BasicInput from '../BasicInput.vue'
 
 export default {
   props: [
@@ -19,8 +23,10 @@ export default {
     'value',
     'attributeStatusModifiers',
     'addNewAttributeStatusModifier',
-    'removeAttributeStatusModifier'
+    'removeAttributeStatusModifier',
+    'isEditableAttr'
   ],
+  emits: ['updateAttr'],
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
@@ -90,6 +96,18 @@ export default {
       return ret
     })
 
+    function showModal() {
+      if (props.isEditableAttr) {
+        editModal.value = true
+      } else {
+        modal.value = true
+      }
+    }
+    const editModal = ref(false)
+    function updateAttr(val) {
+      context.emit('updateAttr', val)
+    }
+
     return {
       designStore,
       modal,
@@ -102,7 +120,10 @@ export default {
       statusModifiersList,
       removeModifier,
       getExceptionalColor,
-      getAttributeColor
+      getAttributeColor,
+      showModal,
+      updateAttr,
+      editModal
     }
   },
   components: {
@@ -111,7 +132,9 @@ export default {
     StatusModifierExplaination,
     RibbonTitle,
     AddStatusEffectWidget,
-    StatusEffectItem
+    StatusEffectItem,
+
+    BasicInput
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -128,7 +151,7 @@ export default {
 
 <template>
   <div
-    @click="modal = !modal"
+    @click="showModal()"
     style="width: 95%; margin: 0.1rem; border-radius: 4px; cursor: pointer"
     :style="{
       color: getAttributeColor(),
@@ -145,7 +168,7 @@ export default {
         borderLeftColor: LightenDarkenColor(designStore.secondaryTheme, -20)
       }"
     >
-      <div class="attrz">
+      <div class="attrz hoverableAttr">
         <div style="width: 0.25rem; padding-right: 1.5rem"></div>
         <div style="">{{ props.value }}</div>
         <div class="exec" v-if="exceptionalVal != 0" :style="{ color: getAttributeColor() }">
@@ -240,6 +263,23 @@ export default {
             :linkedStatus="mod.linkedStatus"
           ></StatusEffectItem>
         </div>
+      </template>
+    </CustomModal>
+    <CustomModal
+      :showModal="editModal"
+      :title="props.attribute"
+      @close="editModal = false"
+      :close-on-enter="true"
+    >
+      <template v-slot:body>
+        <BasicInput
+          :label="props.attribute"
+          :value="props.value"
+          type="number"
+          :max="10"
+          :min="0"
+          @newValue="(val) => updateAttr(val)"
+        ></BasicInput>
       </template>
     </CustomModal>
   </div>

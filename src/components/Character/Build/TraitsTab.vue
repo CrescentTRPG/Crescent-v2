@@ -2,7 +2,13 @@
 import { ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 import TitleWidget from '@/components/TitleWidget.vue'
-import { BButton, BButtonGroup, BDropdown, BDropdownItem } from 'bootstrap-vue-next'
+import {
+  BButton,
+  BButtonGroup,
+  BDropdown,
+  BDropdownDivider,
+  BDropdownItem
+} from 'bootstrap-vue-next'
 import { useTraitsStore } from '@/stores/traitsStore'
 import AddTrait from './AddTrait.vue'
 import CustomModal from '@/components/CustomModal.vue'
@@ -45,7 +51,8 @@ export default {
     AddTrait,
     CustomModal,
     TraitsTable,
-    AddCustomTrait
+    AddCustomTrait,
+    BDropdownDivider
   },
   methods: {
     addTrait(name: string) {
@@ -121,35 +128,97 @@ export default {
             scrollbarColor: designStore.secondaryTheme + ' ' + designStore.primaryTheme
           }"
         >
+          <div
+            class="dropdownHeader"
+            :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+          >
+            Damage Modifiers
+          </div>
+          <BDropdownDivider
+            style="margin-bottom: -1rem; border: 2px"
+            :style="{ color: designStore.secondaryTheme }"
+          ></BDropdownDivider>
           <BDropdownItem @click="addTrait('Resistance')">Resistance</BDropdownItem>
-          <BDropdownItem @click="addTrait('Immunity')">Immunity</BDropdownItem>
           <BDropdownItem @click="addTrait('Susceptibility')">Susceptibility</BDropdownItem>
+          <BDropdownItem @click="addTrait('Immunity')">Immunity</BDropdownItem>
           <BDropdownItem @click="addTrait('Vulnerability')">Vulnerability</BDropdownItem>
           <BDropdownItem @click="addTrait('Damage Reduction')">Damage Reduction</BDropdownItem>
           <BDropdownItem @click="addTrait('Damage Amplification')"
             >Damage Amplification</BDropdownItem
           >
+          <div
+            class="dropdownHeader"
+            :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+          >
+            Defense Values
+          </div>
+          <BDropdownDivider
+            style="margin-bottom: -1rem"
+            :style="{ color: designStore.secondaryTheme }"
+          ></BDropdownDivider>
           <BDropdownItem @click="addTrait('Armor DVs')">Armor Dvs</BDropdownItem>
           <BDropdownItem @click="addTrait('Shield DVs')">Shield Dvs</BDropdownItem>
           <BDropdownItem @click="addTrait('Bonus DVs')">Bonus Dvs</BDropdownItem>
           <BDropdownItem @click="addTrait('Movement DVs')">Movement Dvs</BDropdownItem>
+          <div
+            class="dropdownHeader"
+            :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+          >
+            Exceptionals And Inferiors
+          </div>
+          <BDropdownDivider
+            style="margin-bottom: -1rem"
+            :style="{ color: designStore.secondaryTheme }"
+          ></BDropdownDivider>
+          <BDropdownItem @click="addTrait('Exceptional')">Exceptional</BDropdownItem>
+          <BDropdownItem @click="addTrait('Inferior')">Inferior</BDropdownItem>
+          <div
+            class="dropdownHeader"
+            :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+          >
+            Movement
+          </div>
+          <BDropdownDivider
+            style="margin-bottom: -1rem"
+            :style="{ color: designStore.secondaryTheme }"
+          ></BDropdownDivider>
+          <BDropdownItem @click="addTrait('Modified Movespeed')">Modified Movespeed</BDropdownItem>
+          <BDropdownItem @click="addTrait('Flight Speed')">Flight Speed</BDropdownItem>
+          <BDropdownItem @click="addTrait('Swim Speed')">Swim Speed</BDropdownItem>
+          <BDropdownItem @click="addTrait('Burrowing Speed')">Burrowing Speed</BDropdownItem>
+          <BDropdownItem @click="addTrait('Climbing Speed')">Climbing Speed</BDropdownItem>
+          <div
+            class="dropdownHeader"
+            :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+          >
+            Resource Pools
+          </div>
+          <BDropdownDivider
+            style="margin-bottom: -1rem"
+            :style="{ color: designStore.secondaryTheme }"
+          >
+          </BDropdownDivider>
+          <BDropdownItem @click="addTrait('Modified HP')">Modified Hp</BDropdownItem>
+          <BDropdownItem @click="addTrait('Modified Mana')">Modified Mana</BDropdownItem>
+          <BDropdownItem @click="addTrait('Modified MP')">Modified MP</BDropdownItem>
+
+          <div
+            class="dropdownHeader"
+            :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+          >
+            Other
+          </div>
+          <BDropdownDivider
+            style="margin-bottom: -1rem"
+            :style="{ color: designStore.secondaryTheme }"
+          ></BDropdownDivider>
           <BDropdownItem @click="addTrait('Status Effect Immunity')"
             >Status Effect Immunity</BDropdownItem
           >
           <BDropdownItem @click="addTrait('Extra Origin Skills')"
             >Extra Origin Skills</BDropdownItem
           >
-          <BDropdownItem @click="addTrait('Bonus HP')">Bonus Hp</BDropdownItem>
-          <BDropdownItem @click="addTrait('Bonus Mana')">Bonus Mana</BDropdownItem>
-          <BDropdownItem @click="addTrait('Exceptional')">Exceptional</BDropdownItem>
-          <BDropdownItem @click="addTrait('Inferior')">Inferior</BDropdownItem>
           <BDropdownItem @click="addTrait('Size Category')">Size Category</BDropdownItem>
-          <BDropdownItem @click="addTrait('Bonus MP')">Bonus MP</BDropdownItem>
-          <BDropdownItem @click="addTrait('Bonus Movespeed')">Bonus Movespeed</BDropdownItem>
-          <BDropdownItem @click="addTrait('Flight Speed')">Flight Speed</BDropdownItem>
-          <BDropdownItem @click="addTrait('Swim Speed')">Swim Speed</BDropdownItem>
-          <BDropdownItem @click="addTrait('Burrowing Speed')">Burrowing Speed</BDropdownItem>
-          <BDropdownItem @click="addTrait('Climbing Speed')">Climbing Speed</BDropdownItem>
         </BDropdown>
         <BButton
           class="spacerButton"
@@ -241,6 +310,11 @@ export default {
   </div>
 </template>
 <style>
+.dropdownHeader {
+  padding-left: 0.5rem;
+  font-size: large;
+  margin-bottom: -0.1rem;
+}
 .bar {
   width: 100%;
   border-radius: 0;

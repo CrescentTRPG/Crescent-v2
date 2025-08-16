@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     addCharacter() {
-      if (this.props.charList.length < 2) {
+      if (this.props.charList.length < 2 || useUserStore().subscriptionLevel === 'Overlord') {
         useCharacterStore().addCharacter(useUserStore().getUserId)
       } else {
         alert('User is not entitled to more than two characters')
@@ -66,6 +66,7 @@ export default {
       useMartialSkillsStore().clearMartialSkillsBuild()
       useSkillStore().clearEffectiveSkills()
       useCharacterStore().setLocalCharacter(character)
+      useCharacterStore().setLocalSpentAbilityPoints(0)
       this.router.push({ name: 'character' })
     }
   }

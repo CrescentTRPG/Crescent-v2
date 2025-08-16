@@ -1,5 +1,6 @@
 <script lang="ts">
 import { useDesignStore } from '@/stores/designStore'
+import { onKeyStroke } from '@vueuse/core'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
@@ -19,6 +20,7 @@ export default {
         )
       }
     })
+
     const value = ref('')
     const menuExpanded = ref(false)
     function select(option: string) {
@@ -26,6 +28,15 @@ export default {
       search.value = option
       menuExpanded.value = false
       context.emit('select', value.value)
+    }
+    function closeMenu(type) {
+      if (type === 'delete') {
+        if (search.value.length === 0) menuExpanded.value = false
+      } else if (type === 'enter') {
+        select(search.value)
+      } else {
+        menuExpanded.value = false
+      }
     }
     const dropDownSelect = ''
     return {
@@ -36,7 +47,8 @@ export default {
       props,
       menuExpanded,
       filteredOptions,
-      select
+      select,
+      closeMenu
     }
   },
   components: {
@@ -49,6 +61,9 @@ export default {
   <div style="display: block; position: relative; flex-direction: column; width: 100%">
     <div style="display: flex">
       <BFormInput
+        @keydown.enter="closeMenu('enter')"
+        @keydown.delete="closeMenu('delete')"
+        @keydown.escape.prevent="closeMenu('escape')"
         v-if="borders === 'left'"
         :style="{
           background: designStore.inputBacking,
@@ -65,6 +80,9 @@ export default {
         "
       ></BFormInput>
       <BFormInput
+        @keydown.enter="closeMenu('enter')"
+        @keydown.delete="closeMenu('delete')"
+        @keydown.escape.prevent="closeMenu('escape')"
         v-if="borders === 'none'"
         :style="{
           background: designStore.inputBacking,

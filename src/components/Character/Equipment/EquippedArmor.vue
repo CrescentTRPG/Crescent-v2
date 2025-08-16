@@ -114,6 +114,7 @@ export default {
       @click="modal = !modal"
       style="width: 13.5rem; height: 10rem; margin-top: -0.65rem; margin-left: -0.5rem"
       :style="{ fontFamily: designStore.font }"
+      class="hoverableIconOnSidebar"
     >
       <div style="position: absolute; z-index: 4; margin-top: -1.5rem; margin-left: -0.5rem">
         <v-icon name="gi-armor-vest" scale="12" style="transform: scale(1.13, 1.05)">></v-icon>

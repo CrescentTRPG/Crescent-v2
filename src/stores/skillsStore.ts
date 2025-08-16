@@ -14,7 +14,7 @@ interface Skill {
   id: string
 }
 
-interface ManualSkill {
+export interface ManualSkill {
   skill: string
   description: string
   attribute: string

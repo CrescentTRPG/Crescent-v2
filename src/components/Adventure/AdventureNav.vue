@@ -56,13 +56,19 @@ export default {
       }"
     >
       <BNavItem
-        :style="{ color: navItemStyle('party'), background: designStore.inputBacking }"
+        :style="{
+          color: navItemStyle('party'),
+          background: designStore.inputBacking
+        }"
         @click="switchTab('party')"
         class="textI"
         >Party</BNavItem
       >
       <BNavItem
-        :style="{ color: navItemStyle('party'), background: designStore.inputBacking }"
+        :style="{
+          color: navItemStyle('party'),
+          background: designStore.inputBacking
+        }"
         @click="switchTab('party')"
         class="navI"
       >

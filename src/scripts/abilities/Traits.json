@@ -702,17 +702,17 @@
     "number": 0,
     "description": "The character is entitled to *NUM* extra origin skills.  A defualt character has 2."
   },
-  "Bonus HP": {
+  "Modified HP": {
     "icon": "gi-health-increase",
-    "name": "Bonus HP",
+    "name": "Modified HP",
     "number": 0,
-    "description": "The character is naturally hardier and has *NUM* increased maximum HP"
+    "description": "The character's total HP is modified by *NUM*"
   },
-  "Bonus Mana": {
+  "Modified Mana": {
     "icon": "gi-spell-book",
-    "name": "Bonus Mana",
+    "name": "Modified Mana",
     "number": 0,
-    "description": "The character is naturally magically attuned and has *NUM* increased maximum Mana"
+    "description": "The character's magical affinity is different from others and their mana pool is modified by *NUM*"
   },
   "Exceptional": {
     "nested": "true",
@@ -735,7 +735,7 @@
       }
     },
     "Exceptional Agility": {
-      "icon": "gi-acrboatic",
+      "icon": "gi-acrobatic",
       "name": "Bonus Exceptional Agility",
       "number": 0,
       "description": "The character has *NUM* natural exceptional Agility(s). Exceptionals grant a static bonus to their associated Attribute and may be stressed for powerful effects...",
@@ -950,17 +950,17 @@
       "description": "The character's size category is Titanic (larger than 45ft X 45ft)."
     }
   },
-  "Bonus MP": {
+  "Modified MP": {
+    "description": "The character's MP pool is modified by *NUM*",
     "icon": "gi-saber-and-pistol",
-    "name": "Bonus MP",
-    "number": 0,
-    "description": "The character is naturally martially attuned and has *NUM* bonus MP"
+    "name": "Modified MP",
+    "number": 0
   },
-  "Bonus Movespeed": {
+  "Modified Movespeed": {
     "icon": "gi-sprint",
-    "name": "Bonus Movespeed",
+    "name": "Modified Movespeed",
     "number": 0,
-    "description": "The character is naturally fast and has *NUM* bonus movespeed"
+    "description": "The character's land movespeed is modified by *NUM*"
   },
   "Flight Speed": {
     "icon": "gi-angel-wings",

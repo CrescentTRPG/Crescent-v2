@@ -30,6 +30,7 @@ export default {
   <div
     style="
       width: 15rem;
+      min-width: 15rem;
       height: 85rem;
       grid-column: 1 / span 2;
       border: 2px solid;

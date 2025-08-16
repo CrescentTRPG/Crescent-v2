@@ -29,7 +29,7 @@ export default {
     })
 
     const hasPerformance: ComputedRef<Boolean> = computed(() => {
-      if (skillsStore.skills['Performance']?.rank >= 2) {
+      if (skillsStore.skills['Performance']?.rank >= 1) {
         return true
       }
       return false

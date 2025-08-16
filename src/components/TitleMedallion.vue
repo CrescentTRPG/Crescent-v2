@@ -2,7 +2,7 @@
 import { useDesignStore } from '../stores/designStore'
 
 export default {
-  props: ['title', 'color'],
+  props: ['title', 'color', 'inline'],
   setup(props, context) {
     const designStore = useDesignStore()
     return {

@@ -3,7 +3,6 @@ import { useCharacterStore } from './characterStore.js'
 import { useUserStore } from './userStore.js'
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '@/firebase/config.js'
-import { aB } from 'vitest/dist/reporters-yx5ZTtEV.js'
 interface PerformanceStyles {
   style1: string
   style2: string

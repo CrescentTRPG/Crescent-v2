@@ -16,8 +16,10 @@ import CustomPagination from '@/components/CustomPagination.vue'
 import CustomModal from '@/components/CustomModal.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import { useAdventureStore } from '@/stores/adventureStore'
+import PowerLevelIcon from './PowerLevelIcon.vue'
 
 export default {
+  props: ['select', 'add', 'hideRm', 'usePlus'],
   setup(props, context) {
     const designStore = useDesignStore()
     const adventureStore = useAdventureStore()
@@ -25,18 +27,33 @@ export default {
     const currentPage = ref(1)
     const perPage = ref(15)
     const currentModal = ref(0)
-    const filterOn = ['name', 'type', 'isAttuned']
+    const filterOn = ['name', 'tags', 'powerLevel']
     const filter = ref('')
 
-    const fields = ref([
-      { key: 'name', label: 'Name' },
-      { key: 'powerLevel', label: 'Power Level' },
-      { key: 'tags', label: 'Tags' },
-      { key: 'actions', label: 'Actions' }
+    const fields = ref(
+      props.hideRm
+        ? [
+            { key: 'name', label: 'Name' },
+            { key: 'powerLevel', label: 'Power Level' },
+            { key: 'tags', label: 'Tags' }
 
-      // { key: 'adaptations', label: 'Adaptations' },
-      // { key: 'Traits', label: 'Traits' },
-    ])
+            // { key: 'adaptations', label: 'Adaptations' },
+            // { key: 'Traits', label: 'Traits' },
+          ]
+        : [
+            { key: 'name', label: 'Name' },
+            { key: 'powerLevel', label: 'Power Level' },
+            { key: 'tags', label: 'Tags' },
+            { key: 'actions', label: 'Actions' }
+
+            // { key: 'adaptations', label: 'Adaptations' },
+            // { key: 'Traits', label: 'Traits' },
+          ]
+    )
+
+    function remove(id) {
+      adventureStore.removeStatBlock(id)
+    }
 
     const StatBlocksArr: ComputedRef<Array<any>> = computed(() => {
       return Object.values(statBlocks.value)
@@ -54,14 +71,16 @@ export default {
       currentPage,
       currentModal,
       adventureStore,
-      perPage
+      perPage,
+      remove
     }
   },
   components: {
     BButton,
     BTable,
     CustomPagination,
-    BFormInput
+    BFormInput,
+    PowerLevelIcon
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -91,19 +110,21 @@ export default {
     style="border-left: 2px solid; margin-left: -2px"
     :style="{ background: designStore.sidebarBacking, borderColor: designStore.secondaryTheme }"
   >
-    <BFormInput
-      class="inputSearch"
-      placeholder="Search..."
-      v-model="filter"
-      style="border-radius: 0; border: none; border-bottom: 2px solid"
-      :style="{
-        fontFamily: designStore.font,
-        color: designStore.inputText,
-        background: designStore.inputBacking,
-        borderColor: designStore.secondaryTheme,
-        '--bs-secondary-color': designStore.inputText
-      }"
-    ></BFormInput>
+    <div style="display: flex">
+      <BFormInput
+        class="inputSearch"
+        placeholder="Search..."
+        v-model="filter"
+        style="border-radius: 0; border: none; border-bottom: 2px solid"
+        :style="{
+          fontFamily: designStore.font,
+          color: designStore.inputText,
+          background: designStore.inputBacking,
+          borderColor: designStore.secondaryTheme,
+          '--bs-secondary-color': designStore.inputText
+        }"
+      ></BFormInput>
+    </div>
     <BTable
       @filtered="onFiltered"
       striped
@@ -119,13 +140,35 @@ export default {
       :filterable="filterOn"
       :per-page="perPage"
       :current-page="currentPage"
-      headerTitle="Abilities"
       class="tableClass mobile"
       :fields="fields"
       :items="StatBlocksArr"
+      show-empty
     >
+      <template v-slot:empty>
+        <div style="display: flex; justify-content: center; margin-bottom: 0.5rem; flex-wrap: wrap">
+          <div style="margin-top: 0.5rem">
+            This Table is Empty, try adding some values by clicking
+          </div>
+          <BButton
+            style="border-radius: 0; font-size: large; border: 2px solid; margin-left: 1rem"
+            :style="{
+              background: designStore.sidebarBacking,
+              color: designStore.sidebarText,
+              borderColor: designStore.secondaryTheme,
+              boxShadow:
+                'inset 0px 0px 0px 3px ' + LightenDarkenColor(designStore.sidebarBacking, 10)
+            }"
+            @click="props.add()"
+          >
+            <v-icon name="gi-spiked-dragon-head" scale="1.5" style="transform: scaleX(1)"></v-icon>
+            Add New Stat Block
+            <v-icon name="gi-high-punch" scale="1.5" style="transform: scaleX(-1)"></v-icon
+          ></BButton>
+        </div>
+      </template>
       <template #cell(name)="data">
-        <div>
+        <div style="display: flex; flex-direction: column; justify-content: center; height: 3.5rem">
           <BButton
             class="nameButton mobile"
             style="
@@ -140,13 +183,40 @@ export default {
               color: designStore.primaryText,
               borderColor: designStore.secondaryTheme
             }"
-            @click="console.log('Clicked')"
+            @click="props.select(data.item)"
+          >
+            <i class="bi bi-plus-lg" style="margin-right: 0.25rem" v-if="props.usePlus"></i
             >{{ data.item.name }}</BButton
           >
         </div>
       </template>
 
-      <template #cell(actions)="data">
+      <template #cell(powerLevel)="data">
+        <PowerLevelIcon
+          class="powerLevel"
+          style="margin-top: 0rem; margin-bottom: 0.75rem"
+          :powerLevel="data.item.powerLevel"
+          :currentStatBlock="data.item"
+          :icon="data.item.icon"
+        ></PowerLevelIcon>
+      </template>
+      <template #cell(tags)="data">
+        <div style="display: flex; flex-wrap: wrap">
+          <div v-for="t in data.item.tags" :key="t">
+            <div
+              class="statTag"
+              :style="{
+                background: designStore.alertTheme,
+                color: designStore.inputBacking,
+                borderColor: designStore.alertTheme
+              }"
+            >
+              {{ t }}
+            </div>
+          </div>
+        </div>
+      </template>
+      <template #cell(actions)="data" v-if="!hideRm">
         <BButton
           style="border: 2px solid"
           :style="{
@@ -154,8 +224,8 @@ export default {
             color: designStore.primaryText,
             borderColor: designStore.secondaryTheme
           }"
-          @click="console.log('remove' + data.item.name)"
-          ><i @click="console.log('remove')" class="bi bi-x-lg"></i
+          @click="remove(data.item.id)"
+          ><i @click="remove(data.item.id)" class="bi bi-x-lg"></i
         ></BButton>
       </template>
     </BTable>
@@ -174,13 +244,23 @@ li {
   text-align: center;
   width: 33%;
 }
+.statTag {
+  font-size: medium;
+}
 .navClass {
   width: 100%;
   border: 2px solid;
   border-left: 0px;
   border-right: 0px;
 }
+
 @media (max-width: 500px) {
+  .powerLevel {
+    transform: scale(75%);
+  }
+  .statTag {
+    font-size: x-small;
+  }
   .navClass {
     width: 100%;
     border: 2px solid;

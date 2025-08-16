@@ -89,7 +89,7 @@ export default {
   <div style="width: fit-content; height: fit-content">
     <div class="charImage">
       <BCard
-        class="charx"
+        class="charx hoverableAttr"
         :style="{
           background: designStore.sidebarBacking,
           borderColor: designStore.secondaryTheme

@@ -11,17 +11,16 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div :style="{ color: props.color }">
     <v-icon
       v-if="props.icon?.substring(0, 2) === 'gi'"
       :name="props.icon"
       :scale="props.scale"
-      :style="{ color: props.color }"
     ></v-icon>
     <i
       v-if="props.icon?.substring(0, 2) === 'bi'"
       style="padding-left: 0.2rem; padding-right: 0.2rem"
-      :style="{ fontSize: props.size, color: props.color }"
+      :style="{ fontSize: props.size }"
       :class="props.icon"
     ></i>
   </div>

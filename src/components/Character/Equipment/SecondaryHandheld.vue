@@ -122,6 +122,7 @@ export default {
         margin-bottom: 2rem;
         margin-left: -0.5rem;
       "
+      class="hoverableIconOnSidebar"
       :style="{ fontFamily: designStore.font }"
     >
       <div style="position: absolute; z-index: 4; margin-top: -1.5rem; margin-left: -0.5rem">

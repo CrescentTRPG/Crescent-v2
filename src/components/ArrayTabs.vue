@@ -1,6 +1,6 @@
 <script lang="ts">
 import { useDesignStore } from '@/stores/designStore'
-import { Ref, ref } from 'vue'
+import { Ref, ref, watch } from 'vue'
 
 import TabItem from './TabItem.vue'
 import { BAccordion, BAccordionItem } from 'bootstrap-vue-next'
@@ -11,6 +11,17 @@ export default {
   setup(props: any) {
     const designStore = useDesignStore()
     const selectedTabs: Ref<Array<any>> = ref([])
+    watch(props, (newVal, oldVal) => {
+      if (selectedTabs.value.length > 0) {
+        let newSelectedTabs: Array<any> = []
+        selectedTabs.value.forEach((tab) => {
+          if (newVal.tabs.includes(tab)) {
+            newSelectedTabs.push(tab)
+          }
+        })
+        selectedTabs.value = newSelectedTabs
+      }
+    })
     return {
       designStore,
       selectedTabs,
@@ -52,6 +63,7 @@ export default {
     }"
   >
     <BAccordionItem
+      style="width: inherit"
       :title="'Filter By ' + props.filteringMessage"
       :style="{
         color: designStore.inputText,
@@ -59,7 +71,7 @@ export default {
         borderColor: designStore.secondaryTheme
       }"
     >
-      <div class="arrayTabs">
+      <div class="arrayTabz">
         <TabItem
           v-for="tab in tabs"
           :key="tab.index"
@@ -73,8 +85,7 @@ export default {
   </BAccordion>
 </template>
 <style>
-.arrayTabs {
-  width: 100%;
+.arrayTabz {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -89,13 +100,13 @@ export default {
   --bs-body-background: background !important;
   border-bottom: 2px solid;
   border-top: 2px solid;
+
   border-radius: 0rem;
 }
 .accordion-button {
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
   padding: var(--bs-accordion-btn-padding-y) var(--bs-accordion-btn-padding-x);
   font-size: 1rem;
   text-align: left;

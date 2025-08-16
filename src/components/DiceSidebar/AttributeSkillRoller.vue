@@ -19,7 +19,7 @@ import DiceIconStack from './DiceIconStack.vue'
 import { useSkillStore } from '@/stores/skillsStore'
 
 export default {
-  props: ['attributes', 'skills'],
+  props: ['attributes'],
   setup(props, context) {
     let designStore = useDesignStore()
     let characterStore = useCharacterStore()
@@ -31,9 +31,7 @@ export default {
     const attrs: ComputedRef<any> = computed(() => {
       return Object.values(props.attributes)
     })
-    const passedSkills: ComputedRef<any> = computed(() => {
-      return Object.values(props.skills)
-    })
+
     const rolls: ComputedRef<number> = computed(() => {
       if (useOverride.value) {
         return override.value
@@ -88,7 +86,6 @@ export default {
       selectedRoll,
       props,
       attrs,
-      passedSkills,
       override,
       rolls,
       modifier,

@@ -1,23 +1,42 @@
 <script lang="ts">
 import { DEFAULT_STAT_BLOCK } from '@/bases'
 import { useDesignStore } from '@/stores/designStore'
-import { ref } from 'vue'
+import { BButton } from 'bootstrap-vue-next'
+import { ref, watch } from 'vue'
+import StatBlockDetailedReference from './StatBlockDetailedReference.vue'
 
 export default {
-  props: ['currentStatBlock', 'isNew'],
+  props: ['currentStatBlock', 'lightenDarkenColor'],
   setup(props, context) {
     const designStore = useDesignStore()
-    const statBlock = ref(DEFAULT_STAT_BLOCK)
-    if (!props.isNew) {
-      statBlock.value = props.currentStatBlock
+    const statBlock = ref({ ...DEFAULT_STAT_BLOCK })
+
+    function goBack() {
+      context.emit('return')
     }
+    const isEditing = ref(true)
+
     return {
-      designStore
+      goBack,
+      designStore,
+      props,
+      statBlock,
+      isEditing
     }
+  },
+  components: {
+    StatBlockDetailedReference
   }
 }
 </script>
 <template>
-  <div></div>
+  <div>
+    <StatBlockDetailedReference
+      :is-editing="isEditing"
+      :current-stat-block="statBlock"
+      :lightenDarkenColor="props.lightenDarkenColor"
+      :goBack="goBack"
+    ></StatBlockDetailedReference>
+  </div>
 </template>
 <style></style>

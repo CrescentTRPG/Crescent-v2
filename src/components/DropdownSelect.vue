@@ -54,6 +54,12 @@ export default {
     const scrollbarColor = computed(() => {
       return designStore.secondaryTheme + ' ' + designStore.primaryTheme
     })
+    const hoverShade = computed(() => {
+      const r = parseInt(designStore.alertTheme.substring(1, 3), 16)
+      const g = parseInt(designStore.alertTheme.substring(3, 5), 16)
+      const b = parseInt(designStore.alertTheme.substring(5, 7), 16)
+      return 'rgb(' + r + ',' + g + ',' + b + ',.3)'
+    })
     return {
       props,
       designStore,
@@ -62,13 +68,17 @@ export default {
       showDropdown,
       openDropdown,
       dropDown,
-      scrollbarColor
+      scrollbarColor,
+      hoverShade
     }
   }
 }
 </script>
 <template>
-  <div ref="dropDown">
+  <div
+    ref="dropDown"
+    :style="{ '--backdrop-color': props.background, '--hover-color': hoverShade }"
+  >
     <div
       v-if="showDropdown"
       :style="{
@@ -204,6 +214,9 @@ export default {
   box-sizing: border-box;
   border: 2px solid;
   width: 100%;
+}
+.dropdown-selected-option:hover {
+  background-image: linear-gradient(var(--backdrop-color), var(--hover-color)) !important;
 }
 .dropdown-borderless-option {
   padding: 0.25rem;

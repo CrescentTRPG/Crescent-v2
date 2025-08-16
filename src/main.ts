@@ -12,7 +12,10 @@ import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { PiniaPlugin, PiniaVuePlugin, createPinia } from 'pinia'
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
+import { QuillEditor } from '@vueup/vue-quill'
 import firebase from 'firebase/compat/app'
+import '@vueup/vue-quill/dist/vue-quill.bubble.css'
+
 // Required for side-effects
 import 'firebase/firestore'
 import { auth } from './firebase/config'
@@ -33,6 +36,7 @@ auth.onAuthStateChanged(() => {
       .use(createPinia().use(piniaPluginPersistedState as unknown as PiniaPlugin))
       .use(createBootstrap({ plugins: { modalController: true } }))
       .component('v-icon', OhVueIcon)
+      .component('QuillEditor', QuillEditor)
       .mount('#app')
   }
 })

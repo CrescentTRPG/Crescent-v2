@@ -38,8 +38,8 @@ export const useDesignStore = defineStore('design', {
     alertTheme: '#c15be6',
     font: 'Bahnschrift',
     titleFont: 'Bahnschrift',
-    icon: 'square',
-    iconFill: 'check',
+    icon: 'bi bi-square',
+    iconFill: 'bi bi-check',
     charIconFlair: 'bi bi-stars',
     charIcon: 'bi bi-moon-stars-fill',
     iconColor: '#000000'

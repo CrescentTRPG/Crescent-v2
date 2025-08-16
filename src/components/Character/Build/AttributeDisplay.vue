@@ -66,6 +66,7 @@ export default {
         padding-right: 2rem;
         cursor: pointer;
       "
+      class="inputColorBackdrop"
       :style="{ background: designStore.inputBacking, color: designStore.secondaryTheme }"
     >
       <div

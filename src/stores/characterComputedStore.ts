@@ -77,8 +77,8 @@ export const useCharacterComputedStore = defineStore('characterComputed', () => 
       ret = Math.floor(152 + (level - 40) * 0.1)
     }
     ret += getPerkAndSkillGainHp()
-    if (characterStore.traits['Bonus HP']) {
-      ret += parseInt(characterStore.traits['Bonus HP'].number)
+    if (characterStore.traits['Modified HP']) {
+      ret += parseInt(characterStore.traits['Modified HP'].number)
     }
     if (wornArmorPassives.value['Override Base Hp']) {
       ret = parseInt(wornArmorPassives.value['Override Base Hp'].modAmount)
@@ -148,8 +148,8 @@ export const useCharacterComputedStore = defineStore('characterComputed', () => 
       sum += spellgroup?.manaGain * maxRank
     })
 
-    if (characterStore.traits['Bonus Mana']) {
-      sum += parseInt(characterStore.traits['Bonus Mana'].number)
+    if (characterStore.traits['Modified Mana']) {
+      sum += parseInt(characterStore.traits['Modified Mana'].number)
     }
 
     if (wornArmorPassives.value['Override Base Mana']) {
@@ -641,18 +641,18 @@ export const useCharacterComputedStore = defineStore('characterComputed', () => 
           : Math.max(speed + modifier, 0)
     }
 
-    if (characterStore.traits['Bonus Movespeed']) {
+    if (characterStore.traits['Modified Movespeed']) {
       return isPinned.value || isStunned.value
         ? 0
         : isProne.value || isSlowed.value
           ? Math.max(
-              parseInt(characterStore.traits['Bonus Movespeed'].number) +
+              parseInt(characterStore.traits['Modified Movespeed'].number) +
                 modifier +
                 perkAndSkillGain +
                 30
             ) / 2
           : Math.max(
-              parseInt(characterStore.traits['Bonus Movespeed'].number) +
+              parseInt(characterStore.traits['Modified Movespeed'].number) +
                 modifier +
                 perkAndSkillGain +
                 30

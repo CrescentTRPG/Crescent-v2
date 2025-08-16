@@ -32,6 +32,10 @@ export default {
       let sections = description.split('\\n')
       let ret
       if (sections.length === 1) {
+        sections = description.split('\n')
+      }
+
+      if (sections.length === 1) {
         return '<div>' + description + '</div>'
       } else {
         ret = '<div style="margin-bottom: .25rem">' + sections[0] + '</div>'

@@ -1,5 +1,4 @@
 <script lang="ts">
-import { useCharacterStore } from '@/stores/characterStore'
 import { useDesignStore } from '../../../stores/designStore'
 import { computed, ComputedRef, ref } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -9,19 +8,31 @@ import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue
 import BDropdownItem from 'bootstrap-vue-next/src/components/BDropdown/BDropdownItem.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
-import BInputGroup from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroup.vue'
 import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
 import IconPicker from '@/components/IconPicker.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import { useStatusEffectStore } from '@/stores/statusEffectStore'
 import { useTraitsStore } from '@/stores/traitsStore'
 import StatusEffectIcon from '@/StatusEffectIcon.vue'
+import AbilityDisplayMedallion from '@/components/AbilityDisplayMedallion.vue'
+import { BButtonGroup } from 'bootstrap-vue-next'
+import AddTrait from '../Build/AddTrait.vue'
+import AddCustomTrait from '../Build/AddCustomTrait.vue'
 
 export default {
-  props: ['tab'],
+  props: [
+    'removeStatus',
+    'addStatus',
+    'addCustomStatus',
+    'traits',
+    'customStatusEffects',
+    'isEditing',
+    'updateTemp',
+    'statuses',
+    'currentStatBlock'
+  ],
   setup(props, context) {
     const designStore = useDesignStore()
-    const characterStore = useCharacterStore()
     const statusEffectsStore = useStatusEffectStore()
     const traitsStore = useTraitsStore()
     const { manualStatusEffect } = storeToRefs(statusEffectsStore)
@@ -61,13 +72,13 @@ export default {
     const modalCheckToBreak = ref('')
     const isCustomStatus = ref(false)
     const traitArr: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(characterStore.traits)
+      return Object.values(props.traits)
     })
     const customStatusArr: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(characterStore.customStatusEffects)
+      return Object.values(props.customStatusEffects)
     })
     const statusArr: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(characterStore.statusEffects)
+      return Object.values(props.statuses)
     })
     function loadValuesAndShowModal(val, isCustom) {
       modalName.value = val.name
@@ -78,7 +89,7 @@ export default {
       isCustomStatus.value = isCustom
     }
     function remove(name) {
-      characterStore.removeStatus(name)
+      props.removeStatus(name)
     }
     const getIcon: ComputedRef<string> = computed(() => {
       if (basicStatus.value.indexOf('X') === -1 && manualStatusEffect.value[basicStatus.value])
@@ -92,7 +103,7 @@ export default {
     })
 
     function addAsStatus() {
-      characterStore.addCustomStatus({
+      props.addCustomStatus({
         name: statusName.value,
         description: statusDescription.value,
         duration: statusDuration.value,
@@ -103,7 +114,7 @@ export default {
       addModal.value = false
     }
 
-    function addStatus() {
+    function addStatusEffect() {
       console.log(manualStatusEffect[basicStatus.value]?.groupIcon.value || 'gi-uncertainty')
       let type = ''
       let ogStatus = basicStatus.value
@@ -111,7 +122,7 @@ export default {
         type = basicStatus.value.substring(2)
         basicStatus.value = basicStatus.value.replace('X', damageType.value)
       }
-      statusEffectsStore.addStatus(
+      props.addStatus(
         basicStatus.value,
         basicCheckToBreak.value,
         basicDuration.value,
@@ -124,11 +135,45 @@ export default {
       )
       addBasicModal.value = false
     }
-
+    const selectTraitTypeModal = ref(false)
+    const selectedTrait = ref('')
+    const stagedTrait = ref({})
+    const addTraitModal = ref(false)
+    function openAddTraitModal() {
+      selectTraitTypeModal.value = true
+    }
+    function addTrait(name: string) {
+      selectedTrait.value = name
+      addTraitModal.value = true
+      selectTraitTypeModal.value = false
+    }
+    function addCustomTrait() {
+      customModal.value = true
+      selectTraitTypeModal.value = false
+    }
+    const customModal = ref(false)
+    function update(trait: any, isDefault: boolean) {
+      let newTemp = { ...props.currentStatBlock }
+      newTemp.traits[trait.name] = trait
+      if (trait.name.includes('Exceptional') && isDefault) {
+        const attrArr = trait.name.split(' ')
+        const attr = attrArr[attrArr.length - 1].toLowerCase()
+        newTemp.exceptionals[attr] =
+          parseInt(newTemp.exceptionals[attr] + '') + parseInt(trait.number + '')
+      }
+      if (trait.name.includes('Inferior') && isDefault) {
+        const attrArr = trait.name.split(' ')
+        const attr = attrArr[attrArr.length - 1].toLowerCase()
+        newTemp.exceptionals[attr] =
+          parseInt(newTemp.exceptionals[attr] + '') + parseInt(trait.number + '') * -1
+      }
+      props.updateTemp(newTemp)
+      customModal.value = false
+      addTraitModal.value = false
+    }
     return {
       designStore,
       props,
-      characterStore,
       traitArr,
       // traitWraps,
       // spillOver,
@@ -152,21 +197,29 @@ export default {
       addAsStatus,
       addBasicModal,
       basicStatus,
-      statusEffects,
       damageType,
       damageTypes,
       basicCheckToBreak,
       basicDuration,
       manualStatusEffect,
-      addStatus,
+      addStatusEffect,
       basicStatusRank,
       traitsStore,
-      getIcon
+      getIcon,
+      statusEffects,
+      openAddTraitModal,
+      addTraitModal,
+      addTrait,
+      selectTraitTypeModal,
+      selectedTrait,
+      customModal,
+      addCustomTrait,
+      stagedTrait,
+      update
     }
   },
   methods: {
     formatHTML(description: string) {
-      console.log('what?')
       let sections = description.split('❖ ')
       console.log(sections)
       let ret
@@ -207,7 +260,11 @@ export default {
     BFormTextarea,
     IconPicker,
     BFormSelect,
-    StatusEffectIcon
+    StatusEffectIcon,
+    AbilityDisplayMedallion,
+    BButtonGroup,
+    AddTrait,
+    AddCustomTrait
   }
 }
 </script>
@@ -227,6 +284,7 @@ export default {
       <div class="traitRibbon">
         <div v-for="t in traitArr" :key="t.name" @click="loadValuesAndShowModal(t, false)">
           <StatusEffectIcon
+            v-if="!isEditing"
             :icon="t.icon"
             :status-obj="t"
             :notRemoveable="true"
@@ -238,38 +296,39 @@ export default {
             borderBottom="1px solid"
             :background="designStore.primaryTheme"
           ></StatusEffectIcon>
-          <!-- <div
-            class="iconContain"
-            v-if="t.icon.substring(0, 2) == 'gi'"
-            :style="{
-              boxShadow:
-                'inset -5px 0px 3px 1px ' + LightenDarkenColor(designStore.primaryTheme, 10),
-              borderBottom: '1px solid',
-
-              borderColor: designStore.secondaryTheme,
-              background: designStore.primaryTheme
-            }"
-          >
-            <v-icon
-              scale="1.5"
-              :name="t.icon"
-              style="cursor: pointer"
-              :style="{ color: designStore.primaryText }"
-            ></v-icon>
-          </div>
-          <div
-            class="iconContain"
-            :style="{
-              borderColor: designStore.secondaryTheme,
-              color: designStore.primaryText
-            }"
-            v-if="t.icon.substring(0, 2) == 'bi'"
-            style="font-size: 1.5rem; cursor: pointer"
-          >
-            <i :class="t.icon"></i>
-          </div> -->
+          <StatusEffectIcon
+            v-if="isEditing"
+            :icon="t.icon"
+            :status-obj="t"
+            :notRemoveable="false"
+            :color="designStore.primaryText"
+            :is-custom="false"
+            :boxShadow="
+              'inset -5px 0px 3px 1px ' + LightenDarkenColor(designStore.primaryTheme, 10)
+            "
+            borderBottom="1px solid"
+            :removeStatus="props.removeStatus"
+            :background="designStore.primaryTheme"
+            :ability="t.ability"
+          ></StatusEffectIcon>
         </div>
-        <div style="display: flex" v-if="traitArr.length >= 1">
+        <div @click="openAddTraitModal()">
+          <StatusEffectIcon
+            v-if="props.isEditing"
+            icon="bi bi-plus"
+            :status-obj="{}"
+            :notRemoveable="true"
+            :color="designStore.primaryText"
+            :is-custom="false"
+            :disable-modal="true"
+            :boxShadow="
+              'inset -5px 0px 3px 1px ' + LightenDarkenColor(designStore.primaryTheme, 10)
+            "
+            borderBottom="1px solid"
+            :background="designStore.primaryTheme"
+          ></StatusEffectIcon>
+        </div>
+        <div style="display: flex" v-if="traitArr.length >= 1 || props.isEditing">
           <div
             style="
               width: 1rem;
@@ -287,7 +346,7 @@ export default {
             {{ ' ' }}
           </div>
           <div
-            v-if="traitArr.length >= 1"
+            v-if="traitArr.length >= 1 || props.isEditing"
             style="display: flex; flex-direction: column; z-index: 5; margin-bottom: 0.1rem"
           >
             <div class="ribbon-top" :style="{ borderLeftColor: designStore.primaryTheme }"></div>
@@ -320,21 +379,22 @@ export default {
               style="font-size: medium"
               :style="{
                 '--bs-btn-color': designStore.inputText,
-                '--bs-btn-hover-bg': designStore.inputBacking,
+                '--bs-btn-hover-bg': 'transparent',
                 '--bs-btn-active-color': designStore.inputText,
-                '--bs-btn-active-bg:': designStore.inputBacking,
+                '--bs-btn-active-bg:': 'transparent',
                 '--bs-dropdown-color': designStore.inputText,
                 '--bs-dropdown-bg': designStore.inputBacking,
                 '--bs-dropdown-link-hover-color': designStore.alertTheme,
-                '--bs-dropdown-link-hover-bg': designStore.inputBacking,
+                '--bs-dropdown-link-hover-bg': 'transparent',
                 '--bs-dropdown-link-active-color': designStore.alertTheme,
-                '--bs-dropdown-link-active-bg': designStore.primaryTheme,
+                '--bs-dropdown-link-active-bg': 'transparent',
                 scrollbarColor: designStore.secondaryTheme + ' ' + designStore.primaryTheme
               }"
             >
               <template #button-content>
                 <BButton
                   style="margin-bottom: 0.5rem"
+                  class="inputColorBackdrop"
                   :style="{
                     '--dropdownBg': designStore.inputBacking
                   }"
@@ -676,7 +736,7 @@ export default {
         </template>
         <template v-slot:footer>
           <BButton
-            @click="addStatus()"
+            @click="addStatusEffect()"
             style="border: 1px solid; margin-right: 1rem"
             :style="{ borderColor: designStore.secondaryTheme }"
             >Add Status</BButton
@@ -690,6 +750,156 @@ export default {
         >
       </CustomModal>
     </div>
+    <CustomModal
+      title="Select Trait Type Modal"
+      :showModal="selectTraitTypeModal"
+      @close="selectTraitTypeModal = !selectTraitTypeModal"
+    >
+      <template v-slot:body>
+        <div>
+          <BButtonGroup style="width: 100%">
+            <BDropdown
+              style="
+                width: 50%;
+                min-width: 10rem;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+              "
+              text="Add Premade Trait"
+              :style="{
+                background: designStore.inputBacking,
+                '--bs-btn-bg': designStore.inputBacking,
+                '--bs-btn-color': designStore.inputText,
+                '--bs-btn-border-color': designStore.secondaryTheme,
+                '--bs-btn-hover-color': designStore.inputText,
+                '--bs-btn-hover-bg': designStore.inputBacking,
+                '--bs-btn-hover-border-color': designStore.secondaryTheme,
+                '--bs-btn-active-color': designStore.inputText,
+                '--bs-btn-active-bg:': designStore.inputBacking,
+                '--bs-btn-active-border-color': designStore.secondaryTheme,
+                '--bs-dropdown-color': designStore.inputText,
+                '--bs-dropdown-bg': designStore.inputBacking,
+                '--bs-dropdown-link-hover-color': designStore.alertTheme,
+                '--bs-dropdown-link-hover-bg': designStore.inputBacking,
+                '--bs-dropdown-link-active-color': designStore.alertTheme,
+                '--bs-dropdown-link-active-bg': designStore.primaryTheme,
+                scrollbarColor: designStore.secondaryTheme + ' ' + designStore.primaryTheme
+              }"
+            >
+              <BDropdownItem @click="addTrait('Archetype')">Archetype</BDropdownItem>
+              <BDropdownItem @click="addTrait('Action Economy')">Action Economy</BDropdownItem>
+              <BDropdownItem @click="addTrait('Resistance')">Resistance</BDropdownItem>
+              <BDropdownItem @click="addTrait('Immunity')">Immunity</BDropdownItem>
+              <BDropdownItem @click="addTrait('Susceptibility')">Susceptibility</BDropdownItem>
+              <BDropdownItem @click="addTrait('Vulnerability')">Vulnerability</BDropdownItem>
+              <BDropdownItem @click="addTrait('Damage Reduction')">Damage Reduction</BDropdownItem>
+              <BDropdownItem @click="addTrait('Damage Amplification')"
+                >Damage Amplification</BDropdownItem
+              >
+              <BDropdownItem @click="addTrait('Status Effect Immunity')"
+                >Status Effect Immunity</BDropdownItem
+              >
+              <BDropdownItem @click="addTrait('Exceptional')">Exceptional</BDropdownItem>
+              <BDropdownItem @click="addTrait('Inferior')">Inferior</BDropdownItem>
+              <BDropdownItem @click="addTrait('Size Category')">Size Category</BDropdownItem>
+            </BDropdown>
+            <BButton
+              style="
+                border: 1px solid;
+                font-size: medium;
+                border-top: 0px;
+                border-bottom: 0px;
+                width: 50%;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+              "
+              :style="{
+                background: designStore.inputBacking,
+                color: designStore.inputText,
+                borderColor: designStore.secondaryTheme
+              }"
+              @click="addCustomTrait()"
+              >Add Custom Trait</BButton
+            ></BButtonGroup
+          >
+          <div style="margin: 1rem">
+            Premade Traits Include base features like Exceptionals, Size Category, Resistances, etc.
+            These traits may influence the way the app treats this entity. Ex. if a creature has
+            fire resistance and you declare them to have taken fire damage, it will automatically
+            halve that damage. Certain Premade Traits are excluded from this list since Stat Blocks
+            are simplified compared to characters: Ex. Hp is not calculated by a formula like it is
+            for players, so a Modified HP Trait is unneccesary. Custom Traits are entirely of your
+            own design.
+          </div>
+        </div>
+        <AbilityDisplayMedallion medallion="gi-dna1"></AbilityDisplayMedallion>
+      </template>
+    </CustomModal>
+    <CustomModal :showModal="addTraitModal" :title="selectedTrait" @close="addTraitModal = false">
+      <template v-slot:body>
+        <AddTrait
+          :trait="traitsStore.manualTraits[selectedTrait]"
+          @staged-trait="(trait) => (stagedTrait = trait)"
+        ></AddTrait>
+      </template>
+      <template v-slot:footer>
+        <div style="display: flex">
+          <BButton
+            style="margin-right: 1rem; border: 1px solid"
+            :style="{
+              borderColor: designStore.secondaryTheme,
+              background: designStore.primaryTheme,
+              color: designStore.primaryText,
+              fontFamily: designStore.font
+            }"
+            @click="update(stagedTrait, true)"
+            >OK</BButton
+          >
+          <BButton
+            style="border: 1px solid"
+            :style="{
+              background: designStore.primaryTheme,
+              color: designStore.primaryText,
+              fontFamily: designStore.font,
+              borderColor: designStore.secondaryTheme
+            }"
+            @click="addTraitModal = false"
+            >Cancel</BButton
+          >
+        </div>
+      </template>
+    </CustomModal>
+    <CustomModal :showModal="customModal" title="Add Custom Trait" @close="customModal = false">
+      <template v-slot:body>
+        <AddCustomTrait @staged-trait="(trait) => (stagedTrait = trait)"></AddCustomTrait>
+      </template>
+      <template v-slot:footer>
+        <div style="display: flex">
+          <BButton
+            style="margin-right: 1rem; border: 1px solid"
+            :style="{
+              borderColor: designStore.secondaryTheme,
+              background: designStore.primaryTheme,
+              color: designStore.primaryText,
+              fontFamily: designStore.font
+            }"
+            @click="update(stagedTrait, false)"
+            >OK</BButton
+          >
+          <BButton
+            style="border: 1px solid"
+            :style="{
+              background: designStore.primaryTheme,
+              color: designStore.primaryText,
+              fontFamily: designStore.font,
+              borderColor: designStore.secondaryTheme
+            }"
+            @click="customModal = false"
+            >Cancel</BButton
+          >
+        </div>
+      </template>
+    </CustomModal>
   </div>
 </template>
 

@@ -155,7 +155,7 @@ export default {
           sender="GM"
           :senderId="userStore.getUserId"
           :style="{ background: designStore.inputBacking }"
-          style="height: 50rem; width: 100%"
+          style="width: 100%; display: flex; flex-direction: column"
         ></ChatWindow>
       </div>
     </div>
@@ -169,6 +169,7 @@ export default {
 .partyCharactersContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 12.5rem;
 }
 @media (max-width: 1400px) {
   .partyCharactersContainer {

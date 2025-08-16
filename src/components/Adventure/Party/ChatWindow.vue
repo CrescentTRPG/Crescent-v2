@@ -30,15 +30,18 @@ export default {
 <template>
   <div
     :style="{ fontFamily: designStore.font, background: designStore.inputBacking }"
-    style="
-      padding: 0.25rem;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      justify-content: space-between;
-    "
+    style="padding: 0.25rem; display: flex; flex-direction: column; justify-content: space-between"
   >
-    <div style="display: flex; flex-direction: column; overflow-y: scroll; max-height: 100vh">
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+        max-height: calc(100vh - 21.25rem);
+      "
+      class="chat-window"
+    >
       <div v-for="chat in chats" :key="chat.timestamp">
         <ChatBubble :messageObj="chat"></ChatBubble>
       </div>
@@ -51,4 +54,8 @@ export default {
   </div>
 </template>
 
-<style></style>
+<style>
+.chat-window > div:last-child {
+  scroll-snap-align: start;
+}
+</style>

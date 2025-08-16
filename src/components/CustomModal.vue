@@ -1,25 +1,33 @@
 <script lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { onKeyStroke, useEventListener, useFocus } from '@vueuse/core'
 
 import { useDesignStore } from '../stores/designStore'
 
 export default {
   emits: ['close'],
-  props: ['showModal', 'title', 'background', 'color', 'secondary'],
+  props: ['showModal', 'title', 'background', 'color', 'secondary', 'closeOnEnter'],
   setup(props, context) {
     const designStore = useDesignStore()
     const element = ref<HTMLElement | null>(null)
 
-    onKeyStroke(
-      'Escape',
-      () => {
+    onKeyStroke('Escape', () => {
+      if (props.showModal) {
         context.emit('close')
-      },
-      { target: element }
-    )
+      }
+    })
 
-    return { designStore, props }
+    onKeyStroke('Enter', () => {
+      if (props.closeOnEnter && props.showModal) context.emit('close')
+    })
+    const hoverShade = computed(() => {
+      const r = parseInt(designStore.alertTheme.substring(1, 3), 16)
+      const g = parseInt(designStore.alertTheme.substring(3, 5), 16)
+      const b = parseInt(designStore.alertTheme.substring(5, 7), 16)
+      return 'rgb(' + r + ',' + g + ',' + b + ',.3)'
+    })
+
+    return { designStore, props, element, hoverShade }
   },
   computed: {
     scrollbarColor() {
@@ -41,7 +49,16 @@ export default {
 <template>
   <Teleport to="#modal">
     <Transition name="modal">
-      <div class="modal-bg" v-if="props.showModal" @click="close" id="outer">
+      <div
+        class="modal-bg"
+        v-if="props.showModal"
+        @click="close"
+        id="outer"
+        :style="{
+          '--hover-color': hoverShade,
+          '--hover-blend': designStore.primaryTheme
+        }"
+      >
         <div
           id="inner"
           class="modale"
@@ -175,5 +192,23 @@ hr {
 ::-webkit-scrollbar {
   width: 0px; /* Adjust scrollbar width */
   height: 8px; /* Adjust scrollbar height */
+}
+@media (max-width: 600px) {
+  .modale {
+    position: relative;
+    bottom: 4rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 95%;
+    max-width: 60rem;
+    min-height: 10rem;
+    height: fit-content;
+    max-height: calc(100vh - 5%);
+  }
+}
+@media (hover: hover) {
+  button:hover {
+    background-image: linear-gradient(var(--hover-blend), var(--hover-color)) !important;
+  }
 }
 </style>

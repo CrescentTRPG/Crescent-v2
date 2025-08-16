@@ -47,10 +47,10 @@ export default {
 <template>
   <div id="tab-contents" style="display: flex; flex-direction: column">
     <div
-      style="width: 100%; position: absolute; height: 4rem; left: -1rem; z-index: 0"
+      style="width: 100%; position: absolute; height: 4rem; left: -1rem; z-index: 1"
       :style="{ background: designStore.inputBacking }"
     ></div>
-    <div class="buildInfoDisplay">
+    <div class="buildInfoDisplay inputColorBackdrop" style="z-index: 4">
       <AbilityPointWidget style="height: 4rem; align-self: flex-start"></AbilityPointWidget
       ><RulesStatus style="height: 5rem; width: 50%; z-index: 2"></RulesStatus>
     </div>
@@ -104,6 +104,7 @@ export default {
 .buildInfoDisplay {
   display: flex;
   justify-content: space-between;
+  height: 4rem;
 }
 
 @media (max-width: 1200px) {

@@ -15,6 +15,7 @@ import TitleWidget from '@/components/TitleWidget.vue'
 import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import { useEquipmentStore } from '@/stores/equipmentStore'
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
+import BasicInput from '../BasicInput.vue'
 
 export default {
   props: [
@@ -34,7 +35,9 @@ export default {
     'isStunned',
     'isPinned',
     'isProne',
-    'isSlowed'
+    'isSlowed',
+    'isEditing',
+    'updateSpeeds'
   ],
   setup(props, context) {
     const modal = ref(false)
@@ -174,7 +177,8 @@ export default {
     CustomModal,
     StatusEffectItem,
     TitleWidget,
-    AddStatusEffectWidget
+    AddStatusEffectWidget,
+    BasicInput
   }
 }
 </script>
@@ -190,6 +194,7 @@ export default {
       border-bottom: 2px solid;
       cursor: pointer;
     "
+    class="inputColorBackdrop"
     :style="{
       fontFamily: designStore.font,
       background: designStore.inputBacking,
@@ -254,7 +259,12 @@ export default {
       <div class="fullNames">Burrow:&nbsp;</div>
       <div>{{ burrowing }}</div>
     </div>
-    <CustomModal title="Modify MP " :showModal="modal" @close="modal = !modal">
+    <CustomModal
+      v-if="!props.isEditing"
+      title="Modify Movespeeds "
+      :showModal="modal"
+      @close="modal = !modal"
+    >
       <template v-slot:body>
         <div
           style="font-size: x-large; text-align: center; margin-bottom: 0.25rem; margin-top: -1rem"
@@ -292,6 +302,74 @@ export default {
             :linkedStatus="mod.linkedStatus"
           ></StatusEffectItem>
         </div>
+      </template>
+    </CustomModal>
+    <CustomModal
+      v-if="props.isEditing"
+      title="Modify Movespeeds"
+      :showModal="modal"
+      @close="modal = !modal"
+    >
+      <template v-slot:body>
+        <BasicInput
+          style="margin-bottom: 0.5rem"
+          label="Base Speed"
+          type="number"
+          :value="props.base"
+          :min="0"
+          :max="999"
+          @newValue="
+            (val) =>
+              props.updateSpeeds(val, props.flight, props.swimming, props.climbing, props.burrowing)
+          "
+        ></BasicInput>
+        <BasicInput
+          style="margin-bottom: 0.5rem"
+          label="Flight Speed"
+          type="number"
+          :value="props.flight"
+          :min="0"
+          :max="999"
+          @newValue="
+            (val) =>
+              props.updateSpeeds(props.base, val, props.swimming, props.climbing, props.burrowing)
+          "
+        ></BasicInput>
+        <BasicInput
+          style="margin-bottom: 0.5rem"
+          label="Swim Speed"
+          type="number"
+          :value="props.swimming"
+          :min="0"
+          :max="999"
+          @newValue="
+            (val) =>
+              props.updateSpeeds(props.base, props.flight, val, props.climbing, props.burrowing)
+          "
+        ></BasicInput>
+        <BasicInput
+          style="margin-bottom: 0.5rem"
+          label="Climbing Speed"
+          type="number"
+          :value="props.climbing"
+          :min="0"
+          :max="999"
+          @newValue="
+            (val) =>
+              props.updateSpeeds(props.base, props.flight, props.swimming, val, props.burrowing)
+          "
+        ></BasicInput>
+        <BasicInput
+          label="Burrow Speed"
+          type="number"
+          :value="props.burrowing"
+          :min="0"
+          :max="999"
+          @newValue="
+            (val) =>
+              props.updateSpeeds(props.base, props.flight, props.swimming, props.climbing, val)
+          "
+        ></BasicInput>
       </template>
     </CustomModal>
   </div>

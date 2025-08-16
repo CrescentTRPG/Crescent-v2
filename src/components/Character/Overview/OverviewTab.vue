@@ -19,6 +19,7 @@ import BPopover from 'bootstrap-vue-next/src/directives/BPopover.js'
 import BarPlannerDisplay from './BarPlannerDisplay.vue'
 import { useCharacterComputedStore } from '@/stores/characterComputedStore'
 import { storeToRefs } from 'pinia'
+import { useStatusEffectStore } from '@/stores/statusEffectStore'
 
 export default {
   setup(props, context) {
@@ -27,6 +28,7 @@ export default {
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
     const characterComputedStore = useCharacterComputedStore()
+    const statusEffectsStore = useStatusEffectStore()
 
     const {
       secondaryHandheldPassives,
@@ -58,7 +60,8 @@ export default {
       flight,
       swimming,
       climbing,
-      burrowing
+      burrowing,
+      statusEffectsStore
     }
   },
   components: {
@@ -109,7 +112,14 @@ export default {
           </BAccordionItem>
         </BAccordion>
       </div>
-      <EffectsRibbon></EffectsRibbon>
+      <EffectsRibbon
+        :traits="characterStore.traits"
+        :customStatusEffects="characterStore.customStatusEffects"
+        :addCustomStatus="characterStore.addCustomStatus"
+        :removeStatus="characterStore.removeStatus"
+        :addStatus="statusEffectsStore.addStatus"
+        :statuses="characterStore.statusEffects"
+      ></EffectsRibbon>
       <OverviewAttributes></OverviewAttributes>
       <MovespeedWidget
         :traits="characterStore.traits"

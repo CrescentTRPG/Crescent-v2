@@ -3,7 +3,8 @@
     class="fill"
     style="display: flex; flex-direction: column"
     :style="{
-      background: design.pageBackdrop
+      background: design.pageBackdrop,
+      '--hover-color': hoverShade
     }"
   >
     <div
@@ -91,7 +92,7 @@
               '--bs-btn-close-color': design.primaryText
             }"
           >
-            <DiceSidebar></DiceSidebar>
+            <!-- <DiceSidebar></DiceSidebar> -->
           </BOffcanvas>
         </div>
       </div>
@@ -105,7 +106,7 @@
       @manual="navPos = 'manual'"
     ></AdventureNav>
     <PartyTab v-if="navPos === 'party'"></PartyTab>
-    <BeingBuilt v-if="navPos === 'combat'"></BeingBuilt>
+    <CombatTab v-if="navPos === 'combat'"></CombatTab>
     <StatBlockTab v-if="navPos === 'statblocks'"></StatBlockTab>
     <BeingBuilt v-if="navPos === 'items'"></BeingBuilt>
     <BeingBuilt v-if="navPos === 'notes'"></BeingBuilt>
@@ -115,7 +116,7 @@
 
 <script lang="ts">
 import { BButton } from 'bootstrap-vue-next'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import IconStackCloud from '../components/IconStackCloud.vue'
 import { useDesignStore } from '@/stores/designStore'
 import DesignButton from '../components/Character/DesignButton.vue'
@@ -133,6 +134,7 @@ import AdventureNav from '@/components/Adventure/AdventureNav.vue'
 import PartyTab from '@/components/Adventure/Party/PartyTab.vue'
 import { usePartyStore } from '@/stores/partyStore'
 import StatBlockTab from '@/components/Adventure/Stat Blocks/StatBlockTab.vue'
+import CombatTab from '@/components/Adventure/Combat/CombatTab.vue'
 
 export default {
   setup(props, context) {
@@ -245,18 +247,36 @@ export default {
       adventure.unsubscribe()
       usePartyStore().unsubscribeFromCharacters()
     })
-    return { design, navPos, adventure, leftmoon, rightmoon, message, showDice, goToHome }
+
+    const hoverShade = computed(() => {
+      const r = parseInt(design.alertTheme.substring(1, 3), 16)
+      const g = parseInt(design.alertTheme.substring(3, 5), 16)
+      const b = parseInt(design.alertTheme.substring(5, 7), 16)
+      return 'rgb(' + r + ',' + g + ',' + b + ',.3)'
+    })
+
+    return {
+      design,
+      navPos,
+      adventure,
+      leftmoon,
+      rightmoon,
+      message,
+      showDice,
+      goToHome,
+      hoverShade
+    }
   },
   components: {
     BButton,
     IconStackCloud,
     DesignButton,
     BOffcanvas,
-    DiceSidebar,
     AdventureNav,
     BeingBuilt,
     PartyTab,
-    StatBlockTab
+    StatBlockTab,
+    CombatTab
   },
   methods: {
     delay: function (time) {

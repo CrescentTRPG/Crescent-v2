@@ -12,9 +12,135 @@ a,
   transition: 0.4s;
   padding: 3px;
 }
+.saira-400 {
+  font-family: 'Saira', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+}
+.lexend-401 {
+  font-family: 'Lexend', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.shantell-sans-402 {
+  font-family: 'Shantell Sans';
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    'BNCE' 0,
+    'INFM' 0,
+    'SPAC' 0;
+}
+.meow-script-regular {
+  font-family: 'Meow Script';
+  font-weight: 400;
+  font-style: normal;
+}
+.gentium-book-plus-regular {
+  font-family: 'Gentium Book Plus', serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.edu-qld-hand-403 {
+  font-family: 'Edu QLD Hand';
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.uncial-antiqua-regular {
+  font-family: 'Uncial Antiqua', system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+.libre-caslon-display-regular {
+  font-family: 'Libre Caslon Display', serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.bad-script-regular {
+  font-family: 'Bad Script';
+  font-weight: 400;
+  font-style: normal;
+}
+.trade-winds-regular {
+  font-family: 'Trade Winds', system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+.megrim-regular {
+  font-family: 'Megrim', system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+.astloch-regular {
+  font-family: 'Astloch', system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+.nova-mono-regular {
+  font-family: 'Nova Mono', monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+.rem-405 {
+  font-family: 'REM', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.roboto-condensed-406 {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.nunito-sans-407 {
+  font-family: 'Nunito Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    'wdth' 100,
+    'YTLC' 500;
+}
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: var(--hover-color);
+  }
+  button:hover {
+    background-image: linear-gradient(var(--hover-blend), var(--hover-color)) !important;
+  }
+  .accordion-button:hover {
+    background-image: linear-gradient(var(--hover-color), var(--hover-blend-input)) !important;
+  }
+  .dropdown-item:hover {
+    background-image: none !important;
+  }
+  .inputColorBackdrop:hover {
+    background-image: linear-gradient(var(--hover-color), var(--hover-blend-input)) !important;
+  }
+  .inputSearch:hover {
+    background-image: linear-gradient(var(--hover-color), var(--hover-blend-input)) !important;
+  }
+  .dropdown-toggle:hover {
+    background-image: none !important;
+    background-color: transparent;
+  }
+  .hoverablePrimary:hover {
+    background-image: linear-gradient(var(--hover-blend), var(--hover-color)) !important;
+  }
+  .hoverableTransparantRadial:hover {
+    background-image: radial-gradient(circle, var(--hover-color), transparent) !important;
+  }
+  .hoverableIconOnSidebar:hover {
+    background-image: radial-gradient(var(--hover-color), var(--hover-blend-sidebar));
+  }
+  .hoverableAttr:hover {
+    background-image: linear-gradient(var(--hover-color), transparent) !important;
   }
 }

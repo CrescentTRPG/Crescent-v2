@@ -114,6 +114,7 @@ export default {
       @click="modal = !modal"
       style="width: 13.5rem; height: 10rem; margin-top: 2rem"
       :style="{ fontFamily: designStore.font }"
+      class="hoverableIconOnSidebar"
     >
       <div
         style="

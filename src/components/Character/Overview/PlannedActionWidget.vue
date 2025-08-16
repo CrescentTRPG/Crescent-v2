@@ -233,6 +233,7 @@ export default {
     </div>
 
     <div
+      class="inputColorBackdrop"
       v-if="props.ability.name"
       style="
         min-height: 4rem;
@@ -242,9 +243,8 @@ export default {
         cursor: pointer;
       "
       :style="{
-        background: designStore.secondaryTheme,
+        background: designStore.inputBacking,
         borderColor: LightenDarkenColor(designStore.inputBacking, -10),
-        boxShadow: 'inset 0px 0px 0px 2px ' + LightenDarkenColor(designStore.secondaryTheme, -10),
         color: designStore.inputText
       }"
       @click="modal = !modal"
@@ -258,9 +258,6 @@ export default {
           z-index: 3;
         "
         class="outerBox"
-        :style="{
-          background: designStore.inputBacking
-        }"
       >
         <div
           style="
@@ -271,36 +268,21 @@ export default {
             margin-right: 0.5rem;
             align-self: center;
           "
-          :style="{
-            background: designStore.inputBacking
-          }"
         >
           {{ props.ability.name }}
         </div>
       </div>
-      <div
-        style="display: flex; justify-content: center"
-        :style="{ background: designStore.inputBacking }"
-        v-if="ability.spellgroup"
-      >
+      <div style="display: flex; justify-content: center" v-if="ability.spellgroup">
         ( {{ ability.rank }} Mana )
       </div>
       <div
         style="display: flex; justify-content: center"
-        :style="{ background: designStore.inputBacking }"
         v-if="ability.perkGroup && ability.type.includes('Charge')"
       >
         ( 1 Charge, {{ ability.type.split('(')[1].charAt(0) }} Total)
       </div>
-      <div
-        :style="{ background: designStore.inputBacking }"
-        style="display: flex; justify-content: center"
-        v-if="ability.skills"
-      >
-        ( No Cost )
-      </div>
+      <div style="display: flex; justify-content: center" v-if="ability.skills">( No Cost )</div>
       <AbilityDisplayMedallion
-        :style="{ background: designStore.inputBacking }"
         :medallion="manualSpellgroups[ability.spellgroup]?.groupIcon || ability.groupIcon"
       ></AbilityDisplayMedallion>
     </div>

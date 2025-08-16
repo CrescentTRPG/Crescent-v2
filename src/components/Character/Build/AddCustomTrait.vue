@@ -15,7 +15,7 @@ export default {
     const icon = ref('gi-dna1')
     const trait = ref({
       name: '',
-      description: 'Write the trait description here',
+      description: '',
       icon: 'gi-dna1'
     })
     const traitAbility = ref({
@@ -106,6 +106,7 @@ export default {
           @change="emitTrait()"
           :style="{ background: designStore.inputBacking }"
           style="align-self: center; border-radius: 10px"
+          :color="designStore.iconColor"
           :currentIcon="trait.icon"
           @selectedIcon="(icon) => (trait.icon = icon)"
           orientation="bottom"
@@ -300,7 +301,7 @@ export default {
         </div>
         <BFormTextarea
           @change="emitTrait()"
-          placeholder="description"
+          placeholder="Write the trait description here"
           v-model="traitAbility.description"
           class="ability-form-last-item"
           :style="{

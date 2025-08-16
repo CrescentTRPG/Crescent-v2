@@ -27,6 +27,10 @@ import CustomModal from '@/components/CustomModal.vue'
 import MultiStackIcon from '@/components/MultiStackIcon.vue'
 import { useTraitsStore } from '@/stores/traitsStore'
 import { usePerformanceStore } from '@/stores/performanceStore'
+import RuleSuggestion from './Rulings/RuleSuggestion.vue'
+import WelcomeMessage from './Rulings/WelcomeMessage.vue'
+import RuleError from './Rulings/RuleError.vue'
+import RulesLookingGood from './Rulings/RulesLookingGood.vue'
 
 export default {
   setup(props, context) {
@@ -40,7 +44,7 @@ export default {
     const { skills } = storeToRefs(skillStore)
     const { combatStyles, specializations } = storeToRefs(martialSkillsStore)
     const { martialPerks } = storeToRefs(martialPerksStore)
-    const { totalAbilityPoints } = storeToRefs(characterStore)
+    const { totalAbilityPoints, spentAbilityPoints } = storeToRefs(characterStore)
     const { spellgroups } = storeToRefs(spellsStore)
     const modal = ref(false)
 
@@ -139,9 +143,9 @@ export default {
     })
 
     const tooManyAbilityPoints: ComputedRef<string> = computed((): string => {
-      if (characterStore.totalAbilityPoints < characterStore.spentAbilityPoints) {
+      if (totalAbilityPoints.value < spentAbilityPoints.value) {
         return abilityPointViolation
-          .replace('*NUM*', characterStore.spentAbilityPoints + '')
+          .replace('*NUM*', spentAbilityPoints.value + '')
           .replace('*NEEDNUM*', characterStore.totalAbilityPoints + '')
       }
       return ''
@@ -154,7 +158,7 @@ export default {
       groups.forEach((group) => {
         let spells: any = Object.values(group.spells).sort((a: any, b: any) => a.rank - b.rank)
         spellgroupMax[group.name] = {
-          rank: spells[spells.length - 1].rank,
+          rank: spells[spells.length - 1]?.rank,
           name: group.name,
           maxRank: characterStore.attributes[group.rankLimiter.toLowerCase()],
           limiter: group.rankLimiter
@@ -391,7 +395,7 @@ export default {
     const attributeSumSuggestion: ComputedRef<string> = computed((): string => {
       if (attrSum.value < maxAttrSum.value) {
         return (
-          'You have  ' +
+          'Suggestion: You have  ' +
           Math.abs(maxAttrSum.value - attrSum.value) +
           ' unused attribute points.  You can use these to increase the values of any attribute(Max 10)'
         )
@@ -456,14 +460,14 @@ export default {
       return ''
     })
     const imAbrandNewBaby: ComputedRef<string> = computed((): string => {
-      if (characterStore.spentAbilityPoints === 0) {
+      if (spentAbilityPoints.value === 0) {
         return "Welcome to Crescent!  I'm here to help.  I'll give you tips and let you know if theres an error with your build."
       }
       return ''
     })
 
     const pickArchetypeSuggestion: ComputedRef<string> = computed((): string => {
-      if (characterStore.spentAbilityPoints === 0) {
+      if (spentAbilityPoints.value === 0) {
         return "You haven't selected an archetype. Archetypes are a powerful and influential bonus.  You can read about archetype abilities by selecting one and hitting the ?.  You may be familar with the idea of a class.  Archetypes do not function like classes since they do not restrict what kinds of abilities a character may select."
       }
       return ''
@@ -552,7 +556,14 @@ export default {
       this.modal = !this.modal
     }
   },
-  components: { CustomModal, MultiStackIcon }
+  components: {
+    CustomModal,
+    MultiStackIcon,
+    RuleSuggestion,
+    WelcomeMessage,
+    RuleError,
+    RulesLookingGood
+  }
 }
 </script>
 
@@ -660,7 +671,22 @@ export default {
     </div>
     <CustomModal :showModal="modal" title="Rules Status" @close="showModal()">
       <template v-slot:body>
-        {{ status }}
+        <div v-for="message in status" :key="message">
+          <RulesLookingGood v-if="message === 'Good'"></RulesLookingGood>
+          <WelcomeMessage
+            v-else-if="message.substring(0, 7) === 'Welcome'"
+            :message="message"
+          ></WelcomeMessage>
+          <div v-else>
+            <RuleSuggestion
+              v-if="message.substring(0, 11) === 'Suggestion:'"
+              :message="message.substring(12)"
+            ></RuleSuggestion>
+            <div v-else>
+              <RuleError :message="message"></RuleError>
+            </div>
+          </div>
+        </div>
       </template>
     </CustomModal>
   </div>

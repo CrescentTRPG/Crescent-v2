@@ -5,7 +5,7 @@ import { ref } from 'vue'
 
 export default {
   emits: ['true', 'false'],
-  props: ['tabName'],
+  props: ['tabName', 'chosen', 'useSingleSelect'],
   setup(props: any) {
     const designStore = useDesignStore()
     const selected = ref(false)
@@ -17,23 +17,27 @@ export default {
   },
   methods: {
     buttonBg() {
-      if (this.selected) {
+      if (this.props.useSingleSelect ? this.props.chosen : this.selected) {
         return this.designStore.alertTheme
       }
       return this.designStore.primaryTheme
     },
     buttonText() {
-      if (this.selected) {
+      if (this.props.useSingleSelect ? this.props.chosen : this.selected) {
         return this.designStore.primaryTheme
       }
       return this.designStore.primaryText
     },
     click() {
-      this.selected = !this.selected
-      if (this.selected) {
+      if (this.props.useSingleSelect) {
         this.$emit('true')
       } else {
-        this.$emit('false')
+        this.selected = !this.selected
+        if (this.selected) {
+          this.$emit('true')
+        } else {
+          this.$emit('false')
+        }
       }
     }
   },

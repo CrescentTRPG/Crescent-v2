@@ -31,6 +31,10 @@ nav a.router-link-exact-active {
 nav a.router-link-exact-active:hover {
   background-color: transparent;
 }
+a:hover {
+  background-color: blueviolet;
+  color: red;
+}
 
 nav a {
   display: inline-block;
@@ -38,6 +42,9 @@ nav a {
   border-left: 1px solid var(--color-border);
 }
 
+.hoverable-element :hover {
+  background: var(--hover-color);
+}
 nav a:first-of-type {
   border: 0;
 }

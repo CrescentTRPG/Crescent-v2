@@ -1,7 +1,7 @@
 <script lang="ts">
 import { useRouter } from 'vue-router'
 import { BInputGroup, BFormInput, BInputGroupText } from 'bootstrap-vue-next'
-import { ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useDesignStore } from '../../../stores/designStore'
 import { useSkillStore } from '@/stores/skillsStore'
 import { storeToRefs } from 'pinia'
@@ -28,7 +28,70 @@ export default {
     const { totalAbilityPoints } = storeToRefs(characterStore)
     const { spellgroups, manualSpellgroups } = storeToRefs(spellsStore)
 
-    const totalAbilityPointsRef = totalAbilityPoints.value
+    const totalAbilityPointsRef = ref(totalAbilityPoints.value)
+
+    onMounted(() => {
+      characterStore.setLocalSpentAbilityPoints(spentAbilityPoints.value)
+    })
+
+    function rankSum(val: number) {
+      if (isNaN(val)) {
+        return 0
+      }
+      if (val <= 0) {
+        return 0
+      }
+      if (val == 1) {
+        return 1
+      } else {
+        return val + rankSum(val - 1)
+      }
+    }
+    function updateSpentAbilityPoints(points: number) {
+      characterStore.setLocalSpentAbilityPoints(points)
+    }
+    function updateTotalAbilityPoints() {
+      characterStore.setTotalAbilityPoints(
+        totalAbilityPointsRef.value,
+        userStore.getUserId,
+        characterStore.getCharacterId
+      )
+    }
+    const spentAbilityPoints = computed(() => {
+      let counter = 0
+      counter += rankSum(parseInt(spellsStore.arcaneBattery + ''))
+      Object.values(skills.value).forEach((val: any) => (counter += rankSum(val.rank)))
+      Object.values(combatStyles.value).forEach((val: any) => (counter += rankSum(val.rank)))
+      Object.values(specializations.value).forEach((val: any) => (counter += rankSum(val.rank)))
+      Object.values(martialPerks.value).forEach((val: any) => {
+        if (val) {
+          counter += val.rank * 3
+        }
+      })
+      Object.values(spellgroups.value).forEach((val: any) => {
+        Object.values(val.spells).forEach((spell: any) => {
+          if (spell.known) {
+            if (manualSpellgroups.value[spell.spellgroup].flatCost) {
+              counter += val.baseCost
+            } else {
+              counter += val.baseCost * spell.rank
+            }
+          }
+        })
+      })
+      return counter
+    })
+    const level = computed(() => {
+      return Math.floor(totalAbilityPoints.value / 10)
+    })
+    watch(totalAbilityPoints, (newVal, oldVal) => {
+      if (totalAbilityPointsRef.value != totalAbilityPoints.value)
+        totalAbilityPointsRef.value = totalAbilityPoints.value
+    })
+    watch(spentAbilityPoints, (newVal, oldVal) => {
+      console.log(spentAbilityPoints.value, oldVal, newVal)
+      if (oldVal != newVal) updateSpentAbilityPoints(newVal)
+    })
 
     return {
       designStore,
@@ -43,67 +106,11 @@ export default {
       martialPerks,
       spellgroups,
       manualSpellgroups,
-      spellsStore
-    }
-  },
-  watch: {
-    totalAbilityPoints() {
-      this.totalAbilityPointsRef = this.totalAbilityPoints
-    },
-    spentAbilityPoints() {
-      this.updateSpentAbilityPoints(this.spentAbilityPoints)
-    }
-  },
-  computed: {
-    level() {
-      return Math.floor(this.totalAbilityPoints / 10)
-    },
-    spentAbilityPoints() {
-      let counter = 0
-      counter += this.rankSum(parseInt(this.spellsStore.arcaneBattery + ''))
-      Object.values(this.skills).forEach((val: any) => (counter += this.rankSum(val.rank)))
-      Object.values(this.combatStyles).forEach((val: any) => (counter += this.rankSum(val.rank)))
-      Object.values(this.specializations).forEach((val: any) => (counter += this.rankSum(val.rank)))
-      Object.values(this.martialPerks).forEach((val: any) => {
-        if (val) {
-          counter += val.rank * 3
-        }
-      })
-      Object.values(this.spellgroups).forEach((val: any) => {
-        Object.values(val.spells).forEach((spell: any) => {
-          if (spell.known) {
-            if (this.manualSpellgroups[spell.spellgroup].flatCost) {
-              counter += val.baseCost
-            } else {
-              counter += val.baseCost * spell.rank
-            }
-          }
-        })
-      })
-      return counter
-    }
-  },
-
-  methods: {
-    updateSpentAbilityPoints(points: number) {
-      this.characterStore.setLocalSpentAbilityPoints(points)
-    },
-    updateTotalAbilityPoints() {
-      this.characterStore.setTotalAbilityPoints(
-        this.totalAbilityPointsRef,
-        this.userStore.getUserId,
-        this.characterStore.getCharacterId
-      )
-    },
-    rankSum(val: number) {
-      if (val == 0) {
-        return 0
-      }
-      if (val == 1) {
-        return 1
-      } else {
-        return val + this.rankSum(val - 1)
-      }
+      spellsStore,
+      spentAbilityPoints,
+      level,
+      updateSpentAbilityPoints,
+      updateTotalAbilityPoints
     }
   },
   components: {

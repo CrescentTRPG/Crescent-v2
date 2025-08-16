@@ -53,7 +53,7 @@ interface HpModifier {
   modifierType: string
 }
 
-interface GenericModifier {
+export interface GenericModifier {
   modAmount: number
   linkedStatus: string
   modifierType: string
@@ -255,8 +255,8 @@ export const useCharacterStore = defineStore('character', {
           ret = max
         }
       }
-      if (state.traits['Bonus MP']) {
-        ret += parseInt(state.traits['Bonus MP'].number)
+      if (state.traits['Modified MP']) {
+        ret += parseInt(state.traits['Modified MP'].number)
       }
       if (equipmentStore.getWornArmorPassives['Override Mp']) {
         ret = parseInt(equipmentStore.getWornArmorPassives['Override Mp']?.modAmount)
@@ -545,7 +545,6 @@ export const useCharacterStore = defineStore('character', {
       this.backstory = backstory
     },
     addCustomStatus(status: any) {
-      console.log(this.customStatusEffects)
       this.customStatusEffects[status.name] = status
       this.updateStatusEffects()
     },

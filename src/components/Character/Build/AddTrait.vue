@@ -37,10 +37,9 @@ export default {
     })
     const nestedTraits: ComputedRef<Array<any>> = computed((): Array<any> => {
       if (props.trait.nested) {
-        let ret: Array<any> = Object.values(props.trait)
-        const nestedLoc = ret.indexOf('true')
+        let ret: Array<any> = Object.values(props.trait).filter((item) => item != true)
+        console.log(ret)
 
-        ret = ret.slice(0, nestedLoc).concat(ret.slice(nestedLoc + 1))
         return ret
       } else return []
     })

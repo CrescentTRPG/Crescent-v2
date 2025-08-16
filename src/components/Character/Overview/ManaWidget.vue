@@ -11,6 +11,7 @@ import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
 import StatusEffectItem from './StatusEffectItem.vue'
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
+import BasicInput from '../BasicInput.vue'
 
 export default {
   props: [
@@ -24,7 +25,9 @@ export default {
     'totalMana',
     'addNewManaStatusModifier',
     'removeManaStatusModifier',
-    'customStatusEffects'
+    'customStatusEffects',
+    'isEditing',
+    'setMana'
   ],
   setup(props, context) {
     const modal = ref(false)
@@ -117,7 +120,8 @@ export default {
       setNewCurrentValue,
       showModal,
       getColor,
-      getCurrentColor
+      getCurrentColor,
+      props
     }
   },
   components: {
@@ -128,13 +132,15 @@ export default {
     StatusModifierExplaination,
     TitleWidget,
     StatusEffectItem,
-    AddStatusEffectWidget
+    AddStatusEffectWidget,
+    BasicInput
   }
 }
 </script>
 
 <template>
   <div
+    class="hoverableIconOnSidebar"
     style="width: 13.5rem; height: 10rem; margin-top: -1rem"
     :style="{ fontFamily: designStore.font }"
     @click="showModal()"
@@ -205,7 +211,12 @@ export default {
         </div>
       </div>
     </div>
-    <CustomModal title="Modify Mana" :showModal="modal" @close="modal = !modal">
+    <CustomModal
+      v-if="!props.isEditing"
+      title="Modify Mana"
+      :showModal="modal"
+      @close="modal = !modal"
+    >
       <template v-slot:body>
         <div
           style="font-size: x-large; text-align: center; margin-top: -1rem; margin-bottom: 0.25rem"
@@ -281,6 +292,32 @@ export default {
             :linkedStatus="mod.linkedStatus"
           ></StatusEffectItem>
         </div>
+      </template>
+    </CustomModal>
+    <CustomModal
+      v-if="props.isEditing"
+      title="Modify Mana"
+      :showModal="modal"
+      @close="modal = !modal"
+    >
+      <template v-slot:body>
+        <BasicInput
+          style="margin-bottom: 1rem"
+          label="Total Mana"
+          type="number"
+          :value="props.totalMana"
+          :min="0"
+          :max="999"
+          @newValue="(val) => props.setMana(props.currentMana, val)"
+        ></BasicInput>
+        <BasicInput
+          label="Current Mana"
+          type="number"
+          :value="props.currentMana"
+          :min="0"
+          :max="999"
+          @newValue="(val) => props.setMana(val, props.totalMana)"
+        ></BasicInput>
       </template>
     </CustomModal>
   </div>

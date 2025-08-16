@@ -405,7 +405,7 @@ export default {
       //toHit
       let attacks = []
       let placedRollsNum = 0
-      let modifier = 0
+      let modifier: number = 0
       let alternateMinWeaponDamage = 0
       let minWeaponDamage = 0
       let causesSave = ''
@@ -440,14 +440,22 @@ export default {
           if ((skill.skillStats[mode].modifyToHit + '').includes('*')) {
             placedRollsNum += getPlaced(skill.skillStats[mode].modifyToHit, rank)
           } else {
-            modifier += parseInt(skill.skillStats[mode].modifyToHit + '')
+            if (skill.skillStats[mode]?.modifyToHit === 'rank') {
+              modifier += parseInt(rank + '')
+            } else {
+              modifier += parseInt(skill.skillStats[mode].modifyToHit + '')
+            }
           }
         }
         if (skill.skillStats?.modifyToHit) {
           if ((skill.skillStats.modifyToHit + '').includes('*')) {
             placedRollsNum += getPlaced(skill.skillStats.modifyToHit, rank)
           } else {
-            modifier += parseInt(skill.skillStats.modifyToHit + '')
+            if (skill.skillStats?.modifyToHit === 'rank') {
+              modifier += parseInt(rank + '')
+            } else {
+              modifier += parseInt(skill.skillStats.modifyToHit + '')
+            }
           }
         }
         if (skill.skillStats?.minWeaponDamage) {
