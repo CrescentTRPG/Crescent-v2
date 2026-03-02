@@ -134,6 +134,9 @@ a,
   .hoverablePrimary:hover {
     background-image: linear-gradient(var(--hover-blend), var(--hover-color)) !important;
   }
+  .hoverablePrimaryRadial:hover {
+    background-image: radial-gradient(circle, var(--hover-color), var(--hover-blend)) !important;
+  }
   .hoverableTransparantRadial:hover {
     background-image: radial-gradient(circle, var(--hover-color), transparent) !important;
   }

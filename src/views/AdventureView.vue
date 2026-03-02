@@ -23,13 +23,13 @@
           class="moon"
         ></IconStackCloud>
         <span
-          class="component"
+          class="component hoverablePrimaryRadial"
           :style="{
             background: design.primaryTheme,
             color: design.primaryText,
             fontFamily: design.titleFont
           }"
-          ><a style="width: 150%">{{ adventure?.name }}</a>
+          ><div style="width: 150%">{{ adventure?.name }}</div>
           <div
             style="display: flex; justify-content: end; position: relative"
             class="sparkle-height"
