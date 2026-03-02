@@ -7,9 +7,21 @@ import { useDesignStore } from './designStore.js'
 import { usePartyStore } from './partyStore.js'
 import { useManualStore } from './manualStore.js'
 import { useCharacterStore } from './characterStore.js'
-import { DEFAULT_COMBAT, DEFAULT_DESIGN } from '@/bases.js'
+import { ABILITY_ENTRY, AbilityEntry, DEFAULT_COMBAT, DEFAULT_DESIGN } from '@/bases.js'
 import { useInitiativeStore } from './initiativeStore.js'
-
+import { useJournalStore } from './journalStore.js'
+export interface CustomAbilities {
+  [key: string]: AbilityEntry
+}
+export interface Chat {
+  filteredRecipients: string[]
+  from: string
+  fromIcon: string
+  fromId: string
+  isStarred: boolean
+  message: string
+  timestamp: string
+}
 export const useAdventureStore = defineStore('adventure', {
   state: () => ({
     adventureRef: () => {},
@@ -17,9 +29,13 @@ export const useAdventureStore = defineStore('adventure', {
     gameMasterId: '',
     name: 'Crescent Adventure',
     image: '',
+    currentViewedUserId: '',
     design: DEFAULT_DESIGN,
     characterIds: [],
+    userIds: [],
     characterNames: [],
+    showChatToast: false,
+    chatToast: '',
     notes: {},
     items: {},
     manual: {},
@@ -27,7 +43,8 @@ export const useAdventureStore = defineStore('adventure', {
     rollingTables: {},
     settings: {
       maxChats: 100,
-      initiativeDisplayNumeric: false,
+      initiativeDisplayNumericHp: false,
+      initiativeDisplayNumericMana: false,
       initiativeDisplayHp: true,
       initiativeDisplayMana: true,
       initiativeDisplayEnemyTraits: false,
@@ -37,37 +54,104 @@ export const useAdventureStore = defineStore('adventure', {
       allowApplyStatusToEnemy: true
     },
     chat: {},
-    customAbilites: {},
+    customAbilites: {
+      'some group': ABILITY_ENTRY
+    } as CustomAbilities,
     combats: {},
     loading: false,
     here: 0,
     rules: {},
-    userIds: [],
-    activeCombat: { ...DEFAULT_COMBAT },
     combatNavPos: 'table',
+    activeCombatId: '',
     characterInitiatives: {} // {id {name: string, id: number, init: number}},
   }),
+  getters: {
+    chats: (state): Chat[] => {
+      return Object.values(state.chat as Chat).sort((a: any, b: any) => {
+        return Date.parse(a.timestamp) - Date.parse(b.timestamp)
+      })
+    }
+  },
   actions: {
+    clearActiveCombat(id) {
+      useInitiativeStore().deleteInitiative(id)
+    },
+    clearLocalActiveCombatId() {
+      this.activeCombatId = ''
+    },
+    toTable() {
+      this.activeCombatId = ''
+      this.updateCombatNavPosLocal('table')
+      updateDoc(doc(db, 'User/' + this.gameMasterId + '/Adventure/' + this.id), {
+        activeCombatId: this.activeCombatId,
+        combatNavPos: 'table'
+      })
+    },
+    updateSettings(settings) {
+      this.settings = settings
+      updateDoc(doc(db, 'User/' + this.gameMasterId + '/Adventure/' + this.id), {
+        settings: this.settings
+      })
+    },
+    setCurrentViewedUserId(id) {
+      this.currentViewedUserId = id
+    },
+    clearImportantAdventureInfo() {
+      this.characterInitiatives = {}
+      this.unsubscribe()
+      this.characterIds = []
+      this.userIds = []
+      this.characterNames = []
+      this.statBlocks = {}
+      this.chat = {}
+      this.customAbilites = {}
+      usePartyStore().characterObjects = {}
+      usePartyStore().unsubscribeFromCharacters()
+      useInitiativeStore().orderedCombatants = []
+      useInitiativeStore().combatants = {}
+      this.settings = {
+        maxChats: 100,
+        initiativeDisplayNumericHp: false,
+        initiativeDisplayNumericMana: false,
+        initiativeDisplayHp: true,
+        initiativeDisplayMana: true,
+        initiativeDisplayEnemyTraits: false,
+        initiativeDisplayCharacterTraits: true,
+        initiativeDefaultExpanded: true,
+        allowApplyStatusToCharacter: true,
+        allowApplyStatusToEnemy: true
+      }
+      this.gameMasterId = ''
+      this.activeCombatId = ''
+    },
+    updateCombatNavPosLocal(pos) {
+      this.combatNavPos = pos
+    },
     dispatchAdventureStart() {
       this.characterInitiatives = {}
-      const ret = updateDoc(doc(db, 'User/' + useUserStore().id + '/Adventure/' + this.id), {
-        characterInitiatives: {},
-        activeCombat: this.activeCombat,
-        combatNavPos: this.combatNavPos
-      })
+      this.updateCombatNavPosLocal('run')
+      const ret = updateDoc(
+        doc(db, 'User/' + useAdventureStore().gameMasterId + '/Adventure/' + this.id),
+        {
+          characterInitiatives: {},
+          combatNavPos: this.combatNavPos
+        }
+      )
+      useInitiativeStore().postInitiative()
     },
     addCharacterInitiative(id, init, agi) {
       this.characterInitiatives[id] = { id: id, agility: agi, initiativeScore: init }
-      const ret = updateDoc(doc(db, 'User/' + useUserStore().id + '/Adventure/' + this.id), {
-        characterInitiatives: this.characterInitiatives
-      })
+      const ret = updateDoc(
+        doc(db, 'User/' + useAdventureStore().gameMasterId + '/Adventure/' + this.id),
+        {
+          characterInitiatives: this.characterInitiatives
+        }
+      )
     },
-    updateActiveCombat(activeCombat, navPos) {
-      this.activeCombat = activeCombat
-      this.combatNavPos = navPos
-      const ret = updateDoc(doc(db, 'User/' + useUserStore().id + '/Adventure/' + this.id), {
-        activeCombat: this.activeCombat,
-        combatNavPos: this.combatNavPos
+    updateActiveCombatId(id) {
+      this.activeCombatId = id
+      updateDoc(doc(db, 'User/' + this.gameMasterId + '/Adventure/' + this.id), {
+        activeCombatId: this.activeCombatId
       })
     },
     updateStatBlock(statBlock) {
@@ -87,10 +171,13 @@ export const useAdventureStore = defineStore('adventure', {
       }
     },
     async getCombatDetails(id) {
+      console.log(this.gameMasterId, this.id, id)
+
       const docRef = doc(
         db,
         'User/' + this.gameMasterId + '/Adventure/' + this.id + '/Combats/' + id
       )
+
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
         return docSnap.data()
@@ -124,7 +211,7 @@ export const useAdventureStore = defineStore('adventure', {
     },
     async postCombat(combat) {
       const ret = await useCollection(
-        'User/' + this.gameMasterId + '/Adventure/' + this.id + '/Combats/',
+        'User/' + this.gameMasterId + '/Adventure/' + this.id + '/Combats',
         combat
       )
       ret && this.updateCombatObj(combat.name, ret.id, combat.difficulty, combat.tags)
@@ -162,6 +249,10 @@ export const useAdventureStore = defineStore('adventure', {
       await deleteDoc(doc(db, 'User/' + this.gameMasterId + '/Combats/' + id))
       this.updateCombatsInFirebase()
     },
+    setLocalAdventureFromCharacter(adventure) {
+      if (this.chat) this.id = adventure.adventureId
+      this.gameMasterId = adventure.gameMasterId
+    },
     setLocalAdventure(adventure) {
       this.id = adventure.id
       this.gameMasterId = adventure.gameMasterId
@@ -180,8 +271,8 @@ export const useAdventureStore = defineStore('adventure', {
       this.customAbilites = adventure.customAbilites
       this.combats = adventure.combats
       this.userIds = adventure.userIds
-      this.activeCombat = adventure.activeCombat
       this.combatNavPos = adventure.combatNavPos
+      this.activeCombatId = adventure.activeCombatId
     },
     editChat(messageObj) {
       this.chat[messageObj.timestamp] = messageObj
@@ -217,9 +308,16 @@ export const useAdventureStore = defineStore('adventure', {
         }
       })
     },
+
     async updateChat() {
       const ret = updateDoc(doc(db, 'User/' + this.gameMasterId + '/Adventure/' + this.id), {
         chat: this.chat
+      })
+    },
+    async setAdventureName(name) {
+      this.name = name
+      const ret = updateDoc(doc(db, 'User/' + this.gameMasterId + '/Adventure/' + this.id), {
+        name: name
       })
     },
     async pullAdventureFromFirebase(adventureId: string) {
@@ -228,7 +326,7 @@ export const useAdventureStore = defineStore('adventure', {
       useManualStore().pullManualFromFirebase()
 
       this.adventureRef = onSnapshot(
-        doc(db, 'User/' + useUserStore().getUserId + '/Adventure/' + adventureId),
+        doc(db, 'User/' + useAdventureStore().gameMasterId + '/Adventure/' + adventureId),
         (doc) => {
           const adventure = {
             id: doc.id,
@@ -248,13 +346,71 @@ export const useAdventureStore = defineStore('adventure', {
             customAbilites: doc.data()?.customAbilites,
             combats: doc.data()?.combats,
             userIds: doc.data()?.userIds,
-            activeCombat: doc.data()?.activeCombat || DEFAULT_COMBAT,
-            combatNavPos: doc.data()?.combatNavPos || 'table'
+            combatNavPos: doc.data()?.combatNavPos || 'table',
+            activeCombatId: doc.data()?.activeCombatId || ''
           }
-
-          if (doc.data()?.characterInitiatives != this.characterInitiatives) {
+          console.log('adventure snap')
+          if (doc.data()?.activeCombatId != this.activeCombatId && doc.data()?.activeCombatId) {
+            this.activeCombatId = doc.data()?.activeCombatId
+            useInitiativeStore().subscribeToInitiative()
+          } else if (!doc.data()?.activeCombatId) {
+            useInitiativeStore().unscubscribeToInitiative()
+          }
+          if (doc.data()?.entryMap) {
+            useJournalStore().setEntryMapFromFirebase(doc.data()?.entryMap)
+          } else {
+            useJournalStore().setEntryMapFromFirebase({
+              entryIds: []
+            })
+          }
+          if (doc.data()?.journalIdKey) {
+            useJournalStore().setJournalIdKeyFromFirebase(doc.data()?.journalIdKey)
+            if (
+              useJournalStore().openFile.id &&
+              !useJournalStore().journalIdKey[useJournalStore().openFile.id]
+            ) {
+              useJournalStore().clearOpenFileAndBookmarks()
+              alert(
+                'Cleared Bookmarks and open File!  Navigating between new adventures and charcters will do this!'
+              )
+            }
+          } else {
+            useJournalStore().setJournalIdKeyFromFirebase({})
+            if (
+              useJournalStore().openFile.id &&
+              !useJournalStore().journalIdKey[useJournalStore().openFile.id]
+            ) {
+              useJournalStore().clearOpenFileAndBookmarks()
+              alert(
+                'Cleared Bookmarks and open File!  Navigating between new adventures and charcters will do this!'
+              )
+            }
+          }
+          useManualStore().setCustomAbilities(doc.data()?.customAbilites || {})
+          if (
+            doc.data()?.characterInitiatives != this.characterInitiatives &&
+            doc.data()?.combatNavPos === 'run'
+          ) {
             this.characterInitiatives = doc.data()?.characterInitiatives
             useInitiativeStore().createInitiativeAndRollValues()
+          }
+          if (doc.data()?.calendar) {
+            useJournalStore().setCalendarFromDatabase(doc.data()?.calendar)
+            useJournalStore().setCurrentDateFromFirebase(
+              doc.data()?.currentDate || 0,
+              doc.data()?.currentYear || 1
+            )
+          } else {
+            useJournalStore().setCalendarFromDatabase({
+              days: {},
+              sections: { 0: {}, names: ['month'] },
+              dateFormula: '',
+              miniPickerFormula: '',
+              organizedBy: 'month',
+              itemsInARow: 7,
+              titleSectionFormula: '',
+              holidays: {}
+            })
           }
           this.setLocalAdventure(adventure)
           this.delay(2000).then(() => {
@@ -262,6 +418,7 @@ export const useAdventureStore = defineStore('adventure', {
           })
         }
       )
+
       for (let i = 0; i < this.characterIds.length; i++) {
         usePartyStore().pullCharacterFromFirebase(this.characterIds[i], this.userIds[i])
       }
@@ -291,10 +448,38 @@ export const useAdventureStore = defineStore('adventure', {
             customAbilites: doc.data()?.customAbilites,
             combats: doc.data()?.combats,
             userIds: doc.data()?.userIds,
-            activeCombat: doc.data()?.activeCombat || DEFAULT_COMBAT,
-            combatNavPos: doc.data()?.combatNavPos || 'table'
+            combatNavPos: doc.data()?.combatNavPos || 'table',
+            gameMasterId: gameMasterId,
+            activeCombatId: doc.data()?.activeCombatId || ''
           }
+          console.log('customAbilities', doc.data()?.customAbilites)
+          useManualStore().setCustomAbilitiesAsCharacter(doc.data()?.customAbilites || {})
           this.characterInitiatives = doc.data()?.characterInitiatives || {}
+          if (doc.data()?.activeCombatId != this.activeCombatId && doc.data()?.activeCombatId) {
+            console.log('ppopy')
+            this.activeCombatId = doc.data()?.activeCombatId
+            useInitiativeStore().subscribeToInitiative()
+          } else if (!doc.data()?.activeCombatId) {
+            useInitiativeStore().unscubscribeToInitiative()
+          }
+          if (doc.data()?.calendar) {
+            useJournalStore().setCalendarFromDatabase(doc.data()?.calendar)
+            useJournalStore().setCurrentDateFromFirebase(
+              doc.data()?.currentDate || 0,
+              doc.data()?.currentYear || 1
+            )
+          } else {
+            useJournalStore().setCalendarFromDatabase({
+              days: {},
+              sections: { 0: {}, names: ['month'] },
+              dateFormula: '',
+              miniPickerFormula: '',
+              organizedBy: 'month',
+              itemsInARow: 7,
+              titleSectionFormula: '',
+              holidays: {}
+            })
+          }
 
           const loc = doc.data()?.characterIds.indexOf(useCharacterStore().id)
           if (loc > -1) {
@@ -323,10 +508,18 @@ export const useAdventureStore = defineStore('adventure', {
         statBlocks: this.statBlocks
       })
     },
-    async updateCombatsInFirebase() {
+    async updateCustomAbilitiesInFirebase(abilities) {
       const ret = updateDoc(doc(db, 'User/' + useUserStore().id + '/Adventure/' + this.id), {
-        combats: this.combats
+        customAbilites: abilities
       })
+    },
+    async updateCombatsInFirebase() {
+      const ret = updateDoc(
+        doc(db, 'User/' + useAdventureStore().gameMasterId + '/Adventure/' + this.id),
+        {
+          combats: this.combats
+        }
+      )
     },
     async addAdventure() {
       const adventure = {

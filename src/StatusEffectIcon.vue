@@ -1,11 +1,10 @@
 <script lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import BImg from 'bootstrap-vue-next/src/components/BImg.vue'
-import { useDesignStore } from './stores/designStore'
-import CustomModal from './components/CustomModal.vue'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import { ref } from 'vue'
 import AbilityDisplay from './components/AbilityDisplay.vue'
+import CustomModal from './components/CustomModal.vue'
 import TitleMedallion from './components/TitleMedallion.vue'
+import { useDesignStore } from './stores/designStore.ts'
 
 export default {
   props: [

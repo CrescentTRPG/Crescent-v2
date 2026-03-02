@@ -1,10 +1,7 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import { useFaunaStore } from '@/stores/faunaStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 import { BPopover } from 'bootstrap-vue-next'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import { describe } from 'node:test'
-import { storeToRefs } from 'pinia'
 
 export default {
   props: ['name', 'description', 'notBordered', 'showDots'],

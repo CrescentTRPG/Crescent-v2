@@ -1,9 +1,8 @@
 <script lang="ts">
-import { useRouter } from 'vue-router'
 import { BFormInput } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useCharacterStore } from '../../../stores/characterStore'
+import { useCharacterStore } from '../../../stores/characterStore.ts'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import CustomModal from '../../CustomModal.vue'
 
 export default {
@@ -20,10 +19,10 @@ export default {
     const armorLevel = {
       '': 'Unarmored',
       mystic: 'Light Armor',
-      priest: 'Light Armor',
       elementalist: 'Light Armor',
       sorcerer: 'Light Armor',
       nomad: 'Light Armor',
+      priest: 'Medium Armor',
       rogue: 'Medium Armor',
       monk: 'Medium Armor',
       mage: 'Medium Armor',
@@ -38,7 +37,6 @@ export default {
 
   methods: {
     updateIcon(name: string) {
-      console.log(name)
       this.icon = name
     }
   },

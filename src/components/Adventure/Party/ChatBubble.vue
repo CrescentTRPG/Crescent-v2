@@ -1,12 +1,12 @@
 <script lang="ts">
-import { computed, ComputedRef, onMounted, onUnmounted, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useUserStore } from '@/stores/userStore'
 import IconDisplay from '@/components/IconDisplay.vue'
-import { useAdventureStore } from '@/stores/adventureStore'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { computed } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
 export default {
-  props: ['messageObj'],
+  props: ['messageObj', 'backgroundOverride', 'colorOverride'],
   setup(props, context) {
     const designStore = useDesignStore()
     const userStore = useUserStore()
@@ -21,10 +21,18 @@ export default {
       return isSender.value ? 'end' : 'start'
     })
     const bubbleBackground = computed(() => {
-      return isSender.value ? designStore.getPrimaryTheme : designStore.sidebarBacking
+      return props.backgroundOverride
+        ? props.backgroundOverride
+        : isSender.value
+          ? designStore.getPrimaryTheme
+          : designStore.sidebarBacking
     })
     const bubbleText = computed(() => {
-      return isSender.value ? designStore.primaryText : designStore.sidebarText
+      return props.colorOverride
+        ? props.colorOverride
+        : isSender.value
+          ? designStore.primaryText
+          : designStore.sidebarText
     })
     const border = computed(() => {
       return props.messageObj.isStarred ? '2px solid ' + designStore.alertTheme : 'none'
@@ -98,7 +106,7 @@ export default {
         <div style="display: flex">
           <IconDisplay
             :icon="messageObj.fromIcon"
-            :color="designStore.secondaryTheme"
+            :color="props.colorOverride ? props.colorOverride : designStore.secondaryTheme"
             size="1.75rem"
             scale="1.75"
           ></IconDisplay>
@@ -128,7 +136,10 @@ export default {
           padding-right: 0.5rem;
           margin-top: -0.25rem;
         "
-        :style="{ textAlign: textAlignment, color: designStore.inputText }"
+        :style="{
+          textAlign: textAlignment,
+          color: props.colorOverride ? props.colorOverride : designStore.inputText
+        }"
       >
         {{ props.messageObj.timestamp }}
       </div>

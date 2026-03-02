@@ -1,22 +1,24 @@
 <script lang="ts">
 import { BInputGroup, BFormInput, BInputGroupText, BButton, BTable } from 'bootstrap-vue-next'
 import { computed, ComputedRef, onMounted, Ref, ref, watch } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { ManualSkill, useSkillStore } from '@/stores/skillsStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import { ManualSkill, useSkillStore } from '@/stores/skillsStore.ts'
 import { storeToRefs } from 'pinia'
-import { useCharacterStore } from '@/stores/characterStore'
-import { useUserStore } from '@/stores/userStore'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
-import { ManualSpell, useSpellStore } from '@/stores/spellsStore'
-import { LiteralUnion } from 'node_modules/bootstrap-vue-next/dist/src/types'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
+import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { ManualSpell, useSpellStore } from '@/stores/spellsStore.ts'
+import _ from 'lodash'
 import ArrayTabs from '@/components/ArrayTabs.vue'
-import { useEquipmentStore } from '@/stores/equipmentStore'
-import { usePerformanceStore } from '@/stores/performanceStore'
-import { useFaunaStore } from '@/stores/faunaStore'
-import { useManualStore } from '@/stores/manualStore'
+import { useEquipmentStore } from '@/stores/equipmentStore.ts'
+import { usePerformanceStore } from '@/stores/performanceStore.ts'
+import { useFaunaStore } from '@/stores/faunaStore.ts'
+import { useManualStore } from '@/stores/manualStore.ts'
 import StatBlockAbilities from './StatBlockAbilities.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { LiteralUnion } from 'bootstrap-vue-next/src/types/LiteralUnion.js'
 
 export default {
   emits: ['ability'],
@@ -50,7 +52,8 @@ export default {
     const buildDisplayPerformanceAbilities: Ref<Array<any>> = ref([])
     const buildDisplayPerformanceStyles: Ref<Array<any>> = ref([])
     const version = ref(props.currentVersion)
-
+    const adventureStore = useAdventureStore()
+    const manualSpellgroupsWithCustom = ref(manualSpellgroups.value)
     const knownSpellgroups = ref({})
     const spellgroupKey = ref({})
     const loading = ref(true)
@@ -66,6 +69,9 @@ export default {
         version.value = props.currentVersion
         name.value = props.currentStatBlock.name
         props.updateRandom()
+      }
+      if (props.isEditing && buildDisplaySpells.value.length < 1) {
+        setUpBuildDisplayFromScratch()
       }
     })
     onMounted(() => {
@@ -106,12 +112,16 @@ export default {
     }
 
     function setUpBuildDisplayFromScratch() {
-      setUpBuildDisplaySpellsFromScratch()
-      setUpBuildDisplayPerksFromScratch()
-      setUpBuildSpecializationDisplayFromScratch()
-      setUpBuildDisplayCombatStylesFromScratch()
-      setUpBuildDisplaySkillsFromScratch()
-      setUpBuildDisplayPerformanceFromScratch()
+      if (props.isEditing) {
+        addCustomAbilities()
+        setUpBuildDisplayPerksFromScratch()
+        setUpBuildSpecializationDisplayFromScratch()
+        setUpBuildDisplayCombatStylesFromScratch()
+        setUpBuildDisplaySkillsFromScratch()
+        setUpBuildDisplayPerformanceFromScratch()
+      } else {
+        loading.value = false
+      }
     }
 
     function setUpBuildDisplayPerformanceFromScratch() {
@@ -274,15 +284,43 @@ export default {
       buildDisplayMartialPerks.value = perks
     }
 
+    function addCustomAbilities() {
+      console.log('add Custom')
+      Object.values(adventureStore.customAbilites).forEach((a: any) => {
+        if (a.type === 'Spellgroup' && a.statBlockAccessible) {
+          manualSpellgroupsWithCustom.value[a.name] = a
+          console.log(a)
+        }
+      })
+      console.log(manualSpellgroupsWithCustom.value)
+      determineIfDanglingAbilities()
+    }
+    function determineIfDanglingAbilities() {
+      const list: Array<any> = Object.values(manualSpellgroupsWithCustom.value)
+      list.forEach((group) => {
+        if (
+          group.source == 'custom' &&
+          !adventureStore.customAbilites[group.name]?.statBlockAccessible
+        ) {
+          console.log(group)
+          delete manualSpellgroupsWithCustom.value[group.name]
+          let temp = _.cloneDeep(props.currentStatBlock)
+          delete temp.spells[group.name]
+          props.updateTemp(temp)
+        }
+      })
+      setUpBuildDisplaySpellsFromScratch()
+    }
+
     function setUpBuildDisplaySpellsFromScratch() {
       loading.value = true
       const spells: Array<any> = []
       const spellgroups: Array<any> = []
       let index = 0
       let spellIndex = 0
-      Object.entries(manualSpellgroups.value).map(([spellgroup]) => {
+      Object.entries(manualSpellgroupsWithCustom.value).map(([spellgroup]) => {
         const spellsArray = sortByRankAndName(
-          Object.values(manualSpellgroups.value[spellgroup]?.spells)
+          Object.values(manualSpellgroupsWithCustom.value[spellgroup]?.spells)
         )
         let groupSpellIndex = 0
         let acc: Array<any> = []
@@ -306,7 +344,7 @@ export default {
         })
         spells.push(...acc)
         spellgroups.push({
-          ...manualSpellgroups.value[spellgroup],
+          ...manualSpellgroupsWithCustom.value[spellgroup],
           spells: acc,
           index: index
         })
@@ -328,7 +366,7 @@ export default {
           buildDisplaySpells.value[spellChanged.spellIndex].known = spellChanged.known
         }
       } else {
-        setUpBuildDisplayFromScratch()
+        addCustomAbilities()
       }
     }
     function setUpBuildDisplayPerks(perkChanged) {
@@ -337,7 +375,7 @@ export default {
           buildDisplayMartialPerks.value[perkChanged.perkIndex].known = perkChanged.known
         }
       } else {
-        setUpBuildDisplayFromScratch()
+        setUpBuildDisplayPerksFromScratch()
       }
     }
 
@@ -383,7 +421,7 @@ export default {
           buildDisplayPerformanceAbilities.value[styleChanged.styleIndex].known = styleChanged.known
         }
       } else {
-        setUpBuildDisplayFromScratch()
+        setUpBuildDisplayPerformanceFromScratch()
       }
     }
 
@@ -494,7 +532,8 @@ export default {
             : 'Something went wrong',
         label: 'Group'
       },
-      { key: 'actionCost', label: 'Action Cost' }
+      { key: 'actionCost', label: 'Action Cost' },
+      { key: 'addStatus', label: 'Add Status' }
     ])
     const spells: ComputedRef<Array<any>> = computed(() => {
       let groups: any
@@ -534,7 +573,9 @@ export default {
       if (props.isEditing) {
         perks = buildDisplayMartialPerks.value
       } else {
-        perks = buildDisplayMartialPerks.value.filter((perk) => perk.known)
+        perks = Object.values(manualMartialPerks.value).filter(
+          (perk: any) => props.currentStatBlock.perks[perk.name]?.known
+        )
       }
       let knownPerks: Array<any> = []
       sortByRankAndName(perks).forEach((perk) => {
@@ -568,19 +609,22 @@ export default {
         skills = buildDisplayCombatStyles.value
       } else {
         skills = buildDisplayCombatStyles.value.filter((spec) => spec.rank > 0)
+        skills = Object.values(props.currentStatBlock.combatStyles)
       }
       let styles: Array<any> = []
       skills.forEach((combatStyle) => {
         let skillx = allCombatStyles.value[combatStyle.name]
-        let skilly = {
-          ...skillx,
-          actionCost: 'Core Action',
-          index: combatStyle.index,
-          rank: combatStyle.rank,
-          skills: Object.values(skillx.skills)
-        }
+        if (skillx) {
+          let skilly = {
+            ...skillx,
+            actionCost: 'Core Action',
+            index: combatStyle.index,
+            rank: combatStyle.rank,
+            skills: Object.values(skillx.skills)
+          }
 
-        styles.push(skilly)
+          styles.push(skilly)
+        }
       })
       return styles || []
     })
@@ -591,6 +635,7 @@ export default {
         skills = buildDisplaySpecializations.value
       } else {
         skills = buildDisplaySpecializations.value.filter((spec) => spec.rank > 0)
+        skills = Object.values(props.currentStatBlock.specializations)
       }
       let styles: Array<any> = []
       skills.forEach((spec) => {
@@ -642,7 +687,6 @@ export default {
       let styles: Array<any> = []
       groups.forEach((group) => {
         let abilities = Object.values(group)
-        console.log(group, abilities)
         styles = styles.concat(abilities)
       })
 
@@ -656,8 +700,8 @@ export default {
         arr['Spells'] = { known: true, name: 'Spells', index: index++ }
         let groups
         if (props.isEditing) {
-          groups = manualSpellgroups
-          Object.values(groups.value).map(
+          groups = manualSpellgroupsWithCustom.value
+          Object.values(groups).map(
             (group: any) =>
               (arr[group.name] = {
                 name: group.name,
@@ -842,12 +886,12 @@ export default {
       let newTemp = props.currentStatBlock
       if (!newTemp.spells[spellObj.spellgroup]) {
         newTemp.spells[spellObj.spellgroup] = {
-          ...manualSpellgroups.value[spellObj.spellgroup],
+          ...manualSpellgroupsWithCustom.value[spellObj.spellgroup],
           spells: {}
         }
       }
       newTemp.spells[spellObj.spellgroup].spells[spellObj.name] = {
-        ...manualSpellgroups.value[spellObj.spellgroup].spells[spellObj.name],
+        ...manualSpellgroupsWithCustom.value[spellObj.spellgroup].spells[spellObj.name],
         ...spellObj
       }
       if (!newTemp.spells[spellObj.spellgroup].spells[spellObj.name].known) {
@@ -1007,7 +1051,6 @@ export default {
         if (!newTemp.practicedStyles[obj.style]) {
           newTemp.practicedStyles[obj.style] = {}
         }
-        console.log(style)
         newTemp.practicedStyles[obj.style][obj.name] = {
           ...manualPerformanceStyles.value[style].styles[name],
           ...obj,
@@ -1061,7 +1104,8 @@ export default {
       updateStyle,
       buildDisplayPerformanceAbilities,
       performanceAbilities,
-      spells
+      spells,
+      manualSpellgroupsWithCustom
     }
   },
   components: {
@@ -1105,6 +1149,7 @@ export default {
       :updateSkill="updateSkill"
       :updateStyle="updateStyle"
       :buildDisplayPerformanceAbilities="buildDisplayPerformanceAbilities"
+      :manualSpellgroups="manualSpellgroupsWithCustom"
     ></StatBlockAbilities>
     <div v-else>Loading ...</div>
   </div>

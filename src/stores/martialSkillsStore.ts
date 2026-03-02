@@ -7,7 +7,7 @@ import { db } from '@/firebase/config.js'
 import { collection, setDoc, doc, addDoc, updateDoc, onSnapshot } from 'firebase/firestore'
 import { getCollectionOnce } from '@/composable/getCollection.js'
 
-interface ManualCombatStyle {
+export interface ManualCombatStyle {
   skills: Array<any>
   attributes: Array<string>
   name: string
@@ -15,7 +15,7 @@ interface ManualCombatStyle {
   source: string
 }
 
-interface ManualSpecialization {
+export interface ManualSpecialization {
   skills: Array<any>
   combatStyles: Array<string>
   name: string

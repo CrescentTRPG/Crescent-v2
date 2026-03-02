@@ -1,15 +1,12 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav, BFormInput } from 'bootstrap-vue-next'
-import { computed, onActivated, onMounted, onUpdated, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import AbilityDisplayMedallion from '../../AbilityDisplayMedallion.vue'
 import DescriptionHoverDisplay from '@/components/DescriptionHoverDisplay.vue'
-import { styleText } from 'util'
-import CustomCheckbox from '../CustomCheckbox.vue'
+import { BButton, BFormInput } from 'bootstrap-vue-next'
 import BFormRadio from 'bootstrap-vue-next/src/components/BFormRadio/BFormRadio.vue'
-import { watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import AbilityDisplayMedallion from '../../AbilityDisplayMedallion.vue'
+import CustomCheckbox from '../CustomCheckbox.vue'
 
 export default {
   emits: ['rollString'],
@@ -65,7 +62,6 @@ export default {
         const raw = rollStringOverride.value[attack].rollstring
         let rolls = raw.split('|')
         if (rolls[0].indexOf('d') <= -1) {
-          console.log('RAW {', raw, '}')
           if (raw.match(/[^\s\\]/)) {
             ret += '(#' + rolls[0] + ' Save#2d10' + ' + ' + resistance + ')'
           }
@@ -85,7 +81,6 @@ export default {
         }
         i++
       })
-      console.log(ret)
       context.emit('rollString', ret)
     }
     function getRollstring(strike) {

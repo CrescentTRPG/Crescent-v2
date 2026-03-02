@@ -83,6 +83,228 @@ export const DEFAULT_CHARCTER = {
   perkGain: ['', '', '', '', '']
 }
 
+export interface ShareObject {
+  [key: string]: SharedPlayer
+}
+export interface SharedPlayer {
+  id: string
+  name: string
+}
+
+export interface LineData {
+  [key: string]: { event: string; description: string; date: string; linkedEntries: LinkedEntryMap }
+}
+export interface LinkedEntryMap {
+  [key: string]: LinkedEntry
+}
+
+export interface LinkedEntry {
+  id: string
+  name: string
+  relationship: string
+}
+
+export interface JournalEntry {
+  shared: undefined | ShareObject | null
+  type: string
+  name: string
+  journalEntryData: HTMLJournalEntry | BioEntry | ImageEntry | TimeLine
+  tags: string
+  linkedEntries: LinkedEntryMap
+  linkedBy: LinkedEntryMap
+  id?: string
+}
+
+export interface Day {
+  key: number
+  name: string | undefined
+}
+export interface Days {
+  [key: number]: Day
+}
+
+export interface Section {
+  subSection: Array<any>
+  name: string
+  key: number
+  arrangedVals: Array<number>
+  numSubsections: number
+}
+export interface Sections {
+  [key: number]: Section
+  names: String[]
+}
+export interface Holiday {
+  id: number
+  index: number
+  icon: string
+  name: ''
+  dateObj?: any
+}
+
+export interface Year {
+  subSection: Array<any>
+  key: number
+  largestSectionName: ''
+}
+
+export interface HTMLJournalEntry {
+  data: HTMLElement | string
+}
+export interface BioEntry {
+  oneLiner: string
+  date: number
+  dateLabel: string
+  image: string
+  description: HTMLJournalEntry
+}
+export interface ImageEntry {
+  image: string
+  iconData?: IconData
+}
+
+export interface IconData {
+  [key: number]: IconStuff
+}
+
+export interface IconStuff {
+  x: number
+  y: number
+  color: string
+  icon: string
+  title: string
+  description: string
+  scale: number
+  titleHoverAlways: boolean
+}
+
+export interface EventEntry {
+  image: string
+}
+export interface TimeLine {
+  lineData: LineData
+  events: string[]
+}
+export enum AbilityType {
+  Spellgroup,
+  MartialPerk,
+  CombatStyle,
+  Specialization
+}
+export const JOUNRAL_ENTRY: JournalEntry = {
+  shared: null,
+  type: 'html',
+  name: 'New Journal Entry',
+  journalEntryData: { data: '<p></p>' },
+  tags: '',
+  linkedEntries: {},
+  linkedBy: {}
+}
+export const ABILITY_ENTRY: AbilityEntry = {
+  name: 'ability',
+  groupIcon: 'gi-uncertainty',
+  rank: 1,
+  type: 'MartialPerk',
+  playerAccessible: {
+    allPlayers: false,
+    specificPlayers: null
+  },
+  statBlockAccessible: false,
+  source: 'custom'
+}
+export interface AbilityEntry {
+  name: string
+  groupIcon: string
+  rank: number
+  type: string
+  playerAccessible: {
+    allPlayers: boolean
+    specificPlayers: null | string[]
+  }
+  statBlockAccessible: boolean
+  source: string
+}
+export const ABILITY_ENTRY_SPELLGROUP = {
+  ...ABILITY_ENTRY,
+  type: 'Spellgroup',
+  rankLimiter: 'Power',
+  groupPurchaseLimiter: 'Intelligence',
+  inOrder: true,
+  spells: {},
+  manaGain: 1,
+  resource: 'mana',
+  flatCost: false,
+  baseCost: 1
+}
+export const ABILITY_ENTRY_COMBAT_STYLE = {
+  ...ABILITY_ENTRY,
+  type: 'CombatStyle',
+  attributes: [],
+  skills: {},
+  baseCost: 1
+}
+
+export const ABILITY_ENTRY_SPECIALIZATION = {
+  ...ABILITY_ENTRY,
+  type: 'Specialization',
+  combatStyles: [],
+  skills: {},
+  baseCost: 1
+}
+
+export const ABILITY_ENTRY_MARTIAL_PERK = {
+  ...ABILITY_ENTRY,
+  type: 'MartialPerk',
+  baseCost: 3,
+  ability: {}
+}
+export const DEFAULT_EFFIGY = {
+  ...DEFAULT_CHARCTER,
+  name: 'New Effigy',
+  groupIcon: 'gi-uncertainty',
+  level: 1,
+  isAscendant: false,
+  formed: false,
+  effigyType: '',
+  movementType: '',
+  majorBonuses: {},
+  minorBonuses: {},
+  chosenResistance: '',
+  chosenSucceptibility: '',
+  chosenImmunity: '',
+  chosenVulnerability: '',
+  damageType: '',
+  base: 0,
+  flight: 0,
+  swim: 0,
+  climb: 0,
+  burrow: 0,
+  statusEffects: {},
+  attributeStatusModifiers: {
+    strength: {},
+    agility: {},
+    perception: {},
+    willpower: {},
+    health: {},
+    intelligence: {},
+    power: {},
+    charisma: {}
+  },
+  armorStatusModifiers: {},
+  hpStatusModifiers: {},
+  manaStatusModifiers: {},
+  mpStatusModifiers: {},
+  movementStatusModifiers: {},
+  customStatusEffects: {},
+  diceStatusModifiers: {},
+  totalMana: 0,
+  armorDvs: 0,
+  moveDvs: 10,
+  shieldDvs: 0,
+  bonusDvs: 0,
+  mp: 0
+}
+
 export const DEFAULT_STAT_BLOCK = {
   ...DEFAULT_CHARCTER,
   statusEffects: {},
@@ -97,6 +319,7 @@ export const DEFAULT_STAT_BLOCK = {
   powerLevel: 0,
   tags: [],
   defaultVersion: 'Default Version',
+  stressedExceptionals: {},
   armorStatusModifiers: {},
   hpStatusModifiers: {},
   manaStatusModifiers: {},

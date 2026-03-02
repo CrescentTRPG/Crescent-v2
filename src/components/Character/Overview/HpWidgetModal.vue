@@ -1,18 +1,20 @@
 <script lang="ts">
 import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
 import CustomModal from '@/components/CustomModal.vue'
-import { BButton, BFormInput, BFormSelect, BInputGroup } from 'bootstrap-vue-next'
-import { Ref, watch } from 'vue'
-import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
+import { useUserStore } from '@/stores/userStore.ts'
+import { BButton, BFormInput, BFormSelect, BInputGroup } from 'bootstrap-vue-next'
+import { Ref } from 'vue'
 import StatusEffectItem from './StatusEffectItem.vue'
+import StatusModifierExplaination from './StatusModifierExplaination.vue'
 
 import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
-import BasicInput from '../BasicInput.vue'
-import BForm from 'bootstrap-vue-next/src/components/BForm/BForm.vue'
+import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue'
+import BDropdownItem from 'bootstrap-vue-next/src/components/BDropdown/BDropdownItem.vue'
+import BDropdownDivider from 'bootstrap-vue-next/src/components/BDropdown/BDropdownDivider.vue'
+import AddStatusModifierModal from './AddStatusModifierModal.vue'
 
 export default {
   props: [
@@ -30,7 +32,8 @@ export default {
     'removeHpStatusModifier',
     'setHp',
     'modal',
-    'setModal'
+    'setModal',
+    'restirictedMode'
   ],
   setup(props, context) {
     const userStore = useUserStore()
@@ -57,7 +60,9 @@ export default {
       'Pure Magic'
     ]
 
-    const modifierType = [
+    const modifierValueTypesChoice = ref('Un-typed Damage')
+
+    const modifiers = [
       'Rot',
       'Suffering',
       'Hp Regen',
@@ -74,9 +79,303 @@ export default {
       modifiers.forEach((modGroup: any) => {
         ret = ret.concat(Object.values(modGroup))
       })
-      console.log(ret)
 
       return ret
+    })
+
+    const hasDRorDA = computed(() => {
+      switch (modifierValueTypesChoice.value) {
+        case 'Fire Damage':
+        case 'Fire Damage (Ignore Barrier)':
+          return (
+            props.traits['Fire Damage Amplification'] ||
+            props.statusEffects['Fire Damage Amplification'] ||
+            props.secondaryHandheldPassives['Fire Damage Amplification'] ||
+            props.primaryHandheldPassives['Fire Damage Amplification'] ||
+            props.wornArmorPassives['Fire Damage Amplification'] ||
+            props.traits['Fire Damage Amplification'] ||
+            props.statusEffects['Fire Damage Reduction'] ||
+            props.secondaryHandheldPassives['Fire Damage Reduction'] ||
+            props.primaryHandheldPassives['Fire Damage Reduction'] ||
+            props.wornArmorPassives['Fire Damage Reduction'] ||
+            props.traits['Elemental Damage Reduction'] ||
+            props.statusEffects['Elemental Damage Reduction'] ||
+            props.secondaryHandheldPassives['Elemental Damage Reduction'] ||
+            props.primaryHandheldPassives['Elemental Damage Reduction'] ||
+            props.wornArmorPassives['Elemental Damage Reduction'] ||
+            props.traits['Elemental Damage Amplification'] ||
+            props.statusEffects['Elemental Damage Amplification'] ||
+            props.secondaryHandheldPassives['Elemental Damage Amplification'] ||
+            props.primaryHandheldPassives['Elemental Damage Amplification'] ||
+            props.wornArmorPassives['Elemental Damage Amplification']
+          )
+        case 'Ice Damage':
+        case 'Ice Damage (Ignore Barrier)':
+          return (
+            props.traits['Ice Damage Reduction'] ||
+            props.statusEffects['Ice Damage Reduction'] ||
+            props.secondaryHandheldPassives['Ice Damage Reduction'] ||
+            props.primaryHandheldPassives['Ice Damage Reduction'] ||
+            props.wornArmorPassives['Ice Damage Reduction'] ||
+            props.traits['Elemental Damage Reduction'] ||
+            props.statusEffects['Elemental Damage Reduction'] ||
+            props.secondaryHandheldPassives['Elemental Damage Reduction'] ||
+            props.primaryHandheldPassives['Elemental Damage Reduction'] ||
+            props.wornArmorPassives['Elemental Damage Reduction'] ||
+            props.traits['Ice Damage Amplification'] ||
+            props.statusEffects['Ice Damage Amplification'] ||
+            props.secondaryHandheldPassives['Ice Damage Amplification'] ||
+            props.primaryHandheldPassives['Ice Damage Amplification'] ||
+            props.wornArmorPassives['Ice Damage Amplification'] ||
+            props.traits['Elemental Damage Amplification'] ||
+            props.statusEffects['Elemental Damage Amplification'] ||
+            props.secondaryHandheldPassives['Elemental Damage Amplification'] ||
+            props.primaryHandheldPassives['Elemental Damage Amplification'] ||
+            props.wornArmorPassives['Elemental Damage Amplification']
+          )
+        case 'Lightning Damage':
+        case 'Lightning Damage (Ignore Barrier)':
+          return (
+            props.traits['Lightning Damage Reduction'] ||
+            props.statusEffects['Lightning Damage Reduction'] ||
+            props.secondaryHandheldPassives['Lightning Damage Reduction'] ||
+            props.primaryHandheldPassives['Lightning Damage Reduction'] ||
+            props.wornArmorPassives['Lightning Damage Reduction'] ||
+            props.traits['Elemental Damage Reduction'] ||
+            props.statusEffects['Elemental Damage Reduction'] ||
+            props.secondaryHandheldPassives['Elemental Damage Reduction'] ||
+            props.primaryHandheldPassives['Elemental Damage Reduction'] ||
+            props.wornArmorPassives['Elemental Damage Reduction'] ||
+            props.traits['Lightning Damage Amplification'] ||
+            props.statusEffects['Lightning Damage Amplification'] ||
+            props.secondaryHandheldPassives['Lightning Damage Amplification'] ||
+            props.primaryHandheldPassives['Lightning Damage Amplification'] ||
+            props.wornArmorPassives['Lightning Damage Amplification'] ||
+            props.traits['Elemental Damage Amplification'] ||
+            props.statusEffects['Elemental Damage Amplification'] ||
+            props.secondaryHandheldPassives['Elemental Damage Amplification'] ||
+            props.primaryHandheldPassives['Elemental Damage Amplification'] ||
+            props.wornArmorPassives['Elemental Damage Amplification']
+          )
+        case 'Force Damage':
+        case 'Force Damage (Ignore Barrier)':
+          return (
+            props.traits['Force Damage Reduction'] ||
+            props.statusEffects['Force Damage Reduction'] ||
+            props.secondaryHandheldPassives['Force Damage Reduction'] ||
+            props.primaryHandheldPassives['Force Damage Reduction'] ||
+            props.wornArmorPassives['Force Damage Reduction'] ||
+            props.traits['Elemental Damage Reduction'] ||
+            props.statusEffects['Elemental Damage Reduction'] ||
+            props.secondaryHandheldPassives['Elemental Damage Reduction'] ||
+            props.primaryHandheldPassives['Elemental Damage Reduction'] ||
+            props.wornArmorPassives['Elemental Damage Reduction'] ||
+            props.traits['Force Damage Amplification'] ||
+            props.statusEffects['Force Damage Amplification'] ||
+            props.secondaryHandheldPassives['Force Damage Amplification'] ||
+            props.primaryHandheldPassives['Force Damage Amplification'] ||
+            props.wornArmorPassives['Force Damage Amplification'] ||
+            props.traits['Elemental Damage Amplification'] ||
+            props.statusEffects['Elemental Damage Amplification'] ||
+            props.secondaryHandheldPassives['Elemental Damage Amplification'] ||
+            props.primaryHandheldPassives['Elemental Damage Amplification'] ||
+            props.wornArmorPassives['Elemental Damage Amplification']
+          )
+        case 'Blunt Damage':
+        case 'Blunt Damage (Ignore Barrier)':
+          return (
+            props.traits['Blunt Damage Reduction'] ||
+            props.statusEffects['Blunt Damage Reduction'] ||
+            props.secondaryHandheldPassives['Blunt Damage Reduction'] ||
+            props.primaryHandheldPassives['Blunt Damage Reduction'] ||
+            props.wornArmorPassives['Blunt Damage Reduction'] ||
+            props.traits['Mundane Damage Reduction'] ||
+            props.statusEffects['Mundane Damage Reduction'] ||
+            props.secondaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.primaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.wornArmorPassives['Mundane Damage Reduction'] ||
+            props.traits['Blunt Damage Amplification'] ||
+            props.statusEffects['Blunt Damage Amplification'] ||
+            props.secondaryHandheldPassives['Blunt Damage Amplification'] ||
+            props.primaryHandheldPassives['Blunt Damage Amplification'] ||
+            props.wornArmorPassives['Blunt Damage Amplification'] ||
+            props.traits['Mundane Damage Amplification'] ||
+            props.statusEffects['Mundane Damage Amplification'] ||
+            props.secondaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.primaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.wornArmorPassives['Mundane Damage Amplification']
+          )
+        case 'Edged Damage':
+        case 'Edged Damage (Ignore Barrier)':
+          return (
+            props.traits['Edged Damage Reduction'] ||
+            props.statusEffects['Edged Damage Reduction'] ||
+            props.secondaryHandheldPassives['Edged Damage Reduction'] ||
+            props.primaryHandheldPassives['Edged Damage Reduction'] ||
+            props.wornArmorPassives['Edged Damage Reduction'] ||
+            props.traits['Mundane Damage Reduction'] ||
+            props.statusEffects['Mundane Damage Reduction'] ||
+            props.secondaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.primaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.wornArmorPassives['Mundane Damage Reduction'] ||
+            props.traits['Edged Damage Amplification'] ||
+            props.statusEffects['Edged Damage Amplification'] ||
+            props.secondaryHandheldPassives['Edged Damage Amplification'] ||
+            props.primaryHandheldPassives['Edged Damage Amplification'] ||
+            props.wornArmorPassives['Edged Damage Amplification'] ||
+            props.traits['Mundane Damage Amplification'] ||
+            props.statusEffects['Mundane Damage Amplification'] ||
+            props.secondaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.primaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.wornArmorPassives['Mundane Damage Amplification']
+          )
+        case 'Piercing Damage':
+        case 'Piercing Damage (Ignore Barrier)':
+          return (
+            props.traits['Piercing Damage Reduction'] ||
+            props.statusEffects['Piercing Damage Reduction'] ||
+            props.secondaryHandheldPassives['Piercing Damage Reduction'] ||
+            props.primaryHandheldPassives['Piercing Damage Reduction'] ||
+            props.wornArmorPassives['Piercing Damage Reduction'] ||
+            props.traits['Mundane Damage Reduction'] ||
+            props.statusEffects['Mundane Damage Reduction'] ||
+            props.secondaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.primaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.wornArmorPassives['Mundane Damage Reduction'] ||
+            props.traits['Piercing Damage Amplification'] ||
+            props.statusEffects['Piercing Damage Amplification'] ||
+            props.secondaryHandheldPassives['Piercing Damage Amplification'] ||
+            props.primaryHandheldPassives['Piercing Damage Amplification'] ||
+            props.wornArmorPassives['Piercing Damage Amplification'] ||
+            props.traits['Mundane Damage Amplification'] ||
+            props.statusEffects['Mundane Damage Amplification'] ||
+            props.secondaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.primaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.wornArmorPassives['Mundane Damage Amplification']
+          )
+        case 'Toxic Damage':
+        case 'Toxic Damage (Ignore Barrier)':
+          return (
+            props.traits['Toxic Damage Reduction'] ||
+            props.statusEffects['Toxic Damage Reduction'] ||
+            props.secondaryHandheldPassives['Toxic Damage Reduction'] ||
+            props.primaryHandheldPassives['Toxic Damage Reduction'] ||
+            props.wornArmorPassives['Toxic Damage Reduction'] ||
+            props.traits['Mundane Damage Reduction'] ||
+            props.statusEffects['Mundane Damage Reduction'] ||
+            props.secondaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.primaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.wornArmorPassives['Mundane Damage Reduction'] ||
+            props.traits['Toxic Damage Amplification'] ||
+            props.statusEffects['Toxic Damage Amplification'] ||
+            props.secondaryHandheldPassives['Toxic Damage Amplification'] ||
+            props.primaryHandheldPassives['Toxic Damage Amplification'] ||
+            props.wornArmorPassives['Toxic Damage Amplification'] ||
+            props.traits['Mundane Damage Amplification'] ||
+            props.statusEffects['Mundane Damage Amplification'] ||
+            props.secondaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.primaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.wornArmorPassives['Mundane Damage Amplification']
+          )
+        case 'Stress Damage':
+        case 'Stress Damage (Ignore Barrier)':
+          return (
+            props.traits['Stress Damage Reduction'] ||
+            props.statusEffects['Stress Damage Reduction'] ||
+            props.secondaryHandheldPassives['Stress Damage Reduction'] ||
+            props.primaryHandheldPassives['Stress Damage Reduction'] ||
+            props.wornArmorPassives['Stress Damage Reduction'] ||
+            props.traits['Mundane Damage Reduction'] ||
+            props.statusEffects['Mundane Damage Reduction'] ||
+            props.secondaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.primaryHandheldPassives['Mundane Damage Reduction'] ||
+            props.wornArmorPassives['Mundane Damage Reduction'] ||
+            props.traits['Stress Damage Amplification'] ||
+            props.statusEffects['Stress Damage Amplification'] ||
+            props.secondaryHandheldPassives['Stress Damage Amplification'] ||
+            props.primaryHandheldPassives['Stress Damage Amplification'] ||
+            props.wornArmorPassives['Stress Damage Amplification'] ||
+            props.traits['Mundane Damage Amplification'] ||
+            props.statusEffects['Mundane Damage Amplification'] ||
+            props.secondaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.primaryHandheldPassives['Mundane Damage Amplification'] ||
+            props.wornArmorPassives['Mundane Damage Amplification']
+          )
+        case 'Divine Damage':
+        case 'Divine Damage (Ignore Barrier)':
+          return (
+            props.traits['Divine Damage Reduction'] ||
+            props.statusEffects['Divine Damage Reduction'] ||
+            props.secondaryHandheldPassives['Divine Damage Reduction'] ||
+            props.primaryHandheldPassives['Divine Damage Reduction'] ||
+            props.wornArmorPassives['Divine Damage Reduction'] ||
+            props.traits['Magical Damage Reduction'] ||
+            props.statusEffects['Magical Damage Reduction'] ||
+            props.secondaryHandheldPassives['Magical Damage Reduction'] ||
+            props.primaryHandheldPassives['Magical Damage Reduction'] ||
+            props.wornArmorPassives['Magical Damage Reduction'] ||
+            props.traits['Divine Damage Amplification'] ||
+            props.statusEffects['Divine Damage Amplification'] ||
+            props.secondaryHandheldPassives['Divine Damage Amplification'] ||
+            props.primaryHandheldPassives['Divine Damage Amplification'] ||
+            props.wornArmorPassives['Divine Damage Amplification'] ||
+            props.traits['Magical Damage Amplification'] ||
+            props.statusEffects['Magical Damage Amplification'] ||
+            props.secondaryHandheldPassives['Magical Damage Amplification'] ||
+            props.primaryHandheldPassives['Magical Damage Amplification'] ||
+            props.wornArmorPassives['Magical Damage Amplification']
+          )
+        case 'Blight Damage':
+        case 'Blight Damage (Ignore Barrier)':
+          return (
+            props.traits['Blight Damage Reduction'] ||
+            props.statusEffects['Blight Damage Reduction'] ||
+            props.secondaryHandheldPassives['Blight Damage Reduction'] ||
+            props.primaryHandheldPassives['Blight Damage Reduction'] ||
+            props.wornArmorPassives['Blight Damage Reduction'] ||
+            props.traits['Magical Damage Reduction'] ||
+            props.statusEffects['Magical Damage Reduction'] ||
+            props.secondaryHandheldPassives['Magical Damage Reduction'] ||
+            props.primaryHandheldPassives['Magical Damage Reduction'] ||
+            props.wornArmorPassives['Magical Damage Reduction'] ||
+            props.traits['Blight Damage Amplification'] ||
+            props.statusEffects['Blight Damage Amplification'] ||
+            props.secondaryHandheldPassives['Blight Damage Amplification'] ||
+            props.primaryHandheldPassives['Blight Damage Amplification'] ||
+            props.wornArmorPassives['Blight Damage Amplification'] ||
+            props.traits['Magical Damage Amplification'] ||
+            props.statusEffects['Magical Damage Amplification'] ||
+            props.secondaryHandheldPassives['Magical Damage Amplification'] ||
+            props.primaryHandheldPassives['Magical Damage Amplification'] ||
+            props.wornArmorPassives['Magical Damage Amplification']
+          )
+        case 'Pure Magic Damage':
+        case 'Pure Magic Damage (Ignore Barrier)':
+          return (
+            props.traits['Pure Magic Damage Reduction'] ||
+            props.statusEffects['Pure Magic Damage Reduction'] ||
+            props.secondaryHandheldPassives['Pure Magic Damage Reduction'] ||
+            props.primaryHandheldPassives['Pure Magic Damage Reduction'] ||
+            props.wornArmorPassives['Pure Magic Damage Reduction'] ||
+            props.traits['Magical Damage Reduction'] ||
+            props.statusEffects['Magical Damage Reduction'] ||
+            props.secondaryHandheldPassives['Magical Damage Reduction'] ||
+            props.primaryHandheldPassives['Magical Damage Reduction'] ||
+            props.wornArmorPassives['Magical Damage Reduction'] ||
+            props.traits['Pure Magic Damage Amplification'] ||
+            props.statusEffects['Pure Magic Damage Amplification'] ||
+            props.secondaryHandheldPassives['Pure Magic Damage Amplification'] ||
+            props.primaryHandheldPassives['Pure Magic Damage Amplification'] ||
+            props.wornArmorPassives['Pure Magic Damage Amplification'] ||
+            props.traits['Magical Damage Amplification'] ||
+            props.statusEffects['Magical Damage Amplification'] ||
+            props.secondaryHandheldPassives['Magical Damage Amplification'] ||
+            props.primaryHandheldPassives['Magical Damage Amplification'] ||
+            props.wornArmorPassives['Magical Damage Amplification']
+          )
+        default:
+          return false
+      }
     })
 
     function addHpStatusModifier(addedVal: {
@@ -102,39 +401,16 @@ export default {
       if (finalBarrier < 0) {
         finalCurrent += finalBarrier
         finalBarrier = 0
-        console.log(finalBarrier)
       }
       props.setCurrentAndBarrier(finalCurrent, finalBarrier)
+      damage.value = 0
     }
 
     function getRealDamageValue(damageType: string, damage: number) {
       if (damageType === 'Un-Typed') {
         return damage
       }
-      let resistance =
-        props.traits[damageType + ' Resistance'] ||
-        props.statusEffects[damageType + ' Resistance'] ||
-        props.secondaryHandheldPassives[damageType + ' Resistance'] ||
-        props.primaryHandheldPassives[damageType + ' Resistance'] ||
-        props.wornArmorPassives[damageType + ' Resistance']
-      let susceptibility =
-        props.traits[damageType + ' Susceptibility'] ||
-        props.statusEffects[damageType + ' Susceptibility'] ||
-        props.secondaryHandheldPassives[damageType + ' Susceptibility'] ||
-        props.primaryHandheldPassives[damageType + ' Susceptibility'] ||
-        props.wornArmorPassives[damageType + ' Susceptibility']
-      let immunity =
-        props.traits[damageType + ' Immunity'] ||
-        props.statusEffects[damageType + ' Immunity'] ||
-        props.secondaryHandheldPassives[damageType + ' Immunity'] ||
-        props.primaryHandheldPassives[damageType + ' Immunity'] ||
-        props.wornArmorPassives[damageType + ' Immunity']
-      let vulnerability =
-        props.traits[damageType + ' Vulnerability'] ||
-        props.statusEffects[damageType + ' Vulnerability'] ||
-        props.secondaryHandheldPassives[damageType + ' Vulnerability'] ||
-        props.primaryHandheldPassives[damageType + ' Vulnerability'] ||
-        props.wornArmorPassives[damageType + ' Vulnerability']
+
       let damageReduction =
         props.traits[damageType + ' Damage Reduction'] ||
         props.statusEffects[damageType + ' Damage Reduction'] ||
@@ -157,7 +433,7 @@ export default {
           damageType == 'Piercing' ||
           damageType == 'Edged'
         ) {
-          resistance = true
+          // resistance = true
         }
       }
       if (
@@ -166,45 +442,20 @@ export default {
         damageType == 'Lightning' ||
         damageType == 'Force'
       ) {
-        resistance =
-          resistance ||
-          props.traits['Elemental Resistance'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Resistance'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Resistance'] ||
-          props.wornArmorPassives[damageType + ' Elemental Resistance']
-        susceptibility =
-          susceptibility ||
-          props.traits['Elemental Susceptibility'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Susceptibility'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Susceptibility'] ||
-          props.wornArmorPassives[damageType + ' Elemental Susceptibility']
-        immunity =
-          immunity ||
-          props.traits['Elemental Immunity'] ||
-          props.statusEffects['Ethereal'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Immunity'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Immunity'] ||
-          props.wornArmorPassives[damageType + ' Elemental Immunity']
-        vulnerability =
-          vulnerability ||
-          props.traits['Elemental Vulnerability'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Vulnerability'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Vulnerability'] ||
-          props.wornArmorPassives[damageType + ' Elemental Vulnerability']
         damageReduction =
           damageReduction ||
           props.traits['Elemental Damage Reduction'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Damage Reduction'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Damage Reduction'] ||
-          props.wornArmorPassives[damageType + ' Elemental Damage Reduction']
+          props.secondaryHandheldPassives['Elemental Damage Reduction'] ||
+          props.primaryHandheldPassives['Elemental Damage Reduction'] ||
+          props.wornArmorPassives['Elemental Damage Reduction']
         damageAmplification =
           damageAmplification ||
           props.traits['Elemental Damage Amplification'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Damage Amplification'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Damage Amplification'] ||
-          props.wornArmorPassives[damageType + ' Elemental Damage Amplification']
+          props.secondaryHandheldPassives['Elemental Damage Amplification'] ||
+          props.primaryHandheldPassives['Elemental Damage Amplification'] ||
+          props.wornArmorPassives['Elemental Damage Amplification']
       }
-
+      console.log(damageType)
       if (
         damageType == 'Toxic' ||
         damageType == 'Stress' ||
@@ -212,70 +463,54 @@ export default {
         damageType == 'Piercing' ||
         damageType == 'Edged'
       ) {
-        resistance =
-          resistance ||
-          props.traits['Mundane Resistance'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Resistance'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Resistance'] ||
-          props.wornArmorPassives[damageType + ' Mundane Resistance']
-        susceptibility =
-          susceptibility ||
-          props.traits['Mundane Susceptibility'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Susceptibility'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Susceptibility'] ||
-          props.wornArmorPassives[damageType + ' Mundane Susceptibility']
-        immunity =
-          immunity ||
-          props.traits['Mundane Immunity'] ||
-          props.statusEffects['Ethereal'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Immunity'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Immunity'] ||
-          props.wornArmorPassives[damageType + ' Mundane Immunity']
-        vulnerability =
-          vulnerability ||
-          props.traits['Mundane Vulnerability'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Vulnerability'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Vulnerability'] ||
-          props.wornArmorPassives[damageType + ' Mundane Vulnerability']
         damageReduction =
           damageReduction ||
           props.traits['Mundane Damage Reduction'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Damage Reduction'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Damage Reduction'] ||
-          props.wornArmorPassives[damageType + ' Mundane Damage Reduction']
+          props.secondaryHandheldPassives['Mundane Damage Reduction'] ||
+          props.primaryHandheldPassives['Mundane Damage Reduction'] ||
+          props.wornArmorPassives['Mundane Damage Reduction']
         damageAmplification =
           damageAmplification ||
           props.traits['Mundane Damage Amplification'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Damage Amplification'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Damage Amplification'] ||
-          props.wornArmorPassives[damageType + ' Mundane Damage Amplification']
+          props.secondaryHandheldPassives['Mundane Damage Amplification'] ||
+          props.primaryHandheldPassives['Mundane Damage Amplification'] ||
+          props.wornArmorPassives['Mundane Damage Amplification']
       }
-
       let damageAmp = 0
       let damageRed = 0
+      console.log(damageReduction)
 
       if (damageAmplification) {
-        damageAmp += dice.value * damageAmplification.number
+        damageAmp +=
+          parseInt(dice.value + '') *
+          (damageAmplification.number ||
+            damageAmplification.rank ||
+            parseInt(damageAmplification.modAmount + ''))
       }
       if (damageReduction) {
-        damageRed -= dice.value * damageReduction.number
+        damageRed -=
+          parseInt(dice.value + '') *
+          (damageReduction.number ||
+            damageReduction.rank ||
+            parseInt(damageReduction.modAmount + ''))
       }
-      if (immunity && !vulnerability) {
+
+      if (detectedImmunity.value.display && !detectedVulnerability.value.display) {
         return 0
       }
-      if (vulnerability) {
+      if (detectedVulnerability.value.display) {
         return damage * 2 + damageAmp
       }
-      if (resistance && susceptibility) {
+      if (detectedResistance.value.display && detectedSusceptibility.value.display) {
         return Math.max(damage + damageAmp + damageRed, 0)
       }
-      if (resistance) {
+      if (detectedResistance.value.display) {
         return Math.max(Math.floor(damage / 2) + damageAmp + damageRed, 0)
       }
-      if (susceptibility) {
-        console.log('damage', damage, damageAmp, damageRed)
+      if (detectedSusceptibility.value.display) {
         return Math.max(Math.floor(damage * 2) + damageAmp + damageRed, 0)
       }
+
       return Math.max(Math.floor(damage) + damageAmp + damageRed, 0)
     }
 
@@ -284,6 +519,7 @@ export default {
 
       finalCurrent = finalCurrent - damage.value
       props.setCurrentAndBarrier(finalCurrent, props.barrierHp)
+      damage.value = 0
     }
     function applyHeal() {
       let finalCurrent: number = props.currentHp
@@ -293,6 +529,7 @@ export default {
         finalCurrent = props.totalHp
       }
       props.setCurrentAndBarrier(finalCurrent, props.barrierHp)
+      heal.value = 0
     }
     function applyHealWithOvershield() {
       let finalCurrent = props.currentHp
@@ -301,10 +538,10 @@ export default {
       finalCurrent = finalCurrent + parseInt(heal.value + '')
       if (finalCurrent > props.totalHp) {
         finalBarrier += finalCurrent - props.totalHp
-        console.log(finalCurrent - props.totalHp, ' vibes')
         finalCurrent = props.totalHp
       }
       props.setCurrentAndBarrier(finalCurrent, finalBarrier)
+      heal.value = 0
     }
     function applyBarrier() {
       let finalCurrent = props.currentHp
@@ -313,6 +550,7 @@ export default {
       finalBarrier = finalBarrier + parseInt(barrier.value + '')
 
       props.setCurrentAndBarrier(finalCurrent, finalBarrier)
+      barrier.value = 0
     }
     function setNewCurrentBarrierValue() {
       let finalCurrent = props.currentHp
@@ -333,13 +571,596 @@ export default {
         sufferingDamageType: 'no'
       })
     }
+    const detectedResistance = computed(() => {
+      let detectionMessage = 'Detected: '
+      if (modifierValueTypesChoice.value.includes('Damage')) {
+        const type = modifierValueTypesChoice.value.split(' Damage')[0]
+
+        if (props.traits[type + ' Resistance']) {
+          detectionMessage += type + ' Resistance from Trait,'
+        }
+        if (props.statusEffects[type + ' Resistance']) {
+          detectionMessage += type + ' Resistance from Status Effect,'
+        }
+        if (
+          props.secondaryHandheldPassives[type + ' Resistance'] +
+          props.primaryHandheldPassives[type + ' Resistance']
+        ) {
+          detectionMessage += type + ' Resistance from Handheld Item,'
+        }
+        if (props.primaryHandheldPassives[type + ' Resistance']) {
+          detectionMessage += type + ' Resistance from Handheld Item,'
+        }
+        if (props.wornArmorPassives[type + ' Resistance']) {
+          detectionMessage += type + ' Resistance from Worn Armor,'
+        }
+        let resistance =
+          props.traits[type + ' Resistance'] ||
+          props.statusEffects[type + ' Resistance'] ||
+          props.secondaryHandheldPassives[type + ' Resistance'] ||
+          props.primaryHandheldPassives[type + ' Resistance'] ||
+          props.wornArmorPassives[type + ' Resistance']
+        if (props.statusEffects['Petrified']) {
+          if (
+            type == 'Fire' ||
+            type == 'Ice' ||
+            type == 'Lightning' ||
+            type == 'Force' ||
+            type == 'Toxic' ||
+            type == 'Piercing' ||
+            type == 'Edged'
+          ) {
+            resistance = true
+            detectionMessage += type + ' Resistance from Petrification,'
+          }
+        }
+        let overResist = false
+        switch (type) {
+          case 'Blunt (Ignore Barrier)':
+          case 'Blunt':
+          case 'Piercing':
+          case 'Piercing (Ignore Barrier)':
+          case 'Edged':
+          case 'Edged (Ignore Barrier)':
+          case 'Toxic  (Ignore Barrier)':
+          case 'Toxic':
+          case 'Stress  (Ignore Barrier)':
+          case 'Stress':
+            if (props.traits['Mundane Resistance']) {
+              detectionMessage += 'Mundane Resistance from Trait,'
+            }
+            if (props.statusEffects['Mundane Resistance']) {
+              detectionMessage += 'Mundane Resistance from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Mundane Resistance'] +
+              props.primaryHandheldPassives['Mundane Resistance']
+            ) {
+              detectionMessage += 'Mundane Resistance from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Mundane Resistance']) {
+              detectionMessage += 'Mundane Resistance from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Mundane Resistance']) {
+              detectionMessage += 'Mundane Resistance from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Mundane Resistance'] ||
+              props.statusEffects['Mundane Resistance'] ||
+              props.secondaryHandheldPassives['Mundane Resistance'] ||
+              props.primaryHandheldPassives['Mundane Resistance'] ||
+              props.wornArmorPassives['Mundane Resistance']
+            return { message: detectionMessage, display: resistance || overResist || false }
+          case 'Fire':
+          case 'Fire (Ignore Barrier)':
+          case 'Ice':
+          case 'Ice (Ignore Barrier)':
+          case 'Force':
+          case 'Force (Ignore Barrier)':
+          case 'Lightning':
+          case 'Lightning (Ignore Barrier)':
+            if (props.traits['Elemental Resistance']) {
+              detectionMessage += 'Elemental Resistance from Trait,'
+            }
+            if (props.statusEffects['Elemental Resistance']) {
+              detectionMessage += 'Elemental Resistance from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Elemental Resistance'] +
+              props.primaryHandheldPassives['Elemental Resistance']
+            ) {
+              detectionMessage += 'Elemental Resistance from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Elemental Resistance']) {
+              detectionMessage += 'Elemental Resistance from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Elemental Resistance']) {
+              detectionMessage += 'Elemental Resistance from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Elemental Resistance'] ||
+              props.statusEffects['Elemental Resistance'] ||
+              props.secondaryHandheldPassives['Elemental Resistance'] ||
+              props.primaryHandheldPassives['Elemental Resistance'] ||
+              props.wornArmorPassives['Elemental Resistance']
+            return { message: detectionMessage, display: resistance || overResist || false }
+          case 'Divine':
+          case 'Divine (Ignore Barrier)':
+          case 'Blight':
+          case 'Blight (Ignore Barrier)':
+          case 'Pure Magic':
+          case 'Pure Magic (Ignore Barrier)':
+            if (props.traits['Magical Resistance']) {
+              detectionMessage += 'Magical Resistance from Trait,'
+            }
+            if (props.statusEffects['Magical Resistance']) {
+              detectionMessage += 'Magical Resistance from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Magical Resistance'] +
+              props.primaryHandheldPassives['Magical Resistance']
+            ) {
+              detectionMessage += 'Magical Resistance from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Magical Resistance']) {
+              detectionMessage += 'Magical Resistance from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Magical Resistance']) {
+              detectionMessage += 'Magical Resistance from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Magical Resistance'] ||
+              props.statusEffects['Magical Resistance'] ||
+              props.secondaryHandheldPassives['Magical Resistance'] ||
+              props.primaryHandheldPassives['Magical Resistance'] ||
+              props.wornArmorPassives['Magical Resistance']
+            return { message: detectionMessage, display: resistance || overResist || false }
+        }
+      }
+      return { message: '', display: false }
+    })
+
+    const detectedSusceptibility = computed(() => {
+      let detectionMessage = 'Detected: '
+      if (modifierValueTypesChoice.value.includes('Damage')) {
+        const type = modifierValueTypesChoice.value.split(' Damage')[0]
+        if (props.traits[type + ' Succeptibility']) {
+          detectionMessage += type + ' Susceptibility from Trait,'
+        }
+        if (props.statusEffects[type + ' Susceptibility']) {
+          detectionMessage += type + ' Susceptibility from Status Effect,'
+        }
+        if (
+          props.secondaryHandheldPassives[type + ' Susceptibility'] +
+          props.primaryHandheldPassives[type + ' Susceptibility']
+        ) {
+          detectionMessage += type + ' Susceptibility from Handheld Item,'
+        }
+        if (props.primaryHandheldPassives[type + ' Susceptibility']) {
+          detectionMessage += type + ' Susceptibility from Handheld Item,'
+        }
+        if (props.wornArmorPassives[type + ' Susceptibility']) {
+          detectionMessage += type + ' Susceptibility from Worn Armor,'
+        }
+        let susceptibility =
+          props.traits[type + ' Susceptibility'] ||
+          props.statusEffects[type + ' Susceptibility'] ||
+          props.secondaryHandheldPassives[type + ' Susceptibility'] ||
+          props.primaryHandheldPassives[type + ' Susceptibility'] ||
+          props.wornArmorPassives[type + ' Susceptibility']
+        let overResist = false
+        switch (type) {
+          case 'Blunt (Ignore Barrier)':
+          case 'Blunt':
+          case 'Piercing':
+          case 'Piercing (Ignore Barrier)':
+          case 'Edged':
+          case 'Edged (Ignore Barrier)':
+          case 'Stress':
+          case 'Stress (Ignore Barrier)':
+          case 'Toxic  (Ignore Barrier)':
+          case 'Toxic':
+            if (props.traits['Mundane Susceptibility']) {
+              detectionMessage += 'Mundane Susceptibility from Trait,'
+            }
+            if (props.statusEffects['Mundane Susceptibility']) {
+              detectionMessage += 'Mundane Susceptibility from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Mundane Susceptibility'] +
+              props.primaryHandheldPassives['Mundane Susceptibility']
+            ) {
+              detectionMessage += 'Mundane Susceptibility from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Mundane Susceptibility']) {
+              detectionMessage += 'Mundane Susceptibility from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Mundane Susceptibility']) {
+              detectionMessage += 'Mundane Susceptibility from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Mundane Susceptibility'] ||
+              props.statusEffects['Mundane Susceptibility'] ||
+              props.secondaryHandheldPassives['Mundane Susceptibility'] ||
+              props.primaryHandheldPassives['Mundane Susceptibility'] ||
+              props.wornArmorPassives['Mundane Susceptibility']
+            return { message: detectionMessage, display: susceptibility || overResist || false }
+          case 'Fire':
+          case 'Fire (Ignore Barrier)':
+          case 'Ice':
+          case 'Ice (Ignore Barrier)':
+          case 'Force':
+          case 'Force (Ignore Barrier)':
+          case 'Lightning':
+          case 'Lightning (Ignore Barrier)':
+            if (props.traits['Elemental Susceptibility']) {
+              detectionMessage += 'Elemental Susceptibility from Trait,'
+            }
+            if (props.statusEffects['Elemental Susceptibility']) {
+              detectionMessage += 'Elemental Susceptibility from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Elemental Susceptibility'] +
+              props.primaryHandheldPassives['Elemental Susceptibility']
+            ) {
+              detectionMessage += 'Elemental Susceptibility from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Elemental Susceptibility']) {
+              detectionMessage += 'Elemental Susceptibility from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Elemental Susceptibility']) {
+              detectionMessage += 'Elemental Susceptibility from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Elemental Susceptibility'] ||
+              props.statusEffects['Elemental Susceptibility'] ||
+              props.secondaryHandheldPassives['Elemental Susceptibility'] ||
+              props.primaryHandheldPassives['Elemental Susceptibility'] ||
+              props.wornArmorPassives['Elemental Susceptibility']
+            return { message: detectionMessage, display: susceptibility || overResist || false }
+          case 'Divine':
+          case 'Divine (Ignore Barrier)':
+          case 'Blight':
+          case 'Blight (Ignore Barrier)':
+          case 'Pure Magic':
+          case 'Pure Magic (Ignore Barrier)':
+            if (props.traits['Magical Susceptibility']) {
+              detectionMessage += 'Magical Susceptibility from Trait,'
+            }
+            if (props.statusEffects['Magical Susceptibility']) {
+              detectionMessage += 'Magical Susceptibility from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Magical Susceptibility'] +
+              props.primaryHandheldPassives['Magical Susceptibility']
+            ) {
+              detectionMessage += 'Magical Susceptibility from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Magical Susceptibility']) {
+              detectionMessage += 'Magical Susceptibility from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Magical Susceptibility']) {
+              detectionMessage += 'Magical Susceptibility from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Magical Susceptibility'] ||
+              props.statusEffects['Magical Susceptibility'] ||
+              props.secondaryHandheldPassives['Magical Susceptibility'] ||
+              props.primaryHandheldPassives['Magical Susceptibility'] ||
+              props.wornArmorPassives['Magical Susceptibility']
+            return { message: detectionMessage, display: susceptibility || overResist || false }
+        }
+      }
+      return { message: '', display: false }
+    })
+
+    const detectedImmunity = computed(() => {
+      let detectionMessage = 'Detected: '
+      if (modifierValueTypesChoice.value.includes('Damage')) {
+        const type = modifierValueTypesChoice.value.split(' Damage')[0]
+        if (props.traits[type + ' Immunity']) {
+          detectionMessage += type + ' Immunity from Trait,'
+        }
+        if (props.statusEffects[type + ' Immunity']) {
+          detectionMessage += type + ' Immunity from Status Effect,'
+        }
+        if (
+          props.secondaryHandheldPassives[type + ' Immunity'] +
+          props.primaryHandheldPassives[type + ' Immunity']
+        ) {
+          detectionMessage += type + ' Immunity from Handheld Item,'
+        }
+        if (props.primaryHandheldPassives[type + ' Immunity']) {
+          detectionMessage += type + ' Immunity from Handheld Item,'
+        }
+        if (props.wornArmorPassives[type + ' Immunity']) {
+          detectionMessage += type + ' Immunity from Worn Armor,'
+        }
+        let immunity =
+          props.traits[type + ' Immunity'] ||
+          props.statusEffects[type + ' Immunity'] ||
+          props.secondaryHandheldPassives[type + ' Immunity'] ||
+          props.primaryHandheldPassives[type + ' Immunity'] ||
+          props.wornArmorPassives[type + ' Immunity']
+        let overResist = false
+        switch (type) {
+          case 'Blunt (Ignore Barrier)':
+          case 'Blunt':
+          case 'Piercing':
+          case 'Piercing (Ignore Barrier)':
+          case 'Edged':
+          case 'Edged (Ignore Barrier)':
+          case 'Toxic  (Ignore Barrier)':
+          case 'Toxic':
+          case 'Stress  (Ignore Barrier)':
+          case 'Stress':
+            if (props.traits['Mundane Immunity']) {
+              detectionMessage += 'Mundane Immunity from Trait,'
+            }
+            if (props.statusEffects['Mundane Immunity']) {
+              detectionMessage += 'Mundane Immunity from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Mundane Immunity'] +
+              props.primaryHandheldPassives['Mundane Immunity']
+            ) {
+              detectionMessage += 'Mundane Immunity from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Mundane Immunity']) {
+              detectionMessage += 'Mundane Immunity from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Mundane Immunity']) {
+              detectionMessage += 'Mundane Immunity from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Mundane Immunity'] ||
+              props.statusEffects['Mundane Immunity'] ||
+              props.secondaryHandheldPassives['Mundane Immunity'] ||
+              props.primaryHandheldPassives['Mundane Immunity'] ||
+              props.wornArmorPassives['Mundane Immunity']
+            return { message: detectionMessage, display: immunity || overResist || false }
+          case 'Fire':
+          case 'Fire (Ignore Barrier)':
+          case 'Ice':
+          case 'Ice (Ignore Barrier)':
+          case 'Force':
+          case 'Force (Ignore Barrier)':
+          case 'Lightning':
+          case 'Lightning (Ignore Barrier)':
+            if (props.traits['Elemental Immunity']) {
+              detectionMessage += 'Elemental Immunity from Trait,'
+            }
+            if (props.statusEffects['Elemental Immunity']) {
+              detectionMessage += 'Elemental Immunity from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Elemental Immunity'] +
+              props.primaryHandheldPassives['Elemental Immunity']
+            ) {
+              detectionMessage += 'Elemental Immunity from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Elemental Immunity']) {
+              detectionMessage += 'Elemental Immunity from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Elemental Immunity']) {
+              detectionMessage += 'Elemental Immunity from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Elemental Immunity'] ||
+              props.statusEffects['Elemental Immunity'] ||
+              props.secondaryHandheldPassives['Elemental Immunity'] ||
+              props.primaryHandheldPassives['Elemental Immunity'] ||
+              props.wornArmorPassives['Elemental Immunity']
+            return { message: detectionMessage, display: immunity || overResist || false }
+          case 'Divine':
+          case 'Divine (Ignore Barrier)':
+          case 'Blight':
+          case 'Blight (Ignore Barrier)':
+          case 'Pure Magic':
+          case 'Pure Magic (Ignore Barrier)':
+            if (props.traits['Magical Immunity']) {
+              detectionMessage += 'Magical Immunity from Trait,'
+            }
+            if (props.statusEffects['Magical Immunity']) {
+              detectionMessage += 'Magical Immunity from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Magical Immunity'] +
+              props.primaryHandheldPassives['Magical Immunity']
+            ) {
+              detectionMessage += 'Magical Immunity from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Magical Immunity']) {
+              detectionMessage += 'Magical Immunity from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Magical Immunity']) {
+              detectionMessage += 'Magical Immunity from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Magical Immunity'] ||
+              props.statusEffects['Magical Immunity'] ||
+              props.secondaryHandheldPassives['Magical Immunity'] ||
+              props.primaryHandheldPassives['Magical Immunity'] ||
+              props.wornArmorPassives['Magical Immunity']
+            return { message: detectionMessage, display: immunity || overResist || false }
+        }
+      }
+      return { message: '', display: false }
+    })
+
+    const detectedVulnerability = computed(() => {
+      let detectionMessage = 'Detected: '
+      if (modifierValueTypesChoice.value.includes('Damage')) {
+        const type = modifierValueTypesChoice.value.split(' Damage')[0]
+        if (props.traits[type + ' Vulnerability']) {
+          detectionMessage += type + ' Vulnerability from Trait,'
+        }
+        if (props.statusEffects[type + ' Vulnerability']) {
+          detectionMessage += type + ' Vulnerability from Status Effect,'
+        }
+        if (
+          props.secondaryHandheldPassives[type + ' Vulnerability'] +
+          props.primaryHandheldPassives[type + ' Vulnerability']
+        ) {
+          detectionMessage += type + ' Vulnerability from Handheld Item,'
+        }
+        if (props.primaryHandheldPassives[type + ' Vulnerability']) {
+          detectionMessage += type + ' Vulnerability from Handheld Item,'
+        }
+        if (props.wornArmorPassives[type + ' Vulnerability']) {
+          detectionMessage += type + ' Vulnerability from Worn Armor,'
+        }
+        let vulnerability =
+          props.traits[type + ' Vulnerability'] ||
+          props.statusEffects[type + ' Vulnerability'] ||
+          props.secondaryHandheldPassives[type + ' Vulnerability'] ||
+          props.primaryHandheldPassives[type + ' Vulnerability'] ||
+          props.wornArmorPassives[type + ' Vulnerability']
+        let overResist = false
+        switch (type) {
+          case 'Blunt (Ignore Barrier)':
+          case 'Blunt':
+          case 'Piercing':
+          case 'Piercing (Ignore Barrier)':
+          case 'Edged':
+          case 'Edged (Ignore Barrier)':
+          case 'Toxic  (Ignore Barrier)':
+          case 'Toxic':
+          case 'Stress  (Ignore Barrier)':
+          case 'Stress':
+            if (props.traits['Mundane Vulnerability']) {
+              detectionMessage += 'Mundane Vulnerability from Trait,'
+            }
+            if (props.statusEffects['Mundane Vulnerability']) {
+              detectionMessage += 'Mundane Vulnerability from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Mundane Vulnerability'] +
+              props.primaryHandheldPassives['Mundane Vulnerability']
+            ) {
+              detectionMessage += 'Mundane Vulnerability from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Mundane Vulnerability']) {
+              detectionMessage += 'Mundane Vulnerability from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Mundane Vulnerability']) {
+              detectionMessage += 'Mundane Vulnerability from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Mundane Vulnerability'] ||
+              props.statusEffects['Mundane Vulnerability'] ||
+              props.secondaryHandheldPassives['Mundane Vulnerability'] ||
+              props.primaryHandheldPassives['Mundane Vulnerability'] ||
+              props.wornArmorPassives['Mundane Vulnerability']
+            return { message: detectionMessage, display: vulnerability || overResist || false }
+          case 'Fire':
+          case 'Fire (Ignore Barrier)':
+          case 'Ice':
+          case 'Ice (Ignore Barrier)':
+          case 'Force':
+          case 'Force (Ignore Barrier)':
+          case 'Lightning':
+          case 'Lightning (Ignore Barrier)':
+            if (props.traits['Elemental Vulnerability']) {
+              detectionMessage += 'Elemental Vulnerability from Trait,'
+            }
+            if (props.statusEffects['Elemental Vulnerability']) {
+              detectionMessage += 'Elemental Vulnerability from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Elemental Vulnerability'] +
+              props.primaryHandheldPassives['Elemental Vulnerability']
+            ) {
+              detectionMessage += 'Elemental Vulnerability from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Elemental Vulnerability']) {
+              detectionMessage += 'Elemental Vulnerability from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Elemental Vulnerability']) {
+              detectionMessage += 'Elemental Vulnerability from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Elemental Vulnerability'] ||
+              props.statusEffects['Elemental Vulnerability'] ||
+              props.secondaryHandheldPassives['Elemental Vulnerability'] ||
+              props.primaryHandheldPassives['Elemental Vulnerability'] ||
+              props.wornArmorPassives['Elemental Vulnerability']
+            return { message: detectionMessage, display: vulnerability || overResist || false }
+          case 'Divine':
+          case 'Divine (Ignore Barrier)':
+          case 'Blight':
+          case 'Blight (Ignore Barrier)':
+          case 'Pure Magic':
+          case 'Pure Magic (Ignore Barrier)':
+            if (props.traits['Magical Vulnerability']) {
+              detectionMessage += 'Magical Vulnerability from Trait,'
+            }
+            if (props.statusEffects['Magical Vulnerability']) {
+              detectionMessage += 'Magical Vulnerability from Status Effect,'
+            }
+            if (
+              props.secondaryHandheldPassives['Magical Vulnerability'] +
+              props.primaryHandheldPassives['Magical Vulnerability']
+            ) {
+              detectionMessage += 'Magical Vulnerability from Handheld Item,'
+            }
+            if (props.primaryHandheldPassives['Magical Vulnerability']) {
+              detectionMessage += 'Magical Vulnerability from Handheld Item,'
+            }
+            if (props.wornArmorPassives['Magical Vulnerability']) {
+              detectionMessage += 'Magical Vulnerability from Worn Armor,'
+            }
+
+            overResist =
+              props.traits['Magical Vulnerability'] ||
+              props.statusEffects['Magical Vulnerability'] ||
+              props.secondaryHandheldPassives['Magical Vulnerability'] ||
+              props.primaryHandheldPassives['Magical Vulnerability'] ||
+              props.wornArmorPassives['Magical Vulnerability']
+            return { message: detectionMessage, display: vulnerability || overResist || false }
+        }
+      }
+      return { message: '', display: false }
+    })
+
+    function applyModifiedValue() {
+      if (modifierValueTypesChoice.value.includes('Ignore Barrier')) {
+        damageType.value = modifierValueTypesChoice.value.split(' Damage')[0]
+        dealDamageIgnoreShield()
+      } else if (modifierValueTypesChoice.value.includes('Damage')) {
+        damageType.value = modifierValueTypesChoice.value.split(' Damage')[0]
+        dealDamage()
+      } else if (modifierValueTypesChoice.value === 'Healing') {
+        heal.value = damage.value
+        applyHeal()
+      } else if (modifierValueTypesChoice.value === 'Shielding') {
+        barrier.value = damage.value
+        applyBarrier()
+      } else if (modifierValueTypesChoice.value === 'Healing with Overheal') {
+        heal.value = damage.value
+        applyHealWithOvershield()
+      }
+      damage.value = 0
+    }
+    const isHidden = ref(false)
     return {
       designStore,
       userStore,
       damage,
       heal,
       damageType,
-      modifierType,
+      modifiers,
       removeModifier,
       dealDamage,
       dealDamageIgnoreShield,
@@ -355,27 +1176,43 @@ export default {
       statusModifiersList,
       dice,
       damageTypes,
-      props
+      props,
+      modifierValueTypesChoice,
+      hasDRorDA,
+      applyModifiedValue,
+      detectedResistance,
+      detectedSusceptibility,
+      detectedImmunity,
+      detectedVulnerability,
+      isHidden
     }
   },
   components: {
     CustomModal,
     BFormInput,
     BInputGroup,
-    BFormSelect,
+    // BFormSelect,
     BButton,
-    StatusModifierExplaination,
     TitleWidget,
     StatusEffectItem,
-    AddStatusEffectWidget
+    BDropdown,
+    BDropdownItem,
+    BDropdownDivider,
+    AddStatusModifierModal
   }
 }
 </script>
 
 <template>
-  <CustomModal title="Modify HP" :showModal="props.modal" @close="props.setModal(!props.modal)">
+  <CustomModal
+    :isHidden="isHidden"
+    title="Modify HP"
+    :showModal="props.modal"
+    @close="props.setModal(!props.modal)"
+  >
     <template v-slot:body>
       <div
+        v-if="!props.restirictedMode"
         style="font-size: x-large; text-align: center; margin-top: -1rem; margin-bottom: 0.25rem"
       >
         {{ currentHp }} Current with {{ barrierHp }} Barrier / {{ props.totalHp }} Total
@@ -388,9 +1225,9 @@ export default {
 
       <div class="damageInput" :style="{ background: designStore.primaryTheme }">
         <div style="display: flex; width: 100%">
-          <div style="display: flex; flex-direction: column" class="infoHeader">
+          <div style="display: flex; flex-direction: column; width: 20%" class="infoHeader">
             <div style="flex-grow: 1; padding-left: 2.5%; display: flex; width: min-content">
-              <div style="align-self: end; width: min-content">Damage</div>
+              <div style="align-self: end; width: min-content">Value</div>
             </div>
             <BFormInput
               class="rightField"
@@ -404,11 +1241,11 @@ export default {
               v-model="damage"
             ></BFormInput>
           </div>
-          <div style="display: flex; flex-direction: column" class="infoHeader">
+          <div style="display: flex; flex-direction: column; width: 40%" class="infoHeader">
             <div style="flex-grow: 1; padding-left: 2.5%; display: flex">
-              <div style="align-self: end; padding-left: 0.25rem">Damage Type</div>
+              <div style="align-self: end; padding-left: 0.25rem">Action</div>
             </div>
-            <BFormSelect
+            <!-- <BFormSelect
               v-model="damageType"
               :options="damageTypes"
               class="damageType"
@@ -417,47 +1254,338 @@ export default {
                 background: designStore.inputBacking,
                 borderColor: designStore.secondaryTheme
               }"
-            ></BFormSelect>
-          </div>
-          <div style="display: flex; flex-direction: column" class="infoHeader">
-            <div style="flex-grow: 1; padding-left: 2.5%"># Damage Dice</div>
-            <BFormInput
+            ></BFormSelect> -->
+            <BDropdown
+              class="damageType"
+              style="
+                border-top: 2px solid;
+                border-bottom: 2px solid;
+                border-radius: 0;
+                border-left: 1px solid;
+              "
+              :text="modifierValueTypesChoice"
               :style="{
-                color: designStore.inputText,
                 background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
+                borderColor: designStore.secondaryTheme,
+                '--bs-btn-bg': designStore.inputBacking,
+                '--bs-btn-color': designStore.inputText,
+                '--bs-btn-border-color': designStore.secondaryTheme,
+                '--bs-btn-hover-color': designStore.inputText,
+                '--bs-btn-hover-bg': designStore.inputBacking,
+                '--bs-btn-hover-border-color': designStore.secondaryTheme,
+                '--bs-btn-active-color': designStore.inputText,
+                '--bs-btn-active-bg:': designStore.inputBacking,
+                '--bs-btn-active-border-color': designStore.secondaryTheme,
+                '--bs-dropdown-color': designStore.inputText,
+                '--bs-dropdown-bg': designStore.inputBacking,
+                '--bs-dropdown-link-hover-color': designStore.alertTheme,
+                '--bs-dropdown-link-hover-bg': designStore.inputBacking,
+                '--bs-dropdown-link-active-color': designStore.alertTheme,
+                '--bs-dropdown-link-active-bg': designStore.primaryTheme,
+                scrollbarColor: designStore.secondaryTheme + ' ' + designStore.primaryTheme
               }"
-              class="damageDice"
-              v-model="dice"
-              placeholder="# Damage Dice"
-              type="number"
-              min="0"
-            ></BFormInput>
+            >
+              <div
+                class="dropdownHeader"
+                :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+              >
+                Helpful effects
+              </div>
+
+              <BDropdownDivider
+                style="margin-bottom: -1rem; border: 2px"
+                :style="{ color: designStore.secondaryTheme }"
+              ></BDropdownDivider>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Healing'"
+                ><v-icon name="gi-health-increase"></v-icon>Healing<v-icon
+                  name="gi-health-increase"
+                ></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Shielding'"
+                ><v-icon name="gi-heart-shield"></v-icon>Shielding<v-icon
+                  name="gi-heart-shield"
+                ></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Healing with Overheal'"
+                ><v-icon name="gi-healing-shield"></v-icon>Healing with Overheal<v-icon
+                  name="gi-healing-shield"
+                ></v-icon
+              ></BDropdownItem>
+              <div
+                class="dropdownHeader"
+                :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+              >
+                Damage
+              </div>
+              <BDropdownDivider
+                style="margin-bottom: -1rem"
+                :style="{ color: designStore.secondaryTheme }"
+              ></BDropdownDivider>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Un-typed Damage'">
+                <v-icon name="gi-broken-bone"></v-icon> Un-Typed Damage
+                <v-icon name="gi-broken-bone"></v-icon
+              ></BDropdownItem>
+              <div
+                class="dropdownHeader"
+                style="font-size: small"
+                :style="{
+                  background: designStore.sidebarBacking,
+                  color: designStore.sidebarText
+                }"
+              >
+                Mundane
+              </div>
+              <BDropdownDivider
+                style="margin-bottom: -1rem"
+                :style="{ color: designStore.secondaryTheme }"
+              ></BDropdownDivider>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Blunt Damage'">
+                <v-icon name="gi-punch"></v-icon> Blunt Damage
+                <v-icon name="gi-punch"></v-icon>
+              </BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Edged Damage'"
+                ><v-icon name="gi-sword-wound"></v-icon>Edged Damage
+                <v-icon name="gi-sword-wound"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Piercing Damage'">
+                <v-icon name="gi-plain-dagger"></v-icon> Piercing Damage
+                <v-icon name="gi-plain-dagger"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Toxic Damage'"
+                ><v-icon name="gi-poison-bottle"></v-icon>Toxic Damage
+                <v-icon name="gi-poison-bottle"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Stress Damage'">
+                <v-icon name="gi-worried-eyes"></v-icon> Stress Damage
+                <v-icon name="gi-worried-eyes"></v-icon
+              ></BDropdownItem>
+
+              <div
+                class="dropdownHeader"
+                style="font-size: small"
+                :style="{
+                  background: designStore.sidebarBacking,
+                  color: designStore.sidebarText
+                }"
+              >
+                Elemental
+              </div>
+              <BDropdownDivider
+                style="margin-bottom: -1rem"
+                :style="{ color: designStore.secondaryTheme }"
+              ></BDropdownDivider>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Fire Damage'">
+                <v-icon name="gi-fire"></v-icon> Fire Damage <v-icon name="gi-fire"></v-icon>
+              </BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Ice Damage'">
+                <v-icon name="gi-ice-bolt"></v-icon> Ice Damage <v-icon name="gi-ice-bolt"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Lightning Damage'"
+                ><v-icon name="gi-lightning-trio"></v-icon> Lightning Damage
+                <v-icon name="gi-lightning-trio"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Force Damage'"
+                ><v-icon name="gi-earth-spit"></v-icon> Force Damage
+                <v-icon name="gi-earth-spit"></v-icon
+              ></BDropdownItem>
+              <div
+                class="dropdownHeader"
+                style="font-size: small"
+                :style="{
+                  background: designStore.sidebarBacking,
+                  color: designStore.sidebarText
+                }"
+              >
+                Magical
+              </div>
+              <BDropdownDivider
+                style="margin-bottom: -1rem"
+                :style="{ color: designStore.secondaryTheme }"
+              ></BDropdownDivider>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Divine Damage'">
+                <v-icon name="gi-sunbeams"></v-icon> Divine Damage
+                <v-icon name="gi-sunbeams"></v-icon>
+              </BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Blight Damage'">
+                <v-icon name="gi-death-zone"></v-icon> Blight Damage
+                <v-icon name="gi-death-zone"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Pure Magic Damage'"
+                ><v-icon name="gi-sparkles"></v-icon> Pure Magic Damage
+                <v-icon name="gi-sparkles"></v-icon
+              ></BDropdownItem>
+              <div
+                class="dropdownHeader"
+                :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
+              >
+                Damage Ignore Barrier
+              </div>
+              <BDropdownDivider
+                style="margin-bottom: -1rem"
+                :style="{ color: designStore.secondaryTheme }"
+              ></BDropdownDivider>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Un-typed Damage (Ignore Barrier)'">
+                <v-icon name="gi-broken-bone"></v-icon> Un-Typed Damage
+                <v-icon name="gi-broken-bone"></v-icon
+              ></BDropdownItem>
+              <div
+                class="dropdownHeader"
+                style="font-size: small"
+                :style="{
+                  background: designStore.sidebarBacking,
+                  color: designStore.sidebarText
+                }"
+              >
+                Mundane
+              </div>
+              <BDropdownDivider
+                style="margin-bottom: -1rem"
+                :style="{ color: designStore.secondaryTheme }"
+              ></BDropdownDivider>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Blunt Damage (Ignore Barrier)'">
+                <v-icon name="gi-punch"></v-icon> Blunt Damage
+                <v-icon name="gi-punch"></v-icon>
+              </BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Edged Damage (Ignore Barrier)'"
+                ><v-icon name="gi-sword-wound"></v-icon>Edged Damage
+                <v-icon name="gi-sword-wound"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Piercing Damage (Ignore Barrier)'">
+                <v-icon name="gi-plain-dagger"></v-icon> Piercing Damage
+                <v-icon name="gi-plain-dagger"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Toxic Damage (Ignore Barrier)'"
+                ><v-icon name="gi-poison-bottle"></v-icon>Toxic Damage
+                <v-icon name="gi-poison-bottle"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Stress Damage (Ignore Barrier)'">
+                <v-icon name="gi-worried-eyes"></v-icon> Stress Damage
+                <v-icon name="gi-worried-eyes"></v-icon
+              ></BDropdownItem>
+
+              <div
+                class="dropdownHeader"
+                style="font-size: small"
+                :style="{
+                  background: designStore.sidebarBacking,
+                  color: designStore.sidebarText
+                }"
+              >
+                Elemental
+              </div>
+              <BDropdownDivider
+                style="margin-bottom: -1rem"
+                :style="{ color: designStore.secondaryTheme }"
+              ></BDropdownDivider>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Fire Damage (Ignore Barrier)'">
+                <v-icon name="gi-fire"></v-icon> Fire Damage <v-icon name="gi-fire "></v-icon>
+              </BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Ice Damage (Ignore Barrier)'">
+                <v-icon name="gi-ice-bolt"></v-icon> Ice Damage <v-icon name="gi-ice-bolt"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Lightning Damage (Ignore Barrier)'"
+                ><v-icon name="gi-lightning-trio"></v-icon> Lightning Damage
+                <v-icon name="gi-lightning-trio"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Force Damage (Ignore Barrier)'"
+                ><v-icon name="gi-earth-spit"></v-icon> Force Damage
+                <v-icon name="gi-earth-spit"></v-icon
+              ></BDropdownItem>
+              <div
+                class="dropdownHeader"
+                style="font-size: small"
+                :style="{
+                  background: designStore.sidebarBacking,
+                  color: designStore.sidebarText
+                }"
+              >
+                Magical
+              </div>
+              <BDropdownDivider
+                style="margin-bottom: -1rem"
+                :style="{ color: designStore.secondaryTheme }"
+              ></BDropdownDivider>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Divine Damage (Ignore Barrier)'">
+                <v-icon name="gi-sunbeams"></v-icon> Divine Damage
+                <v-icon name="gi-sunbeams"></v-icon>
+              </BDropdownItem>
+              <BDropdownItem @click="modifierValueTypesChoice = 'Blight Damage (Ignore Barrier)'">
+                <v-icon name="gi-death-zone"></v-icon> Blight Damage
+                <v-icon name="gi-death-zone"></v-icon
+              ></BDropdownItem>
+              <BDropdownItem
+                @click="modifierValueTypesChoice = 'Pure Magic Damage (Ignore Barrier)'"
+                ><v-icon name="gi-sparkles"></v-icon> Pure Magic Damage
+                <v-icon name="gi-sparkles"></v-icon
+              ></BDropdownItem>
+            </BDropdown>
           </div>
         </div>
-        <div style="display: flex; width: 100%">
-          <BButton
-            class="leftDamageButton"
-            :style="{ borderColor: designStore.secondaryTheme }"
-            @click="dealDamage()"
-            >Damage</BButton
-          >
-          <BButton
-            class="rightDamageButton"
-            :style="{ borderColor: designStore.secondaryTheme }"
-            @click="dealDamageIgnoreShield()"
-            ><span style="display: flex; justify-content: center">
-              Damage Ignore<v-icon
-                class="superMobile"
-                name="gi-heart-shield"
-                style="font-size: large"
-              ></v-icon>
-              <span class="norm">&nbsp;Barrier</span></span
-            ></BButton
-          >
+        <div
+          style="display: flex; flex-direction: column; width: 20%"
+          class="infoHeader"
+          v-if="hasDRorDA"
+        >
+          <div style="flex-grow: 1; padding-left: 2.5%; min-width: 7.5rem"># Dice in Roll</div>
+
+          <BFormInput
+            :style="{
+              color: designStore.inputText,
+              background: designStore.inputBacking,
+              borderColor: designStore.secondaryTheme
+            }"
+            class="damageDice"
+            v-model="dice"
+            placeholder="# Damage Dice"
+            type="number"
+            min="0"
+          ></BFormInput>
         </div>
+        <BButton
+          class="rightDamageButton"
+          :style="{ borderColor: designStore.secondaryTheme }"
+          @click="applyModifiedValue()"
+          >Apply</BButton
+        >
       </div>
-      <div class="expandingInput">
+      <div
+        v-if="hasDRorDA && dice <= 0"
+        :style="{ color: designStore.alertTheme }"
+        style="margin-top: -1rem; margin-bottom: 1rem; font-size: small; text-align: end"
+      >
+        Detected Applicable Damage Reduction or Damage Amplification. # of Dice needed to do
+        calculation correctly!
+      </div>
+      <div
+        v-if="detectedImmunity?.display"
+        :style="{ color: designStore.alertTheme }"
+        style="margin-top: -1rem; margin-bottom: 1rem; font-size: small; text-align: end"
+      >
+        {{ detectedImmunity.message }}
+      </div>
+      <div
+        v-if="detectedSusceptibility?.display"
+        :style="{ color: designStore.alertTheme }"
+        style="margin-top: -1rem; margin-bottom: 1rem; font-size: small; text-align: end"
+      >
+        {{ detectedSusceptibility.message }}
+      </div>
+      <div
+        v-if="detectedResistance?.display"
+        :style="{ color: designStore.alertTheme }"
+        style="margin-top: -1rem; margin-bottom: 1rem; font-size: small; text-align: end"
+      >
+        {{ detectedResistance.message }}
+      </div>
+      <div
+        v-if="detectedVulnerability?.display"
+        :style="{ color: designStore.alertTheme }"
+        style="margin-top: -1rem; margin-bottom: 1rem; font-size: small; text-align: end"
+      >
+        {{ detectedVulnerability.message }}
+      </div>
+
+      <!-- <div class="expandingInput">
         <BInputGroup
           style="border: 2px solid; border-radius: 10px; margin-bottom: 1rem"
           :style="{
@@ -484,8 +1612,8 @@ export default {
             Overheal</BButton
           >
         </BInputGroup>
-      </div>
-      <div class="expandingInput">
+      </div> -->
+      <!-- <div class="expandingInput">
         <BInputGroup
           style="border: 3px solid; border-radius: 10px; margin-bottom: 1rem"
           :style="{
@@ -512,13 +1640,14 @@ export default {
             >Apply Barrier</BButton
           >
         </BInputGroup>
-      </div>
+      </div> -->
       <TitleWidget
+        v-if="!props.restirictedMode"
         class="expandingInput"
         title="Override Values"
         style="margin-top: -1rem"
       ></TitleWidget>
-      <div class="expandingInput">
+      <div class="expandingInput" v-if="!props.restirictedMode">
         <BInputGroup
           style="border: 2px solid; border-radius: 10px; margin-bottom: 1rem"
           :style="{
@@ -546,7 +1675,7 @@ export default {
           >
         </BInputGroup>
       </div>
-      <div class="expandingInput">
+      <div class="expandingInput" v-if="!props.restirictedMode">
         <BInputGroup
           style="border: 3px solid; border-radius: 10px; margin-bottom: 1rem"
           :style="{
@@ -575,22 +1704,12 @@ export default {
         </BInputGroup>
       </div>
 
-      <div style="display: flex; justify-content: space-between; margin-top: -2rem">
-        <TitleWidget
-          class="expandingInput"
-          title="Status Modifiers"
-          style="width: 100%"
-        ></TitleWidget>
-        <StatusModifierExplaination
-          style="position: relative; top: 2.5rem"
-        ></StatusModifierExplaination>
-      </div>
-
-      <AddStatusEffectWidget
-        class="expandingInput"
-        :modifierType="modifierType"
+      <AddStatusModifierModal
+        :modify-is-hidden="(val) => (isHidden = true)"
+        :modifiers="modifiers"
+        :modifierType="'HP'"
         @added="(addedVal) => addHpStatusModifier(addedVal)"
-      ></AddStatusEffectWidget>
+      ></AddStatusModifierModal>
       <div v-for="mod in statusModifiersList" :key="mod">
         <StatusEffectItem
           v-if="mod.modifierType == 'Suffering'"
@@ -634,6 +1753,7 @@ export default {
   border: 2px solid;
   border-right: 1px solid;
   border-left: 1px solid;
+  flex-grow: 1;
 }
 .damageDice {
   min-width: 5rem;
@@ -665,13 +1785,11 @@ export default {
   padding-top: 0.5rem;
   padding-left: 0.5rem;
   border-left: 1px solid;
-  width: 12.5rem;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   max-height: 2.5rem;
   align-self: end;
-  flex-grow: 1;
-  min-width: 9rem;
+  width: 20%;
 }
 .superMobile {
   display: none;
@@ -705,9 +1823,7 @@ export default {
     border-top-right-radius: 0rem;
     min-width: 8rem;
   }
-  .damageType {
-    max-width: 15rem;
-  }
+
   @media (max-width: 720px) {
     .liltext {
       display: none;

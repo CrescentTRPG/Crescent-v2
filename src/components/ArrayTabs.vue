@@ -1,5 +1,5 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 import { Ref, ref, watch } from 'vue'
 
 import TabItem from './TabItem.vue'
@@ -53,36 +53,101 @@ export default {
 }
 </script>
 <template>
-  <BAccordion
-    class="accordion"
-    :style="{
-      color: LightenDarkenColor(designStore.inputText, -10),
-      background: designStore.inputBacking,
-      backgroundColor: LightenDarkenColor(designStore.inputBacking, -10),
-      borderColor: designStore.secondaryTheme
-    }"
-  >
-    <BAccordionItem
-      style="width: inherit"
-      :title="'Filter By ' + props.filteringMessage"
+  <div>
+    <div style="height: 0" class="dissapearsInMobile">
+      <div
+        style="
+          display: flex;
+          padding-right: 2.5rem;
+          justify-content: flex-end;
+          width: 100%;
+          z-index: 4;
+          padding-left: 16rem;
+          overflow: hidden;
+        "
+      >
+        <div v-for="(tab, i) in selectedTabs" :key="tab.index">
+          <div
+            v-if="i < 4"
+            class="dissapearsInMobile"
+            style="
+              padding: 0.25rem;
+              margin: 0.25rem;
+              margin-top: 0.75rem;
+              font-size: small;
+              z-index: 4;
+              border-radius: 0.375rem;
+              text-wrap: nowrap;
+            "
+            :style="{ background: designStore.alertTheme }"
+          >
+            {{ tab.name }}
+          </div>
+        </div>
+        <div
+          v-if="selectedTabs.length > 4"
+          style="
+            padding: 0.25rem;
+            margin: 0.25rem;
+            margin-top: 0.75rem;
+            font-size: small;
+            z-index: 4;
+            border-radius: 0.375rem;
+            text-wrap: nowrap;
+          "
+          :style="{ background: designStore.alertTheme }"
+        >
+          + {{ selectedTabs.length - 4 }} more
+        </div>
+      </div>
+    </div>
+    <BAccordion
+      class="accordion"
       :style="{
-        color: designStore.inputText,
-        background: designStore.sidebarBacking,
+        color: LightenDarkenColor(designStore.inputText, -10),
+        background: designStore.inputBacking,
+        backgroundColor: LightenDarkenColor(designStore.inputBacking, -10),
         borderColor: designStore.secondaryTheme
       }"
     >
-      <div class="arrayTabz">
-        <TabItem
-          v-for="tab in tabs"
-          :key="tab.index"
-          :tabName="tab.name"
-          @true="addTab(tab)"
-          @false="removeTab(tab)"
-          style="flex: 1 1 7.5rem"
-        ></TabItem>
-      </div>
-    </BAccordionItem>
-  </BAccordion>
+      <BAccordionItem
+        style="width: inherit"
+        :title="'Filter By ' + props.filteringMessage"
+        :style="{
+          color: designStore.inputText,
+          background: designStore.sidebarBacking,
+          borderColor: designStore.secondaryTheme
+        }"
+      >
+        <div class="arrayTabz">
+          <div
+            v-for="tab in tabs"
+            :key="tab.index"
+            :style="{
+              flex: tab.header ? '1 1 100%' : '1 1 7.5rem',
+              fontSize: tab.header ? 'large' : 'medium',
+              marginLeft: tab.header ? '-.5rem' : '0rem',
+              marginRight: tab.header ? '-.5rem' : '0rem'
+            }"
+          >
+            <TabItem
+              v-if="tab.index >= 0 && tab.name"
+              :tabName="tab.name"
+              @true="addTab(tab)"
+              @false="removeTab(tab)"
+              style="width: 100%"
+            ></TabItem>
+
+            <hr
+              v-else
+              style="margin-bottom: 0.5rem"
+              :style="{ color: designStore.secondaryTheme }"
+            />
+          </div>
+        </div>
+      </BAccordionItem>
+    </BAccordion>
+  </div>
 </template>
 <style>
 .arrayTabz {
@@ -103,6 +168,10 @@ export default {
 
   border-radius: 0rem;
 }
+.dissapearsInMobile {
+  pointer-events: none;
+  display: block;
+}
 .accordion-button {
   position: relative;
   display: flex;
@@ -121,5 +190,10 @@ export default {
   color: color;
   background-color: transparent;
   border: none;
+}
+@media (max-width: 700px) {
+  .dissapearsInMobile {
+    display: none;
+  }
 }
 </style>

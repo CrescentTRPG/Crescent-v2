@@ -1,13 +1,11 @@
 <script lang="ts">
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useCharacterStore } from '@/stores/characterStore'
-import { useUserStore } from '@/stores/userStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import EquippedArmor from './EquippedArmor.vue'
 import PrimaryHandheld from './PrimaryHandheld.vue'
 import SecondaryHandheld from './SecondaryHandheld.vue'
-import TitleMedallion from '@/components/TitleMedallion.vue'
-import TitleWidget from '@/components/TitleWidget.vue'
 
 export default {
   setup(props, context) {

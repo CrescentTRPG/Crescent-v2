@@ -1,22 +1,12 @@
 <script lang="ts">
-import TitleWidget from '@/components/TitleWidget.vue'
-import { useDesignStore } from '@/stores/designStore'
-import { BFormSelect } from 'bootstrap-vue-next'
-import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
-import { computed, ComputedRef, ref } from 'vue'
-import { usePerformanceStore } from '@/stores/performanceStore'
-import { storeToRefs } from 'pinia'
-import { useSkillStore } from '@/stores/skillsStore'
-import BNavbar from 'bootstrap-vue-next/src/components/BNavbar/BNavbar.vue'
-import BNavItem from 'bootstrap-vue-next/src/components/BNav/BNavItem.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import WeaponAttackBuilder from './WeaponAttackBuilder.vue'
-import { useCharacterStore } from '@/stores/characterStore'
-import BTable from 'bootstrap-vue-next/src/components/BTable/BTable.vue'
-import CustomPagination from '@/components/CustomPagination.vue'
 import CustomModal from '@/components/CustomModal.vue'
+import CustomPagination from '@/components/CustomPagination.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
+import { storeToRefs } from 'pinia'
+import { computed, ComputedRef, ref } from 'vue'
 import MartialAttackDisplay from './MartialAttackDisplay.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 
 export default {
   setup(props, context) {

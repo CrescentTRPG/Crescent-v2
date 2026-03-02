@@ -1,18 +1,17 @@
 <script lang="ts">
-import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useUserStore } from '@/stores/userStore'
 import CustomModal from '@/components/CustomModal.vue'
+import { useUserStore } from '@/stores/userStore.ts'
+import { computed, ComputedRef, ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import TitleWidget from '@/components/TitleWidget.vue'
-import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import RibbonTitle from '@/components/RibbonTitle.vue'
-import StatusEffectItem from './StatusEffectItem.vue'
-import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
-import BInputGroup from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroup.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import BasicInput from '../BasicInput.vue'
+import AddStatusModifierModal from './AddStatusModifierModal.vue'
+import ExceptionalTracker from './ExceptionalTracker.vue'
+import StatusEffectItem from './StatusEffectItem.vue'
+import FancyDecor from '@/components/FancyDecor.vue'
+import IconDisplay from '@/components/IconDisplay.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
 export default {
   props: [
@@ -24,7 +23,9 @@ export default {
     'attributeStatusModifiers',
     'addNewAttributeStatusModifier',
     'removeAttributeStatusModifier',
-    'isEditableAttr'
+    'isEditableAttr',
+    'usedExceptionals',
+    'useExceptional'
   ],
   emits: ['updateAttr'],
   setup(props, context) {
@@ -43,14 +44,20 @@ export default {
       'Add Inferior(s)'
     ]
 
-    const titleMessage: ComputedRef = computed(() => {
-      if (exceptionalVal.value < 0) {
-        return props.value + ' ' + props.attribute + ', ' + exceptionalVal.value + ' Inferior(s)'
-      } else if (exceptionalVal.value > 0) {
-        return props.value + ' ' + props.attribute + ', ' + exceptionalVal.value + ' Exceptional(s)'
-      } else {
-        return props.value + ' ' + props.attribute
+    const exceptionalsList = computed(() => {
+      let ret: Array<{ used: boolean; index: number }> = []
+      for (
+        let i = 0;
+        i < props.exceptionals - props.inferiors + Object.keys(props.usedExceptionals || {}).length;
+        i++
+      ) {
+        ret.push({ index: i, used: props.usedExceptionals[i] })
       }
+      return ret
+    })
+
+    const titleMessage: ComputedRef = computed(() => {
+      return props.value + ' ' + props.attribute
     })
 
     function getAttributeColor() {
@@ -95,7 +102,7 @@ export default {
 
       return ret
     })
-
+    const isHidden = ref(false)
     function showModal() {
       if (props.isEditableAttr) {
         editModal.value = true
@@ -106,6 +113,26 @@ export default {
     const editModal = ref(false)
     function updateAttr(val) {
       context.emit('updateAttr', val)
+    }
+    function getIcon() {
+      switch (props.attribute) {
+        case 'Agility':
+          return 'gi-tightrope'
+        case 'Strength':
+          return 'gi-strong'
+        case 'Health':
+          return 'gi-heart-inside'
+        case 'Willpower':
+          return 'gi-confrontation'
+        case 'Perception':
+          return 'gi-eye-target'
+        case 'Charisma':
+          return 'gi-star-struck'
+        case 'Intelligence':
+          return 'gi-brain'
+        case 'Power':
+          return 'gi-glowing-hands'
+      }
     }
 
     return {
@@ -123,18 +150,20 @@ export default {
       getAttributeColor,
       showModal,
       updateAttr,
-      editModal
+      editModal,
+      isHidden,
+      exceptionalsList,
+      getIcon
     }
   },
   components: {
     CustomModal,
-    TitleWidget,
-    StatusModifierExplaination,
-    RibbonTitle,
-    AddStatusEffectWidget,
-    StatusEffectItem,
 
-    BasicInput
+    IconDisplay,
+    StatusEffectItem,
+    AddStatusModifierModal,
+    BasicInput,
+    ExceptionalTracker
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -234,26 +263,65 @@ export default {
         </div>
       </div>
     </div>
-    <CustomModal :title="'Modify ' + props.attribute" :showModal="modal" @close="modal = !modal">
+    <CustomModal
+      :is-hidden="isHidden"
+      :title="'Modify ' + props.attribute"
+      :showModal="modal"
+      @close="modal = !modal"
+    >
       <template v-slot:body>
-        <div style="display: flex; justify-content: center">
-          <RibbonTitle
-            style="margin-top: -1rem"
-            :title="titleMessage"
-            :background="designStore.sidebarBacking"
-            :textColor="designStore.sidebarText"
-          ></RibbonTitle>
+        <div
+          style="
+            margin-top: -1rem;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            padding-bottom: 1rem;
+          "
+        >
+          <div style="display: flex; justify-content: center">
+            <IconDisplay
+              :color="designStore.secondaryTheme"
+              :scale="4"
+              :icon="getIcon()"
+            ></IconDisplay>
+          </div>
+          <div
+            style="
+              align-self: center;
+              font-size: x-large;
+              padding: 0.5rem;
+              border: 2px solid;
+              margin-top: -1rem;
+            "
+            :style="{
+              background: designStore.sidebarBacking,
+              color: designStore.sidebarText,
+              borderColor: designStore.secondaryTheme
+            }"
+          >
+            {{ titleMessage }}
+          </div>
+          <div
+            v-if="exceptionalsList.length > 0"
+            style="display: flex; justify-content: center; flex-grow: 1"
+          >
+            <div v-for="e in exceptionalsList" :key="e.index">
+              <ExceptionalTracker
+                :used="e.used"
+                :flipExceptional="() => props.useExceptional(e.index, !e.used, props.attribute)"
+              ></ExceptionalTracker>
+            </div>
+            <div style="align-self: center">{{ '( + ' + exceptionalVal + ' )' }}</div>
+          </div>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-top: -1rem">
-          <TitleWidget title="Status Modifiers" style="width: 100%"></TitleWidget>
-          <StatusModifierExplaination
-            style="position: relative; top: 2.5rem"
-          ></StatusModifierExplaination>
-        </div>
-        <AddStatusEffectWidget
-          :modifierType="modifierType"
+
+        <AddStatusModifierModal
+          :modifiers="modifierType"
+          modifierType="Modify Mp"
           @added="(addedVal) => addAttributeStatusModifier(addedVal)"
-        ></AddStatusEffectWidget>
+          :modify-is-hidden="(val) => (isHidden = val)"
+        ></AddStatusModifierModal>
 
         <div v-for="mod in statusModifiersList" :key="mod">
           <StatusEffectItem

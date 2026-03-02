@@ -1,16 +1,16 @@
 <script lang="ts">
-import { useCharacterStore } from '../../../stores/characterStore'
-import { useUserStore } from '../../../stores/userStore'
-import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
 import CustomModal from '@/components/CustomModal.vue'
-import CustomCheckbox from '../CustomCheckbox.vue'
-import { ref, toRaw } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import TitleWidget from '@/components/TitleWidget.vue'
+import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
 import { storeToRefs } from 'pinia'
-import { useMartialPerksStore } from '../../../stores/martialPerksStore'
+import { ref, toRaw } from 'vue'
+import { useCharacterStore } from '../../../stores/characterStore.ts'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import { useMartialPerksStore } from '../../../stores/martialPerksStore.ts'
+import { useUserStore } from '../../../stores/userStore.ts'
 import AbilityDisplay from '../../AbilityDisplay.vue'
 import CustomPagination from '../../CustomPagination.vue'
-import TitleWidget from '@/components/TitleWidget.vue'
+import CustomCheckbox from '../CustomCheckbox.vue'
 
 interface Skill {
   skill: string
@@ -127,13 +127,33 @@ export default {
       this.modal = !this.modal
     },
     update(name: any, rank: number, source: any, known: any, perkGroup: string, perkIndex: number) {
-      let perkObj = {
+      let perkObj: {
+        name: string
+        rank: number
+        known: any
+        perkGroup: string
+        perkIndex: number
+        source: any
+        charges: number
+        chargesSpent: number
+      } = {
         name: name,
         rank: rank,
         known: known,
         source: source,
         perkGroup: perkGroup,
-        perkIndex: perkIndex
+        perkIndex: perkIndex,
+        charges: 0,
+        chargesSpent: 0
+      }
+      let type = this.martialPerkStore.manualMartialPerks[name].type
+      if (type.includes('Charged')) {
+        let num = 1
+        if (type.indexOf('(')) {
+          num = parseInt(type.substring(type.indexOf('(') + 1, type.indexOf('(') + 2))
+        }
+        perkObj.charges = num
+        perkObj.chargesSpent = 0
       }
       this.martialPerkStore.setMartialPerk(perkObj)
     },
@@ -247,9 +267,14 @@ export default {
       <template #cell(known)="data">
         <div>
           <CustomCheckbox
+            v-if="data.index || data.index === 0"
             :overrideBox="''"
             :overrideFill="''"
-            :isChecked="buildDisplayMartialPerks[data.item.perkIndex as number].known || false"
+            :isChecked="
+              data.item?.perkIndex !== undefined
+                ? buildDisplayMartialPerks[data.item?.perkIndex as number].known || false
+                : false
+            "
             style="margin-left: 0.5rem; margin-right: 1rem"
             :update="data.index"
             @true="

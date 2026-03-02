@@ -1,20 +1,20 @@
 <script lang="ts">
 import { computed, ComputedRef, Ref, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/userStore.ts'
 
 import CustomModal from '@/components/CustomModal.vue'
-import { BButton, BFormInput, BFormSelect, BInputGroup } from 'bootstrap-vue-next'
+import { BButton } from 'bootstrap-vue-next'
 
+import DropdownSelect from '@/components/DropdownSelect.vue'
+import { Item, useEquipmentStore } from '@/stores/equipmentStore.ts'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
-import { Item, useEquipmentStore } from '@/stores/equipmentStore'
-import ItemDisplay from './ItemDisplay.vue'
 import { storeToRefs } from 'pinia'
 import EditItem from './EditItem.vue'
-import DropdownSelect from '@/components/DropdownSelect.vue'
+import ItemDisplay from './ItemDisplay.vue'
 
 export default {
   setup(props, context) {

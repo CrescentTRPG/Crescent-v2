@@ -1,5 +1,5 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 import { BFormInput, BPopover, BTable } from 'bootstrap-vue-next'
 import { computed, ComputedRef, ref } from 'vue'
 import { giIcons } from './icons/giIcons'
@@ -27,6 +27,9 @@ export default {
         Math.min(currentPage.value * 30, filteredIconSet.value.length)
       )
     })
+    function filterChanged() {
+      currentPage.value = 1
+    }
     const total: ComputedRef<number> = computed((): number => filteredIconSet.value.length)
 
     const fields = [{ key: 'value', label: 'icon' }]
@@ -40,7 +43,8 @@ export default {
       total,
       objArray,
       fields,
-      perRow
+      perRow,
+      filterChanged
     }
   },
   components: {
@@ -55,6 +59,7 @@ export default {
       class="inputSearch in"
       placeholder="Search..."
       v-model="filter"
+      @keypress="filterChanged()"
       style="border-radius: 0; border: none; border-bottom: 2px solid"
       :style="{
         fontFamily: designStore.font,
@@ -88,6 +93,7 @@ export default {
     <CustomPagination
       :per-page="30"
       :total-rows="total"
+      :page="currentPage"
       @currentPage="(page) => (currentPage = page)"
       :maxTab="2"
     ></CustomPagination>
@@ -104,6 +110,14 @@ export default {
   width: 25rem;
 }
 @media (max-width: 600px) {
+  .grid {
+    width: 25rem;
+  }
+  .in {
+    width: 25rem;
+  }
+}
+@media (max-width: 500px) {
   .grid {
     width: 15rem;
   }

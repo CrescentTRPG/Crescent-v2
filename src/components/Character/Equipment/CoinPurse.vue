@@ -1,11 +1,12 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import { useEquipmentStore } from '@/stores/equipmentStore'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useEquipmentStore } from '@/stores/equipmentStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import BasicInput from '../BasicInput.vue'
 
 export default {
   setup(props, context) {
@@ -19,6 +20,7 @@ export default {
     function updateStore() {
       equipmentStore.setCoins(localCurrencyObj.value)
     }
+
     function organizeIntoStacks() {
       let coins = localCurrencyObj.value
       let overflow = 0
@@ -36,9 +38,9 @@ export default {
       localCurrencyObj.value = coins
       updateStore()
     }
-    return { designStore, currency, localCurrencyObj, updateStore, organizeIntoStacks }
+    return { designStore, currency, localCurrencyObj, updateStore, organizeIntoStacks, equipment }
   },
-  components: { BFormInput, BInputGroupText, BButton },
+  components: { BInputGroupText, BButton, BasicInput },
   watch: {
     equipment() {
       this.localCurrencyObj = useEquipmentStore().equipment.coins
@@ -81,23 +83,27 @@ export default {
             :style="{ background: designStore.inputBacking, color: designStore.inputText }"
             >{{ c.name }} :</BInputGroupText
           >
-          <BFormInput
+
+          <BasicInput
             style="
               border: none;
               border-right: 1px solid;
               border-radius: 0;
               text-align: end;
               flex-grow: 1;
+              padding: 0.5rem;
+              border-radius: 0px;
             "
-            :style="{
-              background: designStore.inputBacking,
-              color: designStore.inputText,
-              borderColor: designStore.secondaryTheme
-            }"
-            type="number"
-            @change="updateStore()"
-            v-model="localCurrencyObj[c.num + ''].amount"
-          ></BFormInput>
+            :type="'number'"
+            @new-value="
+              (val) => (
+                (localCurrencyObj[c.num + ''] = { ...equipment.coins[c.num + ''], amount: val }),
+                updateStore()
+              )
+            "
+            :borderless="true"
+            :value="equipment.coins[c.num + ''].amount"
+          ></BasicInput>
         </div>
       </div>
 

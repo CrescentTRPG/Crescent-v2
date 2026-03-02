@@ -1,14 +1,19 @@
 <script lang="ts">
 import { BButton } from 'bootstrap-vue-next'
-import { ref } from 'vue'
-import { useDesignStore } from '../stores/designStore'
+import { ref, watch } from 'vue'
+import { useDesignStore } from '../stores/designStore.ts'
 
 export default {
   emits: ['currentPage'],
-  props: ['perPage', 'totalRows', 'max'],
+  props: ['perPage', 'totalRows', 'max', 'page'],
   setup(props) {
-    const currentPage = ref(1)
+    const currentPage = ref(props.page || 1)
     const designStore = useDesignStore()
+    watch(props, (oldVal, newVal) => {
+      if (props.page) {
+        currentPage.value = props.page
+      }
+    })
     const tab = ref('corestats')
     return { designStore, tab, props, currentPage }
   },

@@ -1,24 +1,75 @@
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import {
+  computed,
+  nextTick,
+  onMounted,
+  onRenderTriggered,
+  onUnmounted,
+  onUpdated,
+  Ref,
+  ref,
+  useTemplateRef,
+  watch
+} from 'vue'
 import { onKeyStroke, useEventListener, useFocus } from '@vueuse/core'
 
-import { useDesignStore } from '../stores/designStore'
+import { useDesignStore } from '../stores/designStore.ts'
+import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 
 export default {
   emits: ['close'],
-  props: ['showModal', 'title', 'background', 'color', 'secondary', 'closeOnEnter'],
+  props: [
+    'showModal',
+    'title',
+    'background',
+    'color',
+    'secondary',
+    'closeOnEnter',
+    'refs',
+    'saveRef',
+    'isHidden'
+  ],
   setup(props, context) {
     const designStore = useDesignStore()
     const element = ref<HTMLElement | null>(null)
+    const pos = ref(0)
+    let templateRef: Ref<typeof BFormInput | typeof BButton | null> = props.refs
+      ? useTemplateRef(props.refs[0])
+      : ref(null)
 
     onKeyStroke('Escape', () => {
-      if (props.showModal) {
+      if (props.showModal && !props.isHidden) {
         context.emit('close')
       }
     })
 
+    function delay(time: number) {
+      return new Promise((resolve) => setTimeout(resolve, time))
+    }
+
+    onUpdated(() => {
+      //console.log('hi')
+      //nextTick(refreshRef)
+    })
+    function refreshRef() {
+      console.log(document.getElementById('attr'), props.refs[0])
+      if (props.refs) templateRef = useTemplateRef(props.refs[0]) || ref(null)
+      templateRef.value?.focus()
+    }
+
     onKeyStroke('Enter', () => {
       if (props.closeOnEnter && props.showModal) context.emit('close')
+      else {
+        pos.value = pos.value + 1
+        if (props.refs && props.refs[pos.value]) {
+          templateRef = useTemplateRef(props.refs[pos.value])
+          templateRef.value?.focus()
+        } else if (props.saveRef) {
+          templateRef = useTemplateRef(props.saveRef)
+          templateRef.value?.focus()
+        }
+      }
     })
     const hoverShade = computed(() => {
       const r = parseInt(designStore.alertTheme.substring(1, 3), 16)
@@ -29,6 +80,7 @@ export default {
 
     return { designStore, props, element, hoverShade }
   },
+
   computed: {
     scrollbarColor() {
       let sec = this.props.secondary || this.designStore.secondaryTheme
@@ -62,17 +114,15 @@ export default {
         <div
           id="inner"
           class="modale"
-          style="padding: 1rem"
+          style="padding: 1rem; scroll-padding-top: 1rem"
           :style="{
             background: props.background || designStore.primaryTheme,
             color: props.color || designStore.primaryText,
-            fontFamily: designStore.font
+            fontFamily: designStore.font,
+            scrollbarColor: scrollbarColor
           }"
         >
-          <div
-            style="overflow-y: auto; max-height: 40rem; overscroll-behavior: contain"
-            :style="{ scrollbarColor: scrollbarColor }"
-          >
+          <div style="height: fit-content">
             <span
               style="
                 display: flex;
@@ -97,11 +147,17 @@ export default {
               <hr :style="{ borderColor: props.secondary || designStore.secondaryTheme }" />
               <v-icon name="gi-abstract-119" style="position: relative; right: 0.25rem"></v-icon>
             </span>
-            <section class="modal-body">
+            <section class="modal-body" ref="body">
               <slot name="body"> This is the default body! </slot>
             </section>
 
-            <footer class="modal-footer">
+            <footer
+              class="modal-footer"
+              :style="{
+                background: props.background || designStore.primaryTheme,
+                color: props.color || designStore.primaryText
+              }"
+            >
               <slot name="footer"> </slot>
             </footer>
           </div>
@@ -119,12 +175,11 @@ export default {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 5;
+  z-index: 6;
 
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 10rem;
   overflow: hidden;
 }
 
@@ -143,15 +198,19 @@ hr {
 }
 
 .modale {
+  overflow-y: auto;
+  max-height: 40rem;
+  overscroll-behavior: contain;
   position: relative;
-  bottom: 4rem;
+  top: 5%;
   padding: 1rem;
+  padding-bottom: 0;
   border-radius: 1rem;
   width: 80%;
   max-width: 60rem;
   min-height: 10rem;
   height: fit-content;
-  max-height: calc(100vh - 5%);
+  max-height: calc(100vh - 7%);
 }
 
 .modal-body {
@@ -165,6 +224,12 @@ hr {
   margin-left: 2rem;
   margin-right: 2rem;
   margin-top: 1rem;
+  position: sticky;
+  z-index: 5;
+  bottom: 0;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  translate: 0 1rem;
 }
 
 .modal-enter-active,
@@ -196,14 +261,22 @@ hr {
 @media (max-width: 600px) {
   .modale {
     position: relative;
-    bottom: 4rem;
-    padding: 1rem;
+    top: 2%;
     border-radius: 1rem;
     width: 95%;
     max-width: 60rem;
     min-height: 10rem;
     height: fit-content;
     max-height: calc(100vh - 5%);
+  }
+  .modal-body {
+    position: relative;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  .modal-footer {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
   }
 }
 @media (hover: hover) {

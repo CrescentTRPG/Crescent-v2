@@ -1,16 +1,16 @@
 <script lang="ts">
-import { DEFAULT_STAT_BLOCK } from '@/bases'
-import ArrayTabs from '@/components/ArrayTabs.vue'
-import { useDesignStore } from '@/stores/designStore'
-import { ManualMartialPerk, useMartialPerksStore } from '@/stores/martialPerksStore'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
-import { useSkillStore } from '@/stores/skillsStore'
-import { ManualSpell, useSpellStore } from '@/stores/spellsStore'
-import { useTraitsStore } from '@/stores/traitsStore'
+import BasicInput from '@/components/Character/BasicInput.vue'
+import CustomModal from '@/components/CustomModal.vue'
+import TitleMedallion from '@/components/TitleMedallion.vue'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { ManualMartialPerk, useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
+import { useSkillStore } from '@/stores/skillsStore.ts'
+import { ManualSpell, useSpellStore } from '@/stores/spellsStore.ts'
+import { useTraitsStore } from '@/stores/traitsStore.ts'
 import { BButton } from 'bootstrap-vue-next'
-import { spec } from 'node:test/reporters'
 import { storeToRefs } from 'pinia'
-import { onMounted, Ref, ref } from 'vue'
+import { ref } from 'vue'
 
 export default {
   props: ['updateFromRandom', 'currentStatBlock'],
@@ -21,6 +21,8 @@ export default {
     const traitsStore = useTraitsStore()
     const martialPerksStore = useMartialPerksStore()
     const { manualMartialPerks } = storeToRefs(martialPerksStore)
+    const pointsVal = ref(0)
+    const profileVal = ref('')
     const martialSkillsStore = useMartialSkillsStore()
     const { manualTraits } = storeToRefs(traitsStore)
     const { allSkills } = storeToRefs(skillsStore)
@@ -209,7 +211,6 @@ export default {
             pointSwing -= 30
           }
           randomTrait = traitArr[Math.floor(Math.random() * traitArr.length)]
-          console.log(randomTrait, 'TRAIIIITS', traitArr, positiveTraits[rand])
           if (randomTrait?.name.includes('Strength')) exceptionals.strength += 1
           if (randomTrait?.name.includes('Agility')) exceptionals.agility += 1
           if (randomTrait?.name.includes('Perception')) exceptionals.perception += 1
@@ -257,10 +258,8 @@ export default {
       return { traits: traits, exceptionals: exceptionals }
     }
     function getMartialPoints(combatStyles) {
-      console.log(combatStyles)
       let styles: Array<any> = Object.values(combatStyles.combatStyles) || []
       let rank = 0
-      console.log(styles)
 
       styles.forEach((style) => {
         rank = Math.max(style.rank, rank)
@@ -268,9 +267,15 @@ export default {
 
       return rank
     }
-    function getRandom() {
-      let profile = getRandomProfile()
-      let points = Math.round(Math.round(Math.random() * 5000) / 10)
+    function getRandom(profileDefault, pointDefault) {
+      let profile = profileDefault
+      if (!profile) {
+        profile = getRandomProfile()
+      }
+      let points = pointDefault
+      if (!points) {
+        points = Math.round(Math.round(Math.random() * 5000) / 10)
+      }
       let combatStyles
       let styleArr: Array<any>
       let specializations
@@ -358,10 +363,7 @@ export default {
           traits = getTraits('Random', perks.pointRemainder)
           break
       }
-      console.log(profile + '|' + points)
-      console.log(combatStyles, specializations, perks, skills, spells)
       let mp = getMartialPoints(combatStyles)
-      console.log(mp, 'mp')
       let newTemp = {
         ...props.currentStatBlock,
         spells: spells?.spells || {},
@@ -641,19 +643,41 @@ export default {
         return rankSub(val, valueToSubtract + acc + baseCost, acc + baseCost, baseCost)
       }
     }
+    function getTypeColor(type) {
+      if (type === profileVal.value) {
+        return designStore.alertTheme
+      }
+      return designStore.secondaryTheme
+    }
+    function getTypeBoxShadow(type) {
+      if (type === profileVal.value) {
+        return '0px 0px 10px 3px ' + designStore.alertTheme
+      }
+      return 'none'
+    }
+    function updateType(type) {
+      profileVal.value = type
+    }
 
+    const modal = ref(false)
     return {
       designStore,
       props,
-      getRandom
+      getRandom,
+      profileVal,
+      pointsVal,
+      modal,
+      getTypeColor,
+      getTypeBoxShadow,
+      updateType
     }
   },
-  components: { BButton }
+  components: { BButton, CustomModal, BasicInput, TitleMedallion }
 }
 </script>
 <template>
   <BButton
-    @click="getRandom()"
+    @click="modal = true"
     class="footerButtons"
     :style="{ color: designStore.primaryText, borderColor: designStore.secondaryTheme }"
   >
@@ -665,8 +689,133 @@ export default {
     ></v-icon>
     <div class="goBackText">Randomize Stat Block</div>
   </BButton>
+  <CustomModal :show-modal="modal" @close="modal = false" title="Randomize Stat Block">
+    <template v-slot:body>
+      <TitleMedallion
+        title="Randomization profile"
+        :color="designStore.primaryText"
+      ></TitleMedallion>
+      <div class="typeSelectContainer">
+        <div
+          @click="updateType('Caster')"
+          class="randomTypeSelect hoverableTransparantLinear"
+          :style="{
+            background: designStore.inputBacking,
+            color: designStore.inputText,
+            borderColor: getTypeColor('Caster'),
+            boxShadow: getTypeBoxShadow('Caster')
+          }"
+        >
+          <TitleMedallion title="Caster"></TitleMedallion>
+          <div style="display: flex; justify-content: space-between">
+            <v-icon name="gi-magic-palm" scale="5"></v-icon>
+            <div style="text-align: end; align-self: center">Prioritize Spells and Mana</div>
+          </div>
+        </div>
+        <div
+          class="randomTypeSelect hoverableTransparantLinear"
+          @click="updateType('Martial')"
+          :style="{
+            background: designStore.inputBacking,
+            color: designStore.inputText,
+            borderColor: getTypeColor('Martial'),
+            boxShadow: getTypeBoxShadow('Martial')
+          }"
+        >
+          <TitleMedallion title="Martial"></TitleMedallion>
+
+          <div style="display: flex; justify-content: space-between">
+            <v-icon name="gi-swordman" scale="5"></v-icon>
+            <div style="text-align: end; align-self: center">
+              Prioritize Martial skills and perks
+            </div>
+          </div>
+        </div>
+        <div
+          class="randomTypeSelect hoverableTransparantLinear"
+          @click="updateType('')"
+          :style="{
+            background: designStore.inputBacking,
+            color: designStore.inputText,
+            borderColor: getTypeColor(''),
+            boxShadow: getTypeBoxShadow('')
+          }"
+        >
+          <TitleMedallion title="Random"></TitleMedallion>
+
+          <div style="display: flex; justify-content: space-between">
+            <v-icon name="gi-card-random" scale="5"></v-icon>
+            <div style="text-align: end; align-self: center">Randomize Profile</div>
+          </div>
+        </div>
+        <div
+          class="randomTypeSelect hoverableTransparantLinear"
+          @click="updateType('Skill')"
+          :style="{
+            background: designStore.inputBacking,
+            color: designStore.inputText,
+            borderColor: getTypeColor('Skill'),
+            boxShadow: getTypeBoxShadow('Skill')
+          }"
+        >
+          <TitleMedallion title="Skill"></TitleMedallion>
+
+          <div style="display: flex; justify-content: space-between">
+            <v-icon name="gi-juggler" scale="5"></v-icon>
+            <div style="text-align: end; align-self: center">Prioritize Skills</div>
+          </div>
+        </div>
+      </div>
+      <BasicInput
+        style="margin-top: 2rem"
+        label="Points"
+        :value="pointsVal"
+        type="number"
+        :max="50000"
+        :min="0"
+        @newValue="(val) => (pointsVal = val)"
+      ></BasicInput>
+    </template>
+    <template v-slot:footer>
+      <BButton
+        style="border: 1px solid; margin-right: 1rem"
+        :style="{ borderColor: designStore.secondaryTheme }"
+        @click="getRandom(profileVal, pointsVal)"
+        >Randomize from Input</BButton
+      ><BButton
+        style="border: 1px solid; margin-right: 1rem"
+        :style="{ borderColor: designStore.secondaryTheme }"
+        @click="getRandom('', '')"
+        >True Random</BButton
+      >
+      <BButton
+        style="border: 1px solid; margin-right: 1rem"
+        :style="{ borderColor: designStore.secondaryTheme }"
+        @click="modal = false"
+        >Cancel</BButton
+      ></template
+    >
+  </CustomModal>
 </template>
 <style>
+.randomTypeSelect {
+  border: 3px solid;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  align-items: center;
+  margin: 2rem;
+  margin-bottom: 0rem;
+}
+.typeSelectContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (max-width: 900px) {
+  .typeSelectContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}
 .randomDie {
   margin: -0.25rem;
   margin-right: 0.25rem;

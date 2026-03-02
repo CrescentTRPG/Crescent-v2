@@ -1,0 +1,572 @@
+{
+  "armor": {
+    "technique": {
+      "base": {
+        "Robe": {
+          "name": "Robe",
+          "dv": 0,
+          "difficulty": 0,
+          "cost": "None",
+          "numericalCost": 0,
+          "numericalAddedValue": 0
+        },
+        "Light Armor": {
+          "name": "Light Armor",
+          "dv": 3,
+          "difficulty": 0,
+          "cost": "None",
+          "numericalCost": 0,
+          "numericalAddedValue": 0
+        },
+        "Medium Armor": {
+          "name": "Medium Armor",
+          "dv": 5,
+          "difficulty": 0,
+          "cost": "None",
+          "numericalCost": 0,
+          "numericalAddedValue": 0
+        },
+        "Heavy Armor": {
+          "name": "Heavy Armor",
+          "dv": 7,
+          "difficulty": 0,
+          "cost": "None",
+          "numericalCost": 0,
+          "numericalAddedValue": 0
+        },
+        "Shield": {
+          "name": "Shield",
+          "dv": 1,
+          "difficulty": 0,
+          "cost": "None",
+          "numericalCost": 7,
+          "numericalAddedValue": 0
+        }
+      },
+      "addon": {
+        "Secret Compartment": {
+          "name": "Secret Compartment",
+          "difficulty": 2,
+          "cost": "2 / 3 GP",
+          "numericalCost": 200,
+          "numericalAddedValue": 300,
+          "description": "A secret pocket on the inside of the armor capable of concealing an item a few inches thick and a few feet long/wide."
+        },
+        "Built in X": {
+          "name": "Built in X",
+          "armorOnly": true,
+          "difficulty": 4,
+          "cost": "10 / 12 GP",
+          "numericalCost": 1000,
+          "numericalAddedValue": 1200,
+          "description": "An item such as a weapon or shield can be attached to the armor, making it immune to any disarming attacks. The item still requires the appropriate number of hands to wield."
+        },
+        "Medical Kit": {
+          "name": "Medical Kit",
+          "difficulty": 3,
+          "cost": "25 / 30 GP",
+          "numericalCost": 2500,
+          "numericalAddedValue": 3000,
+          "description": "The action cost of healing via knowledge skill is reduced to a swift action."
+        },
+        "Alchemic Suite": {
+          "name": "Medical Kit",
+          "difficulty": 8,
+          "cost": "50 / 60 GP",
+          "numericalCost": 5000,
+          "numericalAddedValue": 6000,
+          "description": "The action cost of alchemy is reduced to a swift action, and the wearer gains a stacking placed roll on alchemy checks",
+          "passives": {
+            "Add Placed Rolls Alchemy": {
+              "modAmount": 1,
+              "name": "Add Placed Rolls Alchemy"
+            }
+          }
+        },
+        "Casting": {
+          "name": "Casting",
+          "difficulty": 4,
+          "cost": "10 / 12 GP",
+          "numericalCost": 1000,
+          "numericalAddedValue": 1200,
+          "shieldOnly": true,
+          "description": "The shield no longer inhibits casting."
+        },
+        "Runic Inscription": {
+          "name": "Runic Inscription",
+          "difficulty": 5,
+          "cost": "30 / 36 GP",
+          "numericalCost": 3000,
+          "numericalAddedValue": 3600,
+          "description": "+ 1 stacking placed roll on all metamagic checks",
+          "passives": {
+            "Add Placed Rolls Metamagic": {
+              "modAmount": 1,
+              "name": "Add Placed Rolls Metamagic"
+            }
+          }
+        },
+        "Dashing Style": {
+          "name": "Dashing Style",
+          "difficulty": 5,
+          "cost": "15 / 18 GP",
+          "numericalCost": 1500,
+          "numericalAddedValue": 1800,
+          "description": "+ 1 stacking placed roll on all interpersonal checks",
+          "passives": {
+            "Add Placed Rolls Interpersonal": {
+              "modAmount": 1,
+              "name": "Add Placed Rolls Interpersonal"
+            }
+          }
+        },
+        "Grappling Hook": {
+          "name": "Grappling Hook",
+          "difficulty": 2,
+          "cost": "2 / 3 GP",
+          "numericalCost": 200,
+          "numericalAddedValue": 300,
+          "description": "Character attaches a grappling hook with 30’ of reach to their armor. Requires a movement action to use. Can only latch onto sturdy objects.",
+          "ability": {
+            "actionCost": "Movement Action",
+            "area": "Character",
+            "description": "Character attaches a grappling hook with 30’ of reach to their armor. Requires a movement action to use. Can only latch onto sturdy objects.",
+            "duration": "Instantaneous",
+            "groupIcon": "gi-grapple",
+            "name": "Grappling Hook",
+            "resistance": "N/A",
+            "target": "Self",
+            "type": "Activated"
+          }
+        },
+        "Advanced Grappling Hook": {
+          "name": "Advanced Grappling Hook",
+          "difficulty": 6,
+          "cost": "30 / 36 GP",
+          "numericalCost": 3000,
+          "numericalAddedValue": 3600,
+          "description": "Character attaches a grappling hook with a reach equal to their movement. Requires a movement action to use. Can be used to grapple onto targets with an attack roll (Core Action, or as part of a grappling attack.)",
+          "ability": {
+            "actionCost": "Movement Action",
+            "area": "Character",
+            "description": "Character attaches a grappling hook with a reach equal to their movement. Requires a movement action to use. Can be used to grapple onto targets with an attack roll (Core Action, or as part of a grappling attack.)",
+            "duration": "Instantaneous",
+            "groupIcon": "gi-grapple",
+            "name": "Advanced Grappling Hook",
+            "resistance": "N/A",
+            "target": "Self",
+            "type": "Activated"
+          }
+        },
+        "Collapseable": {
+          "name": "Collapseable",
+          "difficulty": 3,
+          "cost": "10 / 12 GP",
+          "numericalCost": 1000,
+          "numericalAddedValue": 1200,
+          "description": "The Armor or shield can collapse to be the size of the character’s palm (no weight change) as a swift action."
+        },
+        "Ejectible X": {
+          "name": "Ejectible X",
+          "difficulty": 2,
+          "cost": "5 / 6 GP",
+          "numericalCost": 500,
+          "numericalAddedValue": 600,
+          "description": "Characters can launch a potion, armor, weapon, or other item as a swift action, up to 40’.",
+          "ability": {
+            "actionCost": "Swift Action",
+            "area": "Object",
+            "description": "Characters can launch a potion, armor, weapon, or other item as a swift action, up to 40’.",
+            "duration": "Instantaneous",
+            "groupIcon": "gi-cannon-shot",
+            "name": "Ejectible X",
+            "resistance": "N/A",
+            "target": "Single Object",
+            "type": "Activated"
+          }
+        },
+        "Fortress Shield": {
+          "name": "Fortress Shield",
+          "difficulty": 5,
+          "cost": "15 / 18 GP",
+          "numericalCost": 1500,
+          "numericalAddedValue": 1800,
+          "description": "The character can plant their shield into the ground, allowing a character to take cover behind it. Selenium, Illastrium, and Oricalcum shields provide exceptionally protective cover.",
+          "ability": {
+            "actionCost": "Free Action",
+            "area": "Shield",
+            "description": "The character can plant their shield into the ground, allowing a character to take cover behind it. Selenium, Illastrium, and Oricalcum shields provide exceptionally protective cover.",
+            "duration": "Instantaneous",
+            "groupIcon": "gi-shield",
+            "name": "Fortress Shield",
+            "resistance": "N/A",
+            "target": "Self",
+            "type": "Activated"
+          }
+        }
+      }
+    },
+    "material": {
+      "base": {
+        "Iron": {
+          "name": "Iron",
+          "dv": 0,
+          "difficulty": 1,
+          "description": "Base Dvs",
+
+          "cost": "2 / 3 GP",
+          "numericalCost": 200,
+          "numericalAddedValue": 300
+        },
+        "Steel": {
+          "name": "Steel",
+          "dv": 1,
+          "description": "+1 Dvs",
+
+          "difficulty": 3,
+          "cost": "15 / 18 GP",
+          "numericalCost": 1500,
+          "numericalAddedValue": 1800
+        },
+        "Lumil": {
+          "name": "Lumil",
+          "dv": 2,
+          "difficulty": 5,
+          "description": "+2 Dvs",
+
+          "cost": "50 / 60 GP",
+          "numericalCost": 5000,
+          "numericalAddedValue": 6000
+        },
+        "Adamant": {
+          "armorOnly": true,
+          "name": "Adamant",
+          "dv": 3,
+          "description": "+3 Dvs",
+
+          "difficulty": 9,
+          "cost": "250 / 300 GP",
+          "numericalCost": 25000,
+          "numericalAddedValue": 30000
+        },
+        "Orichalcum": {
+          "name": "Iron",
+          "dv": 0,
+          "description": "1 placed roll on any attempts to resist an ability.",
+          "difficulty": 1,
+          "cost": "2 / 3 GP",
+          "numericalCost": 200,
+          "numericalAddedValue": 300
+        },
+        "Selenium": {
+          "name": "Selenium",
+          "dv": 0,
+          "description": "The armor can hold double the normal maximum difficulty score of enchantments (20, instead of 10.) Crafter’s ranks in crafting are doubled when working with this material.",
+          "difficulty": 9,
+          "cost": "250 / 300 GP",
+          "numericalCost": 25000,
+          "numericalAddedValue": 30000
+        },
+        "Illiastrium": {
+          "name": "Illiastrium",
+          "dv": 0,
+          "dvOverride": 0,
+          "description": "Mundane Damage Reduction 4, Negates a weapon’s bonus damage (Any additional damage beyond base damage die of weapon), unless it is a Magical Damage type; character no longer benefits from armor DVs.",
+          "difficulty": 10,
+          "cost": "500 / 600 GP",
+          "numericalCost": 50000,
+          "numericalAddedValue": 60000
+        }
+      },
+      "addon": {
+        "Invisible Ink": {
+          "name": "Invisible Ink",
+          "difficulty": 1,
+          "cost": "30 / 36 GP",
+          "numericalCost": 3000,
+          "numericalAddedValue": 3600,
+          "description": "The item itself is invisible, allowing it to be seen through, showing whatever is beneath it."
+        },
+        "Vacuum Proof": {
+          "name": "Vacuum Proof",
+          "difficulty": 3,
+          "armorOnly": true,
+          "cost": "20 / 25 GP",
+          "numericalCost": 2000,
+          "numericalAddedValue": 2500,
+          "description": "Makes the armor vacuum-proof (Protecting them from some hostile environmental conditions). Has a life support system that lasts for up an hour, that is restored upon a rest period."
+        },
+        "Dragon Scales": {
+          "name": "Invisible Ink",
+          "difficulty": 7,
+          "cost": "100 / 120 GP",
+          "numericalCost": 10000,
+          "numericalAddedValue": 12000,
+          "chosenResistanceMundane": true,
+          "description": "Resistance to a single type of mundane damage of the character’s choosing."
+        },
+        "Golden": {
+          "name": "Golden",
+          "difficulty": 3,
+          "armorOnly": true,
+          "cost": "100 / 120 GP",
+          "numericalCost": 10000,
+          "numericalAddedValue": 12000,
+          "description": "+ 1 stacking placed roll on all performance checks.",
+          "passives": {
+            "Add Placed Rolls Performance": {
+              "modAmount": 1,
+              "name": "Add Placed Rolls Performance"
+            }
+          }
+        },
+        "Hood": {
+          "name": "Hood",
+          "difficulty": 3,
+          "armorOnly": true,
+          "cost": "15 / 18 GP",
+          "numericalCost": 1500,
+          "numericalAddedValue": 1800,
+          "description": "+ 1 stacking placed roll on all subtlety checks.",
+          "passives": {
+            "Add Placed Rolls Subtlety": {
+              "modAmount": 1,
+              "name": "Add Placed Rolls Subtlety"
+            }
+          }
+        },
+        "Cape": {
+          "name": "Cape",
+          "difficulty": 3,
+          "armorOnly": true,
+          "cost": "15 / 18 GP",
+          "numericalCost": 1500,
+          "numericalAddedValue": 1800,
+          "description": "+ 1 stacking placed roll on all acrobatics checks.",
+          "passives": {
+            "Add Placed Rolls Acrobatics": {
+              "modAmount": 1,
+              "name": "Add Placed Rolls Acrobatics"
+            }
+          }
+        }
+      }
+    },
+    "enchantment": {
+      "Sequenced Magic": {
+        "name": "Sequenced Magic",
+        "difficulty": 3,
+        "cost": "Any Group: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "Spell resistance checks set by the caster are always 11 + the caster’s ranks in crafting."
+      },
+      "Elemental Resistance": {
+        "name": "Elemental Resistance",
+        "difficulty": 10,
+        "cost": "Any Elemental Group: 10 / 20 GP",
+        "numericalCost": 0,
+        "chosenResistanceElemental": true,
+
+        "numericalAddedValue": 2000,
+        "description": "Resistance to a single type of elemental damage of the character’s choosing."
+      },
+      "Aegisite": {
+        "name": "Aegisite",
+        "difficulty": 10,
+        "cost": "Any Elemental Group: 10 / 20 GP",
+        "numericalCost": 0,
+        "passives": {
+          "Elemental Damage Reduction": {
+            "modAmount": 1,
+            "damageType": "Elemental",
+            "name": "Damage Reduction"
+          }
+        },
+        "numericalAddedValue": 2000,
+        "description": "Resistance to a single type of elemental damage of the character’s choosing."
+      },
+      "Earthen Infusion": {
+        "name": "Earthen Infusion",
+        "difficulty": 4,
+        "cost": "Terramancy: 4 / 8 GP",
+        "numericalCost": 0,
+        "dv": 1,
+        "numericalAddedValue": 800,
+        "description": "+1 DV"
+      },
+      "Ice Infusion": {
+        "name": "Ice Infusion",
+        "difficulty": 4,
+        "cost": "Aquamancy: 4 / 8 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 800,
+        "description": "Slows the first target that successfully strikes the character with an attack roll, in a round, until the end of their next turn"
+      },
+      "Lighting Infusion": {
+        "name": "Lighting Infusion",
+        "difficulty": 5,
+        "cost": "Aquamancy: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "+10 Bonus Movespeed",
+        "passives": {
+          "Modify Movespeed": {
+            "modAmount": 10,
+            "name": "Modify Movespeed"
+          }
+        }
+      },
+      "Astral Infusion": {
+        "name": "Astral Infusion",
+        "difficulty": 5,
+        "cost": "Astral Power: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "Inflicts 1d10 pure magic damage to the first target that successfully strikes the character with an attack roll in a round."
+      },
+      "Fire Infusion": {
+        "name": "Fire Infusion",
+        "difficulty": 5,
+        "cost": "Pyromancy: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "Inflicts an instance of suffering (fire) on the first target that successfully strikes the character with an attack roll in a round"
+      },
+      "Protective Field": {
+        "name": "Protective Field",
+        "difficulty": 5,
+        "cost": "Interdictions: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "+ 1 to the roll on any attempts to resist an ability."
+      },
+      "Chronosteel": {
+        "name": "Chronosteel",
+        "difficulty": 5,
+        "cost": "Space Time: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "Gain a placed roll on initiative checks and allows the character to dismiss and summon the item from a pocket dimension as a swift action."
+      },
+      "Disguised Armor": {
+        "name": "Disguised Armor",
+        "difficulty": 2,
+        "cost": "Illusions: 2 / 4 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 400,
+        "description": "Twice per day, change the visual appearance of the armor within reason."
+      },
+      "Sensing Armor": {
+        "name": "Sensing Armor",
+        "difficulty": 4,
+        "cost": "Scrying: 4 / 8 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 800,
+        "description": "+ 1 stacking placed roll on Awareness checks",
+        "passives": {
+          "Add Placed Rolls Awareness": {
+            "modAmount": 1,
+            "name": "Add Placed Rolls Awareness"
+          }
+        }
+      },
+      "Charming Allure": {
+        "name": "Charming Allure",
+        "difficulty": 4,
+        "cost": "Charms: 4 / 8 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 800,
+        "description": "Enemies have a displaced roll on to hit rolls against the character if the character hasn’t taken any hostile actions against them."
+      },
+      "Restorative Armor": {
+        "name": "Restorative Armor",
+        "difficulty": 3,
+        "cost": "Charms: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "All healing this character gives/receives is increased by 2."
+      },
+      "Natural Lighting": {
+        "name": "Natural Lighting",
+        "difficulty": 1,
+        "cost": "Light: 1 / 2 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 200,
+        "description": "Wears armor emits light in a 40’ radius around them."
+      },
+      "Leeching Infusion": {
+        "name": "Leeching Infusion",
+        "difficulty": 10,
+        "cost": "Death: 10 / 20 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "Wearer recovers 10 HP at the end of each turn, up to a maximum daily total of 80, restored after a complete rest period."
+      },
+      "Nightvision": {
+        "name": "Nightvision",
+        "difficulty": 4,
+        "cost": "Death: 4 / 8 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 800,
+        "description": "Wearer’s vision in natural darkness is equal to their normal vision."
+      },
+      "Living Armor": {
+        "name": "Living Armor",
+        "difficulty": 1,
+        "cost": "Light: 1 / 2 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 200,
+        "description": "The armor has a 10 HP temporary barrier, restored after a complete rest period."
+      },
+      "Natural Armor": {
+        "name": "Natural Armor",
+        "difficulty": 3,
+        "cost": "Fauna: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "Wearer gains d12 claws and a d12 bite."
+      },
+      "Adaptive Armor": {
+        "name": "Adaptive Armor",
+        "difficulty": 2,
+        "cost": "Tempest: 2 / 4 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 400,
+        "description": "Wearer is unaffected by temperature, and the wearer does not need to breathe as long as they are wearing the armor."
+      },
+      "Auric Armor": {
+        "name": "Auric Armor",
+        "difficulty": 8,
+        "cost": "Turmoil: 8 / 16 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1600,
+        "passives": {
+          "Override Base Hp": {
+            "modAmount": 10,
+            "name": "Override Base Hp"
+          }
+        },
+        "description": "The wearer’s maximum HP is set to 10 and cannot be increased. At the start of each turn, the wearer receives a HP shield of 35. This shield reapplies itself to the character at the start of each round. If enhanced with enhanced enchantment this is increased to 45."
+      },
+      "Duplicate Armor": {
+        "name": "Duplicate Armor",
+        "difficulty": 5,
+        "cost": "Equilibrium: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "The wearer can give someone a temporary copy of their own armor without the duplicate enchantment once between rest periods (lasts 8 hours.)"
+      },
+      "Enhanced Enchantment": {
+        "name": "Enhanced Enchantment",
+        "difficulty": 0,
+        "multiplyDifficulty": 2,
+        "compoundEnchantment": true,
+        "cost": "Equilibrium: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "The wearer can give someone a temporary copy of their own armor without the duplicate enchantment once between rest periods (lasts 8 hours.)"
+      }
+    }
+  }
+}

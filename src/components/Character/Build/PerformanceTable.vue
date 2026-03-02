@@ -1,15 +1,14 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
+import AbilityDisplay from '@/components/AbilityDisplay.vue'
+import ArrayTabs from '@/components/ArrayTabs.vue'
+import CustomModal from '@/components/CustomModal.vue'
+import CustomPagination from '@/components/CustomPagination.vue'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { usePerformanceStore } from '@/stores/performanceStore.ts'
 import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
 import { storeToRefs } from 'pinia'
 import { computed, ComputedRef, ref } from 'vue'
-import AbilityDisplay from '@/components/AbilityDisplay.vue'
-import CustomModal from '@/components/CustomModal.vue'
 import CustomCheckbox from '../CustomCheckbox.vue'
-import CustomPagination from '@/components/CustomPagination.vue'
-import ArrayTabs from '@/components/ArrayTabs.vue'
-import TitleWidget from '@/components/TitleWidget.vue'
-import { usePerformanceStore } from '@/stores/performanceStore'
 
 export default {
   setup() {

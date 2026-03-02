@@ -1,16 +1,15 @@
 <script lang="ts">
-import { useRouter } from 'vue-router'
-import { BInputGroup, BFormInput, BInputGroupText } from 'bootstrap-vue-next'
-import { computed, onMounted, ref, watch } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useSkillStore } from '@/stores/skillsStore'
-import { storeToRefs } from 'pinia'
-import { useCharacterStore } from '@/stores/characterStore'
 import CustomModal from '@/components/CustomModal.vue'
-import { useUserStore } from '@/stores/userStore'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
-import { useSpellStore } from '@/stores/spellsStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
+import { useSkillStore } from '@/stores/skillsStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { BFormInput, BInputGroup, BInputGroupText } from 'bootstrap-vue-next'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
 export default {
   setup(props, context) {
@@ -71,10 +70,10 @@ export default {
       Object.values(spellgroups.value).forEach((val: any) => {
         Object.values(val.spells).forEach((spell: any) => {
           if (spell.known) {
-            if (manualSpellgroups.value[spell.spellgroup].flatCost) {
-              counter += val.baseCost
+            if (manualSpellgroups.value[spell.spellgroup]?.flatCost) {
+              counter += parseInt(val.baseCost + '')
             } else {
-              counter += val.baseCost * spell.rank
+              counter += parseInt(val.baseCost + '') * parseInt(spell.rank + '')
             }
           }
         })
@@ -89,7 +88,6 @@ export default {
         totalAbilityPointsRef.value = totalAbilityPoints.value
     })
     watch(spentAbilityPoints, (newVal, oldVal) => {
-      console.log(spentAbilityPoints.value, oldVal, newVal)
       if (oldVal != newVal) updateSpentAbilityPoints(newVal)
     })
 

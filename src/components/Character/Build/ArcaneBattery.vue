@@ -1,10 +1,9 @@
 <script lang="ts">
 import CustomModal from '@/components/CustomModal.vue'
-import { useDesignStore } from '@/stores/designStore'
-import { useSpellStore } from '@/stores/spellsStore'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
 import { BFormInput } from 'bootstrap-vue-next'
 
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 export default {

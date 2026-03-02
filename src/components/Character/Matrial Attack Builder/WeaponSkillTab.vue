@@ -1,11 +1,7 @@
 <script lang="ts">
 import DropdownSelect from '@/components/DropdownSelect.vue'
-import TitleWidget from '@/components/TitleWidget.vue'
-import { useDesignStore } from '@/stores/designStore'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import { useDesignStore } from '@/stores/designStore.ts'
 import BPopover from 'bootstrap-vue-next/src/components/BPopover.vue'
-import { storeToRefs } from 'pinia'
 import { computed, ComputedRef, ref, watch } from 'vue'
 
 export default {

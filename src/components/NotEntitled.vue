@@ -1,8 +1,8 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 
 export default {
-  setup(props) {
+  setup() {
     const designStore = useDesignStore()
     return { designStore }
   }

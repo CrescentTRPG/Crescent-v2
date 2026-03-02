@@ -1,15 +1,14 @@
 <script lang="ts">
-import { useCharacterStore } from '@/stores/characterStore'
-import { useDesignStore } from '@/stores/designStore'
-import { Components } from 'bootstrap-vue-next'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
+import { storeToRefs } from 'pinia'
 import { computed, ComputedRef, ref } from 'vue'
 import StatusEffectItem from '../Character/Overview/StatusEffectItem.vue'
 import StatusModifierExplaination from '../Character/Overview/StatusModifierExplaination.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
 import TitleWidget from '../TitleWidget.vue'
-import { storeToRefs } from 'pinia'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 
 export default {
   setup() {
@@ -175,7 +174,7 @@ export default {
             background: designStore.primaryTheme,
             color: designStore.primaryText
           }"
-          ><i class="bi bi-plus-lg" @click="addStatusModifier()"></i
+          ><i class="bi bi-plus-lg" style="pointer-events: none"></i
         ></BButton>
       </div>
       <hr

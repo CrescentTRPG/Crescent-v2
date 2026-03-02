@@ -1,25 +1,28 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import ArrayTabsSingleSelect from './ArrayTabsSingleSelect.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import { computed, ref } from 'vue'
 import CustomModal from '@/components/CustomModal.vue'
-import BasicInput from '@/components/Character/BasicInput.vue'
+import { useDesignStore } from '@/stores/designStore.ts'
 import { BFormTags } from 'bootstrap-vue-next'
+import { ref } from 'vue'
 
 export default {
-  props: ['currentStatBlock', 'isEditing', 'updateTemp'],
+  props: ['currentStatBlock', 'isEditing', 'updateTemp', 'useStringOverArray', 'justReturnTags'],
   emits: ['version'],
   setup(props, context) {
     const designStore = useDesignStore()
     const statBlock = props.currentStatBlock
     const modal = ref(false)
-    const tags = ref(props.currentStatBlock.tags)
+    const tags = ref(
+      props.useStringOverArray ? props.currentStatBlock.tags.split('') : props.currentStatBlock.tags
+    )
     function close() {
       modal.value = false
       let newTemp = { ...props.currentStatBlock }
-      newTemp.tags = tags.value
-      props.updateTemp(newTemp)
+      newTemp.tags = props.useStringOverArray ? tags.value.join(',') : tags.value
+      if (props.justReturnTags) {
+        props.updateTemp(newTemp.tags)
+      } else {
+        props.updateTemp(newTemp)
+      }
     }
     return {
       designStore,
@@ -37,6 +40,7 @@ export default {
   <div style="display: flex; flex-wrap: wrap; justify-content: end">
     <div v-for="t in tags" :key="t">
       <div
+        v-if="t"
         class="statTag"
         :style="{
           background: designStore.alertTheme,
@@ -51,7 +55,7 @@ export default {
     <div
       v-if="props.isEditing"
       @click="modal = true"
-      class="statTag"
+      class="statTag hoverablePrimary"
       style="cursor: pointer; display: flex; height: min-content"
       :style="{
         background: designStore.primaryTheme,

@@ -1,15 +1,15 @@
 <script lang="ts">
+import { useCharacterComputedStore } from '@/stores/characterComputedStore.ts'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useCharacterStore } from '@/stores/characterStore'
-import { useUserStore } from '@/stores/userStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import ArmorWidget from './ArmorWidget.vue'
 import HpWidget from './HpWidget.vue'
 import ManaWidget from './ManaWidget.vue'
-import ArmorWidget from './ArmorWidget.vue'
 import MPWidget from './MPWidget.vue'
-import { useCharacterComputedStore } from '@/stores/characterComputedStore'
-import { storeToRefs } from 'pinia'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
 
 export default {
   setup(props, context) {
@@ -35,7 +35,6 @@ export default {
       bonusDvs,
       totalDvs
     } = storeToRefs(characterComputedStore)
-    //console.log(hpStatusModifiers)
     return {
       designStore,
       modal,
@@ -136,6 +135,11 @@ export default {
         :martialPerks="martialPerks"
         :removeArmorStatusModifier="characterStore.removeArmorStatusModifier"
         :addNewArmorStatusModifier="characterStore.addNewArmorStatusModifier"
+        :setIsDodging="characterStore.setIsDodging"
+        :is-dodging="
+          (martialPerks['Dodging']?.known && characterStore.overviewValues.isDodging) || false
+        "
+        :has-dodging="martialPerks['Dodging']?.known"
         class="bannerItem"
       ></ArmorWidget>
       <MPWidget

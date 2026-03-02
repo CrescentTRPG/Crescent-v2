@@ -1,11 +1,11 @@
 <script lang="ts">
 import { BFormInput, BInputGroup, BInputGroupText } from 'bootstrap-vue-next'
-import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import CustomModal from '../../CustomModal.vue'
-import { useCharacterStore } from '../../../stores/characterStore'
-import { useUserStore } from '../../../stores/userStore'
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+import { useCharacterStore } from '../../../stores/characterStore.ts'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import { useUserStore } from '../../../stores/userStore.ts'
+import CustomModal from '../../CustomModal.vue'
 
 export default {
   props: ['attribute', 'attributeValue', 'exceptionalValue', 'attributeMessage', 'attrShorthand'],
@@ -18,6 +18,9 @@ export default {
     const modal = ref(false)
     let attributeValueRef = ref(props.attributeValue)
 
+    function openModal() {
+      modal.value = true
+    }
     return {
       designStore,
       modal,
@@ -27,7 +30,8 @@ export default {
       characterStore,
       userStore,
       attributes,
-      exceptionals
+      exceptionals,
+      openModal
     }
   },
   methods: {
@@ -57,7 +61,7 @@ export default {
 </script>
 
 <template>
-  <div @click="modal = !modal" style="width: 100%">
+  <div @click="openModal()" style="width: 100%">
     <div
       style="
         width: 100%;
@@ -136,7 +140,12 @@ export default {
         </div>
       </div>
     </div>
-    <CustomModal :showModal="modal" :title="$props.attribute" @close="modal = false">
+    <CustomModal
+      :showModal="modal"
+      :title="$props.attribute"
+      @close="modal = false"
+      :refs="['attr']"
+    >
       <template v-slot:body>
         <BInputGroup
           style="border: 3px solid; border-radius: 10px; margin-bottom: 1rem"
@@ -148,6 +157,8 @@ export default {
             >Attribute</BInputGroupText
           >
           <BFormInput
+            id="attr"
+            ref="attr"
             :style="{ background: designStore.inputBacking, color: designStore.inputText }"
             type="number"
             min="0"

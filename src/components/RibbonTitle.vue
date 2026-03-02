@@ -1,9 +1,9 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import { useUserStore } from '@/stores/userStore'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
 
 export default {
-  props: ['title', 'background', 'textColor'],
+  props: ['title', 'background', 'textColor', 'enableHover'],
   setup(props, context) {
     const userStore = useUserStore()
     const designStore = useDesignStore()
@@ -65,6 +65,7 @@ export default {
         display: flex;
         justify-content: center;
       "
+      :class="enableHover ? 'hoverableTransparantLinear' : ''"
       :style="{ background: props.background, color: props.textColor }"
     >
       <div

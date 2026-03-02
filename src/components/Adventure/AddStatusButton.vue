@@ -1,20 +1,19 @@
 <script lang="ts">
-import { computed, ComputedRef, onMounted, onUnmounted, ref } from 'vue'
-import BImg from 'bootstrap-vue-next/src/components/BImg.vue'
+import { computed, ComputedRef, ref } from 'vue'
 
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useStatusEffectStore } from '@/stores/statusEffectStore.ts'
+import { useTraitsStore } from '@/stores/traitsStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue'
-import { useDesignStore } from '@/stores/designStore'
 import BDropdownItem from 'bootstrap-vue-next/src/components/BDropdown/BDropdownItem.vue'
-import { storeToRefs } from 'pinia'
-import { useStatusEffectStore } from '@/stores/statusEffectStore'
-import { useTraitsStore } from '@/stores/traitsStore'
-import CustomModal from '../CustomModal.vue'
-import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
-import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import IconPicker from '../IconPicker.vue'
+import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
 import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
+import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
+import { storeToRefs } from 'pinia'
+import CustomModal from '../CustomModal.vue'
+import IconPicker from '../IconPicker.vue'
 
 export default {
   props: [
@@ -261,7 +260,8 @@ export default {
             basicStatus === 'Suffering' ||
             basicStatus === 'Sickened' ||
             basicStatus === 'Fatigued' ||
-            basicStatus === 'Warped'
+            basicStatus === 'Warped' ||
+            basicStatus.includes('Damage')
           "
         >
           <BInputGroupText

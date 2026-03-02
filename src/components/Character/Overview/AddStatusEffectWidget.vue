@@ -1,10 +1,9 @@
 <script lang="ts">
 import DropdownSelect from '@/components/DropdownSelect.vue'
-import { useCharacterStore } from '@/stores/characterStore'
-import { useDesignStore } from '@/stores/designStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import { computed, ComputedRef, ref } from 'vue'
 

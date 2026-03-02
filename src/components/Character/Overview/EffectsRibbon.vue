@@ -1,23 +1,23 @@
 <script lang="ts">
-import { useDesignStore } from '../../../stores/designStore'
-import { computed, ComputedRef, ref } from 'vue'
-import { storeToRefs } from 'pinia'
+import StatusEffectIcon from '@/StatusEffectIcon.vue'
+import AbilityDisplayMedallion from '@/components/AbilityDisplayMedallion.vue'
 import CustomModal from '@/components/CustomModal.vue'
+import IconPicker from '@/components/IconPicker.vue'
+import { useStatusEffectStore } from '@/stores/statusEffectStore.ts'
+import { useTraitsStore } from '@/stores/traitsStore.ts'
+import { BButtonGroup } from 'bootstrap-vue-next'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue'
 import BDropdownItem from 'bootstrap-vue-next/src/components/BDropdown/BDropdownItem.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
 import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
-import IconPicker from '@/components/IconPicker.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
-import { useStatusEffectStore } from '@/stores/statusEffectStore'
-import { useTraitsStore } from '@/stores/traitsStore'
-import StatusEffectIcon from '@/StatusEffectIcon.vue'
-import AbilityDisplayMedallion from '@/components/AbilityDisplayMedallion.vue'
-import { BButtonGroup } from 'bootstrap-vue-next'
-import AddTrait from '../Build/AddTrait.vue'
+import { storeToRefs } from 'pinia'
+import { computed, ComputedRef, ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import AddCustomTrait from '../Build/AddCustomTrait.vue'
+import AddTrait from '../Build/AddTrait.vue'
 
 export default {
   props: [
@@ -115,7 +115,6 @@ export default {
     }
 
     function addStatusEffect() {
-      console.log(manualStatusEffect[basicStatus.value]?.groupIcon.value || 'gi-uncertainty')
       let type = ''
       let ogStatus = basicStatus.value
       if (basicStatus.value.indexOf('X') > -1) {
@@ -133,6 +132,7 @@ export default {
         basicStatusRank.value || 1,
         damageType.value || ''
       )
+      basicStatusRank.value = 1
       addBasicModal.value = false
     }
     const selectTraitTypeModal = ref(false)
@@ -221,7 +221,6 @@ export default {
   methods: {
     formatHTML(description: string) {
       let sections = description.split('❖ ')
-      console.log(sections)
       let ret
       if (sections.length === 1) {
         sections = description.split('\\n')
@@ -629,7 +628,8 @@ export default {
               basicStatus === 'Suffering' ||
               basicStatus === 'Sickened' ||
               basicStatus === 'Fatigued' ||
-              basicStatus === 'Warped'
+              basicStatus === 'Warped' ||
+              basicStatus.includes('Damage')
             "
           >
             <BInputGroupText

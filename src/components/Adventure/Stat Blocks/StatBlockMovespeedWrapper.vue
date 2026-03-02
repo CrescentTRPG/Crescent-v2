@@ -1,12 +1,12 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 import MovespeedWidget from '@/components/Character/Overview/MovespeedWidget.vue'
 import { ComputedRef } from 'vue'
 
-import { GenericModifier } from '@/stores/characterStore'
+import { GenericModifier } from '@/stores/characterStore.ts'
 
 export default {
   props: [

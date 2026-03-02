@@ -1,9 +1,5 @@
 <script lang="ts">
-import { DEFAULT_STAT_BLOCK } from '@/bases'
-import ArrayTabs from '@/components/ArrayTabs.vue'
-import { useDesignStore } from '@/stores/designStore'
-import { BButton } from 'bootstrap-vue-next'
-import { computed, onMounted, Ref, ref } from 'vue'
+import { useDesignStore } from '@/stores/designStore.ts'
 
 export default {
   props: ['currentStatBlock', 'powerLevel', 'icon'],

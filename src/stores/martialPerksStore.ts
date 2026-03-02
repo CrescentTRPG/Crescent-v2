@@ -47,10 +47,10 @@ export const useMartialPerksStore = defineStore('martialPerk', {
     setLocalPerkGain(gain: Array<string>) {
       this.perkGain = gain
     },
-    setUpBuildDisplayFromScratch() {
+    async setUpBuildDisplayFromScratch() {
       const perks: Array<any> = []
       let index = 0
-
+      let wrongIndex = false
       Object.values(this.manualMartialPerks)
         .sort((a: any, b: any) => {
           if (a.rank === b.rank) {
@@ -69,6 +69,12 @@ export const useMartialPerksStore = defineStore('martialPerk', {
           return a.rank - b.rank
         })
         .forEach((martialPerk: any) => {
+          if (this.martialPerks[martialPerk.name]?.known) {
+            if (this.martialPerks[martialPerk.name].perkIndex != index) {
+              this.martialPerks[martialPerk.name].perkIndex = index
+              wrongIndex = true
+            }
+          }
           perks.push({
             name: martialPerk.name,
             description: martialPerk.description,
@@ -86,6 +92,15 @@ export const useMartialPerksStore = defineStore('martialPerk', {
           })
           index += 1
         })
+      if (wrongIndex) {
+        await updateDoc(
+          doc(
+            db,
+            'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
+          ),
+          { perks: this.martialPerks }
+        )
+      }
       this.buildDisplayMartialPerks = perks
     },
     setUpBuildDisplay(perkChanged) {
@@ -166,6 +181,18 @@ export const useMartialPerksStore = defineStore('martialPerk', {
         delete this.martialPerks[perk.name]
         this.resolvePerkGain(perk)
       }
+      await updateDoc(
+        doc(
+          db,
+          'User/' + useUserStore().getUserId + '/Character/' + useCharacterStore().getCharacterId
+        ),
+        { perks: this.martialPerks, perkChanged: perk }
+      )
+    },
+    async updatePerkCharges(name, charges) {
+      const perk = { ...this.martialPerks[name], chargesSpent: charges }
+      this.setLocalPerk(perk)
+
       await updateDoc(
         doc(
           db,

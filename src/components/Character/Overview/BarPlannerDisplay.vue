@@ -1,11 +1,11 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-import { useSpellStore } from '@/stores/spellsStore'
+import { useSpellStore } from '@/stores/spellsStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
 import { storeToRefs } from 'pinia'
 
 export default {

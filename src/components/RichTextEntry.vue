@@ -1,13 +1,10 @@
 <script lang="ts">
-import { ref, watch } from 'vue'
-import { useDesignStore } from '../stores/designStore'
-import { useAdventureStore } from '@/stores/adventureStore'
+import { ref, watch, onMounted, Ref } from 'vue'
+import { useDesignStore } from '../stores/designStore.ts'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.bubble.css'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
-import IconPicker from './IconPicker.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 
 export default {
   props: ['sendUpdates', 'formVal'],
@@ -27,6 +24,10 @@ export default {
     watch(form, (newForm, oldForm) => {
       props.sendUpdates(newForm)
     })
+    watch(props, (newForm, oldForm) => {
+      form.value = props.formVal
+    })
+
     const icon = ref('gi-stars-stack')
     function addIcon() {
       let selection = getSelection()
@@ -43,13 +44,33 @@ export default {
       form.value = newForm
     }
 
-    const modules = [
-      {
-        name: 'blotFormatter',
-        module: BlotFormatter,
-        options: {}
+    const modules: Ref<any> = ref([
+      // blotFormatter will be added dynamically on mount to avoid
+      // CommonJS/interop circular import issues in production builds.
+    ])
+
+    onMounted(async () => {
+      let BlotFormatterModule: any = null
+      try {
+        const m = await import('quill-blot-formatter')
+        BlotFormatterModule = m && (m.default || m)
+      } catch (e) {
+        // fallback to UMD bundle which exposes `QuillBlotFormatter` on window/globalThis
+        try {
+          await import('quill-blot-formatter/dist/quill-blot-formatter.min.js')
+          // prefer `.default` if present
+          BlotFormatterModule =
+            globalThis.QuillBlotFormatter &&
+            (globalThis.QuillBlotFormatter.default || globalThis.QuillBlotFormatter)
+        } catch (err) {
+          /* ignore - BlotFormatter will remain unavailable */
+        }
       }
-    ]
+
+      if (BlotFormatterModule) {
+        modules.value.push({ name: 'blotFormatter', module: BlotFormatterModule, options: {} })
+      }
+    })
     return {
       designStore,
       modal,
@@ -69,7 +90,6 @@ export default {
 <template>
   <div
     class="quill-override-var"
-    style="height: 100%"
     :style="{
       fontFamily: designStore.font,
       background: designStore.primaryTheme,
@@ -79,7 +99,8 @@ export default {
       '--input-backing': designStore.inputBacking,
       '--input-backing-highlight': lightenDarkenColor(designStore.inputBacking, 20),
       '--primary-highlight': lightenDarkenColor(designStore.primaryTheme, 20),
-      '--primary-backing': designStore.primaryTheme
+      '--primary-backing': designStore.primaryTheme,
+      '--border': designStore.secondaryTheme
     }"
   >
     <QuillEditor
@@ -144,6 +165,12 @@ export default {
   fill: var(--primary-highlight) !important;
 
   background: var(--primary-highlight) !important;
+}
+.ql-container {
+  border: 1px solid var(--border) !important;
+}
+.ql-toolbar {
+  border: 1px solid var(--border) !important;
 }
 
 .ql-picker-options {

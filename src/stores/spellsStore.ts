@@ -1,10 +1,10 @@
 import { db } from '@/firebase/config.js'
-import { collection, doc, onSnapshot, query, updateDoc } from 'firebase/firestore'
+import { collection, doc, getDocs, onSnapshot, query, updateDoc } from 'firebase/firestore'
 import { defineStore } from 'pinia'
-import { useUserStore } from './userStore.js'
+import { useAdventureStore } from './adventureStore.js'
 import { useCharacterStore } from './characterStore.js'
-import { getCollectionOnce } from '@/composable/getCollection.js'
-import SpellsTable from '@/components/Character/Build/SpellsTable.vue'
+import { useUserStore } from './userStore.js'
+import { useManualStore } from './manualStore.ts'
 
 export interface ManualSpell {
   name: string
@@ -82,12 +82,35 @@ export const useSpellStore = defineStore('spell', {
     ]
   }),
   actions: {
+    addCustomAbilities() {
+      useManualStore().getCustomSpells.forEach((a) => {
+        if (a.type === 'Spellgroup' && a.playerAccessible?.allPlayers) {
+          this.manualSpellgroups[a.name] = a
+        }
+      })
+      this.determineIfDanglingAbilities()
+    },
+    determineIfDanglingAbilities() {
+      const list: Array<any> = Object.values(this.manualSpellgroups)
+      list.forEach((group) => {
+        if (
+          group.source == 'custom' &&
+          !useAdventureStore().customAbilites[group.name]?.playerAccessible?.allPlayers
+        ) {
+          delete this.manualSpellgroups[group.name]
+          delete this.spellgroups[group.name]
+        }
+      })
+      this.setUpBuildDisplayFromScratch()
+    },
     setUpBuildDisplayFromScratch() {
+      console.log(Object.entries(this.manualSpellgroups))
       const spells: Array<any> = []
       const spellgroups: Array<any> = []
       let index = 0
       let spellIndex = 0
       Object.entries(this.manualSpellgroups).map(([spellgroup]) => {
+        console.log(spellgroup)
         const spellsArray = Object.values(this.manualSpellgroups[spellgroup].spells).sort(
           (a: any, b: any) => {
             if (a.rank === b.rank) {
@@ -112,7 +135,6 @@ export const useSpellStore = defineStore('spell', {
           spell.groupNumber = index
           spell.spellIndex = spellIndex
           spell.groupSpellIndex = groupSpellIndex
-          console.log(spellgroup)
           if (spell.known) {
             this.spellgroups[spellgroup].spells[spell.name].spellIndex = spellIndex
             this.spellgroups[spellgroup].spells[spell.name].groupSpellIndex = groupSpellIndex
@@ -134,23 +156,45 @@ export const useSpellStore = defineStore('spell', {
       this.buildDisplaySpellgroups = spellgroups
     },
     setUpBuildDisplay(spellChanged: any) {
-      if (this.buildDisplaySpellgroups.length > 1 && this.buildDisplaySpells.length > 1) {
-        if (spellChanged != undefined && spellChanged.name) {
+      console.log('at setup build display')
+      if (
+        this.buildDisplaySpellgroups.length > 1 &&
+        this.buildDisplaySpells.length > 1 &&
+        this.buildDisplaySpellgroups.length === Object.keys(this.manualSpellgroups).length
+      ) {
+        if (
+          spellChanged != undefined &&
+          spellChanged.name &&
+          this.buildDisplaySpellgroups[spellChanged.groupNumber] &&
+          this.buildDisplaySpellgroups[spellChanged.groupNumber].spells &&
+          this.buildDisplaySpellgroups[spellChanged.groupNumber].spells[
+            spellChanged.groupSpellIndex
+          ]?.name === spellChanged.name
+        ) {
+          console.log('spellChanged ', spellChanged)
+          console.log('buildDisplaySpells ', this.buildDisplaySpells)
+          console.log('buildDisplaySpellgroups ', this.buildDisplaySpellgroups)
+
           this.buildDisplaySpellgroups[spellChanged.groupNumber].spells[
             spellChanged.groupSpellIndex
           ].known = spellChanged.known
           this.buildDisplaySpells[spellChanged.spellIndex].known = spellChanged.known
         }
       } else {
-        this.setUpBuildDisplayFromScratch()
+        this.addCustomAbilities()
       }
     },
 
     clearBuildDisplay() {
       this.buildDisplaySpells = []
       this.buildDisplaySpellgroups = []
+      this.manualSpellgroups = {}
     },
 
+    clearBuildDisplayOnly() {
+      this.buildDisplaySpells = []
+      this.buildDisplaySpellgroups = []
+    },
     spellIndex(spellsArray, spell) {
       for (let i = 0; i < spellsArray.length; i++) {
         if (spell.rank <= spellsArray[i].rank) {
@@ -175,22 +219,16 @@ export const useSpellStore = defineStore('spell', {
     // validateSpells(spell){ // spellIndex
     //   Object.values(this.spellgroups).forEach((group))
     // },
-    pullManualSpellgroupsFromFirebase() {
+    async pullManualSpellgroupsFromFirebase() {
+      console.log('waaa')
       const manualSpellgroupRef = query(collection(db, 'Ability/Base/Spellgroup'))
-      onSnapshot(
-        manualSpellgroupRef,
-        (snap) => {
-          const len = snap.docs.length
-          let count = 0
-          snap.docs.forEach(async (doc) => {
-            count++
-            this.manualSpellgroups[doc.data().name] = { ...doc.data(), source: 'Base' }
-          })
-        },
-        (err) => {
-          console.log(err.message)
-        }
-      )
+      const spellgroups = await getDocs(manualSpellgroupRef)
+      let count = 0
+
+      spellgroups.docs.forEach((doc) => {
+        count++
+        this.manualSpellgroups[doc.data().name] = { ...doc.data(), source: 'Base' }
+      })
     },
     setCharacterSpellgroupsFromFirebase(spells: any) {
       this.spellgroups = spells
@@ -226,8 +264,6 @@ export const useSpellStore = defineStore('spell', {
       this.spellgroups[spellgroup] = { ...this.manualSpellgroups[spellgroup], spells: {} }
     },
     async setSpell(spell: any) {
-      console.log(spell.groupNumber)
-
       if (!this.spellgroups[spell.spellgroup]) {
         this.setLocalSpellgroup(spell.spellgroup)
         this.setLocalSpell(spell)
@@ -239,7 +275,7 @@ export const useSpellStore = defineStore('spell', {
           { spells: this.spellgroups, spellChanged: spell }
         )
         //set all rank zeros
-        if (spell.rank > 0) {
+        if (spell.rank > 0 && !this.manualSpellgroups[spell.spellgroup].flatCost) {
           for (let i = 0; i < this.buildDisplaySpellgroups[spell.groupNumber].spells.length; i++) {
             if (this.buildDisplaySpellgroups[spell.groupNumber].spells[i].rank == 0) {
               this.setLocalSpell({
@@ -307,7 +343,6 @@ export const useSpellStore = defineStore('spell', {
             { spellChanged: { ...spell, known: false } }
           )
         })
-        console.log(this.spellgroups[spell.spellgroup])
 
         delete this.spellgroups[spell.spellgroup]
       }
@@ -316,7 +351,6 @@ export const useSpellStore = defineStore('spell', {
         this.spellgroups[spell.spellgroup]?.spells &&
         Object.values(this.spellgroups[spell.spellgroup]?.spells).length < 1
       ) {
-        console.log('deleteme')
         delete this.spellgroups[spell.spellgroup]
       }
       updateDoc(

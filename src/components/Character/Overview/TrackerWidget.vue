@@ -1,10 +1,7 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
-
-import { useUserStore } from '@/stores/userStore'
 import AnimatedTrackerItem from './Tracker Components/AnimatedTrackerItem.vue'
 
 export default {

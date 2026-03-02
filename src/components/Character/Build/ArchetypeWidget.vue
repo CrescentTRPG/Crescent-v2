@@ -1,13 +1,10 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BFormTextarea, BModal } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import CharacterSidebar from '../Build/CharacterSidebar.vue'
-import BannerItem from '../Build/BannerItem.vue'
-import ArchetypeSelector from '../Build/ArchetypeSelector.vue'
+import { useRouter } from 'vue-router'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import CustomModal from '../../CustomModal.vue'
+import ArchetypeSelector from '../Build/ArchetypeSelector.vue'
+import BannerItem from '../Build/BannerItem.vue'
 
 export default {
   setup(props, context) {

@@ -1,14 +1,31 @@
 <script lang="ts">
 import { computed, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import { ComputedRef } from 'vue'
-import { useAdventureStore } from '@/stores/adventureStore'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
 import StatBlockQuickReference from '../StatBlockQuickReference.vue'
-import { useInitiativeStore } from '@/stores/initiativeStore'
+import { useInitiativeStore } from '@/stores/initiativeStore.ts'
+import HpWidgetModal from '@/components/Character/Overview/HpWidgetModal.vue'
 
 export default {
   emits: ['render'],
-  props: ['statBlock', 'editable', 'updateTemp', 'edit', 'initiative'],
+  props: [
+    'statBlock',
+    'editable',
+    'updateTemp',
+    'edit',
+    'initiative',
+    'initiativeDisplayNumericHp',
+    'initiativeDisplayNumericMana',
+    'initiativeDisplayHp',
+    'initiativeDisplayMana',
+    'initiativeDisplayEnemyTraits',
+    'initiativeDisplayCharacterTraits',
+    'allowApplyStatusToCharacter',
+    'allowApplyStatusToEnemy',
+    'isOpponent',
+    'collapseable'
+  ],
   setup(props, context) {
     const modal = ref(false)
     const designStore = useDesignStore()
@@ -67,6 +84,7 @@ export default {
       let newTemp = { ...props.statBlock }
       newTemp.currentHp = currentHp
       newTemp.barrierHp = barrierHp
+      hpModal.value = false
       props.updateTemp(newTemp)
     }
 
@@ -161,7 +179,6 @@ export default {
           return Math.max(max + modifier, 0)
         }
       }
-      console.log(modifier)
 
       return Math.max(parseInt(props.statBlock.armorDvs + '') + modifier, 0)
     })
@@ -313,7 +330,18 @@ export default {
       }
       props.updateTemp(newTemp)
     }
-
+    function addNewHpStatusModifier(modifier) {
+      let newTemp = { ...props.statBlock }
+      const modRef = newTemp.hpStatusModifiers[modifier.modifierType]
+      const pos = modifier.modAmount + ' '
+      newTemp.hpStatusModifiers[modifier.modifierType] = { ...modRef, [pos]: modifier }
+      if (modifier.linkedStatus) {
+        newTemp.customStatusEffects[modifier.linkedStatus].linkedModifiers.push(
+          'HP: ' + modifier.modifierType + ' : ' + modifier.modAmount
+        )
+      }
+      props.updateTemp(newTemp)
+    }
     function removeHpStatusModifier(modifier) {
       let newTemp = { ...props.statBlock }
       const modRef = newTemp.hpStatusModifiers[modifier.modifierType]
@@ -449,7 +477,15 @@ export default {
       })
     }
     const hpModal = ref(false)
-
+    function setHp(current: any, total: any) {
+      let newTemp = { ...props.statBlock }
+      newTemp.currentHp = parseInt(current + '')
+      newTemp.totalHp = parseInt(total + '')
+      props.updateTemp(newTemp)
+    }
+    function setHpModal(bool: boolean) {
+      hpModal.value = bool
+    }
     return {
       designStore,
       modal,
@@ -466,11 +502,16 @@ export default {
       editStatBlock,
       changeInitiative,
       hpModal,
-      removeHpStatusModifier
+      removeHpStatusModifier,
+      setCurrentAndBarrierHP,
+      addNewHpStatusModifier,
+      setHp,
+      setHpModal
     }
   },
   components: {
-    StatBlockQuickReference
+    StatBlockQuickReference,
+    HpWidgetModal
   }
 }
 </script>
@@ -510,7 +551,36 @@ export default {
       :agi="props.statBlock.attributes.agility"
       :keyVal="props.statBlock.name"
       :openHpModal="() => (hpModal = true)"
+      :isOpponent="true"
+      :initiativeDisplayNumericHp="initiativeDisplayNumericHp"
+      :initiativeDisplayNumericMana="initiativeDisplayNumericMana"
+      :initiativeDisplayHp="initiativeDisplayHp"
+      :initiativeDisplayMana="initiativeDisplayMana"
+      :initiativeDisplayEnemyTraits="initiativeDisplayEnemyTraits"
+      :initiativeDisplayCharacterTraits="initiativeDisplayCharacterTraits"
+      :allowApplyStatusToCharacter="allowApplyStatusToCharacter"
+      :allowApplyStatusToEnemy="allowApplyStatusToEnemy"
+      :collapseable="props.collapseable"
+      :setHpModal="setHpModal"
     ></StatBlockQuickReference>
+    <HpWidgetModal
+      :setCurrentAndBarrier="setCurrentAndBarrierHP"
+      :totalHp="totalHp"
+      :traits="statBlock.traits"
+      :secondaryHandheldPassives="secondaryHandheldPassives"
+      :primaryHandheldPassives="primaryHandheldPassives"
+      :wornArmorPassives="wornArmorPassives"
+      :current-hp="statBlock.currentHp"
+      :barrier-hp="statBlock.barrierHp"
+      :hpStatusModifiers="statBlock.hpStatusModifiers"
+      :statusEffects="statBlock.statusEffects"
+      :removeHpStatusModifier="removeHpStatusModifier"
+      :addNewHpStatusModifier="addNewHpStatusModifier"
+      :setHp="setHp"
+      :modal="hpModal"
+      :setModal="(newVal) => (hpModal = newVal)"
+      :restiricted-mode="true"
+    ></HpWidgetModal>
   </div>
 </template>
 

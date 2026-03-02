@@ -1,19 +1,17 @@
 <script lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useUserStore } from '@/stores/userStore'
-import { useAdventureStore } from '@/stores/adventureStore'
-import { usePartyStore } from '@/stores/partyStore'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import CustomModal from '@/components/CustomModal.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import CharacterComputedShell from '../CharacterComputedShell.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { usePartyStore } from '@/stores/partyStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
 import CharacterView from '@/views/CharacterView.vue'
-import { useCharacterStore } from '@/stores/characterStore'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import { storeToRefs } from 'pinia'
-import { watch } from 'vue'
-import { validateHeaderValue } from 'http'
+import { ref, watch } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import CharacterComputedShell from '../CharacterComputedShell.vue'
 import ChatWindow from './ChatWindow.vue'
 
 export default {
@@ -34,12 +32,22 @@ export default {
     }
     const currentChar = ref({})
     const charId = ref('')
+    const renderedCharUserId = ref('')
     const showParty = ref(true)
     let handle = () => {}
     function renderCharacter(char) {
       showParty.value = false
       currentChar.value = char
       charId.value = char.id
+      let loc = -1
+
+      for (let i = 0; i < adventureStore.characterIds.length; i++) {
+        if (charId.value === adventureStore.characterIds[i]) {
+          loc = i
+        }
+      }
+      renderedCharUserId.value = adventureStore.userIds[loc]
+      adventureStore.setCurrentViewedUserId(renderedCharUserId.value)
       handle = watch(
         characterObjects,
         async (newCharacterObjects, oldCharacterObjects) => {
@@ -53,6 +61,8 @@ export default {
     }
     function exit() {
       showParty.value = true
+      characterStore.clearCharacterNameAndID()
+      adventureStore.setCurrentViewedUserId('')
       handle()
       useDesignStore().setLocalDesign(adventureStore.design)
     }
@@ -67,7 +77,8 @@ export default {
       renderCharacter,
       showParty,
       exit,
-      props
+      props,
+      renderedCharUserId
     }
   },
   components: {
@@ -88,7 +99,13 @@ export default {
       <BButton
         v-if="!props.isCharacter"
         @click="modal = true"
-        style="border: 2px solid; margin: 0.25rem"
+        style="
+          border: 2px solid;
+          position: absolute;
+          right: 2rem;
+          font-size: small;
+          margin-top: 0.25rem;
+        "
         :style="{
           background: designStore.primaryTheme,
           color: designStore.primaryText,
@@ -150,6 +167,41 @@ export default {
               :character="character || {}"
             ></CharacterComputedShell>
           </div>
+          <div
+            v-if="adventureStore.characterIds.length < 1"
+            style="
+              align-self: center;
+              display: flex;
+              justify-content: center;
+              padding: 1rem;
+              margin: 1rem;
+            "
+            :style="{ background: designStore.inputBacking }"
+          >
+            <v-icon scale="3" name="gi-pikeman" style="align-self: center"></v-icon>
+
+            <div style="align-self: center; display: flex; flex-direction: column">
+              <div style="align-self: center; padding: 0.25rem">
+                Try inviting some characters to this adventure by clicking
+              </div>
+              <BButton
+                v-if="!props.isCharacter"
+                @click="modal = true"
+                style="border: 2px solid; font-size: small; margin-top: 0.25rem; margin: 0.5rem"
+                :style="{
+                  background: designStore.primaryTheme,
+                  color: designStore.primaryText,
+                  borderColor: designStore.secondaryTheme
+                }"
+                >Invite to Adventure <i class="bi bi-envelope"></i
+              ></BButton>
+            </div>
+            <v-icon
+              scale="3"
+              name="gi-fairy"
+              style="align-self: center; transform: scale(-1, 1)"
+            ></v-icon>
+          </div>
         </div>
         <ChatWindow
           sender="GM"
@@ -160,7 +212,12 @@ export default {
       </div>
     </div>
     <div v-else>
-      <CharacterView v-if="!props.isCharacter" :isGameMaster="true" :exit="exit"></CharacterView>
+      <CharacterView
+        :userId="renderedCharUserId"
+        v-if="!props.isCharacter"
+        :isGameMaster="true"
+        :exit="exit"
+      ></CharacterView>
     </div>
   </div>
 </template>

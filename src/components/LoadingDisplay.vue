@@ -12,7 +12,7 @@
 <script lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 
 export default {
   setup(props, context) {

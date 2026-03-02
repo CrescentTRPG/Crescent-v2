@@ -1,14 +1,11 @@
 <script lang="ts">
-import { DEFAULT_STAT_BLOCK } from '@/bases'
-import ArrayTabs from '@/components/ArrayTabs.vue'
-import { useDesignStore } from '@/stores/designStore'
-import { BButton } from 'bootstrap-vue-next'
-import { computed, onMounted, Ref, ref } from 'vue'
-import PowerLevelIcon from './PowerLevelIcon.vue'
 import CustomModal from '@/components/CustomModal.vue'
 import IconPicker from '@/components/IconPicker.vue'
-import CustomCheckbox from '@/components/Character/CustomCheckbox.vue'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { BButton } from 'bootstrap-vue-next'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import { computed, onMounted, ref } from 'vue'
+import PowerLevelIcon from './PowerLevelIcon.vue'
 
 export default {
   props: ['currentStatBlock'],
@@ -89,7 +86,6 @@ export default {
           (acc: number, mod: any) => (mod.rank > acc ? mod.rank : acc),
           0
         )
-        console.log(maxRank, spellgroup.icon)
         if (maxRank > acc) {
           acc = maxRank
           maxRankSpellGroupIcon = spellgroup.groupIcon

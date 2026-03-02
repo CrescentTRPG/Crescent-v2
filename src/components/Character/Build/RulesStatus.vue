@@ -1,13 +1,16 @@
 <script lang="ts">
-import { BButton, BCard, BNavItem, BNavbar } from 'bootstrap-vue-next'
-import { computed, ref, ComputedRef } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useCharacterStore } from '@/stores/characterStore'
-import { useSkillStore } from '@/stores/skillsStore'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
-import { useSpellStore } from '@/stores/spellsStore'
+import CustomModal from '@/components/CustomModal.vue'
+import MultiStackIcon from '@/components/MultiStackIcon.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
+import { usePerformanceStore } from '@/stores/performanceStore.ts'
+import { useSkillStore } from '@/stores/skillsStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
+import { useTraitsStore } from '@/stores/traitsStore.ts'
 import { storeToRefs } from 'pinia'
+import { ComputedRef, computed, ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import {
   abilityPointViolation,
   combatStyleRankViolation,
@@ -22,15 +25,11 @@ import {
   spellGroupPurchaseLimiterViolationStrength,
   spellGroupPurchaseLimiterViolationWillpower,
   spellGroupRankLimiterViolation
-} from '../Utility/RulesConstants'
-import CustomModal from '@/components/CustomModal.vue'
-import MultiStackIcon from '@/components/MultiStackIcon.vue'
-import { useTraitsStore } from '@/stores/traitsStore'
-import { usePerformanceStore } from '@/stores/performanceStore'
-import RuleSuggestion from './Rulings/RuleSuggestion.vue'
-import WelcomeMessage from './Rulings/WelcomeMessage.vue'
+} from '../Utility/RulesConstants.ts'
 import RuleError from './Rulings/RuleError.vue'
 import RulesLookingGood from './Rulings/RulesLookingGood.vue'
+import RuleSuggestion from './Rulings/RuleSuggestion.vue'
+import WelcomeMessage from './Rulings/WelcomeMessage.vue'
 
 export default {
   setup(props, context) {
@@ -461,7 +460,7 @@ export default {
     })
     const imAbrandNewBaby: ComputedRef<string> = computed((): string => {
       if (spentAbilityPoints.value === 0) {
-        return "Welcome to Crescent!  I'm here to help.  I'll give you tips and let you know if theres an error with your build."
+        return "Welcome to Crescent!  I'm here to help.  I'll give you tips and let you know if theres an error with your build. If you're completely new to Crescent checkout the Reference Tab and the far right.  This has all kinds of information regaurding how to make a character, how to play, and what abilities to take depending on what you are looking for! I reccomend searching for the new player guide and starting there!"
       }
       return ''
     })
@@ -580,6 +579,7 @@ export default {
       :style="{ borderColor: designStore.secondaryTheme }"
       style="border-left-color: transparent"
     ></div>
+
     <div
       :style="{
         background: designStore.primaryTheme,

@@ -8,12 +8,17 @@ import { useMartialSkillsStore } from './martialSkillsStore.js'
 import { useMartialPerksStore } from './martialPerksStore.js'
 import { useSpellStore } from './spellsStore.js'
 import { useManualStore } from './manualStore.js'
-import { useTraitsStore } from './traitsStore.js'
 import { useUserStore } from './userStore.js'
 import { Details } from '@/components/Character/Details/CoreTraits.vue'
 import { useEquipmentStore } from './equipmentStore.js'
 import { usePerformanceStore } from './performanceStore.js'
 import { DEFAULT_CHARCTER, DEFAULT_DESIGN } from '@/bases.js'
+import { useEffigyStore } from './effigyStore.js'
+import { useAdventureStore } from './adventureStore.js'
+import { useJournalStore } from './journalStore.ts'
+import _ from 'lodash'
+import { nextTick } from 'vue'
+import { resolve } from 'path'
 
 interface Character {
   id: string
@@ -33,6 +38,9 @@ interface Character {
   currentHp: number
   barrierHp: number
   currentMana: number
+  overviewValues: any
+  showNewPlayerGuide: boolean
+  stressedExceptionals: any
   // effigies: any //collection
   // faunaTransformations: any //collection
   // performanceStyles: any //collection
@@ -77,6 +85,8 @@ export const useCharacterStore = defineStore('character', {
     characterRef: () => {},
     here: 0,
     loading: true,
+    showNewPlayerGuide: true,
+    newPlayerGuideStep: 0,
     id: '',
     name: '',
     backstory: '',
@@ -132,6 +142,7 @@ export const useCharacterStore = defineStore('character', {
       performance: {},
       subtlety: {}
     },
+    stressedExceptionals: {},
     mpStatusModifiers: {},
     movementStatusModifiers: {},
     currentHp: 0,
@@ -178,7 +189,7 @@ export const useCharacterStore = defineStore('character', {
       power: 0,
       charisma: 0
     },
-    effigies: null,
+    effigies: {},
     faunaTransformations: null,
     journal: null,
     inventory: null,
@@ -310,6 +321,41 @@ export const useCharacterStore = defineStore('character', {
       this.martialAttacks = weaponAttacks
       this.setMartialAttacks()
     },
+    setShowNewPlayerGuide(showNewPlayerGuide: boolean) {
+      this.showNewPlayerGuide = showNewPlayerGuide
+      const ret = updateDoc(
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
+        {
+          showNewPlayerGuide: false
+        }
+      )
+    },
+    flipExceptional(index, newVal, attr) {
+      if (newVal) {
+        if (this.stressedExceptionals[attr]) {
+          this.stressedExceptionals[attr][index] = { index: index, used: true }
+        } else {
+          this.stressedExceptionals[attr] = {}
+          this.stressedExceptionals[attr][index] = { index: index, used: true }
+        }
+      } else {
+        delete this.stressedExceptionals[attr][index]
+        console.log(this.stressedExceptionals)
+      }
+      this.setStressedExceptionals(this.stressedExceptionals)
+    },
+    incrementNewPlayerGuideStep() {
+      this.newPlayerGuideStep += 1
+      if (this.newPlayerGuideStep > 22) {
+        this.showNewPlayerGuide = false
+        const ret = updateDoc(
+          doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
+          {
+            showNewPlayerGuide: false
+          }
+        )
+      }
+    },
     removeMartialAttack(name) {
       delete this.martialAttacks[name]
       this.setMartialAttacks()
@@ -388,10 +434,15 @@ export const useCharacterStore = defineStore('character', {
     //   this.overviewValues.moveDvs = dvs
     //   this.setOverviewValues()
     // },
-    // setIsDodging(isDodging) {
-    //   this.overviewValues.isDodging = isDodging
-    //   this.setOverviewValues()
-    // },
+    setIsDodging(isDodging) {
+      if (!this.overviewValues) {
+        this.overviewValues = {
+          isDodging: false
+        }
+      }
+      this.overviewValues.isDodging = isDodging
+      this.setOverviewValues()
+    },
     addNewDiceStatusModifier(modifier: DiceModifier) {
       const attribute = modifier.target.toLowerCase()
       const modRef = this.diceStatusModifiers[attribute][modifier.modifierType]
@@ -407,9 +458,11 @@ export const useCharacterStore = defineStore('character', {
       }
       this.updateStatusModifiers()
     },
+
     removeAttributeStatusModifier(modifier: AttributeModifier) {
       const attribute = modifier.attribute.toLowerCase()
       console.log(this.attributeStatusModifiers, attribute)
+      this.resolveStressedExceptionals(modifier)
 
       const modRef = this.attributeStatusModifiers[attribute][modifier.modifierType]
       const pos = modifier.modAmount + ' '
@@ -420,12 +473,14 @@ export const useCharacterStore = defineStore('character', {
       if (
         (
           (this.attributeStatusModifiers[attribute] &&
+            modifier.modifierType &&
             Object.values(this.attributeStatusModifiers[attribute][modifier.modifierType])) ||
           {}
         ).length == 0
       ) {
         delete this.attributeStatusModifiers[attribute][modifier.modifierType]
       }
+
       this.updateStatusModifiers()
     },
     addNewAttributeStatusModifier(modifier: AttributeModifier) {
@@ -442,6 +497,41 @@ export const useCharacterStore = defineStore('character', {
         )
       }
       this.updateStatusModifiers()
+      if (modifier.modifierType.includes('Exceptional')) {
+        this.resolveStressedExceptionals(modifier)
+      }
+    },
+    resolveStressedExceptionals(modifier) {
+      interface stressor {
+        index: number
+      }
+      let stressedExceptionals: stressor[] = []
+      if (this.stressedExceptionals[modifier.attribute]) {
+        stressedExceptionals = Object.values(
+          this.stressedExceptionals[modifier.attribute]
+        ) as stressor[]
+      }
+
+      let counter = modifier.modAmount
+      if (stressedExceptionals.length > 0) {
+        const maxLength = stressedExceptionals.reduce((a: stressor, b: stressor) =>
+          a.index > b.index ? a : b
+        )
+        console.log(maxLength)
+        for (
+          let i = parseInt('' + this.exceptionals[modifier.attribute.toLowerCase()]);
+          i <= maxLength.index;
+          i++
+        ) {
+          if (stressedExceptionals[i]) {
+            delete this.stressedExceptionals[modifier.attribute][i]
+            counter--
+          }
+          if (counter == 0) {
+            break
+          }
+        }
+      }
     },
     removeMpStatusModifier(modifier: GenericModifier) {
       const modRef = this.mpStatusModifiers[modifier.modifierType]
@@ -466,7 +556,6 @@ export const useCharacterStore = defineStore('character', {
       this.updateStatusModifiers()
     },
     removeManaStatusModifier(modifier: GenericModifier) {
-      console.log(modifier.modifierType)
       const modRef = this.manaStatusModifiers[modifier.modifierType]
       const pos = modifier.modAmount + ' '
       console.log(modRef, pos)
@@ -500,6 +589,7 @@ export const useCharacterStore = defineStore('character', {
     },
     addNewArmorStatusModifier(modifier: GenericModifier) {
       const modRef = this.armorStatusModifiers[modifier.modifierType]
+
       const pos = modifier.modAmount + ' '
       this.armorStatusModifiers[modifier.modifierType] = { ...modRef, [pos]: modifier }
       if (modifier.linkedStatus) {
@@ -598,14 +688,24 @@ export const useCharacterStore = defineStore('character', {
               modAmount: parseInt(modArr[2].substring(1))
             })
         }
-        const attr = modArr[0].split(',')[1]
-        if (attr) {
-          this.removeAttributeStatusModifier({
+        if (modArr[0].includes('Roll')) {
+          this.removeDiceStatusModifier({
             linkedStatus: '',
             modifierType: modArr[1].substring(1, modArr[1].length - 1),
             modAmount: parseInt(modArr[2].substring(1)),
-            attribute: attr.substring(1)
+            target:
+              modArr[0].substring(6, 7).toUpperCase() + modArr[0].substring(7, modArr[0].length)
           })
+        } else {
+          const attr = modArr[0].split(',')[1]
+          if (attr) {
+            this.removeAttributeStatusModifier({
+              linkedStatus: '',
+              modifierType: modArr[1].substring(1, modArr[1].length - 1),
+              modAmount: parseInt(modArr[2].substring(1)),
+              attribute: attr.substring(1)
+            })
+          }
         }
       })
     },
@@ -649,11 +749,13 @@ export const useCharacterStore = defineStore('character', {
       this.details = details
     },
     updateExceptionals(exceptional: string, exceptionalValue: number) {
-      this.exceptionals[exceptional] = exceptionalValue
+      const copy = _.cloneDeep(this.exceptionals)
+      copy[exceptional] = exceptionalValue
+      console.log(copy, exceptionalValue)
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
-          exceptionals: this.exceptionals
+          exceptionals: copy
         }
       )
     },
@@ -680,9 +782,12 @@ export const useCharacterStore = defineStore('character', {
       this.barrierHp = character.barrierHp
       this.currentMana = character.currentMana
       this.motivation = character.motivation
+      this.overviewValues = character.overviewValues
+      this.showNewPlayerGuide = character.showNewPlayerGuide
+      this.stressedExceptionals = character.stressedExceptionals || {}
     },
     async setCharacter(character: Character, uid: string, cid) {
-      const char = await useCollection('User/' + uid + '/Character/' + cid, character)
+      const char = await useCollection('User/' + this.getUser() + '/Character/' + cid, character)
       console.log(char)
     },
     async addCharacter(uid: string) {
@@ -714,12 +819,15 @@ export const useCharacterStore = defineStore('character', {
         originSkills: char.originSkills,
         adventure: char.adventure,
         condition: char.condition,
+        showNewPlayerGuide: char.showNewPlayerGuide === undefined ? true : char.showNewPlayerGuide,
         attributes: char.attributes,
         exceptionals: char.exceptionals,
         traits: char.traits || {},
         currentHp: char.currentHp || 0,
         barrierHp: char.barrierHp || 0,
-        currentMana: char.currentMana || 0
+        currentMana: char.currentMana || 0,
+        overviewValues: char.overviewValues || {},
+        stressedExceptionals: char.stressedExceptionals || {}
       }
       this.statusEffects = char.statusEffects
       this.setLocalCharacter(character)
@@ -732,8 +840,7 @@ export const useCharacterStore = defineStore('character', {
       useMartialPerksStore().pullManualMartialPerksFromFirebase()
       useMartialPerksStore().setCharacterMartialPerksFromFirebase(char.martialPerks)
       useSpellStore().setCharacterSpellgroupsFromFirebase(char.spellgroups)
-      useSpellStore().pullManualSpellgroupsFromFirebase()
-      useSpellStore().setUpBuildDisplay(char.spellChanged)
+      await useSpellStore().pullManualSpellgroupsFromFirebase()
       useMartialPerksStore().setUpBuildDisplay(char.perkChanged)
       useMartialSkillsStore().setUpBuildSpecializationDisplay(char.specializationChanged)
       useMartialSkillsStore().setUpBuildDisplay(char.combatStyleChanged)
@@ -746,10 +853,11 @@ export const useCharacterStore = defineStore('character', {
       usePerformanceStore().setLocalPracticedStyles(char.practicedStyles)
       usePerformanceStore().setLocalPerformanceStyles(char.performanceStyles)
       usePerformanceStore().setUpBuildDisplay(char.performanceStyleChanged)
+      useEffigyStore().setLocalEffigies(char.effigies || {})
     },
     async setCharacterFromAdventure(char: any) {
       this.loading = true
-      useSpellStore().clearBuildDisplay()
+      useSpellStore().clearBuildDisplayOnly()
       useMartialPerksStore().clearBuildDisplay()
       useMartialSkillsStore().clearMartialSkillsBuild()
       useSkillStore().clearEffectiveSkills()
@@ -770,20 +878,22 @@ export const useCharacterStore = defineStore('character', {
         traits: char.traits || {},
         currentHp: char.currentHp || 0,
         barrierHp: char.barrierHp || 0,
-        currentMana: char.currentMana || 0
+        currentMana: char.currentMana || 0,
+        showNewPlayerGuide: char.showNewPlayerGuide === undefined ? true : char.showNewPlayerGuide,
+        overviewValues: char.overviewValues || {},
+        stressedExceptionals: char.stressedExceptionals || {}
       }
       this.statusEffects = char.statusEffects
       this.setLocalCharacter(character)
       this.setLocalMartialAttacks(char.martialAttacks || {})
+
       useMartialPerksStore().setLocalPerkGain(char.perkGain)
       useDesignStore().setLocalDesign(char.design)
       useSkillStore().setCharacterSkillsFromFirebase(char.skills)
       useMartialSkillsStore().setCharacterCombatStylesFromFirebase(char.combatStyles)
       useMartialSkillsStore().setCharacterSpecializationsFromFirebase(char.specializations)
-      useMartialPerksStore().pullManualMartialPerksFromFirebase()
       useMartialPerksStore().setCharacterMartialPerksFromFirebase(char.martialPerks)
       useSpellStore().setCharacterSpellgroupsFromFirebase(char.spellgroups)
-      useSpellStore().pullManualSpellgroupsFromFirebase()
       useSpellStore().setUpBuildDisplay(char.spellChanged)
       useMartialPerksStore().setUpBuildDisplay(char.perkChanged)
       useMartialSkillsStore().setUpBuildSpecializationDisplay(char.specializationChanged)
@@ -797,6 +907,8 @@ export const useCharacterStore = defineStore('character', {
       usePerformanceStore().setLocalPracticedStyles(char.practicedStyles)
       usePerformanceStore().setLocalPerformanceStyles(char.performanceStyles)
       usePerformanceStore().setUpBuildDisplay(char.performanceStyleChanged)
+      useEffigyStore().setLocalEffigies(char.effigies || {})
+
       this.delay(2000).then(() => {
         useCharacterStore().setLoadingFalse()
       })
@@ -820,6 +932,8 @@ export const useCharacterStore = defineStore('character', {
     async pullCharacterFromFirebase(uid: string, cid: string, fromScratch = false) {
       this.loading = true
       this.here = 1
+      useManualStore().pullManualFromFirebase()
+
       this.characterRef = onSnapshot(doc(db, 'User/' + uid + '/Character/' + cid), (doc) => {
         const character = {
           id: doc.data()?.id,
@@ -838,7 +952,10 @@ export const useCharacterStore = defineStore('character', {
           traits: doc.data()?.traits || {},
           currentHp: doc.data()?.currentHp || 0,
           barrierHp: doc.data()?.barrierHp || 0,
-          currentMana: doc.data()?.currentMana || 0
+          currentMana: doc.data()?.currentMana || 0,
+          overviewValues: doc.data()?.overviewValues || {},
+          showNewPlayerGuide: doc.data()?.showNewPlayerGuide === undefined ? true : false,
+          stressedExceptionals: doc.data()?.stressedExceptionals || {}
         }
         this.backstory = doc.data()?.backstory || ''
         this.setLocalCharacter(character)
@@ -861,10 +978,11 @@ export const useCharacterStore = defineStore('character', {
           iconColor: doc.data()?.design.iconColor
         }
         this.statusEffects = doc.data()?.statusEffects || {}
+        this.effigies = doc.data()?.effigies || {}
         this.customStatusEffects = doc.data()?.customStatusEffects || {}
         this.setLocalMartialAttacks(doc.data()?.martialAttacks || {})
+        useSpellStore().setCharacterSpellgroupsFromFirebase(doc.data()?.spells)
         useSpellStore().setLocalArcaneBattery(doc.data()?.arcaneBattery || 0)
-        useManualStore().pullManualFromFirebase()
         useMartialPerksStore().setLocalPerkGain(doc.data()?.perkGain)
         useDesignStore().setLocalDesign(design)
         useSkillStore().setCharacterSkillsFromFirebase(doc.data()?.skills)
@@ -872,10 +990,7 @@ export const useCharacterStore = defineStore('character', {
         useMartialSkillsStore().setCharacterSpecializationsFromFirebase(doc.data()?.specializations)
         useMartialPerksStore().pullManualMartialPerksFromFirebase()
         useMartialPerksStore().setCharacterMartialPerksFromFirebase(doc.data()?.perks)
-        useSpellStore().setCharacterSpellgroupsFromFirebase(doc.data()?.spells)
-        useSpellStore().pullManualSpellgroupsFromFirebase()
-
-        useSpellStore().setUpBuildDisplay(doc.data()?.spellChanged)
+        useAdventureStore().setLocalAdventureFromCharacter(doc.data()?.adventure || {})
         useMartialPerksStore().setUpBuildDisplay(doc.data()?.perkChanged)
         useMartialSkillsStore().setUpBuildSpecializationDisplay(doc.data()?.specializationChanged)
         useMartialSkillsStore().setUpBuildDisplay(doc.data()?.combatStyleChanged)
@@ -888,6 +1003,62 @@ export const useCharacterStore = defineStore('character', {
         usePerformanceStore().setLocalPracticedStyles(doc.data()?.practicedStyles)
         usePerformanceStore().setLocalPerformanceStyles(doc.data()?.performanceStyles)
         usePerformanceStore().setUpBuildDisplay(doc.data()?.performanceStyleChanged)
+        useEffigyStore().setLocalEffigies(doc.data()?.effigies || {})
+        console.log(
+          !character.adventure?.adventureId,
+          useSpellStore().buildDisplaySpellgroups.length > 1,
+          useSpellStore().buildDisplaySpellgroups
+        )
+        if (
+          !character.adventure?.adventureId ||
+          useSpellStore().buildDisplaySpellgroups.length > 1
+        ) {
+          useSpellStore().setUpBuildDisplay(doc.data()?.spellChanged)
+        }
+
+        if (doc.data()?.entryMap) {
+          useJournalStore().setEntryMapFromFirebase(doc.data()?.entryMap)
+        } else {
+          useJournalStore().setEntryMapFromFirebase({
+            entryIds: []
+          })
+        }
+        if (doc.data()?.journalIdKey) {
+          useJournalStore().setJournalIdKeyFromFirebase(doc.data()?.journalIdKey)
+          if (
+            useJournalStore().openFile.id &&
+            !useJournalStore().journalIdKey[useJournalStore().openFile.id]
+          ) {
+            useJournalStore().clearOpenFileAndBookmarks()
+            alert(
+              'Cleared Bookmarks and Open File!  Navigating between new adventures and charcters will do this!'
+            )
+          }
+        } else {
+          useJournalStore().setJournalIdKeyFromFirebase({})
+          if (
+            useJournalStore().openFile.id &&
+            !useJournalStore().journalIdKey[useJournalStore().openFile.id]
+          ) {
+            useJournalStore().clearOpenFileAndBookmarks()
+            alert(
+              'Cleared Bookmarks and Open File!  Navigating between new adventures and charcters will do this!'
+            )
+          }
+        }
+        if (!doc.data()?.adventure?.adventureId) {
+          useJournalStore().setCalendarFromDatabase({
+            days: {},
+            sections: { 0: {}, names: ['month'] },
+            dateFormula: '',
+            miniPickerFormula: '',
+            organizedBy: '',
+            itemsInARow: 7,
+            titleSectionFormula: '',
+            holidays: {}
+          })
+        }
+
         this.delay(2000).then(() => {
           useCharacterStore().setLoadingFalse()
         })
@@ -899,14 +1070,20 @@ export const useCharacterStore = defineStore('character', {
     setLoadingFalse() {
       this.loading = false
     },
+    clearCharacterNameAndID() {
+      this.id = ''
+      this.name = 'Crescent Character'
+    },
     async setArchetype(archetype: string, uid: string, cid: string) {
       this.setLocalArchetype(archetype)
-      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { archetype: archetype })
+      const ret = updateDoc(doc(db, 'User/' + this.getUser() + '/Character/' + cid), {
+        archetype: archetype
+      })
       console.log(ret)
     },
     async setTotalAbilityPoints(totalAbilityPoints: number, uid: string, cid: string) {
       this.setLocalTotalAbilityPoints(totalAbilityPoints)
-      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), {
+      const ret = updateDoc(doc(db, 'User/' + this.getUser() + '/Character/' + cid), {
         totalAbilityPoints: totalAbilityPoints
       })
       console.log(ret)
@@ -914,12 +1091,14 @@ export const useCharacterStore = defineStore('character', {
     async setOrigin(origin: Array<string>, uid: string, cid: string) {
       console.log(origin)
       this.setLocalOrigin(origin)
-      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), { originSkills: origin })
+      const ret = updateDoc(doc(db, 'User/' + this.getUser() + '/Character/' + cid), {
+        originSkills: origin
+      })
       console.log(ret)
     },
     async setAttribute(attributes: any, uid: string, cid: string) {
       this.setLocalAttributes(attributes)
-      const ret = updateDoc(doc(db, 'User/' + uid + '/Character/' + cid), {
+      const ret = updateDoc(doc(db, 'User/' + this.getUser() + '/Character/' + cid), {
         attributes: attributes
       })
       console.log(ret)
@@ -927,16 +1106,24 @@ export const useCharacterStore = defineStore('character', {
     async setExceptionals(exceptionals: any) {
       this.setLocalExceptionals(exceptionals)
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           exceptionals: exceptionals
+        }
+      )
+    },
+    async setStressedExceptionals(exceptionals: any) {
+      const ret = updateDoc(
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
+        {
+          stressedExceptionals: exceptionals
         }
       )
     },
     async setCurrentAndBarrierHP(currentHp: number, barrierHp: number) {
       this.setLocalCurrentandBarrierHp(currentHp, barrierHp)
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           currentHp: currentHp,
           barrierHp: barrierHp
@@ -946,7 +1133,7 @@ export const useCharacterStore = defineStore('character', {
     async setCurrentMana(currentMana: number) {
       this.setLocalMana(currentMana)
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           currentMana: currentMana
         }
@@ -955,7 +1142,7 @@ export const useCharacterStore = defineStore('character', {
     async setCharacterName(name: string) {
       this.setName(name)
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           name: name
         }
@@ -964,7 +1151,7 @@ export const useCharacterStore = defineStore('character', {
     async setDetails(details: Details) {
       this.setLocalDetails(details)
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           details: details
         }
@@ -973,7 +1160,7 @@ export const useCharacterStore = defineStore('character', {
     async setMotivation(motivation: string) {
       this.setLocalMotivation(motivation)
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           motivation: motivation
         }
@@ -982,7 +1169,7 @@ export const useCharacterStore = defineStore('character', {
     async setBackstory(backstory: string) {
       this.setLocalBackstory(backstory)
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           backstory: backstory
         }
@@ -991,7 +1178,7 @@ export const useCharacterStore = defineStore('character', {
     async setcharacterImage(image: string) {
       this.setImage(image)
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           image: image
         }
@@ -999,15 +1186,22 @@ export const useCharacterStore = defineStore('character', {
     },
     async setMartialAttacks() {
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           martialAttacks: this.martialAttacks
         }
       )
     },
+    getUser() {
+      let uid = useUserStore().id
+      if (this.adventure.gameMasterId === uid) {
+        uid = useAdventureStore().currentViewedUserId || uid
+      }
+      return uid
+    },
     async setOverviewValues() {
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           overviewValues: this.overviewValues
         }
@@ -1016,7 +1210,7 @@ export const useCharacterStore = defineStore('character', {
 
     async updateStatusEffects() {
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           statusEffects: this.statusEffects,
           customStatusEffects: this.customStatusEffects
@@ -1025,7 +1219,7 @@ export const useCharacterStore = defineStore('character', {
     },
     async updateStatusModifiers() {
       const ret = updateDoc(
-        doc(db, 'User/' + useUserStore().id + '/Character/' + this.getCharacterId),
+        doc(db, 'User/' + this.getUser() + '/Character/' + this.getCharacterId),
         {
           hpStatusModifiers: this.hpStatusModifiers,
           armorStatusModifiers: this.armorStatusModifiers,
@@ -1033,7 +1227,8 @@ export const useCharacterStore = defineStore('character', {
           attributeStatusModifiers: this.attributeStatusModifiers,
           diceStatusModifiers: this.diceStatusModifiers,
           mpStatusModifiers: this.mpStatusModifiers,
-          manaStatusModifiers: this.manaStatusModifiers
+          manaStatusModifiers: this.manaStatusModifiers,
+          customStatusEffects: this.customStatusEffects
         }
       )
     }

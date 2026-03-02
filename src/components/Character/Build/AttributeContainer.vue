@@ -1,11 +1,11 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import AttributeDisplay from '../Build/AttributeDisplay.vue'
-import { storeToRefs } from 'pinia'
-import { useCharacterStore } from '@/stores/characterStore'
 import TitleWidget from '@/components/TitleWidget.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { storeToRefs } from 'pinia'
+import AttributeDisplay from '../Build/AttributeDisplay.vue'
 
 export default {
   setup(props, context) {

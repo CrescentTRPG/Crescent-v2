@@ -1,0 +1,1037 @@
+{
+  "bases": {
+    "Water": {
+      "name": "Water",
+      "difficulty": 1,
+      "effects": "Imbibed potion",
+      "cost": "1cp",
+      "numericalCost": 1,
+      "numericalAddedValue": 10,
+
+      "addedValue": "1sp",
+      "icon": "gi-potion-ball",
+      "metadata": {
+        "type": "base",
+        "target": "User",
+        "area": "Single Target(s)",
+        "save": false,
+        "to-hit": false
+      }
+    },
+    "Strong Spirits": {
+      "name": "Strong Spirits",
+      "difficulty": 2,
+      "effects": "Single target(s) thrown potion",
+      "cost": "2sp",
+      "numericalCost": 20,
+      "numericalAddedValue": 40,
+
+      "icon": "gi-square-bottle",
+      "addedValue": "4sp",
+      "metadata": {
+        "type": "base",
+        "target": "Thrown",
+        "area": "Single Target",
+        "save": false,
+        "to-hit": true
+      }
+    },
+    "Magical Blood": {
+      "name": "Magical Blood",
+      "difficulty": 3,
+      "effects": "Lathered onto a weapon as a swift action lasting 1 minute. Consumed upon the next successful strike",
+      "cost": "5sp",
+      "icon": "gi-bloody-sword",
+      "numericalCost": 50,
+      "numericalAddedValue": 80,
+
+      "addedValue": "8sp",
+      "metadata": {
+        "type": "base",
+        "target": "User",
+        "area": "Single Weapon",
+        "save": false,
+        "to-hit": false
+      }
+    },
+    "Pure Alcohol": {
+      "name": "Pure Alcohol",
+      "difficulty": 4,
+      "effects": "thrown potion that explodes in a 10’ radius",
+      "cost": "1gp",
+      "icon": "gi-brandy-bottle",
+      "numericalCost": 100,
+      "numericalAddedValue": 110,
+
+      "addedValue": "1gp 1sp",
+      "metadata": {
+        "type": "base",
+        "target": "Thrown",
+        "area": "10' radius",
+        "save": true,
+        "to-hit": false
+      }
+    },
+    "Hydrablood": {
+      "name": "Hydrablood",
+      "difficulty": 5,
+      "numericalCost": 200,
+      "numericalAddedValue": 260,
+
+      "effects": "thrown potion that explodes in a 20’ radius",
+      "icon": "gi-hydra",
+      "cost": "2gp",
+      "addedValue": "2gp 6sp",
+      "metadata": {
+        "type": "base",
+        "target": "Thrown",
+        "area": "20' radius",
+        "save": true,
+        "to-hit": false
+      }
+    },
+    "Ichor": {
+      "name": "Ichor",
+      "difficulty": 6,
+      "icon": "gi-stigmata",
+      "numericalCost": 300,
+      "numericalAddedValue": 390,
+
+      "effects": "Lathered onto a weapon as a swift action lasting indefinitely. Consumed after the next 5 successful strikes",
+      "cost": "3gp",
+      "addedValue": "3gp 9sp",
+      "metadata": {
+        "type": "base",
+        "target": "User",
+        "area": "Single Weapon",
+        "save": true,
+        "to-hit": false
+      }
+    }
+  },
+  "reagents": {
+    "Sunflower Seed": {
+      "name": "Sunflower Seed",
+      "icon": "gi-sunflower",
+      "numericalCost": 2,
+      "numericalAddedValue": 10,
+
+      "difficulty": 1,
+      "effects": "Heals for 1d6",
+      "cost": "2cp",
+      "addedValue": "1sp",
+      "metadata": {
+        "duration": "instantaneous",
+        "type": "reagent",
+        "heal": "1d6"
+      }
+    },
+    "Parasol Mushroom": {
+      "name": "Parasol Mushroom",
+      "difficulty": 1,
+      "icon": "gi-mushroom-gills",
+      "numericalCost": 2,
+      "numericalAddedValue": 10,
+
+      "effects": "Damages for 1d6 toxic damage",
+      "cost": "2cp",
+      "addedValue": "1sp",
+      "metadata": {
+        "duration": "instantaneous",
+        "type": "reagent",
+        "damage": "1d6"
+      }
+    },
+    "Saffron Seeds": {
+      "name": "Saffron Seeds",
+      "icon": "gi-sesame",
+      "difficulty": 3,
+      "numericalCost": 50,
+      "numericalAddedValue": 80,
+
+      "effects": "Heals for 5d6",
+      "cost": "5sp",
+      "addedValue": "8sp",
+      "metadata": {
+        "duration": "instantaneous",
+        "type": "reagent",
+        "heal": "5d6"
+      },
+
+      "Hairy Panus Mushroom": {
+        "name": "Hairy Panus Mushroom",
+        "difficulty": 3,
+        "icon": "gi-mushroom",
+
+        "effects": "Damages for 5d6 toxic damage",
+        "cost": "5sp",
+        "addedValue": "8sp",
+        "numericalCost": 50,
+        "numericalAddedValue": 80,
+
+        "metadata": {
+          "duration": "instantaneous",
+          "type": "reagent",
+          "damage": "5d6"
+        }
+      },
+      "Mandrake Seed": {
+        "name": "Mandrake Seed",
+        "icon": "gi-tree-roots",
+        "numericalCost": 120,
+        "numericalAddedValue": 180,
+
+        "difficulty": 5,
+        "effects": "Heals for 10d6",
+        "cost": "1gp 2sp",
+        "addedValue": "1gp 8sp",
+        "metadata": {
+          "duration": "instantaneous",
+          "type": "reagent",
+          "heal": "10d6"
+        }
+      },
+      "Nightcap Mushroom": {
+        "name": "Nightcap Mushroom",
+        "difficulty": 5,
+        "icon": "gi-super-mushroom",
+        "numericalCost": 120,
+        "numericalAddedValue": 180,
+        "effects": "Damages for 10d6 toxic damage",
+        "cost": "1gp 2sp",
+        "addedValue": "1gp 8sp",
+        "metadata": {
+          "duration": "instantaneous",
+          "type": "reagent",
+          "damage": "5d6"
+        }
+      },
+      "Dragon Scales": {
+        "name": "Dragon Scales",
+        "difficulty": 7,
+        "icon": "gi-wyvern",
+        "numericalCost": 250,
+        "numericalAddedValue": 370,
+        "effects": "Restores 2d4 mana",
+        "cost": "2gp 5sp",
+        "addedValue": "3gp 7sp",
+        "metadata": {
+          "duration": "instantaneous",
+          "type": "reagent",
+          "manaGain": "2d4"
+        }
+      },
+      "Moonlight Cherry Blossom": {
+        "name": "Moonlight Cherry Blossom",
+        "difficulty": 7,
+        "icon": "gi-vine-flower",
+        "numericalCost": 250,
+        "numericalAddedValue": 370,
+        "effects": "Removes 2d4 mana",
+        "cost": "2gp 5sp",
+        "addedValue": "3gp 7sp",
+        "metadata": {
+          "duration": "instantaneous",
+
+          "type": "reagent",
+          "manaDrain": "2d4"
+        }
+      },
+      "Unicorn Horn": {
+        "name": "Unicorn Horn",
+        "difficulty": 9,
+        "icon": "gi-unicorn",
+        "numericalCost": 500,
+        "numericalAddedValue": 860,
+        "effects": "Restores 4d4 mana",
+        "cost": "5gp",
+        "addedValue": "8gp 6sp",
+        "metadata": {
+          "duration": "instantaneous",
+
+          "type": "reagent",
+          "manaGain": "4d4"
+        }
+      },
+      "Moonbloom Shroom": {
+        "name": "Moonbloom Shroom",
+        "difficulty": 9,
+        "icon": "gi-spotted-mushroom",
+        "numericalCost": 500,
+        "numericalAddedValue": 860,
+        "effects": "Removes 4d4 mana",
+        "cost": "5gp",
+        "addedValue": "8gp 6sp",
+        "metadata": {
+          "duration": "instantaneous",
+
+          "type": "reagent",
+          "manaDrain": "4d4"
+        }
+      },
+      "Ancient Willow Seed": {
+        "name": "Ancient Willow Seed",
+        "difficulty": 10,
+        "icon": "gi-willow-tree",
+        "numericalCost": 600,
+        "numericalAddedValue": 850,
+        "effects": "Heals for 20d6 and any excess is converted to an HP shield that lasts for the next minute",
+        "cost": "6gp",
+        "addedValue": "8gp 5sp",
+        "metadata": {
+          "duration": "instantaneous",
+          "useEffects": true,
+          "type": "reagent",
+          "overheal": "20d6"
+        }
+      }
+    },
+    "mutagens": {
+      "Soap": {
+        "name": "Soap",
+        "difficulty": 1,
+        "icon": "gi-soap",
+        "numericalCost": 2,
+        "numericalAddedValue": 10,
+        "effects": "the target(s) and their belongings are made highly presentable through cleaning, removing stains, drying clothes, etc",
+        "cost": "2cp",
+        "addedValue": "1sp",
+        "metadata": {
+          "descriptor": "Cleaning",
+          "type": "mutagen",
+          "useEffects": true,
+          "duration": "instantaneous",
+          "opposite": "Target(s) is made filthy"
+        }
+      },
+      "Weeping Carnation": {
+        "name": "Weeping Carnation",
+        "difficulty": 1,
+        "icon": "gi-pollen-dust",
+        "numericalCost": 10,
+        "numericalAddedValue": 20,
+        "effects": "the target(s) is slowed",
+        "cost": "1sp",
+        "addedValue": "2sp",
+        "metadata": {
+          "descriptor": "Slowing",
+
+          "type": "mutagen",
+          "duration": "2 rounds",
+          "applyStatus": "Slowed",
+          "opposite": "Target(s)s speed is doubled and they gain an extra reaction"
+        }
+      },
+      "Jellyfish Stingers": {
+        "name": "Jellyfish Stingers",
+        "difficulty": 1,
+        "icon": "gi-jellyfish",
+        "numericalCost": 10,
+        "numericalAddedValue": 20,
+        "effects": "the target(s) falls prone",
+        "cost": "1sp",
+        "addedValue": "2sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Proning",
+
+          "duration": "instantaneous",
+          "applyStatus": "Prone",
+          "opposite": "Target(s)s is upright, has a placed roll on AGI checks, Attacks against the target(s) have a displaced roll and their movement speed is doubled."
+        }
+      },
+      "Lurch Reeds": {
+        "name": "Lurch Reeds",
+        "difficulty": 1,
+        "icon": "gi-reed",
+        "numericalCost": 15,
+        "numericalAddedValue": 40,
+        "effects": "the target(s) is cured of fatigue and hangovers",
+        "cost": "1 sp 5cp",
+        "addedValue": "4 sp",
+        "metadata": {
+          "type": "mutagen",
+          "useEffects": true,
+          "descriptor": "Revitalizing",
+
+          "duration": "instantaneous",
+          "opposite": "Target(s) is becomes fatgued and gains a hangover."
+        }
+      },
+      "Dwindleberries": {
+        "name": "Dwindleberries",
+        "icon": "gi-blackcurrant",
+        "numericalCost": 15,
+        "numericalAddedValue": 40,
+        "difficulty": 2,
+        "effects": "the next attack roll made against the target(s) has a placed roll to hit",
+        "cost": "1 sp 5cp",
+        "addedValue": "4sp",
+        "metadata": {
+          "type": "mutagen",
+          "duration": "2 rounds",
+          "descriptor": "Exposing",
+
+          "useEffects": true,
+          "opposite": "Next attack made against target(s) has a displaced roll to hit."
+        }
+      },
+      "Clam Shells": {
+        "name": "Clam Shells",
+        "difficulty": 2,
+        "icon": "gi-scallop",
+        "effects": "target(s) can breathe and form verbal components of spells underwater",
+        "cost": "3sp",
+        "addedValue": "5sp",
+        "numericalCost": 30,
+        "numericalAddedValue": 50,
+        "metadata": {
+          "type": "mutagen",
+          "duration": "1 Minute",
+          "descriptor": "Aquatifying",
+
+          "useEffects": true,
+          "opposite": "Target(s) cannot breathe and form verbal components of spells underwater."
+        }
+      },
+      "Iron Shavings": {
+        "name": "Iron Shavings",
+        "difficulty": 2,
+        "icon": "gi-anvil",
+        "numericalCost": 40,
+        "numericalAddedValue": 60,
+        "effects": "the target(s) is granted an additional strike for the round(s)",
+        "cost": "4sp",
+        "addedValue": "6sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Iron Arming",
+
+          "duration": "instantaneous",
+          "useEffects": true,
+          "opposite": "Target(s)s next strike fizzles out, expending the MP to no gain.  This only works this round."
+        }
+      },
+      "Elemental Essence": {
+        "name": "Elemental Essence",
+        "difficulty": 2,
+        "icon": "gi-triple-yin",
+        "numericalCost": 40,
+        "numericalAddedValue": 70,
+        "effects": "Change the damage type to an elemental magic damage type of your choice",
+        "cost": "4sp",
+        "addedValue": "7sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Elemental",
+
+          "damageType": ["Fire", "Ice", "Lightning", "Force"],
+          "opposite": "Change the damage type to pure magic damage."
+        }
+      },
+      "Psilocybin Mushroom": {
+        "name": "Psilocybin Mushroom",
+        "icon": "gi-mushrooms-cluster",
+
+        "difficulty": 2,
+        "effects": "the target(s) is frightened",
+        "numericalCost": 50,
+        "numericalAddedValue": 70,
+        "cost": "5sp",
+        "addedValue": "7sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Frightening",
+
+          "duration": "1 round(s)",
+          "applyStatus": "Frightened",
+          "opposite": "Target(s) is comforted by the source of this condition and will utilize their movement action to get as close as possible.  In addition they have a placed roll on any check stemming from the source of the condition and a placed roll when making an attack roll against the source."
+        }
+      },
+      "Lizard Scales": {
+        "name": "Lizard Scales",
+        "difficulty": 3,
+        "icon": "gi-gecko",
+        "numericalCost": 30,
+        "numericalAddedValue": 60,
+        "effects": "the target(s) receives 2 Bonus DVs",
+        "cost": "3sp",
+        "addedValue": "6sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Hardening",
+
+          "duration": "2 rounds",
+          "bonusDvs": 2,
+          "opposite": "The target(s) is stripped of 2 Bonus DVs."
+        }
+      },
+      "Stargazer Lily": {
+        "name": "Stargazer Lily",
+        "icon": "gi-lotus",
+        "numericalCost": 40,
+        "numericalAddedValue": 70,
+        "difficulty": 3,
+        "effects": "the target(s) cannot talk quietly and must yell",
+        "cost": "4sp",
+        "addedValue": "7sp",
+        "metadata": {
+          "type": "mutagen",
+          "useEffects": true,
+          "descriptor": "Screaming",
+
+          "duration": "1 minute",
+          "opposite": "Target(s) cannot yell and must whisper."
+        }
+      },
+      "Moondew": {
+        "name": "Moondew",
+        "difficulty": 3,
+        "icon": "gi-dew",
+        "numericalCost": 65,
+        "numericalAddedValue": 100,
+        "effects": "target(s) experience vivid hallucinations",
+        "cost": "6sp 5cp",
+        "addedValue": "1gp",
+        "metadata": {
+          "type": "mutagen",
+          "useEffects": true,
+          "descriptor": "Hallucinating",
+
+          "duration": "1 minute",
+          "opposite": "Target(s) becomes incredibly lucid."
+        }
+      },
+      "Starbloom": {
+        "name": "Starbloom",
+        "icon": "gi-beveled-star",
+        "numericalCost": 80,
+        "numericalAddedValue": 110,
+        "difficulty": 3,
+        "effects": "Grants the target(s) vision through obstructions such as non-magical darkness and physical barriers",
+        "cost": "8sp",
+        "addedValue": "1gp 1sp",
+        "metadata": {
+          "descriptor": "Starsight",
+
+          "type": "mutagen",
+          "duration": "4 rounds",
+          "useEffects": true,
+          "opposite": "Target(s) becomes blinded."
+        }
+      },
+      "Myrrh": {
+        "name": "Myrrh",
+        "difficulty": 4,
+        "numericalCost": 60,
+        "numericalAddedValue": 110,
+        "effects": "the target(s) is heavily perfumed and can be detected by means other than sight by other creatures",
+        "cost": "6sp",
+        "icon": "gi-bottle-vapors",
+
+        "addedValue": "1gp 1sp",
+        "metadata": {
+          "type": "mutagen",
+          "useEffects": true,
+          "descriptor": "Perfuming",
+
+          "duration": "4 rounds",
+          "opposite": "Target(s) is scentless.  They cannot be detected by smell."
+        }
+      },
+      "Raven's Eyes": {
+        "name": "Raven's Eyes",
+        "difficulty": 4,
+        "icon": "gi-eyeball",
+        "numericalCost": 75,
+        "numericalAddedValue": 120,
+        "effects": "All of the target(s)'s abilities have their ranges doubled",
+        "cost": "7sp 5cp",
+        "addedValue": "1gp 2sp",
+        "metadata": {
+          "type": "mutagen",
+          "duration": "1 round(s)",
+          "descriptor": "Ranging",
+
+          "useEffects": true,
+          "opposite": "All of the target(s)'s abilities have their halved doubled."
+        }
+      },
+      "Burst Cherries": {
+        "name": "Burst Cherries",
+        "difficulty": 4,
+        "numericalCost": 75,
+        "numericalAddedValue": 110,
+        "effects": "the target(s) is befuddled",
+        "cost": "7sp 5cp",
+        "icon": "gi-cherry",
+
+        "addedValue": "1gp 1sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Befuddling",
+
+          "duration": "1 round(s)",
+          "applyStatus": "Befuddled",
+          "opposite": "Target(s) gains a placed roll on INT and PER Checks."
+        }
+      },
+      "Fractal Lichen": {
+        "name": "Fractal Lichen",
+        "difficulty": 4,
+        "numericalCost": 140,
+        "numericalAddedValue": 190,
+        "effects": "the target(s) experience vague visions of the future. Adding personal items can influence the direction or subject of the visions",
+        "cost": "1gp 4sp",
+        "icon": "gi-trunk-mushroom",
+
+        "addedValue": "1gp 9sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Scrying",
+
+          "duration": "Variable",
+          "useEffects": true,
+          "opposite": "Target(s) experience a specific vison of the past. Adding personal items can influence the the vision."
+        }
+      },
+      "Quartz Powder": {
+        "name": "Quartz Powder",
+        "difficulty": 4,
+        "effects": "the target(s) is teleported LOS 60' to a location of their choice",
+        "cost": "1gp 8sp",
+        "icon": "gi-minerals",
+        "numericalCost": 180,
+        "numericalAddedValue": 230,
+        "addedValue": "2gp 3sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Teleportation",
+
+          "duration": "instantaneous",
+          "useEffects": true,
+          "opposite": "The target(s) cannot teleport."
+        }
+      },
+      "Phosphorus": {
+        "name": "Phosphorus",
+        "difficulty": 5,
+        "icon": "gi-glowing-hands",
+        "numericalCost": 180,
+        "numericalAddedValue": 230,
+        "effects": "Any damage dealt by the potion is instead dealt as suffering in the potion's relevant damage type",
+        "cost": "1gp 8sp",
+        "addedValue": "2gp 3sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Suffering",
+
+          "damageToSuffering": true,
+          "opposite": "Any healing caused by the potion is treated like suffering. This automatically clears after a maximum of four rounds and is not stacking."
+        }
+      },
+      "Gnomish Mead": {
+        "name": "Gnomish Mead",
+        "difficulty": 5,
+        "icon": "gi-bad-gnome",
+        "numericalCost": 60,
+        "numericalAddedValue": 120,
+        "effects": "the target(s) shrinks one size category smaller",
+        "cost": "6sp",
+        "addedValue": "1gp 2sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Shrinking",
+
+          "duration": "2 rounds",
+          "useEffects": true,
+          "opposite": "Target(s) grows one size category larger."
+        }
+      },
+      "Crystalline Light": {
+        "name": "Crystalline Light",
+        "difficulty": 5,
+        "icon": "gi-crystal-shine",
+        "numericalCost": 90,
+        "numericalAddedValue": 150,
+        "effects": "the target(s) glows brightly, eradicating natural darkness in the target(s) area and eliminating stealth and invisibility",
+        "cost": "9sp",
+        "addedValue": "1gp 5sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Glowing",
+
+          "duration": "4 rounds",
+          "useEffects": true,
+          "opposite": "Target(s) emanates natural darkness."
+        }
+      },
+      "Magician's Little Helper": {
+        "name": "Magician's Little Helper",
+        "difficulty": 5,
+        "icon": "gi-sparkles",
+        "numericalCost": 1600,
+        "numericalAddedValue": 220,
+        "effects": "the next spell cast by the target(s) in this round is finessed 2 times. ",
+        "cost": "1gp 6sp",
+        "addedValue": "2gp 2sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Finessing",
+
+          "duration": "instantaneous",
+          "useEffects": true,
+          "opposite": "The next spell cast by the target(s) in this round is finessed negatively 2 times."
+        }
+      },
+      "Salt": {
+        "name": "Salt",
+        "difficulty": 6,
+        "icon": "gi-salt-shaker",
+        "numericalCost": 50,
+        "numericalAddedValue": 120,
+        "effects": "Potion's instantanous effects apply continuously for 2 rounds.  Effects that are naturally Continuous have their duration doubled",
+        "cost": "5sp",
+        "addedValue": "1gp 2sp",
+        "metadata": {
+          "type": "mutagen",
+          "durationMultiplier": 2,
+          "opposite": "All of the potion's effects apply instantaneously",
+          "oppositeDurationMultiplier": 0
+        }
+      },
+      "Spring Shrooms": {
+        "name": "Spring Shrooms",
+        "difficulty": 6,
+        "icon": "gi-spring",
+        "numericalCost": 70,
+        "numericalAddedValue": 140,
+        "effects": "the target(s) is immune to falling damage",
+        "cost": "7sp",
+        "addedValue": "1gp 4sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Foolhardy",
+
+          "duration": "1 round(s)",
+          "useEffects": true,
+          "opposite": "The target(s) is vulnerable to falling damage."
+        }
+      },
+      "Holy Water": {
+        "name": "Holy Water",
+        "difficulty": 6,
+        "icon": "gi-holy-water",
+        "numericalCost": 90,
+        "numericalAddedValue": 160,
+        "effects": "the damage type of the potion changes to divine",
+        "cost": "9sp",
+        "addedValue": "1gp 6sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Divine",
+
+          "damageType": ["divine"],
+          "opposite": "The damage type of the potion changes to blight."
+        }
+      },
+      "Mythril Powder": {
+        "name": "Mythril Powder",
+        "difficulty": 6,
+        "icon": "gi-powder",
+        "numericalCost": 90,
+        "numericalAddedValue": 160,
+        "effects": "the target(s) becomes nearly weightless and hovers above the ground. The target(s) receives a displaced roll on all STR Checks. If the target(s) has a flight speed, it is doubled",
+        "cost": "9sp",
+        "addedValue": "1gp 6sp",
+        "metadata": {
+          "type": "mutagen",
+          "useEffects": true,
+          "descriptor": "Hovering",
+
+          "duration": "4 rounds",
+          "opposite": "The target(s) becomes extremely heavy and is fimly planted. The target(s) recieves a placed roll on all STR Checks.  If the target(s) has a flight speed, it is halved."
+        }
+      },
+      "Fairy's Cap": {
+        "name": "Fairy's Cap",
+        "difficulty": 6,
+        "icon": "gi-fairy",
+        "numericalCost": 180,
+        "numericalAddedValue": 260,
+        "effects": "the target(s) is instantly teleported to their position from 3 rounds ago",
+        "cost": "1gp 8sp",
+        "addedValue": "2gp 6sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Timeskipping",
+
+          "duration": "instantaneous",
+          "useEffects": true,
+          "opposite": "The target(s) will be teleported to their current position 3 rounds from now."
+        }
+      },
+      "Ectoplasm": {
+        "name": "Ectoplasm",
+        "difficulty": 6,
+        "icon": "gi-bottled-shadow",
+        "numericalCost": 200,
+        "numericalAddedValue": 300,
+        "effects": "the target(s) is made ethereal",
+        "cost": "2gp",
+        "addedValue": "3gp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Ethereal",
+
+          "duration": "2 rounds",
+          "useEffects": true,
+          "opposite": "The target(s) is made corporeal"
+        }
+      },
+      "Mercury": {
+        "name": "Mercury",
+        "difficulty": 7,
+        "icon": "gi-dripping-tube",
+        "numericalCost": 130,
+        "numericalAddedValue": 230,
+        "effects": "Delays potion effect by 1 hour",
+        "cost": "1gp 3sp",
+        "addedValue": "2gp 3sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Delayed",
+
+          "useEffects": true,
+          "opposite": "Potion is unstable and will go off randomly without being used"
+        }
+      },
+      "Mandrake Root": {
+        "name": "Mandrake Root",
+        "difficulty": 7,
+        "icon": "gi-tree-root",
+        "numericalCost": 150,
+        "numericalAddedValue": 250,
+        "effects": "the target(s) can understand all languages",
+        "cost": "1gp 5sp",
+        "addedValue": "2gp 5sp",
+        "metadata": {
+          "type": "mutagen",
+          "duration": "1 Minute",
+          "descriptor": "Polyglot",
+
+          "useEffects": true,
+          "opposite": "The target(s) cannot understand language."
+        }
+      },
+      "Primordial Orchid": {
+        "name": "Primordial Orchid",
+        "difficulty": 7,
+        "icon": "gi-vanilla-flower",
+        "numericalCost": 150,
+        "numericalAddedValue": 250,
+        "effects": "the target(s) becomes immune to an elemental damage type. (decided at the time of creation)",
+        "cost": "1gp 5sp",
+        "addedValue": "2gp 5sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Immunity",
+
+          "duration": "2 rounds",
+          "useEffects": true,
+          "opposite": "The target(s) becomes vulnerable to an elemental damage type. (decided at the time of creation)"
+        }
+      },
+      "Tallow": {
+        "name": "Tallow",
+        "difficulty": 7,
+        "icon": "gi-pig",
+        "numericalCost": 220,
+        "numericalAddedValue": 330,
+        "effects": "Grants the target(s) an inferior attribute of the alchemist's choice(set at the time of the potion's creation)",
+        "cost": "2gp 2sp",
+        "addedValue": "3gp 3sp",
+        "metadata": {
+          "type": "mutagen",
+          "duration": "2 rounds",
+          "descriptor": "Inferiority",
+
+          "useEffects": true,
+          "opposite": "Grants the target(s) an exceptional attribute of the alchemist's choice(set at the time of the potion's creation)."
+        }
+      },
+      "Poppy Seeds": {
+        "name": "Poppy Seeds",
+        "difficulty": 7,
+        "icon": "gi-poppy",
+        "numericalCost": 420,
+        "numericalAddedValue": 560,
+        "effects": "the target(s) is made sluggish, their Martial Point total is halved",
+        "cost": "4gp 2sp",
+        "addedValue": "5gp 6sp",
+        "metadata": {
+          "type": "mutagen",
+          "duration": "2 rounds",
+          "descriptor": "Sluggifying",
+
+          "useEffects": true,
+          "opposite": "The target(s) is made energized, their Martial Point total is doubled."
+        }
+      },
+      "Tiger Lilly": {
+        "name": "Tiger Lilly",
+        "difficulty": 8,
+        "icon": "gi-twirly-flower",
+        "numericalCost": 210,
+        "numericalAddedValue": 360,
+        "effects": "the target(s) is rendered mute",
+        "cost": "2gp 1sp",
+        "addedValue": "3gp 6sp",
+        "metadata": {
+          "type": "mutagen",
+          "duration": "2 rounds",
+          "descriptor": "Mutifying",
+
+          "useEffects": true,
+          "opposite": "The target(s) is granted speech"
+        }
+      },
+      "Powdered Essentia": {
+        "name": "Powdered Essentia",
+        "difficulty": 8,
+        "icon": "gi-cool-spices",
+        "numericalCost": 240,
+        "numericalAddedValue": 400,
+        "effects": "Delays potion effect by 12 hours",
+        "cost": "2gp 4sp",
+        "addedValue": "4gp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Delayed",
+
+          "useEffects": true,
+          "opposite": "Potion is unstable and will go off randomly without being used"
+        }
+      },
+      "Realgar Dust": {
+        "name": "Realgar Dust",
+        "difficulty": 8,
+        "icon": "gi-unstable-orb",
+        "numericalCost": 300,
+        "numericalAddedValue": 480,
+        "effects": "A random chaos effect is rolled, wherein the target(s) is considered both the target(s) and the caster.  The effect is considered rank 5",
+        "cost": "3gp",
+        "addedValue": "4gp 8sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Chaos",
+
+          "duration": "instantaneous",
+          "useEffects": true,
+          "opposite": "A random chaos effect is rolled, wherein the target(s) is considered neither the target(s) and the caster.  The effect is considered rank 5"
+        }
+      },
+      "Reishi Mushroom": {
+        "name": "Reishi Mushroom",
+        "icon": "gi-remedy",
+        "numericalCost": 300,
+        "numericalAddedValue": 480,
+        "difficulty": 8,
+        "effects": "the target(s) is cured of disease and cleansed of all status effects",
+        "cost": "3gp",
+        "addedValue": "4gp 8sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Cleansing",
+
+          "duration": "instantaneous",
+          "useEffects": true,
+          "opposite": "The target(s) becomes Sickened I"
+        }
+      },
+      "Cloudbloom": {
+        "name": "Cloudbloom",
+        "difficulty": 9,
+        "icon": "gi-fog",
+        "numericalCost": 120,
+        "numericalAddedValue": 280,
+        "effects": "the target(s) falls upwards at a rate of 40ft per round(s)",
+        "cost": "1gp 2sp",
+        "addedValue": "2gp 8sp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Falling",
+
+          "duration": "4 rounds",
+          "useEffects": true,
+          "opposite": "The target(s) is becomed Sickened I"
+        }
+      },
+      "Copper Powder": {
+        "name": "Copper Powder",
+        "difficulty": 9,
+        "icon": "gi-coins-pile",
+        "numericalCost": 120,
+        "numericalAddedValue": 280,
+        "effects": "Potion's instantanous effects apply continuously for 4 rounds. Effects that are naturally Continuous have their duration quadrupled",
+        "cost": "1gp 2sp",
+        "addedValue": "2gp 8sp",
+        "metadata": {
+          "type": "mutagen",
+
+          "durationMultiplier": 4,
+          "opposite": "Potion's effects apply instantaneously",
+          "oppositeDurationMultiplier": 0
+        }
+      },
+      "Selenium": {
+        "name": "Selenium",
+        "difficulty": 9,
+        "icon": "gi-duality",
+        "numericalCost": 370,
+        "numericalAddedValue": 660,
+        "effects": "the potion does the exact opposite of what it would do otherwise. Ex. Healing effects would deal pure magic damage",
+        "cost": "3gp 7sp",
+        "addedValue": "6gp 6sp",
+        "metadata": {
+          "type": "mutagen",
+          "causeOpposite": true
+        }
+      },
+      "Banana Slugs": {
+        "name": "Banana Slugs",
+        "difficulty": 10,
+        "icon": "gi-grasping-slug",
+        "numericalCost": 650,
+        "numericalAddedValue": 1400,
+        "effects": "the target(s) is permanently transformed into a a sex of choice.  Set by the alchemist at the time of creation.  It does not have to conform to traditional sexes for their race",
+        "cost": "6gp 5sp",
+        "addedValue": "14gp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Health Care",
+
+          "duration": "Permananent",
+          "opposite": "The target(s) loses their sex organs."
+        }
+      },
+      "Polymethaqualone": {
+        "name": "Polymethaqualone",
+        "difficulty": 8,
+        "icon": "gi-cosmic-egg",
+        "numericalCost": 700,
+        "numericalAddedValue": 1500,
+        "effects": "the target(s) is permanently transformed into a creature that the alchemist has studied (set at the time of the potion's creation). The target(s) can receive any adaptations natural to the creature, with a total point cost up to the target(s)'s HEA stat. (instantaneous)",
+        "cost": "7gp",
+        "addedValue": "15gp",
+        "metadata": {
+          "type": "mutagen",
+          "descriptor": "Furrifying",
+
+          "duration": "Permananent",
+          "opposite": "Target(s) becomes somethiung...unexpected."
+        }
+      }
+    }
+  }
+}

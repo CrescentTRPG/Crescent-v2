@@ -1,8 +1,5 @@
 <script lang="ts">
-import { ref } from 'vue'
-import { useDesignStore } from '../../../../stores/designStore'
-
-import { useCharacterStore } from '@/stores/characterStore'
+import { useDesignStore } from '../../../../stores/designStore.ts'
 
 export default {
   setup(props, context) {

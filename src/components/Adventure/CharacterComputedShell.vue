@@ -1,19 +1,20 @@
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useDesignStore } from '../../stores/designStore'
-import BImg from 'bootstrap-vue-next/src/components/BImg.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { usePartyStore } from '@/stores/partyStore.ts'
+import { computed, ComputedRef, ref } from 'vue'
+import { useDesignStore } from '../../stores/designStore.ts'
 import StatBlockQuickReference from './StatBlockQuickReference.vue'
-import { ComputedRef } from 'vue'
-import { useCharacterStore } from '@/stores/characterStore'
-import { useRoute, useRouter } from 'vue-router'
-import { useAdventureStore } from '@/stores/adventureStore'
-import { clearIndexedDbPersistence } from 'firebase/firestore'
-import { usePartyStore } from '@/stores/partyStore'
-import { idText } from 'typescript'
 
 export default {
   emits: ['render'],
-  props: ['character', 'editable', 'initiative'],
+  props: [
+    'character',
+    'editable',
+    'initiative',
+    'initiativeDisplayCharacterTraits',
+    'allowApplyStatusToCharacter'
+  ],
   setup(props, context) {
     const modal = ref(false)
     const designStore = useDesignStore()
@@ -173,10 +174,16 @@ export default {
       sum += props.character.arcaneBattery * 2
       const groups: Array<any> = Object.values(props.character.spellgroups)
       groups.forEach((spellgroup: any) => {
-        const maxRank = Object.values(spellgroup?.spells)?.reduce(
+        let maxRank = Object.values(spellgroup?.spells)?.reduce(
           (acc: number, spell: any) => (spell.rank > acc ? spell.rank : acc),
           0
         )
+        if (!spellgroup.inOrder || spellgroup.flatCost) {
+          maxRank = Object.values(spellgroup?.spells)?.reduce(
+            (acc: number, spell: any) => acc + 1,
+            0
+          )
+        }
 
         sum += spellgroup?.manaGain * maxRank
       })
@@ -342,7 +349,10 @@ export default {
           : parseInt(secondaryHandheldPassives.value['Override Move Dvs']?.modAmount) + modifier
       }
       const perks = Object.values(props.character.martialPerks || {})
-      if (props.character.overviewValues.isDodging) {
+      if (
+        props.character.martialPerks['Dodging']?.known &&
+        props.character.overviewValues?.isDodging
+      ) {
         return isStunned.value || isPinned.value
           ? 0
           : perks.reduce((acc: number, perk: any) => (perk.rank > acc ? perk.rank : acc), 0) +
@@ -359,7 +369,10 @@ export default {
     })
     const armorDvs: ComputedRef<number> = computed(() => {
       let modifier = -1000
-      if (props.character.overviewValues.isDodging) {
+      if (
+        props.character.martialPerks['Dodging']?.known &&
+        props.character.overviewValues.isDodging
+      ) {
         return 0
       }
       if (wornArmorPassives.value['Modify Armor Dvs']) {
@@ -509,7 +522,10 @@ export default {
 
     const shieldDvs: ComputedRef<number> = computed(() => {
       let modifier = -1000
-      if (props.character.overviewValues.isDodging) {
+      if (
+        props.character.martialPerks['Dodging']?.known &&
+        props.character.overviewValues.isDodging
+      ) {
         return 0
       }
       if (wornArmorPassives.value['Modify Shield Dvs']) {
@@ -704,6 +720,9 @@ export default {
       :changeInitiative="adventureStore.addCharacterInitiative"
       :agi="props.character.attributes.agility"
       :keyVal="props.character.id"
+      :initiativeDisplayCharacterTraits="initiativeDisplayCharacterTraits"
+      :allowApplyStatusToCharacter="props.allowApplyStatusToCharacter"
+      :collapseable="false"
     ></StatBlockQuickReference>
   </div>
 </template>

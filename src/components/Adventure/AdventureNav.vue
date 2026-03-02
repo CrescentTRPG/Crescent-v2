@@ -1,9 +1,8 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
+import { BNavItem, BNavbar } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../../stores/designStore'
+import { useRouter } from 'vue-router'
+import { useDesignStore } from '../../stores/designStore.ts'
 
 export default {
   setup(props, context) {

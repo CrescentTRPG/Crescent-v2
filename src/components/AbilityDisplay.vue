@@ -1,9 +1,7 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../stores/designStore'
+import { useRouter } from 'vue-router'
+import { useDesignStore } from '../stores/designStore.ts'
 import AbilityDisplayMedallion from './AbilityDisplayMedallion.vue'
 
 export default {
@@ -32,20 +30,33 @@ export default {
       let sections = description.split('\\n')
       let ret
       if (sections.length === 1) {
-        sections = description.split('\n')
+        sections = description.split('\n*')
       }
 
       if (sections.length === 1) {
-        return '<div>' + description + '</div>'
+        sections = description.split('\n')
+        if (sections.length === 1) return '<div>' + description + '</div>'
+        else {
+          ret = '<div style="margin-bottom: .25rem">'
+          sections.forEach((s) => {
+            if (s === '') {
+              ret += '<div style="padding: .5rem"></div>'
+            }
+            ret += '<div style=" margin-bottom: .25rem;list-style-type:none;">' + s + '</div>'
+          })
+          ret += '</div>'
+        }
       } else {
         ret = '<div style="margin-bottom: .25rem">' + sections[0] + '</div>'
         sections.shift()
         sections.forEach((s) => {
-          ret +=
-            '<li style="padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem ;">' +
-            '❖ ' +
-            s +
-            '</li>'
+          if (s.length > 3) {
+            ret +=
+              '<li style="padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem ;">' +
+              '❖ ' +
+              s +
+              '</li>'
+          }
         })
       }
       return ret

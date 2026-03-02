@@ -1,15 +1,14 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import { BButton, BPopover, BTable } from 'bootstrap-vue-next'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { BPopover } from 'bootstrap-vue-next'
 import { computed, ComputedRef, ref } from 'vue'
-import { giIcons } from './icons/giIcons'
-import CustomPagination from './CustomPagination.vue'
+import IconDisplay from './IconDisplay.vue'
 import IconGrid from './IconGrid.vue'
-import { styleText } from 'util'
+import { giIcons } from './icons/giIcons'
 
 export default {
   emits: ['selectedIcon'],
-  props: ['currentIcon', 'orientation', 'color'],
+  props: ['currentIcon', 'orientation', 'color', 'xsmall'],
   setup(props: any) {
     const designStore = useDesignStore()
     const selectedIcon = ref('')
@@ -45,7 +44,7 @@ export default {
       this.$emit('selectedIcon', icon)
     }
   },
-  components: { BPopover, IconGrid }
+  components: { BPopover, IconGrid, IconDisplay }
 }
 </script>
 <template>
@@ -57,28 +56,33 @@ export default {
       :close-on-hide="true"
       :delay="{ show: 0, hide: 0 }"
       style="width: fit-content !important"
-      :placement="orientation"
+      :placement="props.orientation"
     >
       <template #target>
-        <div
-          v-if="icon.substring(0, 2) == 'gi'"
-          class="icons"
-          :style="{ borderColor: designStore.secondaryTheme }"
-        >
-          <v-icon
-            scale="2.5"
-            :name="icon"
-            style="cursor: pointer"
-            :style="{ color: props.color }"
-          ></v-icon>
+        <div v-if="props.xsmall">
+          <IconDisplay scale="1" fontsize="1rem" :icon="icon" :color="props.color"></IconDisplay>
         </div>
-        <div
-          class="icons"
-          :style="{ borderColor: designStore.secondaryTheme, color: props.color }"
-          v-if="icon.substring(0, 2) == 'bi'"
-          style="font-size: 2.5rem; cursor: pointer"
-        >
-          <i :class="icon"></i>
+        <div v-else>
+          <div
+            v-if="icon.substring(0, 2) == 'gi'"
+            class="icons hoverableTransparantLinear"
+            :style="{ borderColor: designStore.secondaryTheme }"
+          >
+            <v-icon
+              scale="2.5"
+              :name="icon"
+              style="cursor: pointer"
+              :style="{ color: props.color }"
+            ></v-icon>
+          </div>
+          <div
+            class="icons"
+            :style="{ borderColor: designStore.secondaryTheme, color: props.color }"
+            v-if="icon.substring(0, 2) == 'bi'"
+            style="font-size: 2.5rem; cursor: pointer"
+          >
+            <i :class="icon"></i>
+          </div>
         </div>
       </template>
       <div>

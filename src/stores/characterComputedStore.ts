@@ -134,16 +134,59 @@ export const useCharacterComputedStore = defineStore('characterComputed', () => 
     // characterStore.setTotalHp(hp)
     return hp
   })
+  const unmoddedTotalHp = computed(() => {
+    let ret = 0
+    const level = Math.floor(characterStore.totalAbilityPoints / 10)
+    if (level < 3) {
+      ret = 10 + level * 8
+    } else if (level < 15) {
+      ret = 34 + (level - 3) * 4
+    } else if (level < 40) {
+      ret = 82 + (level - 15) * 2
+    } else {
+      ret = Math.floor(152 + (level - 40) * 0.1)
+    }
+    ret += getPerkAndSkillGainHp()
+    let modifier = -1000
+    if (wornArmorPassives.value['Modify Base Hp']) {
+      modifier = Math.max(parseInt(wornArmorPassives.value['Modify Base Hp']?.modAmount), modifier)
+    }
+    if (primaryHandheldPassives.value['Modify Base Hp']) {
+      modifier = Math.max(
+        parseInt(primaryHandheldPassives.value['Modify Base Hp']?.modAmount),
+        modifier
+      )
+    }
+    if (secondaryHandheldPassives.value['Modify Base Hp']) {
+      modifier = Math.max(
+        parseInt(secondaryHandheldPassives.value['Modify Base Hp']?.modAmount),
+        modifier
+      )
+    }
+    if (modifier == -1000) {
+      modifier = 0
+    }
+
+    if (characterStore.currentHp > ret + modifier) {
+      setNewCurrentHpValue(parseInt(ret + modifier + ''))
+    }
+    const hp = Math.max(ret + modifier, 0)
+    // characterStore.setTotalHp(hp)
+    return hp
+  })
   const spellStore = useSpellStore()
   const totalMana = computed(() => {
     let sum = 0
     sum += spellStore.arcaneBattery * 2
     const groups: Array<any> = Object.values(spellStore.spellgroups)
     groups.forEach((spellgroup: any) => {
-      const maxRank = Object.values(spellgroup?.spells)?.reduce(
+      let maxRank = Object.values(spellgroup?.spells)?.reduce(
         (acc: number, spell: any) => (spell.rank > acc ? spell.rank : acc),
         0
       )
+      if (!spellgroup.inOrder && spellgroup.flatCost) {
+        maxRank = Object.values(spellgroup?.spells)?.reduce((acc: number, spell: any) => acc + 1, 0)
+      }
 
       sum += spellgroup?.manaGain * maxRank
     })
@@ -305,7 +348,10 @@ export const useCharacterComputedStore = defineStore('characterComputed', () => 
         : parseInt(secondaryHandheldPassives.value['Override Move Dvs']?.modAmount) + modifier
     }
     const perks = Object.values(martialPerksStore.martialPerks)
-    if (characterStore.overviewValues.isDodging) {
+    if (
+      martialPerksStore.martialPerks['Dodging']?.known &&
+      characterStore.overviewValues.isDodging
+    ) {
       return isStunned.value || isPinned.value
         ? 0
         : perks.reduce((acc: number, perk: any) => (perk.rank > acc ? perk.rank : acc), 0) +
@@ -322,7 +368,10 @@ export const useCharacterComputedStore = defineStore('characterComputed', () => 
   })
   const armorDvs: ComputedRef<number> = computed(() => {
     let modifier = -1000
-    if (characterStore.overviewValues.isDodging) {
+    if (
+      martialPerksStore.martialPerks['Dodging']?.known &&
+      characterStore.overviewValues.isDodging
+    ) {
       return 0
     }
     if (wornArmorPassives.value['Modify Armor Dvs']) {
@@ -464,7 +513,10 @@ export const useCharacterComputedStore = defineStore('characterComputed', () => 
 
   const shieldDvs: ComputedRef<number> = computed(() => {
     let modifier = -1000
-    if (characterStore.overviewValues.isDodging) {
+    if (
+      martialPerksStore.martialPerks['Dodging']?.known &&
+      characterStore.overviewValues.isDodging
+    ) {
       return 0
     }
     if (wornArmorPassives.value['Modify Shield Dvs']) {

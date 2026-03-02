@@ -137,6 +137,9 @@ a,
   .hoverableTransparantRadial:hover {
     background-image: radial-gradient(circle, var(--hover-color), transparent) !important;
   }
+  .hoverableTransparantLinear:hover {
+    background-image: linear-gradient(transparent, var(--hover-color)) !important;
+  }
   .hoverableIconOnSidebar:hover {
     background-image: radial-gradient(var(--hover-color), var(--hover-blend-sidebar));
   }

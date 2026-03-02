@@ -1,13 +1,13 @@
 <script lang="ts">
+import DropdownSelect from '@/components/DropdownSelect.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
-import { useDesignStore } from '@/stores/designStore'
-import { BFormSelect } from 'bootstrap-vue-next'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { usePerformanceStore } from '@/stores/performanceStore.ts'
+import { useSkillStore } from '@/stores/skillsStore.ts'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
+import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import PerformanceTable from './PerformanceTable.vue'
-import { usePerformanceStore } from '@/stores/performanceStore'
-import { storeToRefs } from 'pinia'
-import { useSkillStore } from '@/stores/skillsStore'
 
 export default {
   setup(props, context) {
@@ -44,7 +44,18 @@ export default {
         style3: style3.value
       })
     }
-
+    function updateStyle1(val) {
+      style1.value = val
+      update()
+    }
+    function updateStyle2(val) {
+      style2.value = val
+      update()
+    }
+    function updateStyle3(val) {
+      style3.value = val
+      update()
+    }
     return {
       styles,
       styles2,
@@ -56,12 +67,15 @@ export default {
       update,
       skills,
       spentPoints,
-      total
+      total,
+      updateStyle3,
+      updateStyle2,
+      updateStyle1
     }
   },
   components: {
     TitleWidget,
-    BFormSelect,
+    DropdownSelect,
     BInputGroupText,
     PerformanceTable
   },
@@ -94,44 +108,53 @@ export default {
           }"
           >Performance Style(s)</BInputGroupText
         >
-        <BFormSelect
+        <DropdownSelect
           class="style1"
+          :borderless="true"
           :style="{
             color: designStore.inputText,
             background: designStore.inputBacking,
             borderColor: designStore.secondaryTheme
           }"
-          v-model="style1"
+          :squared="true"
           :options="styles"
-          @change="update()"
-        ></BFormSelect>
+          :default="style1"
+          @selection="(val) => updateStyle1(val)"
+        ></DropdownSelect>
       </div>
       <div style="display: flex; width: 100%">
-        <BFormSelect
+        <DropdownSelect
           :disabled="skills['Performance'].rank < 5"
+          disabled-message="Unlocks at rank 5"
+          :borderless="true"
+          style="padding-right: 0.25rem"
           class="style2"
           :style="{
             color: designStore.inputText,
             background: designStore.inputBacking,
             borderColor: designStore.secondaryTheme
           }"
-          v-model="style2"
+          :squared="true"
           :options="styles2"
-          @change="update()"
-        ></BFormSelect>
+          :default="style2"
+          @selection="(val) => updateStyle2(val)"
+        ></DropdownSelect>
 
-        <BFormSelect
+        <DropdownSelect
           :disabled="skills['Performance'].rank < 10"
-          class="style3"
+          disabled-message="Unlocks at rank 10"
+          :borderless="true"
+          class="style2"
+          :squared="true"
           :style="{
             color: designStore.inputText,
             background: designStore.inputBacking,
             borderColor: designStore.secondaryTheme
           }"
-          v-model="style3"
           :options="styles3"
-          @change="update()"
-        ></BFormSelect>
+          :default="style3"
+          @selection="(val) => updateStyle3(val)"
+        ></DropdownSelect>
       </div>
     </div>
     <PerformanceTable></PerformanceTable>

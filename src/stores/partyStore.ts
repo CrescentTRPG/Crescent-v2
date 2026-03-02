@@ -35,6 +35,8 @@ export const usePartyStore = defineStore('party', {
           traits: doc.data()?.traits || {},
           currentHp: doc.data()?.currentHp || 0,
           barrierHp: doc.data()?.barrierHp || 0,
+          showNewPlayerGuide:
+            doc.data()?.showNewPlayerGuide === undefined ? true : doc.data()?.showNewPlayerGuide,
           currentMana: doc.data()?.currentMana || 0,
           statusEffects: doc.data()?.statusEffects || {},
           customStatusEffects: doc.data()?.customStatusEffects || {},
@@ -59,6 +61,7 @@ export const usePartyStore = defineStore('party', {
               Potion: {}
             }
           },
+          effigies: doc.data()?.effigies || {},
           hpStatusModifiers: doc.data()?.hpStatusModifiers || {},
           manaStatusModifiers: doc.data()?.manaStatusModifiers || {},
           arcaneBattery: doc.data()?.arcaneBattery || 0,

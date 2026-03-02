@@ -1,6 +1,6 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import { useFaunaStore } from '@/stores/faunaStore'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useFaunaStore } from '@/stores/faunaStore.ts'
 import { storeToRefs } from 'pinia'
 
 export default {

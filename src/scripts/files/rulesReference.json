@@ -1,0 +1,452 @@
+{
+  "Armor Level": {
+    "title": "Armor Level",
+    "type": "html",
+    "document": "<div>There are three different base Armor Levels: <b>Heavy, Medium, and Light. </b> The most basic type of armor is Iron Armor which confers characters 7, 5, and 3 armor DVs respectfully. Character's do not directly chose their armor level, instead, it is determined by their archetype:  \n*Breakers, Aurgurs, Paladins, and Wardens all recieve Heavy Armor. \n* Rogues, Mages, Priests, and Monks all recieve Medium Armor. \n* Nomads, Mystics, Elementalists, and Sorcerers all recieve Light Armor. </div>",
+    "tags": "Heavy:Medium:Light"
+  },
+  "Defense Values (DVs)": {
+    "title": "Defense Values (DVs)",
+    "type": "html",
+    "document": "<div>Defense Values (DVs) represent how hard it is to hit a target or pierce their armor. DVs are composed of Movement, Armor, Bonus, and Shield DVs which additively deine how dificult it is to strike a target. Every character begins with 10 movement DVs, armor DVs are decided by their archetype, shield DVs are earned by holding a shield, and bonus DVs are typically temporary DVs granted by an ability</div>",
+    "tags": "Armor:Shield:Movement:Bonus"
+  },
+  "Elemental Spellgroups": {
+    "title": "Elemental Spellgroups",
+    "type": "html",
+    "document": "<div>Magical groups of Intellectual Study, a Character needs 2 points of <b>Intelligence</b> for every Elemental Spellgroup they know. To become a master of their craft they will need <b>Power</b> as it limits the rank spellcasters may buy in all spellgroups and sets the difficulty of their saves and checks. \n  \n \tThe elemental spellgroups include the four base elemental groups (Aquamancy, Aeromancy, Pyromancy and Terramancy) as well as Core Magics whos magical roots stem from those base groups (Interdictions, Illusions, Space Time, Charms, Astral Power, and Scrying). \n \nBeware that buying any of the base Elemental groups will alter a character's <i>Adaptive Damage</i>.</div>",
+    "tags": "Magic:Intelligence"
+  },
+  "Adaptive Damage": {
+    "title": "Adaptive Damage",
+    "type": "html",
+    "document": "<div>Adaptive Damage is the primary damage type dealt by Core Magics.  It <i>adapts</i> to the character's choices in spellgroups.  \n*If the character has Pyromancy their adpative damage will deal Fire Damage \n*If the character has Aeromancy their adpative damage will deal Lightning Damage \n*If the character has Aquamancy their adpative damage will deal Ice Damage \n*If the character has Terramancy their adpative damage will deal Force Damage \n*If the character has multiple elemental spellgroups, when they deal adaptive damage they may chose which type they want it to take on (If the character has all four, they may additionally chose <b>pure magic damage</b>) \n*If the character hasn't selected any of the Base Elemental groups, their adaptive damage always deals <b>pure magic damage</b></div>",
+    "tags": "Magic:Intelligence:Elemental Spellgroups"
+  },
+  "Spellgroups": {
+    "title": "Spellgroups",
+    "type": "html",
+    "document": "<div>Spellgroups are collections of magical abilities called spells.  Every spell has a rank, typically 0-10 though some groups only go up to 5 and one exception, Arcana, only has rank 0 spells. \n \n   For all spellgroups except Arcana, Characters must purchase spells in rank order, meaning they first purchase the rank 1, recieve all rank 0's for free with the first rank, and from then on out may only purchase spells  <b>one greater</b> than their current max rank or lower. All spellgroups with a maximum rank of ten have a base cost of 1 and all groups with a maximum rank of 5 have a base cost of 3. \n \n Every unique rank in a spellgroup grants a point of <b>mana</b> to the caster. Ex: someone with 6 ranks of Aquamancy and 2 ranks of Scrying will have 8 mana.</div>",
+    "tags": "Magic:Intelligence:Elemental Spellgroups:Divine Spellgroups:Mana:Spell"
+  },
+  "Ability Points": {
+    "title": "Ability Points",
+    "type": "html",
+    "document": "<div>Ability Points are a numerical representation of the growth of a character's abilities. They can be spent to aquire new abilities or put more ranks into existing ones.  How much an ability costs will vary based on its <i>Base Cost</i> and if it is a <i>Flat Cost<i/> or <i>Rank Cost</i> ability.  The vast majority of abilities are <i>Rank Cost</i> with a <i>Base Cost</i> of one.  This means most abilities will cost a number of ability points equal to their rank.  Thankfully, you are on the Web App, <i>Lucky you!</i>  So when you are selecting abilities in the Build Tab, a counter will keep track of how much you have spent for you. You <b>do not</b> need to spend your ability points in totality, and at higher levels will likely find yourself needing to save up some points to get something you want later.\n \nAbility Points are given out at the Game Master's discretion.  Frequently they are earned in increments of 5 or 10 either every session <b>or</b> every time a goal has been completed or a chapter has closed.</div>",
+    "tags": "Spend:Cost:Points:Purchase"
+  },
+  "Level": {
+    "title": "Level",
+    "type": "html",
+    "document": "<div>A character's Level is an easy shorthand for representing their overall power.  It is their total ability points/10 (rounded down).</div>",
+    "tags": "Ability Points"
+  },
+  "Base Cost": {
+    "title": "Base Cost",
+    "type": "html",
+    "document": "<div>Base Cost is a number that refers to the cost of an individual ability.  If that ability is a <i>Rank Cost</i> ability, every ability costs its rank*(Base Cost).  Most abilities are Rank Cost, the only exception being Arcana which is a <i>Flat Cost</i> group.</div>",
+    "tags": "Ability Points:Purchase:Cost:Price"
+  },
+  "Flat Cost": {
+    "title": "Flat Cost",
+    "type": "html",
+    "document": "<div>Flat Cost, as opposed to <i>Rank Cost</i>, means that every ability in that group costs the same number of <i>ability points</i>.  That number being the <i>Base Cost</i> of that particular group.</div>",
+    "tags": "Ability Points:Purchase:Cost:Price"
+  },
+  "Rank Cost": {
+    "title": "Rank Cost",
+    "type": "html",
+    "document": "<div>Rank Cost, as opposed to <i>Flat Cost</i>, means that every ability in that group costs rank*<i>Base Cost</i>.</div>",
+    "tags": "Ability Points:Purchase:Cost:Price"
+  },
+  "Spell": {
+    "title": "Spell",
+    "type": "html",
+    "document": "<div>Spells are known manifestations of magic that can be reliably reproduced once an individual has learned them. The act of performing a spell is spellcasting, or casting for short.  An individual may learn them through intellectual study, meditation, worship, shady deals, inherent magical potential, etc. Spells can be cast how they are, <i>finnessed</i> to increase the power of an aspect of a spell, or modified through <i>Metamagic</i>. Spells are written In a standardized format with the following properties: \n*Name: Identifier of the spell\n*Rank: Representation of the power of the spell, also, the amount of mana it costs to cast\n*Action Cost: the Action required to perform the spell\n*Target:  A Restriction on who the spell may be used on whether that be based on an effective range, the ability is only restricted to work on the Caster, etc. \n*Area: Related to the amount of targets efected, whether this be an actual number of target that may be selected, an <i>Area of Effect</i> etc.\n*Type: Defines if and how the ability persists over time\n*Duration:  Specifies how long the spell's effects last\n*Resistance: Reference for what kind of <i>resistance checks</i> or <i>saves</i> there might be <br /><br />If you are confused by something that looks like this + 1/F, that is <i>Finesse</i>.  These are optional, but may be used to make spells more powerful in exchange for more mana.</div>",
+    "tags": "Magic:Intelligence:Elemental Spellgroups:Divine Spellgroups:Mana:Spell"
+  },
+  "Spellcasting": {
+    "title": "Spellcasting",
+    "type": "html",
+    "document": "<div>To Cast a spell, first figure out who/where you would like to target, then spend an amount of mana equivilant to the rank of that spell. Determine if it has any <i>rolls to hit</i> and or a<i> resistance checks</i> or <i>saves</i>.  If it has a roll to hit, roll a Perception Check.  If this value meets or exceeds their <i>Armor Dvs</i> the spell will strike the target.  If there are saves or checks, roll a Power Check, the affected must roll the Attribute Check specified in the spell to contest against your spell's power. If they meet or exceed the power they will either lessen the effects or avoid them entirely depending on the spell.</div>",
+    "tags": "casting:spell:how to cast"
+  },
+  "Finesse": {
+    "title": "Finesse",
+    "type": "html",
+    "document": "<div>Finessing a spell is the act of spending more mana to make a spell stronger.  If an aspect of a spell can be finnessed it will read something like: You fire 1 + 1/F blast(s).  In this example, the spell will only fire one blast by default, but will fire an additional blast for each additional point of mana spent.  If it instead read 1 + 1/2F, each additional blast would instead require two finnesses, for an additional two point of mana per blast. \n \n  Each finnesse increases the technical rank of a spell by one, and a character may only spend to finesse a spell up to the maximum rank they know in that particular group.  Free finnesses do not count towards this. Additionally, most spellcasters have a finnesse cap of <b>four</b>, meaning that even if they are not at their rank limit, they may only finesse a given spellcast 4 times.</div>",
+    "tags": "casting:spell:how to cast:+ 1/F:/F:/2F"
+  },
+  "Interdictions": {
+    "title": "Interdictions",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Antimagic, Shielding, Defense</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Magic is incredibly powerful, those looking to put a direct stop to it could find no better defense than Interdictions magic. Interdictions is a Core Magic School focused on defense, specifically defense against magic.  A Character will need <i>Power</i> to become proficient in it, however, for certain spells like <b>Counterspell</b> they will also need a strong <i>Willpower</i>.  As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Anti:Magic:Anti-Magic:Counterspell:Stop Magic:Antimagic:Shielding:Defense"
+  },
+  "Space Time": {
+    "title": "Space Time",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Mobility, Buff, Debuff</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>  The battlefield can be a treacherous place, and Space Time provides creative ways to manipulate and navigate it. Space Time is a Core Magic School focused on mobility and utility. A Character will need <i>Power</i> to become proficient in it. As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Mobility:Buff:Debuff"
+  },
+  "Scrying": {
+    "title": "Scrying",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Luck, Information Gathering, Support</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>  Luck is a fickle thing, but the Scrying Mage has learned how to coherce it. The Scrying Mage thirsts for knowledge and has a variety of ways to gather it.  Second to the cunning theif, you never want to play cards with one who can look straight past them into your soul.  A Character will need <i>Power</i> to become proficient in it. As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Vision:Luck:Dice:Information Gathering:Support"
+  },
+  "Charms": {
+    "title": "Charms",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Debuff, Trickery, Buff</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Charms magic targets the mind, altering peoples perception of reality: who is friend, foe, what they truly believe. If you wrong a Charms Mage, you might just find yourself tossing and turning, kept awake by prophetic nightmares. A Character will need <i>Power</i> to become proficient in it.  As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Trickery:Buff:Debuff"
+  },
+  "Illusions": {
+    "title": "Illusions",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Trickery, Defense </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Illusionsists create false realities and play upon all of the senses.  They can even manipulate what sensations real physical objects and people have. An illusionist's true power is bound by their own creativity. A Character will need <i>Power</i> to become proficient in it.  As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Trickery:Defense"
+  },
+  "Astral Power": {
+    "title": "Astral Power",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Damage, Buff </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Astral Power channels the energy of the cosmos to supercharge spellcasting.  Astral Power's core mechanic revolves around orbitals, small planet or star like bodies which can be used as vectors for spellcasting, enhanced, and hurled at targets. A Character will need <i>Power</i> to become proficient in it.  As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Damage:Buff:orbital"
+  },
+  "Pyromancy": {
+    "title": "Pyromancy",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 1/5</div><div>Themes: Damage, Debuff  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Overwhelming destruction is Pyromancy's specialty. As a Base Elemental Group, Pyromancy is a primal force that influces a Mage's base magical state, causing their <i>adaptive damage</i> to deal fire damage. A Character will need <i>Power</i> to become proficient in it.  As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:fire:Damage:Debuff"
+  },
+  "Aquamancy": {
+    "title": "Aquamancy",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Battlefield Control, Damage, Antimagic</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> An Aquamancer finds both pride and comedy in the ubiquity of water. The blood of the world bows to them should they command it.  As a Base Elemental Group, Aquamancy is a primal force that influces a Mage's base magical state, causing their adaptive damage to deal ice damage. A Character will need <i>Power</i> to become proficient in it.  As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:water:ice:Battlefield Control:Damage:Antimagic:Control"
+  },
+  "Aeromancy": {
+    "title": "Aeromancy",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Damage, Mobility, Battlefield Control</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> The swift winds of an Aeromancer are but a warning for the storm to come. Specialists in mobility and damage, the aeromancer is as nimble as they are deadly. As a Base Elemental Group, Aeromancy is a primal force that influces a Mage's base magical state, causing their adaptive damage to deal lightning damage. A Character will need <i>Power</i> to become proficient in it.  As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:lighting:wind:Damage:mobility:Battlefield Control:Control"
+  },
+  "Terramancy": {
+    "title": "Terramancy",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Defense, Shielding, Buff</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> The terramancer stands with both feet firmly planted in the ground: their power unshakable. The earth bends to their will, sheilding them from danger and striking out in shards of raw force. As a Base Elemental Group, Terramancy is a primal force that influces a Mage's base magical state, causing their adaptive damage to deal force damage. A Character will need <i>Power</i> to become proficient in it.  As an Elemental Magic school, depending on how many other Elemental groups they wish to know, your character may need high <i>Intelligence</i>.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:earth:force:Defense:Shielding:buff"
+  },
+  "Life": {
+    "title": "Life",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 1/5</div><div>Themes: Healing, Support, Antimagic</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Life is precious and must be protected, this is a core belief of a Life mage/priest. In times of need, most wish for a Life mage/priest. A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>. Life is a member of the Domain of Order.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Healing:support:buff:Antimagic"
+  },
+  "Light": {
+    "title": "Light",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Debuff, Weapon Synergy, Damage</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Honor and order above all else, this is a core belief of a Life mage/priest. Practicioners of Light Magic tend to be hardheaded people of rules for the betterment of society. A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>. Light is a member of the Domain of Order.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Blind:Debuff:Weapon Synergy:Damage"
+  },
+  "Death": {
+    "title": "Death",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Debuff, Damage, Lifesteal</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> All things must die; practicioners of Death magic see it as a gift.  Without Death, we would starve and become overrun with life.  A core mechanic of Death Magics revolves around <i>Rot</i>: a stacking damage that can be expended for powerful effects and made to bloom across the battlefield. A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>. Death is a member of the Domain of Order.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:rot:Debuff:Damage:Lifesteal:Healing"
+  },
+  "Rot": {
+    "title": "Rot",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between\"><div>Rot is a damage over time status effect unique to the death magic group that causes a target to take 1d4 blight damage per stack of rot each turn.  It is similar to <i>suffering</i>, but it can be expended like currency to produce powerful effects like curses.</div>",
+    "tags": "Death"
+  },
+  "Suffering": {
+    "title": "Suffering",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between;\"><div>Suffering is an inherently stacking Status condition that causes a d6 of typed damage per stack of suffering.  Ex: 3 stacks of fire suffering causes 3d6 damage each turn it remains on a target.  Unless otherwise specified, anyone may clear suffering with the \"Remove\" Generic Ability.  This removes all stacks of suffering from a target you can touch as a swift action.</div>",
+    "tags": "Status Effect"
+  },
+  "Status Effect": {
+    "title": "Status Effect",
+    "type": "special",
+    "document": "<div>Status Effects represent the current state of your character independant of their remaining HP. Examples include: Stunned, Befuddled, Confused, Pinned etc.</div>",
+    "tags": "Condition:Befuddled:Blinded:Charmed:Confused:Encumbered:Fatigued:Frightened:Invisible:Paralyzed:Pinned:Grappled:Petrified:Prone:Sickened:Slowed:Spell Jammed:Stunned:Suffering:Warped"
+  },
+  "Darkness": {
+    "title": "Darkness",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Debuff, Mobility, Battlefield Control</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>A core belief of many Darkness mages/priests is that some individuals deserve darkness. Chaos must be kept at bay and restrained.  This is their burden to carry. A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>. Darkness is a member of the Domain of Order.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Debuff:Mobility:Battlefield Control:Control"
+  },
+  "Flora": {
+    "title": "Flora",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Damage, Healing, Battlefield Control</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Flora Mages/Priests have a tendency to see the good in everyone and everything. Rapid and chaotic growth, nature will provide. What some might call overgrown, The Flora practicioner calls lush. A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>. Flora is a member of the Domain of Chaos.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:plant:damage:Healing:Battlefield Control:Control"
+  },
+  "Fauna": {
+    "title": "Fauna",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 4/5</div><div>Themes: Damage, Buff, Battlefield Control</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Emotional with a bit of a temper, Fauna practicioners tend to be passionate go getters who welcome change.  They welcome it so much in fact, their their bodies become vessels for change. Fauna is about transformation, whether it be piecemeal via adaptation or a complete transformation into a custom creature of choice. A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>. Fauna is a member of the Domain of Chaos.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:animal:beast:transform:adaptation"
+  },
+  "Tempest": {
+    "title": "Tempest",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Damage, Battlefield Control, Weapon Synergy</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Furious conduits of power, tempest practicioners call upon the force of natural disasters. They see disaster and praise how it can reshape a society; raw power is worth worshipping and its goals are not for you to understand.  A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>.  Tempest is a member of the Domain of Chaos.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Storm:Damage:Battlefield Control:Weapon Synergy:Control"
+  },
+  "Turmoil": {
+    "title": "Turmoil",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Damage, Chaos, Risk-Reward</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Perhaps the epitome of raw power outside their control, Turmoil users are gamblers. They know the odds and they seek to try their hand. There is nothing more thrilling than uncertainty, especially when the reward is so great and the consequences so dire. The odds are so low that anything bad will happen....  A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>.  Turmoil is a member of the Domain of Chaos.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Damage:Chaos:Risk-Reward"
+  },
+  "Equilibrium": {
+    "title": "Equilibrium",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Damage, Debuff, Support</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>The equilibrium mage/priest sees the world in a delicate balance, and sees it as their duty to preserve this balance.  The raw forces of Chaos and Order, would seek to annihilate one another without a guiding hand to preserve the universe. Equillibrium's core magical themeing revolves around balance, keeping power in check, but also redistributing it to others. A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>.  Equilibrium is a member of the Domain of Balance.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Damage:Debuff:Support"
+  },
+  "Example Character: Pyromaniac": {
+    "title": "Example Character: Pyromaniac",
+    "type": "special",
+    "document": "",
+    "tags": "Example Character:Pyromaniac"
+  },
+  "Example Character: Scarlet Thorn": {
+    "title": "Example Character: Scarlet Thorn",
+    "type": "special",
+    "document": "",
+    "tags": "Example Character:Scarlet Thorn"
+  },
+  "Example Character: Iron Blade": {
+    "title": "Example Character: Iron Blade",
+    "type": "special",
+    "document": "",
+    "tags": "Example Character:Iron Blade"
+  },
+  "Example Character: Sure Shot": {
+    "title": "Example Character: Sure Shot",
+    "type": "special",
+    "document": "",
+    "tags": "Example Character:Sure Shot"
+  },
+  "Example Character: Devout Protector": {
+    "title": "Example Character: Devout Protector",
+    "type": "special",
+    "document": "",
+    "tags": "Example Character:Devout Protector"
+  },
+  "Example Character: Poison Blade": {
+    "title": "Example Character: Poison Blade",
+    "type": "special",
+    "document": "",
+    "tags": "Example Character:Poison Blade"
+  },
+  "Effigy": {
+    "title": "Effigy",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 5/5</div><div>Themes: Damage, Debuff, Buff</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>The effigy mage/priest sees beauty in variety; all magical schools are welcome. Immitation is flattery, and Effigy practicioners are the biggests flirts.  The Core Mechanic of effigy revolves around creating, summoning or otherwise building constructs who do their bidding. A Character will need <i>Power</i> to become proficient in it.  As a Divine Magic School, depending on how many other Divine groups they wish to know, your character may need high <i>Charisma</i>.  Effigy is a member of the Domain of Balance.  <b>Under no circumstances do I reccomend a first time player to chose effigy</b></div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Spellgroup:Damage:Debuff:Buff"
+  },
+  "Building A Character": {
+    "title": "Building A Character",
+    "type": "html",
+    "document": "<div>A prerequisite to creating a character is having an idea of who they are.  This idea can be a vauge concept, based on mechanics you as a player enjoy using, based around well known character classes from other systems, or even based around a favorite character from media. \n \n Once you have an idea, you can build a character by doing the following \n \n* Distribute Attributes (See <i>Help Distributing Attributes</i>) \n* Define Your Lore, select your <i>background</i>, <i>origin skills</i>, <i>exceptionals</i>, and flesh out your backstory \n* Define your <i>Lunar Motivation</i> \n* Select an <i>Archetype</i> \n* Purchase Abilities (See <i>Ability Points</i> and <i>Selecting Abilities</i>) \n* Pick Starting Equipment (See <i>How to Pick Starting Equipment</i>) </div>",
+    "tags": "Create Character:New Character:Help"
+  },
+  "Selecting Abilities": {
+    "title": "Selecting Abilities",
+    "type": "html",
+    "document": "<div>It can feel very daunting to select abilities because there are so many choices.  Ultimately, the goal of the game is to enjoy yourself, so pick what you think sounds fun.  If you are looking for particular mechanics, the following have been tagged for search in the Quick Reference Page: <i>Antimagic</i>, <i>Defense</i>, <i>Damage</i>, <i>Buff</i>, <i>Healing</i>, <i>Debuff</i>, <i>Battlefield Control</i>,  <i>Weapon Synergy</i>, <i>Support</i>, <i>Chaos</i>, <i>Risk Reward</i>, <i>Lifesteal</i>, <i>Trickery</i>, <i>Luck</i>, <i>Information Gathering</i> and <i>Mobility</i>. \n \n  I would reccomend that you ensure your character has a free way to deal damage.  Free ways to deal damage include making a <i>Weapon Attack</i> and some rank 0 <i>spells</i>. Another good practice is to try and ensure that your character has abilities that vary in their action cost.  If you only select Core Actions, you will likely feel limited in combat. Remember that Level one characters are at the very start of their journey, It will likely take some time for them to realize your vision. \n \n If you are looking for more direction you can follow one of these common build patterns or look at <i>Example Characters</i>: \n*Standard Martial: 2 ranks of a combat style, 2 ranks of a specialization, 1 rank 1 martial perk, and 1 extra point in a skill. \n*Varied Spellcaster: 2 ranks in 3 spellgroups, 1 point in a skill. \n*Specialist Spellcaster: 4 ranks in one spellgroup. \n*Skilled Professional: 2 ranks in a skill, (1 rank 1 martial perk and 2 ranks in combat style) or (2 ranks in 2 spellgroups), 1 point in another skill.  \n*Magical Martial: 2 ranks combat style, 2 ranks in a spellgroup, 2 ranks specialization or 1 rank 1 martial perk, 1 rank in a skill. </div>",
+    "tags": "New Player Guide to Selecting Abilities:Ability"
+  },
+  "Archetype": {
+    "title": "Archetype",
+    "type": "html",
+    "document": "<div><div style=\"margin-bottom: 2rem\">If you have played DnD or other class based systems, you may expect Archetypes to be class adjacent. Archetypes are not mechanically similar to classes. An archetype is an incredibly powerful bonus that you define at character creation that also defines what armor level your character will have. An archetype does not define exactly what abilities you get, but they will be influential on your build due to their power. Here is a List of All of the Archetypes with advice for when to choose them:</div><h2>Heavy Armor Archetypes</h2><hr /><h3>Augur</h3><div style=\"margin-left: 1rem\">Augurs have an additional stacking placed roll on all origin skill checks.</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Augur for a simple archetype that grants the best armor DVs and makes your character naturally better at skills.</div><h3>Breaker</h3><div style=\"margin-left: 1rem\">Breakers can reroll all dice greater or equal to a d12 once each round and their attacks ignore shield DVs.</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Breaker if you plan to make a character that rolls d12s or d20s frequently, whether that be through Versatile/Heavy Weapons or spellcasting.</div><h3>Paladin</h3><div style=\"margin-left: 1rem\">Upon casting a spell, the Paladin may restore an amount of HP to themselves or another character within LOS 20’ for (mana cost)d6 without action cost.</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Paladin for great passive defense/healing as a spellcaster or spellcaster martial hybrid.</div><h3>Warden</h3><div style=\"margin-left: 1rem\">Wardens may choose to have either mundane or elemental resistance</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Warden to be great at tanking damage.</div><h2>Medium Armor Archetypes</h2><hr /><h3>Mage</h3><div style=\"margin-left: 1rem\">Spells cast from a mage have a free finesse that stacks with other finesse bonuses. Mages have a finesse cap of 6.</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Mage to naturally cast more powerful spells.</div><h3>Priest</h3><div style=\"margin-left: 1rem\">The range of all priests’ spells, including touch spells, is increased by 30’. Priests can also cast spells with a self target on other willing targets at a 30’ + 10’/F LOS range.</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Priest if you have a lot of low range, touch, or self cast abilities. Especially self cast.</div><h3>Monk</h3><div style=\"margin-left: 1rem\">By spending a reaction, monks may take their turn immediately instead of during their normal turn in the initiative order. This may only be done once per round.</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Monk for a powerful built in reaction that is great to avoid powerful effects and protect others.</div><h3>Rogue</h3><div style=\"margin-left: 1rem\">Rogues do not have standard action sets. Rogues have 4 points to spend on actions eachround. Core Actions cost 2 points, Swift Actions, Reactions, and Movement Actions cost 1. If the rogue choses to spend all points on core actions, they lose their movement DVs until the start of their next turn.</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Rogue when you plan to use swift actions, reactions, or move actions more frequently than others. Be careful when choosing Rogue since it is possible to make yourself weaker, especially if you plan to take a core action each turn.</div><h2>Light Armor Archetypes</h2><hr /><h3>Mystic</h3><div style=\"margin-left: 1rem\">Mystics may expend their swift action to prepare a spell, converting it to an on hit effect until the end of the turn. This strips the spell of its resistance check while retaining its effects. If the attack misses, the spell dissipates and the mana is lost. Should the spell be continuous or focus, the resistance check is determined when the target re-attempts the check (3 times between rest periods.)</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Mystic for incredible burst potential. Mystics will have a much higher need for perception than other characters.</div><h3>Nomad</h3><div style=\"margin-left: 1rem\">Nomads may prepare 2 spells they know, for free, as once per rest period magic items that may be activated by their wielder as a reaction. Previous items lose power when more are created. These spells can have a combined additive rank equal to the character’s PWR attribute or twice their level; whichever is lower.</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Nomad to create powerful unique reactions. Nomads also end up being able to cast a little more than other archetypes.</div><h3>Elementalist</h3><div style=\"margin-left: 1rem\">Elementalists can choose to convert any damage dealt this turn by the character into their magical element type (Must have bought at least one elemental spell to have an element type) as a swift action. Regardless, each type of elemental damage has additional effects:</div> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ Fire: Inflicts an instance of suffering (Fire) to all struck enemies (applies once per enemy per round)</li> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ Ice : Slows all struck enemies until the end of their next turn.</li> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ Force : Pushes the creature or character (if they are within melee reach of a creature or a surface) up to 10’ in a direction of the character’s choice.</li> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ Lightning : Paralyses a singular struck target until the end of their next turn, HEA save to negate (check is set with PWR.)</li><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Choose Elementalist to take advantage of passive additional effects when dealing elemental damage.</div><h3>Sorcerer</h3><div style=\"margin-left: 1rem\">Sorcerers can have four abilities that require focus active at once.</div><div style=\"text-align: end; font-size: small; font-style: italic; margin-left: 2rem\">Focus abilities tend to be more powerful than continuous ones. Chose Sorcerer when you want to take advantage of having multiple active at once. Focus abilities exist as spells but also martial perks.</div></div>",
+    "tags": "Selecting an Archetype:Nomad:Augur:Breaker:Warden:Priest:Paladin:Monk:Rogue:Mage:Mystic:Elementalist:Sorcerer"
+  },
+  "Attributes": {
+    "title": "Attributes",
+    "type": "html",
+    "document": "<div><div style=\"margin-bottom: 1rem\">Eight attributes define a character’s natural predispositions and abilities. These attributes are interwoven into everything a character does whether they are rolling to set a check, resisting an effect, or purchasing abilities. The maximum attribute score a character can have is 10.</div><h3>Strength (STR)</h3><p>Strength is a measure of a character's physical brawn. Strength will be most important to characters using Heavy Weapons and Potentially Versatile Weapons. To use any weapons, characters will need some strength depending on the STR score neccesary to weild it. Strength will also be important to break from grapples and in the resistance checks of some abilities</p><h3>Agility (AGI)</h3><p> Agility is a measure of the character's precise control of their body. Agility will be important to characters using Light Weapons, potentially important to character's with Versatile Weapons, and a little important to all characters as it is commonly used to make resistance checks and saves. Finally, it is the modifier for initiative rolls.</p><h3>Health (HEA)</h3><p>Health is a measure of a character's hardiness. Health is the most common attribute used in resistance checks / saves. Making Health saves will typically reduce damage taken. Health also determines how much HP a character regenerates over a long rest (Health*10 HP). Every character will have some need for Health, but those who have invested in the Fauna spellgroup may find themselves having an even greater need for Health.</p><h3>Perception (PER)</h3><p>Perception represents a characters ability to analyze their surroundings. For most characters, Perception will likely be one of their higher stats as it is the modifier for rolls to hit. Mystics will have the greatest need for perception, followed by roll to hit damaging spellcasters, followed by Martial Characters, followed by all other spellcasters. Some characters will have little to no need for Perception. If your character primarily has abilities that do not require a roll to hit like most supportive abilities or damaging abilities like Sear (Arcana), Perception may be their <i>lowest</i> stat</p><h3>Willpower (WIL)</h3><p> Willpower represents a character's mental strength. It's commonly used to resist effects that would control one's mind or ability to cast spells. Every character will have some need for Willpower, but those who want to use the Interdictions spellgroup or invest in Alchemy may have a greater need for it.</p><h3>Charisma (CHA)</h3><p>Charisma represents a character's innate ability to excel at social or artistic tasks. Characters who want to utilizie many different Divine spellgroups will need a higher Charisma. Characters who want to invest in Performance will have the highest need for Charisma.</p><h3>Intelligence (INT)</h3> <p> Intelligence repesents a character's wit and capacity to learn. Characters who want to utilizie many different Elemental / Core Magics spellgroups will need a higher Intelligence. Characters who want to invest in Knowledge or Crafting will also have a higher need for Intelligence.</p><h3>Power (PWR)</h3><p>Power is a character's innate magical potential. All spellcasters will have a need for Power and it will likely be one of their highest stats if they wish to invest deeply in spellcasting. Characters need a high power to cast high level spells and it is the modifier used to set most spell's resistance checks.  Power also determines how much mana a character regenerates after long rest (Power * 2).</p></div>",
+    "tags": "Help Distributing Attributes:Distributing Attributes"
+  },
+  "Combat Styles": {
+    "title": "Combat Styles",
+    "type": "html",
+    "document": "<div><p>  Combat Styles represent a base proficiency in a broad grouping of weapons. All Combat Styles have access to the same few weapon skills: Precise, Multiattack, Offhand Attack,  and Lethal.  I have summarized the skills below.  For a reference on the formatting of reading weapon skills, see <i>Weapon Skill Notation</i></p><p>  Multiattack lets a character make additional strikes with the weapon in their primary or  offhand</p><p>  Offhand Attack lets a character make additional strikes with the weapon in their offhand  <b>Once</b> per Weapon Attack</p><p>Lethal adds additional damage to a chosen strike</p><p>Precise increases the roll to hit modifier for all strikes</p><div>The following table is a reference for how many martial points the skills cost for each of the Combat Styles. </div><table style=\"margin-bottom: 1rem\">  <tr>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Combat Style</th>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Multiattack</th>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Lethal</th>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Offhand Attack</th>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Precise</th>  </tr>  <tr>    <td style=\"padding-left: .5rem;padding-right: .5rem\">Light</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">2 MP</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 MP</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 MP</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 MP</td>  </tr>  <tr>    <td style=\"padding-left: .5rem;padding-right: .5rem\">Versatile</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">3 MP</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 MP</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">2 MP</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 MP</td>  </tr>  <tr>    <td style=\"padding-left: .5rem;padding-right: .5rem\">Heavy</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">5 MP</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 MP</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">3 MP</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 MP</td>  </tr></table><br /><div>This table illustrates effect of each skill for each style:</div><table style=\"margin-bottom: 1rem\">  <tr>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Combat Style</th>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Multiattack</th>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Lethal</th>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Offhand Attack</th>    <th style=\"padding: 1rem; padding-bottom: 0.5rem\">Precise</th>  </tr>  <tr>    <td style=\"padding-left: .5rem;padding-right: .5rem\">Light</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">+ 1 additional strike</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">+ 1 damage</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 strike made with offhand</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">+ 1 to hit</td>  </tr>  <tr>    <td style=\"padding-left: .5rem;padding-right: .5rem\">Versatile</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">+ 1 additional strike</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">+ 2 damage</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 strike made with offhand</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">+ 1 to hit</td>  </tr>  <tr>    <td style=\"padding-left: .5rem;padding-right: .5rem\">Heavy</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">+ 1 additional strike</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">+ 3 damage</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">1 strike made with offhand</td>    <td style=\"padding-left: .5rem;padding-right: .5rem\">+ 1 to hit</td>  </tr></table><h3>Martial Points (MP)</h3><p>  MP or Martial Points, is a regenerating currency, equal to a Character's highest combat  style rank. A character may spend all of their martial points every time they make a  <i>Weapon Attack</i>, though they may only invest in a particular style or  specialization up to their rank in that group.</p><h4>Examples</h4><p>  Peter has 4 ranks of Heavy Combat Style. Gaining 4 martial points upon taking the weapon  attack option, He invests everything into Lethal, gaining a + 12 damage bonus to his  attack</p><p>  Marissa has 4 ranks of Light Combat Style. Gaining 4 martial points upon taking the  weapon attack option, She invests 2MP in multiattack, 1MP in Offhand Attack, and 1MP in  Precise. She makes 3 attacks, each with a + 1 to hit.</p><p>  Maria has 7 ranks in versatile weapons, 7 ranks in swords, and 5 ranks in brawling. Gaining 7 martial points upon taking the weapon attack option, she hopes to use both of her specialization skills. She makes a strike with her longsword, using 3 MP with the strike (spent on staggering blow), then expends 4 martial points to make an offhand grappling attack with her cestus.</p></div>",
+    "tags": "Combat Styles:Heavy:Weapons:Light:Versatile"
+  },
+  "Weapon Skill Notation": {
+    "title": "Weapon Skill Notation",
+    "type": "html",
+    "document": "<div>Weapon skills are the individual abilities of Combat Styles and specialization such as Lethal, Pinpoint, Blinding Attack, etc. Weapon skills fall into four categories: altered strike, extra strike, execute an action, and next successful strike. Each has distinctions that govern their function.</div><br /><h4>Altered Strike</h4><div>An altered strike changes one of the character’s strikes to inflict additional or new effects. A character can choose to either alter their initial strike; or any provided by <i>extra strikes.</i></div> <br /><h4>Extra Strike</h4><div>The character gains an additional strike that they may utilize with the appropriate weapon.</div><br /><h4>Executes an Action</h4><div>The character activates an ability as a part of their weapon skill, they may still utilize the rest of their weapon skill / other actions as a part of executing an action.</div><br /><h4>Next Successful Strike</h4><div>When the character successfully matches or exceeds the target’s DVs with any strike using the associated weapon during their entire turn. If selecting the same weapon skill multiple times, the character can choose to effect different targets, or the same target multiple times.</div>",
+    "tags": "Combat Styles:Specializations:Martial Skills:altered strike:extra strike:next successful Strike:executes an Action"
+  },
+  "Specializations": {
+    "title": "Specializations",
+    "type": "html",
+    "document": "<div>Specilizations represent refinement in a specific style of weaponry.  Every Weapon has a specialization, and characters who have ranks in that weapon specialization can spend their MP on upgraded skills and get access to that weapons passive ability. A character may only buy ranks in a weapon specialization up to their ranks in an appropriate combat style.</div><br /><h4>Using Specializations</h4><div>Specializations are utilized in the same way as Combat Styles.  Whenever the character performs a <i>Weapon Attack</i>, The character gains <i>MP</i> equal to their ranks in their highest <i>Combat Style</i>.  They can spend these points on both specializations and combat styles.  </div>",
+    "tags": "Specializations"
+  },
+  "Axes": {
+    "title": "Axes",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Damage, Debuff</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Axes are primarily a damaging specialization with some light utility.  They have multiple options to hit targets including an AOE and the throw ability to hit targets at range. </div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Debuff"
+  },
+  "Bows": {
+    "title": "Bows",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Damage, Debuff, Battlefield Control</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Bows have a mix of utility and damage. They have innate range, can attack in an AOE, and can interact uniquely with alchemy through object shot.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Debuff"
+  },
+  "Brawling": {
+    "title": "Brawling",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Damage, Mobility, Battlefield Control  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Brawlers excel at crossing long distances quickly and locking down opponents.  Their launch ability lets them flit about the battlefield with ease or send enemies flying and their passive allows them to continue to attack while grappling targets.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Battlefield Control:Mobility:Control"
+  },
+  "Crossbows": {
+    "title": "Crossbows",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Damage, Battlefield Control, Debuff  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Crossbows are a bit strange compared to other weapons.  When using the crossbows specialization, you may notice the only thing that costs MP is skyshot.  This is because each time you fire your crossbow you will pick which of your four bolts to use, and you may spend all your MP on combat style skills.  If you manage to run out of arrows, you get to fire your sky shot, which is the single most damaging martial skill in the game.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Debuff:Battlefield Control"
+  },
+  "Hammers": {
+    "title": "Hammers",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 1/5</div><div>Themes: Damage, Mobility, Debuff  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Hammers users are great at applying debuffs to enemies since their passive means that even if they miss, they can still apply their utility.  Hammers are probably the simplest weapon specialization to use since their passive is very simple and they will mostly make a single attack.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Debuff:Mobility"
+  },
+  "Handguns": {
+    "title": "Handguns",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 4/5</div><div>Themes: Damage, Debuff, Battlefield Control  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div> Handguns primarily excel at dealing damage to choice targets with their Assasination ability, though, especially with more skill, they can very effectively disable an opponent.  Their short range means that Handgun users will find themselves in the thick of things and need to have their wits about them.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Debuff:Battlefield Control:Control"
+  },
+  "Knives": {
+    "title": "Knives",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Damage, Debuff, Battlefield Control  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Knives are very similar to Handguns with a few key differences, they trade a little damage capacity, for more flexibility, ability to disable opponents, and a little bit of ease of use.  Their passive lets them disable multiple opponets with ease, but their ability to use Assasinate still means that under the right conditions, they can apply massive damage.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Debuff:Battlefield Control:Control"
+  },
+  "Machine Guns": {
+    "title": "Machine Guns",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 4/5</div><div>Themes: Damage, Debuff, Battlefield Control  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Machine Guns are a bit unusual. Of all of the weapons, they have the highest amount of utility and a uniquely powerful ability to Interrupt enemies and deny their action economy, but without weapon upgrades, their damamge curve significantly lags behind.  </div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Debuff:Battlefield Control:Control"
+  },
+  "Polearms": {
+    "title": "Polearms",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Damage, Mobility, Battlefield Control  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Polearms can attack both in an AOE through Radial Attack and at range due to Throw.  They can take to the skies via fulcrum and crush targets both in the air and below.  </div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Mobility:Battlefield Control:Control"
+  },
+  "Rifles": {
+    "title": "Rifles",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 1/5</div><div>Themes: Damage, Buff  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>The identity of Rifles is first an formost dealing damage, and secondly, making sure they can deal damage against particular defenses.  They can deal critical damage, especially if enemies convienently line up for their punchthrough ability.  As a tradeoff, Rifle users work best when standing still, so anything that forces them to move will disadvantage them more than others.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Debuff:Battlefield Control:Control"
+  },
+  "Shotguns": {
+    "title": "Shotguns",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Damage, Mobility, Battlefield Control  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Shotgun users are highly mobile, great at combatting crowds with Area Attack and great at controlling where enemies are and if they can move.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Debuff:Battlefield Control:Control"
+  },
+  "Swords": {
+    "title": "Swords",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Damage, Buff, Defense  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Swords are a flexible weapon that can be used in a more offensive style to buff allies strikes, or in a defensive stle to increase the DVs of the weilder.  They sit in a neutral position between utility and damage focus.</div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Buff:Defense"
+  },
+  "Whips": {
+    "title": "Whips",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Damage, Mobility, Battlefield Control  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Whips allow the weilder to swing themselves and enemies around the battlefield and can attack in large areas due to their long reach and Radial Attack.  Whips have a slant towords being primarily for utility over damage, but if you find ways to take advantage of the passive, Whips can still deal alot of damage. </div><br /><br /><div style=\"text-align: end\"><i>Read the abilities in detail either in the abilities tab, or in their respective tab on the build page.</i></div>",
+    "tags": "Specialization:Damage:Mobility:Battlefield Control:Control"
+  },
+  "Alchemy": {
+    "title": "Alchemy",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 4/5</div><div>Themes: Damage, Healing, Really alot of things...  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>There is no ability more versatile than alchemy. Alchemists turn <i>Alchemical Ingredients</i> into Potions. With time to prep and the right ingredients, alchemists can be incredibly powerful. They just need to be very careful they don't run out of potions...</div><br /><div>There are three kinds of alchemical ingredients:  Bases like Water or Magical Blood define how the potion is used, Reagents effect base resources like mana and HP, either regaining it, or removing it, Mutagens do, well, almost everything else? Alchemists will need Willpower to become a masters and Health in order to stomach using many of their creations in a single day.</div><br /><h4>Full Description</h4><div>Initially, a character requires an Alchemy Lab to engage in alchemy. Characters are not limited by the amount of potions they may make in a day so long as they have a recipe and ingredients. Different alchemical ingredients have different properties and difficulty associated with working with them. As an alchemist becomes more skilled they are able to work with more difficult ingredients and create more interesting combinations. This skill is elaborated upon in the following sections.</div> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \"> ❖ At rank 10 the character gains a stacking placed roll on all WIL resistance checks.</li><br /><h4>Basics</h4><div>Alchemical potions all share a few properties. They have ingredients (every potion must have at least 2 ingredients; at least one of them being a base), a difficulty score, and a market value. Unless otherwise specified it takes 1 minute to brew a potion and a swift action to use one.</div><br /><h4>Alchemical Ingredient Difficulty</h4><div>Individual ingredients have a difficulty value associated with them. A player’s ranks in alchemy must at least match the difficulty of an ingredient to be able to brew a potion utilizing this ingredient.</div><br /><h4>Difficulty of Creating Potions</h4><div>The difficulty of a given alchemical potion can be calculated by summing the individual difficulty of each chosen ingredient + 10. When a character wishes to brew a potion they must expend the needed ingredients and attempt an alchemy check. If the alchemy roll is at least as high as the difficulty value, the potion is successfully created. If the alchemy roll is 10 or even 15 higher than the required number, you instead make 2 or even 3 potions respectively. On an unsuccessful attempt all ingredients are wasted.</div><br /><h4>Resistance Checks</h4><div>Every potion must have either a resistance save or associated attack roll. Imbibed potions and thrown potions with an AOE have a HEA save equivalent to the diffculty of that potion. Making the save halves any damage and negates all utility effects.</div><br /><h3>Types of Ingredients</h3><hr /><h4>Bases</h4><div>Bases are required for every potion and typically define how the potion is used on a basic level: if it is imbibed, thrown, etc.</div><br /><h4>Reagents</h4><div>A potion may have either one or no reagents. Reagents provide flat damage, mana, HP, and mana drain. All reagents have instantaneous effects.</div><br /><h4>Mutagens</h4><div>A potion may have as many mutagens as the alchemist desires. Mutagens provide a wide variety of effects and utility. Mutagenic effects have varying different durations listed next to the ingredient.</div><br /><h4>Modified Instantaneous Effects</h4><div>Some mutagens, like salt, change the duration of a potion, lengthening the continuous effect. If the potion has instantaneous effects, those effects reapply each round for the entire duration.</div><br /><h4>Mutagens That Effect Damage Type</h4><div>Some mutagens, like elemental essence, change the damage type of a potion. If lathered onto a weapon, these mutagens will also change the damage of a weapon(base damage and damage caused by weapon specialization/combat style abilities) along with any other damaging effects in the brew. By themselves, reagents do not have this effect on the damage of a weapon.</div><br /><h4>Failure and Sickening</h4><div>If the alchemy check fails, all materials are lost. An individual may only imbibe/make use of a number of potions equal to their HEA each day. Individuals with skill in alchemy may make use of a number of potions equal to their HEA + their ranks in alchemy. Beyond this point, the character gains a rank of <i>sickened</i> for each potion they make use of. Each effect caused by a rank of sickness is cumulative with the last.</div><br /><h4>Price</h4><div>A character can typically buy a potion for its cumulative market value and brew a potion by expending the required ingredients. Ingredients, like potions, may also be purchased in towns depending on the resources they have access to. When looking to purchase potions, they are typically made to order since it is possible for them to decay.</div><br /><h4>Decay</h4><div>Depending on the quality of a potion, a potion could decay in a matter of days, weeks, or months. Mechanically speaking, each time players complete a rest period they must roll a d20. On failure, a potion of their choice decays and might become entirely inert, simply less effective, or the potion might produce entirely different effects altogether (GM discretion).</div>",
+    "tags": "Support:Skill:Damage:Healing:Buff:Debuff:Mobility:Weapon Synergy:Battlefield Control:Control"
+  },
+  "Alchemical Ingredients": {
+    "title": "Alchemical Ingredients",
+    "type": "special",
+    "document": "",
+    "tags": "Ingredients:Alchemy:Potion"
+  },
+  "Adaptations": {
+    "title": "Adaptations",
+    "type": "special",
+    "document": "",
+    "tags": "Fauna"
+  },
+  "Pick Starting Equipment": {
+    "title": "Pick Starting Equipment",
+    "type": "html",
+    "document": "<div><h3>Funds</h3><p>Unless otherwise specified by your Game Master, you will start with 2d6 + 2 starting gold.  You can spend this money to buy whatever equipment you want.</p><h3>Armor</h3><hr><p>Every Character should purchase armor with their starting funds. Unless you are starting at a higher level with starting funds, you will likely have plain Iron Armor (3gp).  There are three Armor weights: Heavy Armor (7 Armor DVs), Medium Armor (5 Armor Dvs), Light Armor (3 Armor Dvs). Your Archetype defines the weight of armor that you wear. To figure out what weight you should have you can reference the Archetypes Reference page or Look at you character's Build Tab where you selected your archetype.</br></br> To add armor on the Web App, navigate to the Equipment Tab and add an Item.  You can add it as a Craftable Item, or using the plain Add Item option. </p><h3>Weapons</h3><hr><p>You may or may not use a Weapon.  If your character does not yet have a means of attack OR you have invested points in a combat style and or specialization, definately purchase a weapon.  Unless you are starting at higher Levels with extra starting funds, a Standard Iron Weapon will do.  All Standard Iron Weapons cost 1GP.  Ensure that you have the required Strength Score to wield your weapon.  If a weapon is one-handed and you have at least half of the required Strength Score, you may wield it in two hands. Some characters may purchase multiple of the same weapon in order to dual wield them.  In the case of knives, for standard Iron Daggers(not enchanted or enhanced knives), I typically offer my players the grace that if they have bought one Iron dagger, they have as many Iron Daggers as they need without needing to retrieve them or buy many of them. </br></br> To add weapons on the Web App, navigate to the Equipment Tab and add an Item.  You can add it as a Craftable Item, or using the plain Add Item option. </p></p><h3>Shield</h3><hr><p>If you have a free hand, you have no reason not to hold a shield.  Remember that casters need one free hand to form the manual components of spells. If your Character wants to make Offhand Attacks, they will also not have a free hand. </br></br> To add a shield on the Web App, navigate to the Equipment Tab and add an Item.  You can add it as a Craftable Item, or using the plain Add Item option. </p></p><h3>Other</h3><hr><p>Adventurers can typically be assumed to have basic gear on them.  Talk to your game master if they are looking to run a more hardcore game where keeping detailed track of rations, basic items like rope, etc, matters.  Other items adventurers could have are magic items and potions, though unless you are an alchemist or maybe a crafter you will likely start with none. </p></div>",
+    "tags": "help:how:guide:equipment"
+  },
+  "New Player Guide": {
+    "title": "New Player Guide",
+    "type": "special",
+    "document": "",
+    "tags": "help:how:guide"
+  },
+  "Rolling Dice": {
+    "title": "Rolling Dice",
+    "type": "special",
+    "document": "",
+    "tags": "Roll:Check:Sve:Resistance:Initiative:Attack Roll: Skill Check:Placed:Displaced"
+  },
+  "Performance": {
+    "title": "Performance",
+    "type": "html",
+    "document": " <div>A character’s ability to perform via a musical instrument, dance, and song is governed by performance. Performance can be used to learn a new set of skills useful in and out of combat for casters and martial characters alike. This skill is elaborated upon in the following sections. Performance can work synergystically with both Spellcasting and Martial Abilities.  The three different Performance styles: Dance, Vocal and Instrumental all offer different advantages and disadvantages.  Performance users start out with one style, and gain more as they increase their ranks of performance.  Unlike other groups, performers technically know all performance abilities, but they only have certain ones practiced and ready to use.  Each long rest performers can select new practiced abilities.  Characters can select their Performance Styles and practiced abilities from the Performance Tab on the Build Page once they have invested in Performance on the Skills Tab.</div>",
+    "tags": "Support:Skill:Damage:Buff:Debuff:Mobility:Weapon Synergy:Battlefield Control:Control"
+  },
+  "Vocal": {
+    "title": "Vocal",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 3/5</div><div>Themes: Debuff, Battlefield Control</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Whether it be through song, rapping, jokes, or storytelling, vocal performace excels at captivating enemies, lulling them into a false sense of security, or breaking down their egos and instilling doubt.  Vocal Performers now cast with their voice, no longer needing bodily movements to cast.</div>",
+    "tags": "Performance:Vocal"
+  },
+  "Instrumental": {
+    "title": "Instrumental",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Buff, Debuff, Support</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Performers who utilize instrumental style now cast by playing their instrument rather than with hand motions and their voice.  Intrumentalists are especially great at powering up their allies whether it be from a steady ballad or a quick love song.</div></div>",
+    "tags": "Performance:Instrumental"
+  },
+  "Dance": {
+    "title": "Dance",
+    "type": "html",
+    "document": "<div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 2/5</div><div>Themes: Mobility, Defense</div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Dance allows the performer to cast just with their body movements, meaning they can cast spells even  when they cannot speak.  Dance provides the character with mobility and makes it more difficult for them to be affected by Control effects that would slow or halt their movement.  Dance also has abilities that provide defense against roll to hit abilities.</div>",
+    "tags": "Performance:Dance"
+  },
+  "Knowledge": {
+    "title": "Knowledge",
+    "type": "html",
+    "document": " <div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 1/5</div><div>Themes: Healing, Support, Information Gathering  </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Knowledge, whether it be skill in research, medicine, history, liguistics etc. is rooted in <i>Intelligence</i>.  Knowledge is great for solving puzzles, deducing information, and healing your allies in and off of the battlefield.  Knowledge is also what is used to stop someone from bleeding out when they reach negative HP.</div><br /><h4>Full Description</h4><div>Knowledge concerns itself with an in-depth explanation of academic subjects. Possible topics include history, religion, medicine, and science. The character can use this ability to assess physical health and administer medical treatments. For each rank in Knowledge a character...  </div> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \"> ❖ Can cause a target to recover an amount of HP equivalent to a knowledge skill roll, stabilizing the target in the process should they be in critical condition as a core action. Stabilized targets stop bleeding out, but remain at whatever HP they stabilize at. This ability can be utilized (Rank) times each day. </li> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \"> ❖ Advances a language they already know onto its next rank. At rank 4, when the character executes a knowledge check to stabilize a target who is in a state of unstable unconsciousness, the target is restored to 0 HP, should their HP be below that threshold.</li>",
+    "tags": "Skill:Healing:Support:Information Gathering"
+  },
+  "Might": {
+    "title": "Might",
+    "type": "html",
+    "document": " <div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 1/5</div><div>Themes: Battlefield Control, Buff </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Characters wishing to lock down opponents in Grapples, will find might to be indespensible. They will also require a high <i>Strength</i> to obtain a high might. In order for enemies to break from your grapple they must make a contested might check against the character. Might also might be useful for a Heavy weapons user aspiring to dual wield two particularly large weapons due to their rank 4 ability: At rank 4, the character decreases the STR requirement of all weapons by half of their might skill. If they have 150% or more of the required strength, they can wield the weapon in one hand, even if it requires two hands to utilize.</div><br /><h4>Full Description</h4><div>Might is a character’s ability to lift and leverage their strength to their advantage. </div> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ At rank 4, the character decreases the STR requirement of all weapons by half of their might skill. If they have 150% or more of the required strength, they can wield the weapon in one hand, even if it requires two hands to utilize. </li> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ At rank 5, the character can grapple targets a size category larger than they are.</li> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ At rank 9, the character can treat any STR resistance or grapple check as a might skill check.</li>",
+    "tags": "Skill:Buff:Battlefield Control:Control"
+  },
+  "Acrobatics": {
+    "title": "Acrobatics",
+    "type": "html",
+    "document": " <div style=\"display: flex; justify-content: space-between; text-align:end\"><div style=\"text-align: start; text-wrap: nowrap\">Difficulty: 1/5</div><div>Themes: Mobility </div></div><hr :style=\"{borderColor: designStore.secondaryTheme}\"><div>Acrobatics is used whenever a character must test their balance, jumping ability, etc. It also increases a characters movespeed and eventually allows the chasracter to walk on water and up walls.  Character who want to invest in acrobatics will need high <i>Agility</i>.</div><br /><h4>Full Description</h4></hr><hr></hr><div>Balance, tumbling, running - acrobatics encompasses the broad way in which a character can manipulate their body to more deftly weaving through all manners of space. For each rank in Acrobatics a character...</div> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ Nullifies 10’ worth of falling/push damage in all situations.</li> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ Adds 2’ of movement to all movement speeds they have access to.</li> <li style=\"margin-left: .5rem;padding-left: 1rem; margin-bottom: .25rem;list-style-type:none;text-indent: -1rem \">❖ Adds 2’ to their jump height.<br />At rank 5, the character can walk up walls / on water, at rank 8 the character’s jump height is set to theirhighest movement speed, and at rank 10 the character gains a stacking placed roll on all AGI resistance checks.</li>",
+    "tags": "Skill:Mobility"
+  }
+}

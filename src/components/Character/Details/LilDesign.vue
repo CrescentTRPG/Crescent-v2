@@ -1,11 +1,11 @@
 <script lang="ts">
-import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
 import AbilityDisplayMedallion from '@/components/AbilityDisplayMedallion.vue'
+import { useUserStore } from '@/stores/userStore.ts'
 
 export default {
   setup(props, context) {

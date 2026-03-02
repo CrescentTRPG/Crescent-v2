@@ -1,6 +1,6 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import { useSpellStore } from '@/stores/spellsStore'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
 import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
 import { storeToRefs } from 'pinia'
 import { computed, ComputedRef, ref } from 'vue'
@@ -45,7 +45,6 @@ export default {
       let ret: Array<any> = []
       if (selectedTabs.value && selectedTabs.value.length > 0) {
         selectedTabs.value.forEach((tab: { name: string; index: number }) => {
-          console.log(buildDisplaySpellgroups.value[tab.index])
           buildDisplaySpellgroups.value[tab.index].spells.forEach((spell) => {
             ret.push(spell)
           })

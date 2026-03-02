@@ -1,26 +1,20 @@
 <script lang="ts">
-import { deepCopy, DEFAULT_STAT_BLOCK } from '@/bases'
-import { useDesignStore } from '@/stores/designStore'
-import { Components } from 'bootstrap-vue-next/src/BootstrapVue.js'
-import { computed, onMounted, ref, watch } from 'vue'
-import StatBlockHeader from './StatBlockHeader.vue'
-import StatBlockVersionControl from './StatBlockVersionControl.vue'
+import EffectsRibbon from '@/components/Character/Overview/EffectsRibbon.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { GenericModifier } from '@/stores/characterStore.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import BOffcanvas from 'bootstrap-vue-next/src/components/BOffcanvas/BOffcanvas.vue'
+import _ from 'lodash'
+import { computed, ComputedRef, onMounted, ref, watch } from 'vue'
+import RandomlyGenerateStatBlock from './RandomlyGenerateStatBlock.vue'
+import StatBlockAbilitiesWrapper from './StatBlockAbiltiesWrapper.vue'
 import StatBlockAttributes from './StatBlockAttributes.vue'
 import StatBlockBio from './StatBlockBio.vue'
-import StatBlockState from './StatBlockState.vue'
-import StatBlockAbilitiesWrapper from './StatBlockAbiltiesWrapper.vue'
-import MovespeedWidget from '@/components/Character/Overview/MovespeedWidget.vue'
-import { ComputedRef } from 'vue'
-import EffectsRibbon from '@/components/Character/Overview/EffectsRibbon.vue'
-import ToggleSwitch from '@/components/ToggleSwitch.vue'
-import { GenericModifier } from '@/stores/characterStore'
+import StatBlockHeader from './StatBlockHeader.vue'
 import StatBlockMovespeedWrapper from './StatBlockMovespeedWrapper.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import _ from 'lodash'
-import RandomlyGenerateStatBlock from './RandomlyGenerateStatBlock.vue'
-import { useAdventureStore } from '@/stores/adventureStore'
-import StatBlockDiceRoller from '@/components/DiceSidebar/StatBlockDiceRoller.vue'
-import BOffcanvas from 'bootstrap-vue-next/src/components/BOffcanvas/BOffcanvas.vue'
+import StatBlockState from './StatBlockState.vue'
+import StatBlockVersionControl from './StatBlockVersionControl.vue'
 
 export default {
   props: [
@@ -31,7 +25,11 @@ export default {
     'rm',
     'inCombat',
     'updateCombat',
-    'currentStatBlockId'
+    'currentStatBlockId',
+    'omitVersionControl',
+    'omitDetails',
+    'omitToolbar',
+    'useIconInsteadOfPowerLevel'
   ],
   setup(props, context) {
     const designStore = useDesignStore()
@@ -41,7 +39,7 @@ export default {
     const editing = ref(props.isEditing)
     const randomized = ref(false)
     const adventureStore = useAdventureStore()
-    const statBlock = { ...props.currentStatBlock }
+    const statBlock = ref({ ...props.currentStatBlock })
     function updateTemp(newBlock) {
       currentStatBlockTemp.value = newBlock
       if (props.inCombat) {
@@ -66,11 +64,15 @@ export default {
       if (props.currentStatBlock.name != currentStatBlockTemp.value.name) {
         currentStatBlockTemp.value = props.currentStatBlock
       }
+      if (props.currentStatBlock != statBlock.value) {
+        statBlock.value = { ...props.currentStatBlock }
+        currentStatBlockTemp.value = props.currentStatBlock
+      }
     })
     onMounted(() => {
       currentStatBlockTemp.value = { ...props.currentStatBlock, versionObjs: null }
       versionObjs.value = props.currentStatBlock.versionObjs
-      if (currentStatBlockTemp?.value?.versions.length > 0) {
+      if (props.omitVersionControl! && currentStatBlockTemp?.value?.versions?.length > 0) {
         currentStatBlockTemp.value = {
           ...versionObjs.value[currentStatBlockTemp.value.currentVersion]
         }
@@ -370,16 +372,18 @@ export default {
     :style="getStyles()"
   >
     <StatBlockHeader
+      v-if="!useIconInsteadOfPowerLevel"
       :current-stat-block="currentStatBlockTemp"
       :updateTemp="updateTemp"
       :is-editing="editing"
+      :useIconInsteadOfPowerLevel="props.useIconInsteadOfPowerLevel"
       @power="(level) => (powerLevel = level)"
       @powerIcon="(icon) => (powerIcon = icon)"
       @overrideIcon="(icon) => (overrideIcon = icon)"
       @overridePowerLevel="(level) => (overridePowerLevel = level)"
     ></StatBlockHeader>
 
-    <div style="display: flex; width: 100%; height: inherit; overflow-y: scroll">
+    <div style="display: flex; width: 100%; height: inherit; overflow-y: auto">
       <div style="flex-grow: 1">
         <div class="arrangeMainBlock">
           <div>
@@ -399,6 +403,7 @@ export default {
           </div>
           <div style="display: flex; flex-direction: column; flex-grow: 1">
             <StatBlockVersionControl
+              v-if="!props.omitVersionControl"
               :versions="currentStatBlockTemp.versions"
               :currentStatBlock="currentStatBlockTemp"
               :currentVersion="currentStatBlockTemp.currentVersion"
@@ -450,6 +455,8 @@ export default {
         </div>
       </div>
       <StatBlockBio
+        :collapsable="true"
+        v-if="!props.omitDetails"
         class="bioSidebar"
         :is-editing="editing"
         :update-temp="updateTemp"
@@ -469,6 +476,7 @@ export default {
         }"
       >
         <StatBlockBio
+          :collapsable="false"
           style="width: 100%"
           :is-editing="editing"
           :update-temp="updateTemp"
@@ -477,6 +485,7 @@ export default {
       </BOffcanvas>
     </div>
     <div
+      v-if="!props.omitToolbar"
       style="
         display: flex;
         justify-content: space-between;

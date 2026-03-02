@@ -3,7 +3,7 @@ import { signOut } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../stores/designStore'
+import { useDesignStore } from '../stores/designStore.ts'
 export default {
   props: ['value'],
   setup(props, context) {

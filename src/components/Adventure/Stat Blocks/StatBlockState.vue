@@ -1,12 +1,13 @@
 <script lang="ts">
-import { computed, ComputedRef, onMounted, Ref, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/userStore.ts'
+import { computed, ComputedRef, ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
+import ArmorWidget from '@/components/Character/Overview/ArmorWidget.vue'
 import HpWidget from '@/components/Character/Overview/HpWidget.vue'
 import ManaWidget from '@/components/Character/Overview/ManaWidget.vue'
-import ArmorWidget from '@/components/Character/Overview/ArmorWidget.vue'
 import MPWidget from '@/components/Character/Overview/MPWidget.vue'
+import { useCharacterComputedStore } from '@/stores/characterComputedStore.ts'
 
 export default {
   props: [
@@ -26,6 +27,7 @@ export default {
     const modal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
+    const characterComputedStore = useCharacterComputedStore()
     const wornArmorPassives = computed(() => {
       return (
         props.currentStatBlock.equipment.items.Armor[props.currentStatBlock.equipment.wornArmor]
@@ -70,6 +72,7 @@ export default {
           modifier = modifier + max
         }
       }
+
       if (props.currentStatBlock.armorStatusModifiers['Override Armor Dvs']) {
         const max = Object.values(
           props.currentStatBlock.armorStatusModifiers['Override Armor Dvs']
@@ -82,9 +85,12 @@ export default {
           return Math.max(max + modifier, 0)
         }
       }
-      console.log(modifier)
 
-      return Math.max(parseInt(props.currentStatBlock.armorDvs + '') + modifier, 0)
+      let baseArmorVal = props.currentStatBlock.traits['Armor DVs']
+        ? props.currentStatBlock.traits['Armor DVs']?.number
+        : props.currentStatBlock.armorDvs
+
+      return Math.max(baseArmorVal + modifier, 0)
     })
     const bonusDvs: ComputedRef<number> = computed(() => {
       if (props.isEditing) {
@@ -206,6 +212,9 @@ export default {
     })
     const totalHp = computed(() => {
       let ret = props.currentStatBlock.totalHp
+      if (props.currentStatBlock.minorBonuses) {
+        ret = characterComputedStore.totalHp / 2
+      }
 
       if (props.currentStatBlock.hpStatusModifiers['Override Base Hp']) {
         const max = Object.values(
@@ -275,9 +284,7 @@ export default {
       }
 
       if (props.currentStatBlock.currentMana > sum + modifier) {
-        props.currentStatBlock.setCurrentMana(
-          Math.min(parseInt(props.currentStatBlock.currentMana + ''), totalMana.value)
-        )
+        setCurrentMana(Math.min(parseInt(props.currentStatBlock.currentMana + ''), totalMana.value))
       }
       const m = sum + modifier
       return m

@@ -1,22 +1,12 @@
 <script lang="ts">
-import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-import BCard from 'bootstrap-vue-next/src/components/BCard/BCard.vue'
-import BCardTitle from 'bootstrap-vue-next/src/components/BCard/BCardTitle.vue'
-import BCardImg from 'bootstrap-vue-next/src/components/BCard/BCardImg.vue'
-import RibbonTitle from '@/components/RibbonTitle.vue'
-import CustomModal from '@/components/CustomModal.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import BFormFile from 'bootstrap-vue-next/src/components/BFormFile/BFormFile.vue'
-import BImg from 'bootstrap-vue-next/src/components/BImg.vue'
-import ImagePicker from '@/components/ImagePicker.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
+import { useUserStore } from '@/stores/userStore.ts'
+import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
 
 export default {
   setup(props, context) {

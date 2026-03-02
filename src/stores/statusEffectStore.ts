@@ -1,10 +1,7 @@
 import { defineStore } from 'pinia'
 import { useCharacterStore } from './characterStore.js'
-import { useUserStore } from './userStore.js'
-import { doc, updateDoc } from 'firebase/firestore'
-import { db } from '@/firebase/config.js'
-import { useSkillStore } from './skillsStore.js'
 import { useEquipmentStore } from './equipmentStore.js'
+import { useSkillStore } from './skillsStore.js'
 
 export const useStatusEffectStore = defineStore('StatusEffect', {
   state: () => ({
@@ -710,6 +707,7 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
     },
     getStrengthExceptionals() {
       const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.strength)
+
       let max = 0
       if (
         useEquipmentStore().getArmorSpecs?.equippedStats.passives['Add Exceptional(s) Strength']
@@ -756,8 +754,17 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
           0
         )
       }
+      let spentExceptionalCount = 0
+      const spentExceptionals = Object.values(
+        useCharacterStore().stressedExceptionals['Strength'] || []
+      )
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
 
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     },
     getAgilityExceptionals() {
       const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.agility)
@@ -805,7 +812,17 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
           0
         )
       }
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      let spentExceptionalCount = 0
+      const spentExceptionals = Object.values(
+        useCharacterStore().stressedExceptionals['Agility'] || []
+      )
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
+
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     },
     gethealthExceptionals() {
       const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.health)
@@ -852,7 +869,17 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
           0
         )
       }
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      let spentExceptionalCount = 0
+      const spentExceptionals = Object.values(
+        useCharacterStore().stressedExceptionals['Health'] || []
+      )
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
+
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     },
     getWillpowerExceptionals() {
       const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.willpower)
@@ -905,7 +932,17 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
           0
         )
       }
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      let spentExceptionalCount = 0
+      const spentExceptionals = Object.values(
+        useCharacterStore().stressedExceptionals['Willpower'] || []
+      )
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
+
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     },
     getperceptionExceptionals() {
       const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.perception)
@@ -958,7 +995,17 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
           0
         )
       }
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      let spentExceptionalCount = 0
+      const spentExceptionals = Object.values(
+        useCharacterStore().stressedExceptionals['Perception'] || []
+      )
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
+
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     },
     getCharismaExceptionals() {
       const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.charisma)
@@ -1008,7 +1055,17 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
           0
         )
       }
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      let spentExceptionalCount = 0
+      const spentExceptionals = Object.values(
+        useCharacterStore().stressedExceptionals['Charisma'] || []
+      )
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
+
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     },
     getIntelligenceExceptionals() {
       const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.intelligence)
@@ -1063,7 +1120,17 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
           0
         )
       }
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      let spentExceptionalCount = 0
+      const spentExceptionals = Object.values(
+        useCharacterStore().stressedExceptionals['Intelligence'] || []
+      )
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
+
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     },
     getPowerExceptionals() {
       const baseExceptionalVal = parseInt('' + useCharacterStore().exceptionals.power)
@@ -1109,7 +1176,17 @@ export const useStatusEffectStore = defineStore('StatusEffect', {
           0
         )
       }
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      let spentExceptionalCount = 0
+      const spentExceptionals = Object.values(
+        useCharacterStore().stressedExceptionals['Power'] || []
+      )
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
+
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     },
     getStrengthInferiors() {
       let mod = -1000

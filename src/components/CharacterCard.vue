@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 import { BCard, BCardImg, BCardTitle } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 

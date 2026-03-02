@@ -1,21 +1,20 @@
 <script lang="ts">
-import { useCharacterStore } from '@/stores/characterStore'
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useStatusEffectStore } from '@/stores/statusEffectStore.ts'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import BNavItem from 'bootstrap-vue-next/src/components/BNav/BNavItem.vue'
 import BNavbar from 'bootstrap-vue-next/src/components/BNavbar/BNavbar.vue'
-import { computed, ComputedRef, Ref, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { computed, ref } from 'vue'
 import TitleWidget from '../TitleWidget.vue'
 import AttributeSkillRoller from './AttributeSkillRoller.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import { storeToRefs } from 'pinia'
-import { useStatusEffectStore } from '@/stores/statusEffectStore'
 import GuiDice from './GuiDice.vue'
 
+import MartialDieRoller from './MartialDieRoller.vue'
 import MultifactedTextRoller from './MultifactedTextRoller.vue'
 import RollerPickerTab from './RollerPickerTab.vue'
+import RollingTableRoller from './RollingTableRoller.vue'
 import RollModifiers from './RollModifiers.vue'
-import MartialDieRoller from './MartialDieRoller.vue'
-import TitleMedallion from '../TitleMedallion.vue'
 
 interface RollAttr {
   modifier: number
@@ -32,6 +31,7 @@ export default {
     //rollsObj = {"roll group": str: "original string", subtotal: number, resultsArr: [{operator: '', dVal, isD, val, accepted, rejected}]}
 
     const rollDisplay = ref({})
+    const rollingTableResult = ref('')
     const sortedRollDisplayArray = computed(() => {
       let ret = Object.values(rollDisplay.value)
       ret = ret.sort((a: any, b: any) => {
@@ -113,6 +113,11 @@ export default {
       rollHistoryPackage[time] = { rollsObj: rollsObj, timestamp: time, rolltitle: rolltitle.value }
       context.emit('rolled', rollHistoryPackage[time])
       statusEffectsStore.addDiceRollHistory(rollHistoryPackage)
+    }
+
+    function rollingTableStaging(result) {
+      rollDisplay.value = {}
+      rollingTableResult.value = result
     }
 
     function processRollString(rollString: string) {
@@ -511,7 +516,7 @@ export default {
       navItemStyleBg,
       designStore,
       navPos,
-
+      rollingTableResult,
       stageRollString,
       rollDisplay,
       override,
@@ -522,7 +527,8 @@ export default {
       rolltitle,
       sortedRollDisplayArray,
       diceRollHistory,
-      props
+      props,
+      rollingTableStaging
     }
   },
   components: {
@@ -535,7 +541,8 @@ export default {
     MultifactedTextRoller,
     RollerPickerTab,
     RollModifiers,
-    MartialDieRoller
+    MartialDieRoller,
+    RollingTableRoller
   },
   computed: {
     scrollbarColor() {
@@ -643,6 +650,20 @@ export default {
           <v-icon scale="1.5" name="gi-bowman"></v-icon>
         </BNavItem>
         <BNavItem
+          v-if="rollerType !== 'table'"
+          :style="{ color: rollerItemStyle('table') }"
+          @click="switchRoller('table')"
+        >
+          <v-icon scale="1.5" name="gi-perspective-dice-six-faces-random"></v-icon>
+        </BNavItem>
+        <BNavItem
+          v-if="rollerType === 'table'"
+          :style="{ color: rollerItemStyle('table') }"
+          @click="switchRoller('table')"
+        >
+          <RollerPickerTab icon="gi-perspective-dice-six-faces-random"></RollerPickerTab>
+        </BNavItem>
+        <BNavItem
           v-if="rollerType !== 'text'"
           :style="{ color: rollerItemStyle('text') }"
           @click="switchRoller('text')"
@@ -684,6 +705,14 @@ export default {
           @as="(title) => setTitle(title)"
           @rollString="(rollString) => stageRollString(rollString)"
         ></MartialDieRoller>
+        <RollingTableRoller
+          v-if="rollerType === 'table'"
+          @result="
+            (value) => {
+              rollingTableStaging(value)
+            }
+          "
+        ></RollingTableRoller>
         <MultifactedTextRoller
           v-if="rollerType === 'text'"
           @rollString="
@@ -796,6 +825,9 @@ export default {
                 </div>
               </div>
             </div>
+          </div>
+          <div style="white-space: pre-line" v-if="Object.keys(rollDisplay).length <= 0">
+            {{ rollingTableResult }}
           </div>
         </div>
       </div>

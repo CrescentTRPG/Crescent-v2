@@ -1,15 +1,15 @@
 <script lang="ts">
-import { DEFAULT_STAT_BLOCK } from '@/bases'
-import { useDesignStore } from '@/stores/designStore'
-import { BButton } from 'bootstrap-vue-next'
-import { ref, watch } from 'vue'
+import { DEFAULT_STAT_BLOCK } from '@/bases.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
+import _ from 'lodash'
+import { ref } from 'vue'
 import StatBlockDetailedReference from './StatBlockDetailedReference.vue'
 
 export default {
   props: ['currentStatBlock', 'lightenDarkenColor'],
   setup(props, context) {
     const designStore = useDesignStore()
-    const statBlock = ref({ ...DEFAULT_STAT_BLOCK })
+    const statBlock = ref(_.cloneDeep(DEFAULT_STAT_BLOCK))
 
     function goBack() {
       context.emit('return')

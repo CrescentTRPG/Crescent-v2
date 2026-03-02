@@ -1,14 +1,19 @@
 <script lang="ts">
-import { useDesignStore } from '../stores/designStore'
+import { styleText } from 'util'
+import { useDesignStore } from '../stores/designStore.ts'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 
 export default {
-  props: ['title', 'color', 'inline'],
+  props: ['title', 'color', 'inline', 'button', 'buttonIcon', 'buttonFunction'],
   setup(props, context) {
     const designStore = useDesignStore()
     return {
       designStore,
       props
     }
+  },
+  components: {
+    BButton
   }
 }
 </script>
@@ -47,7 +52,23 @@ export default {
       >
         {{ props.title }}
       </div>
-      <slot name="dropdown"></slot>
+      <div style="display: flex; margin: 0.25rem">
+        <slot name="dropdown"></slot>
+        <BButton
+          @click="props.buttonFunction()"
+          class="hoverableTransparantLinear"
+          v-if="props.button"
+          style="
+            height: 2.15rem;
+            margin: 0.25rem;
+            margin-top: 0.1rem;
+            padding: 0.25rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+          "
+          ><i :class="props.buttonIcon"></i
+        ></BButton>
+      </div>
     </div>
     <v-icon
       name="gi-moon"

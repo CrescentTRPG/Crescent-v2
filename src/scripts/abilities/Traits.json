@@ -417,7 +417,7 @@
       "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."
     },
     "Ice Damage Amplification": {
-      "icon": "gi-snowflake2",
+      "icon": "gi-snowflake-2",
       "name": "Ice Damage Amplification",
       "number": 0,
       "description": "The character increases the amount of damage they recieve by *NUM* for every damage dice rolled of the appropriate damage type rolled in the attack."

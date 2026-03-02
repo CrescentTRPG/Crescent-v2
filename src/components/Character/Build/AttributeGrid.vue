@@ -1,11 +1,9 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
+import { BButton, BCard, BNavItem, BNavbar } from 'bootstrap-vue-next'
 import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
-import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import CharacterSidebar from '../Build/CharacterSidebar.vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import AttributeWidget from '../Build/AttributeWidget.vue'
+import CharacterSidebar from '../Build/CharacterSidebar.vue'
 
 export default {
   setup(props, context) {
@@ -16,12 +14,6 @@ export default {
 
   methods: {},
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
-    CharacterSidebar,
-
     AttributeWidget
   }
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 import ArrayTabsSingleSelect from './ArrayTabsSingleSelect.vue'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import { computed, ref } from 'vue'

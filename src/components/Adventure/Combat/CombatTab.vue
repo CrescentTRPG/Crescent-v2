@@ -1,17 +1,16 @@
 <script lang="ts">
-import { onMounted, Ref, ref, watch } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useAdventureStore } from '@/stores/adventureStore'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { onMounted, Ref, ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import TitleWidget from '@/components/TitleWidget.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import CombatTable from './CombatTable.vue'
-import { DEFAULT_COMBAT } from '@/bases'
-import _ from 'lodash'
-import PlanCombat from './PlanCombat.vue'
+import { DEFAULT_COMBAT } from '@/bases.ts'
 import LoadingDisplay from '@/components/LoadingDisplay.vue'
-import { useInitiativeStore } from '@/stores/initiativeStore'
-import { storeToRefs } from 'pinia'
+import TitleWidget from '@/components/TitleWidget.vue'
+import { useInitiativeStore } from '@/stores/initiativeStore.ts'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import _ from 'lodash'
+import CombatTable from './CombatTable.vue'
+import PlanCombat from './PlanCombat.vue'
 
 export default {
   setup(props, context) {
@@ -21,7 +20,6 @@ export default {
     const initiativeStore = useInitiativeStore()
     const mode = ref('table')
     const tempCombat = ref({ ...DEFAULT_COMBAT })
-    const activeCombat = storeToRefs(adventureStore)
     function lightenDarkenColor(col, amt) {
       var num = parseInt(col.substring(1), 16)
       var r = (num >> 16) + amt
@@ -31,20 +29,32 @@ export default {
       return '#' + newColor.toString(16)
     }
     onMounted(() => {
-      tempCombat.value = _.cloneDeep(adventureStore.activeCombat)
+      console.log('mount')
+      tempCombat.value = _.cloneDeep(DEFAULT_COMBAT)
       mode.value = adventureStore.combatNavPos
+      if (mode.value === 'run') {
+        tempCombat.value = {
+          ...initiativeStore.baseCombatDetails,
+          combatants: initiativeStore.combatants
+        }
+      }
     })
 
     function updateTemp(temp) {
       tempCombat.value = _.cloneDeep(temp)
-      let combatantsWithPreservedInitiative = { ...tempCombat.value.combatants }
-      Object.keys(combatantsWithPreservedInitiative).forEach((c) => {
-        combatantsWithPreservedInitiative[c].initiativeScore =
-          initiativeStore.combatants[c].initiativeScore || 0
-      })
-      console.log(combatantsWithPreservedInitiative)
-      initiativeStore.updateCombatants(combatantsWithPreservedInitiative)
-      adventureStore.updateActiveCombat(tempCombat.value, mode.value)
+      if (adventureStore.combatNavPos === 'run') {
+        let combatantsWithPreservedInitiative = { ...tempCombat.value.combatants }
+        Object.keys(combatantsWithPreservedInitiative).forEach((c) => {
+          combatantsWithPreservedInitiative[c].initiativeScore =
+            initiativeStore.combatants[c]?.initiativeScore || 0
+        })
+        initiativeStore.updateCombatantsLocal(combatantsWithPreservedInitiative)
+        initiativeStore.createInitiativeAndRollValues()
+        initiativeStore.putInitiative()
+        initiativeStore.setBaseCombatDetails(tempCombat.value)
+      } else {
+        initiativeStore.updateCombatantsLocal({ ...tempCombat.value.combatants })
+      }
     }
     const combatId: Ref<string | null> = ref(null)
 
@@ -64,11 +74,16 @@ export default {
       loading.value = true
       let combatDetails = (await adventureStore.getCombatDetails(combat.id)) || combat
       combatId.value = combat.id
+      tempCombat.value = _.cloneDeep(combatDetails)
+
       mode.value = 'run'
       initiativeStore.resetInitiativeOpened()
-      initiativeStore.clearOrderedCombatants()
-      initiativeStore.updateCombatants(combatDetails.combatants)
-      updateTemp(combatDetails)
+      initiativeStore.clearOrderedCombatantsLocally()
+      initiativeStore.setNewCombatants(combatDetails.combatants)
+      //       initiativeStore.createInitiativeAndRollValues()
+      // initiativeStore.putInitiative()
+      initiativeStore.setBaseCombatDetails(tempCombat.value)
+
       adventureStore.dispatchAdventureStart()
       loading.value = false
     }
@@ -78,18 +93,25 @@ export default {
       let combatDetails = (await adventureStore.getCombatDetails(combat.id)) || combat
       combatId.value = combat.id
       mode.value = 'build'
+      initiativeStore.clearOrderedCombatantsLocally()
+
+      adventureStore.updateCombatNavPosLocal(mode.value)
       updateTemp(combatDetails)
+      initiativeStore.updateCombatantsLocal(combatDetails.combatants)
+
       loading.value = false
     }
     async function toTable() {
       mode.value = 'table'
-      updateTemp({
+      tempCombat.value = _.cloneDeep({
         combatants: {},
         initiative: {},
         notes: '',
         tags: [],
         name: 'Default Combat'
       })
+      adventureStore.toTable()
+      initiativeStore.unscubscribeToInitiative()
     }
 
     function quickStartCombat() {
@@ -102,6 +124,8 @@ export default {
         tags: [],
         name: 'Default Combat'
       })
+      initiativeStore.clearOrderedCombatantsLocally()
+
       adventureStore.dispatchAdventureStart()
     }
 

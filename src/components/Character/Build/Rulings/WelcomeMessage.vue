@@ -1,5 +1,5 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 import { ref } from 'vue'
 
 export default {
@@ -30,9 +30,13 @@ export default {
         color: designStore.primaryText
       }"
     >
-      <div style="z-index: 5; padding: 0.5rem; padding-bottom: 0rem">
-        {{ props.message }}
-      </div>
+      <p style="z-index: 5; padding: 0.5rem; padding-bottom: 0rem">
+        Welcome to Crescent! I'm here to help. I'll give you tips and let you know if theres an
+        error with your build. <br /><br />If you're completely new to Crescent checkout the
+        Reference Tab <i class="bi bi-book"></i>. This has all kinds of information regaurding how
+        to make a character, how to play, and what abilities to take depending on what you are
+        looking for! I reccomend searching for the <i>New Player Guide</i> and starting there!
+      </p>
     </div>
   </div>
 </template>

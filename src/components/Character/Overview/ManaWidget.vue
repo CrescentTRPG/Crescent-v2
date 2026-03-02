@@ -1,17 +1,18 @@
 <script lang="ts">
 import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/userStore.ts'
 
 import CustomModal from '@/components/CustomModal.vue'
+import TitleWidget from '@/components/TitleWidget.vue'
 import { BFormInput, BInputGroup } from 'bootstrap-vue-next'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import StatusModifierExplaination from './StatusModifierExplaination.vue'
-import TitleWidget from '@/components/TitleWidget.vue'
-import StatusEffectItem from './StatusEffectItem.vue'
-import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
 import BasicInput from '../BasicInput.vue'
+import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
+import StatusEffectItem from './StatusEffectItem.vue'
+import StatusModifierExplaination from './StatusModifierExplaination.vue'
+import AddStatusModifierModal from './AddStatusModifierModal.vue'
 
 export default {
   props: [
@@ -103,7 +104,7 @@ export default {
     function showModal() {
       modal.value = true
     }
-
+    const isHidden = ref(false)
     return {
       removeModifier,
       addManaStatusModifier,
@@ -121,7 +122,8 @@ export default {
       showModal,
       getColor,
       getCurrentColor,
-      props
+      props,
+      isHidden
     }
   },
   components: {
@@ -129,11 +131,10 @@ export default {
     BInputGroup,
     BFormInput,
     BButton,
-    StatusModifierExplaination,
     TitleWidget,
     StatusEffectItem,
-    AddStatusEffectWidget,
-    BasicInput
+    BasicInput,
+    AddStatusModifierModal
   }
 }
 </script>
@@ -141,7 +142,7 @@ export default {
 <template>
   <div
     class="hoverableIconOnSidebar"
-    style="width: 13.5rem; height: 10rem; margin-top: -1rem"
+    style="width: 13.25rem; height: 10rem; margin-top: -1rem"
     :style="{ fontFamily: designStore.font }"
     @click="showModal()"
   >
@@ -212,6 +213,7 @@ export default {
       </div>
     </div>
     <CustomModal
+      :is-hidden="isHidden"
       v-if="!props.isEditing"
       title="Modify Mana"
       :showModal="modal"
@@ -273,17 +275,12 @@ export default {
             >Set New Value</BButton
           >
         </BInputGroup>
-        <div style="display: flex; justify-content: space-between; margin-top: -2rem">
-          <TitleWidget title="Status Modifiers" style="width: 100%"></TitleWidget>
-          <StatusModifierExplaination
-            style="position: relative; top: 2.5rem"
-          ></StatusModifierExplaination>
-        </div>
-
-        <AddStatusEffectWidget
-          :modifierType="modifierType"
+        <AddStatusModifierModal
+          :modify-is-hidden="(val) => (isHidden = val)"
+          :modifiers="modifierType"
+          :modifierType="'Mana'"
           @added="(addedVal) => addManaStatusModifier(addedVal)"
-        ></AddStatusEffectWidget>
+        ></AddStatusModifierModal>
         <div v-for="mod in statusModifiersList" :key="mod">
           <StatusEffectItem
             @delete="removeModifier(mod.modifierType, mod.modAmount, mod.linkedStatus)"

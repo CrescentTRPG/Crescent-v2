@@ -1,12 +1,9 @@
 <script lang="ts">
-import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-
-import TitleWidget from '@/components/TitleWidget.vue'
 import TitleMedallion from '@/components/TitleMedallion.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 

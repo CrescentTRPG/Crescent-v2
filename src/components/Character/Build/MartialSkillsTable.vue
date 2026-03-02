@@ -1,31 +1,13 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { useCharacterStore } from '../../../stores/characterStore'
-import { useUserStore } from '../../../stores/userStore'
-import {
-  BButton,
-  BCard,
-  BNavItem,
-  BNavbar,
-  BTable,
-  BFormSelect,
-  BThead,
-  BTableSimple,
-  BTr,
-  BTh,
-  BTd
-} from 'bootstrap-vue-next'
-import CustomCheckbox from '../CustomCheckbox.vue'
-import { ref, onMounted, toRaw } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useMartialSkillsStore } from '../../../stores/martialSkillsStore'
-import { storeToRefs } from 'pinia'
-import CustomModal from '@/components/CustomModal.vue'
-import MartialSkillsDisplay from '@/components/MartialSkillDisplay.vue'
-import SpecializationsTable from './SpecializationsTable.vue'
-import CombatStylesTable from './CombatStylesTable.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+import { useCharacterStore } from '../../../stores/characterStore.ts'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import { useMartialSkillsStore } from '../../../stores/martialSkillsStore.ts'
+import { useUserStore } from '../../../stores/userStore.ts'
+import CombatStylesTable from './CombatStylesTable.vue'
+import SpecializationsTable from './SpecializationsTable.vue'
 
 interface Skill {
   skill: string

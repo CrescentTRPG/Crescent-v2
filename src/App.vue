@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+window.onerror = function (message, source, lineno, colno, error) {
+  const stack = error ? error.stack : 'No stack trace available'
+  // Send this 'stack' string to your logging endpoint
+  console.log(stack)
+}
 </script>
 
 <template>

@@ -1,9 +1,6 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import CharacterSidebar from '../Build/CharacterSidebar.vue'
 import TabContents from '../Build/TabContents.vue'
 
@@ -29,7 +26,7 @@ export default {
     :style="{ fontFamily: designStore.font }"
   >
     <CharacterSidebar
-      style="width: 20%; max-width: 9rem; z-index: 2; height: inherit"
+      style="width: 20%; max-width: 9rem; z-index: 4; height: inherit"
       @corestats="tab = 'corestats'"
       @traits="tab = 'traits'"
       @skills="tab = 'skills'"

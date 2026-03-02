@@ -1,6 +1,6 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import { BForm, BFormInput, BFormTextarea, BInputGroup, BInputGroupText } from 'bootstrap-vue-next'
 import IconPicker from '@/components/IconPicker.vue'
 import ToggleSwitch from '@/components/ToggleSwitch.vue'
@@ -28,7 +28,9 @@ export default {
       type: 'Instantaneous',
       resistance: 'N/A',
       description: 'trait description',
-      groupIcon: icon
+      groupIcon: icon,
+      spellgroup: '',
+      rank: undefined
     })
     const emitTrait = () => {
       if (!hasAbility.value) {
@@ -157,7 +159,13 @@ export default {
     </BInputGroup>
     <div v-if="hasAbility" style="margin-top: 1rem">
       <SearchForAbilityDropdown
-        @ability="(ability) => (traitAbility = ability)"
+        @ability="
+          (ability) => (
+            (traitAbility = ability),
+            (traitAbility.spellgroup = ''),
+            (traitAbility.rank = undefined)
+          )
+        "
       ></SearchForAbilityDropdown>
       <BForm
         :style="{

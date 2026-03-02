@@ -1,7 +1,6 @@
 <script lang="ts">
-import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { useDesignStore } from '../stores/designStore'
+import { useDesignStore } from '../stores/designStore.ts'
 
 export default {
   props: ['title', 'description', 'mpCost'],

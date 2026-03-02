@@ -1,6 +1,6 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import { computed, Ref, ref } from 'vue'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { computed, ref } from 'vue'
 
 import { BAccordion, BAccordionItem } from 'bootstrap-vue-next'
 import TabItem from '@/components/TabItem.vue'

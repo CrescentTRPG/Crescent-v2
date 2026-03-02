@@ -1,11 +1,10 @@
 <script lang="ts">
-import { computed, ComputedRef, ref, useTemplateRef } from 'vue'
-import { useDesignStore } from '../stores/designStore'
+import { ref, useTemplateRef } from 'vue'
+import { useDesignStore } from '../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-import BFormFile from 'bootstrap-vue-next/src/components/BFormFile/BFormFile.vue'
+import { useUserStore } from '@/stores/userStore.ts'
 
 export default {
   emits: ['newImage'],
@@ -18,7 +17,6 @@ export default {
     const characterStore = useCharacterStore()
 
     function getBase64(image) {
-      console.log(typeof image)
       let val = fileObj.value
       var reader = new FileReader()
       reader.readAsDataURL(image)

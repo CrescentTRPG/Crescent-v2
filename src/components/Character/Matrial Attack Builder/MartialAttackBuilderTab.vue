@@ -1,18 +1,12 @@
 <script lang="ts">
 import TitleWidget from '@/components/TitleWidget.vue'
-import { useDesignStore } from '@/stores/designStore'
-import { BFormSelect } from 'bootstrap-vue-next'
-import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
-import { computed, ref } from 'vue'
-import { usePerformanceStore } from '@/stores/performanceStore'
-import { storeToRefs } from 'pinia'
-import { useSkillStore } from '@/stores/skillsStore'
-import BNavbar from 'bootstrap-vue-next/src/components/BNavbar/BNavbar.vue'
-import BNavItem from 'bootstrap-vue-next/src/components/BNav/BNavItem.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import WeaponAttackBuilder from './WeaponAttackBuilder.vue'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 import MartialAttackTable from './MartialAttackTable.vue'
-import { useCharacterStore } from '@/stores/characterStore'
+import WeaponAttackBuilder from './WeaponAttackBuilder.vue'
 
 export default {
   setup(props, context) {

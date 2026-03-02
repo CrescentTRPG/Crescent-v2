@@ -1,24 +1,22 @@
 <script lang="ts">
-import { auth, db } from '../firebase/config'
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
-import { computed, onMounted, onUnmounted, Ref, ref } from 'vue'
-import { useUserStore } from '@/stores/userStore'
-import SelectCharacter from '../components/SelectCharacter.vue'
-import IconStackCloud from '../components/IconStackCloud.vue'
 import BeingBuilt from '@/components/BeingBuilt.vue'
-import SelectAdventure from '@/components/SelectAdventure.vue'
-import { isVariableDeclarationList } from 'typescript'
-import { unsubscribe } from 'diagnostics_channel'
 import CustomModal from '@/components/CustomModal.vue'
 import DropdownSelect from '@/components/DropdownSelect.vue'
-import { collection, deleteDoc, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
-import { useCharacterStore } from '@/stores/characterStore'
-import { storeToRefs } from 'pinia'
 import NotEntitled from '@/components/NotEntitled.vue'
+import SelectAdventure from '@/components/SelectAdventure.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { BButton, BNavbar, BNavItem } from 'bootstrap-vue-next'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import BInputGroup from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroup.vue'
+import { signOut } from 'firebase/auth'
+import { collection, deleteDoc, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted, onUnmounted, Ref, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import IconStackCloud from '../components/IconStackCloud.vue'
+import SelectCharacter from '../components/SelectCharacter.vue'
+import { auth, db } from '../firebase/config.js'
 
 export default {
   setup(props, context) {
@@ -47,7 +45,9 @@ export default {
       let ret = await getDoc(docRef)
       let ids = ret.data()?.characterIds
       ids.push(selectedChar.value)
-      let uids = ret.data()?.userIds
+
+      let uids = ret.data()?.userIds || []
+
       uids.push(userStore.getUserId)
       let charObjArr = nameList.value.filter((obj) => (obj.value = selectedChar.value))
       let names = ret.data()?.characterNames

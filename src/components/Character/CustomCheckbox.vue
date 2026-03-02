@@ -1,6 +1,6 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../stores/designStore'
+import { useDesignStore } from '../../stores/designStore.ts'
 export default {
   props: ['isChecked', 'overrideBox', 'overrideFill', 'update'],
   setup(props, context) {

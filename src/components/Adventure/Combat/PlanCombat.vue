@@ -1,20 +1,20 @@
 <script lang="ts">
-import { Ref, ref, computed, ComputedRef, watch } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useAdventureStore } from '@/stores/adventureStore'
-import CombatHeader from './CombatHeader.vue'
-import CombatantList from './CombatantList.vue'
-import _ from 'lodash'
-import StatBlockDetailedReference from '../Stat Blocks/StatBlockDetailedReference.vue'
-import CombatNav from './CombatNav.vue'
-import BOffcanvas from 'bootstrap-vue-next/src/components/BOffcanvas/BOffcanvas.vue'
-import CombatNotes from './CombatNotes.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import { open } from 'node:inspector/promises'
-import TitleMedallion from '@/components/TitleMedallion.vue'
 import CustomCheckbox from '@/components/Character/CustomCheckbox.vue'
 import CustomModal from '@/components/CustomModal.vue'
+import TitleMedallion from '@/components/TitleMedallion.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useInitiativeStore } from '@/stores/initiativeStore.ts'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import BOffcanvas from 'bootstrap-vue-next/src/components/BOffcanvas/BOffcanvas.vue'
+import _ from 'lodash'
 import { storeToRefs } from 'pinia'
+import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref, watch } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import StatBlockDetailedReference from '../Stat Blocks/StatBlockDetailedReference.vue'
+import CombatHeader from './CombatHeader.vue'
+import CombatNav from './CombatNav.vue'
+import CombatNotes from './CombatNotes.vue'
+import CombatantList from './CombatantList.vue'
 
 export default {
   props: ['combat', 'updateTemp', 'lightenDarkenColor', 'toTable', 'tabMode', 'id'],
@@ -22,6 +22,8 @@ export default {
     const modal = ref(false)
     const designStore = useDesignStore()
     const adventureStore = useAdventureStore()
+    const initiativeStore = useInitiativeStore()
+    const { combatants } = storeToRefs(initiativeStore)
     const mode = ref('table')
     const navPos = ref('notes')
     function switchTab(tab) {
@@ -32,15 +34,17 @@ export default {
     function updateDeletedViewedCombatant() {
       openCombatant.value = 'none'
     }
-
     function setViewedCombatant(name) {
-      console.log(name)
-      console.log(props.combat)
-      navPos.value = 'combatant'
       openCombatant.value = props.combat.combatants[name]
+      navPos.value = 'combatant'
     }
-    const combatants: ComputedRef<Array<any>> = computed(() => {
+    const localCombatants: ComputedRef<Array<any>> = computed(() => {
       return Object.values(props.combat.combatants)
+    })
+    watch(combatants, (newOne, oldOne) => {
+      openCombatant.value = openCombatant.value.name
+        ? combatants.value[openCombatant.value.name]
+        : 'none'
     })
     function saveCombat() {
       if (props.id) {
@@ -48,11 +52,17 @@ export default {
       } else {
         adventureStore.postCombat(props.combat)
       }
+      // if (adventureStore.activeCombatId) {
+      //   adventureStore.clearActiveCombat(adventureStore.activeCombatId)
+      // }
       modal.value = true
     }
     function closeAndBoBack() {
       modal.value = false
       props.toTable()
+      if (adventureStore.activeCombatId) {
+        adventureStore.clearActiveCombat(adventureStore.activeCombatId)
+      }
     }
     function updateViewedCombatant(statBlock) {
       let newTemp = _.cloneDeep(props.combat)
@@ -83,6 +93,27 @@ export default {
       let prim = designStore.primaryTheme
       return sec + ' ' + prim
     })
+    const sidebarWidth = computed(() => {
+      return innerWidth.value > 1500
+        ? Math.floor(innerWidth.value / 3)
+        : innerWidth.value > 1200
+          ? Math.floor(innerWidth.value / 4)
+          : 0
+    })
+    const sidebarWidthPx = computed(() => {
+      return sidebarWidth.value + 'px'
+    })
+    const innerWidth = ref(window.innerWidth)
+    onMounted(() => {
+      window.addEventListener('resize', () => (innerWidth.value = window.innerWidth))
+    })
+
+    const mainContainerWidth = computed(() => {
+      return 'calc(100vw -  ' + sidebarWidth.value + 'px )'
+    })
+    const mainContainerWidthNoScroll = computed(() => {
+      return 'calc(100vw -  ' + sidebarWidth.value + 'px - 18px )'
+    })
     return {
       designStore,
       modal,
@@ -96,12 +127,16 @@ export default {
       switchTab,
       showCombatants,
       updateDeletedViewedCombatant,
-      combatants,
+      localCombatants,
       overwrite,
       overwriteKey,
       saveCombat,
       closeAndBoBack,
-      scrollbarColor
+      scrollbarColor,
+      mainContainerWidth,
+      mainContainerWidthNoScroll,
+      sidebarWidth,
+      sidebarWidthPx
     }
   },
   components: {
@@ -127,23 +162,32 @@ export default {
       :is-editing="true"
     ></CombatHeader>
     <div style="display: flex; height: 100%">
-      <div style="display: flex; flex-direction: column; flex-grow: 1; margin-top: -1rem">
+      <div
+        :style="{ width: mainContainerWidth, maxWidth: mainContainerWidth }"
+        style="display: flex; flex-direction: column; flex-grow: 1; margin-top: -1rem"
+        id="mainDisplay"
+      >
         <CombatNav
           :switchTab="switchTab"
           :navPos="navPos"
           :openCombatant="openCombatant"
           :combatants="props.combat.combatants"
         ></CombatNav>
-        <StatBlockDetailedReference
-          v-if="navPos === 'combatant'"
-          :currentStatBlock="openCombatant"
-          :is-editing="false"
-          :lighten-darken-color="lightenDarkenColor"
-          :rm="console.log('rm')"
-          :updateCombat="updateViewedCombatant"
-          :in-combat="true"
-        ></StatBlockDetailedReference>
+        <div
+          :style="{ width: mainContainerWidthNoScroll }"
+          v-if="navPos === 'combatant' && openCombatant != 'none'"
+        >
+          <StatBlockDetailedReference
+            :currentStatBlock="openCombatant"
+            :is-editing="false"
+            :lighten-darken-color="lightenDarkenColor"
+            :rm="console.log('rm')"
+            :updateCombat="updateViewedCombatant"
+            :in-combat="true"
+          ></StatBlockDetailedReference>
+        </div>
         <CombatNotes
+          class="mainDisplayClass"
           :combat="props.combat"
           :updateTemp="updateTemp"
           v-if="navPos === 'notes'"
@@ -151,7 +195,7 @@ export default {
         <CombatantList
           v-if="navPos === 'list'"
           :overrideFull="true"
-          style="flex-grow: 1"
+          style="flex-grow: 1; width: 100vw"
           :combat="props.combat"
           :switchTab="switchTab"
           :openEdit="setViewedCombatant"
@@ -159,23 +203,30 @@ export default {
           :openCombatant="openCombatant"
           :mode="props.tabMode"
           :updateDeletedViewedCombatant="updateDeletedViewedCombatant"
+          :initiativeDisplayNumericHp="true"
+          :initiativeDisplayNumericMana="true"
+          :initiativeDisplayHp="true"
+          :initiativeDisplayMana="true"
+          :initiativeDisplayEnemyTraits="true"
+          :initiativeDisplayCharacterTraits="true"
+          :allowApplyStatusToCharacter="true"
+          :allowApplyStatusToEnemy="true"
         ></CombatantList>
       </div>
       <div
-        style="height: max-content; width: calc(30% + 1.5rem)"
+        :style="{ width: sidebarWidthPx }"
+        class="combatantSidebar"
         v-if="navPos === 'combatant' || navPos === 'notes'"
       >
-        <div
-          style="
-            position: absolute;
-            height: calc(100% - 15rem);
-            padding-bottom: 1rem;
-            width: inherit;
-          "
-        >
-          <div class="combatantListContainer" :style="{ scrollbarColor: scrollbarColor }">
+        <div style="height: calc(100% - 15rem); padding-bottom: 1rem; width: 100%">
+          <div
+            class="combatantListContainer"
+            id="sidebar"
+            :style="{ scrollbarColor: scrollbarColor }"
+          >
             <CombatantList
-              style="flex-grow: 1; min-height: 75vh"
+              :style="{ width: sidebarWidthPx }"
+              style="flex-grow: 1; min-height: 75vh; padding-right: 0.75rem"
               :combat="props.combat"
               :switchTab="switchTab"
               :openEdit="setViewedCombatant"
@@ -183,6 +234,14 @@ export default {
               :openCombatant="openCombatant"
               :updateDeletedViewedCombatant="updateDeletedViewedCombatant"
               :mode="props.tabMode"
+              :initiativeDisplayNumericHp="true"
+              :initiativeDisplayNumericMana="true"
+              :initiativeDisplayHp="true"
+              :initiativeDisplayMana="true"
+              :initiativeDisplayEnemyTraits="true"
+              :initiativeDisplayCharacterTraits="true"
+              :allowApplyStatusToCharacter="true"
+              :allowApplyStatusToEnemy="true"
             ></CombatantList>
           </div>
         </div>
@@ -280,7 +339,7 @@ export default {
           <TitleMedallion :color="designStore.primaryText" title="Combatants"> </TitleMedallion>
           <div style="display: flex">
             <div
-              v-for="c in combatants"
+              v-for="c in localCombatants"
               :key="c"
               style="
                 display: flex;
@@ -353,18 +412,35 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .combatantListContainer {
   height: 100%;
+  width: 100%;
+
   overscroll-behavior: contain;
   overflow-y: scroll;
   position: relative;
   display: flex;
   flex-direction: column;
 }
+@media (max-width: 1500px) {
+  .sidebarWidth {
+    width: 25%;
+  }
+}
 .combatantOffCanvas {
   display: none;
 }
+
+.combatantSidebar {
+  height: max-content;
+  display: flex;
+  flex-grow: 1;
+}
 @media (max-width: 1500px) {
+  .sidebarWidth {
+    width: 20%;
+  }
   .combatantList {
     display: none;
   }
@@ -373,11 +449,14 @@ export default {
     display: flex;
     flex-direction: column;
   }
-  .combatantListContainer {
-    width: 12rem;
-  }
 }
 @media (max-width: 1200px) {
+  .combatantSidebar {
+    display: none;
+  }
+  .sidebarWidth {
+    width: 0px;
+  }
   .footerButtons {
     font-size: medium;
     align-self: center;
@@ -387,9 +466,10 @@ export default {
     height: 3rem;
   }
 }
+
 @media (max-width: 800px) {
-  .combatantListContainer {
-    width: 4rem;
+  .combatantSidebar {
+    display: none;
   }
 }
 @media (max-width: 600px) {

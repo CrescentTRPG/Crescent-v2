@@ -7,7 +7,7 @@ import MartialSkillsTable from './MartialSkillsTable.vue'
 import AbilityPointWidget from '../Build/AbilityPointWidget.vue'
 import ArmorLevelWidget from '../Build/ArmorLevelWidget.vue'
 import AttributeContainer from '../Build/AttributeContainer.vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import SkillsTable from '../Build/SkillsTable.vue'
 import MartialPerksTab from '../Build/MartialPerksTab.vue'
 import SpellsTable from './SpellsTable.vue'
@@ -16,6 +16,8 @@ import TitleWidget from '@/components/TitleWidget.vue'
 import FaunaTab from './Fauna/FaunaTab.vue'
 import PerformanceTab from './PerformanceTab.vue'
 import MartialAttackBuilderTab from '../Matrial Attack Builder/MartialAttackBuilderTab.vue'
+import EffigyTab from '../Effigy/EffigyTab.vue'
+import GuideMessage from '@/components/GuideMessage.vue'
 
 export default {
   props: ['tab'],
@@ -39,7 +41,9 @@ export default {
     TitleWidget,
     FaunaTab,
     PerformanceTab,
-    MartialAttackBuilderTab
+    MartialAttackBuilderTab,
+    EffigyTab,
+    GuideMessage
   }
 }
 </script>
@@ -47,13 +51,50 @@ export default {
 <template>
   <div id="tab-contents" style="display: flex; flex-direction: column">
     <div
+      v-if="
+        !(
+          props.tab === 'effigy' ||
+          props.tab === 'martialbuilder' ||
+          props.tab === 'performance' ||
+          props.tab === 'fauna'
+        )
+      "
       style="width: 100%; position: absolute; height: 4rem; left: -1rem; z-index: 1"
       :style="{ background: designStore.inputBacking }"
     ></div>
-    <div class="buildInfoDisplay inputColorBackdrop" style="z-index: 4">
-      <AbilityPointWidget style="height: 4rem; align-self: flex-start"></AbilityPointWidget
-      ><RulesStatus style="height: 5rem; width: 50%; z-index: 2"></RulesStatus>
+
+    <div
+      class="buildInfoDisplay inputColorBackdrop"
+      v-if="
+        !(
+          props.tab === 'effigy' ||
+          props.tab === 'martialbuilder' ||
+          props.tab === 'performance' ||
+          props.tab === 'fauna'
+        )
+      "
+      style="z-index: 3"
+    >
+      <AbilityPointWidget style="height: 4rem; align-self: flex-start"></AbilityPointWidget>
+
+      <RulesStatus style="height: 5rem; width: 50%; z-index: 2"></RulesStatus>
     </div>
+    <GuideMessage
+      :step="3"
+      style="position: absolute; max-width: 30rem; margin-top: 2rem"
+      title="Ability Points"
+      orientation="bottom"
+      shift="start"
+      message="This keeps track of your ability points.  Click here to set your total ability points.  The spent points will be tabulated automatically."
+    ></GuideMessage>
+    <GuideMessage
+      :step="2"
+      style="position: absolute; max-width: 50rem; z-index: 5; margin-top: 2rem"
+      title="Build Status"
+      orientation="bottom"
+      shift="end"
+      message="This is your build status.  It will let you know if there are any issues with your build as you create your character. Look out for the exclamation point! Alternatively look for the question mark for a suggestion (not a rule break, just some help!). Simply click the widget for details"
+    ></GuideMessage>
     <div class="buildContent" v-if="props.tab == 'corestats'">
       <AttributeContainer class="attributeWidth"></AttributeContainer>
       <div class="archetypeHeader">
@@ -61,6 +102,14 @@ export default {
 
         <div class="archetypeContainer">
           <div class="archetypeDisplay">
+            <GuideMessage
+              :step="4"
+              style="position: absolute; max-width: 30rem; margin-top: -20rem"
+              title="Archetype"
+              orientation="top"
+              shift="start"
+              message="This is where you select your character's archetype.  Archetypes are a powerful choice made at Character Creation.  Read more about them in the manual page."
+            ></GuideMessage>
             <ArchetypeWidget></ArchetypeWidget>
             <ArmorLevelWidget></ArmorLevelWidget>
           </div>
@@ -73,7 +122,7 @@ export default {
     <div v-if="props.tab == 'spells'"><SpellsTable></SpellsTable></div>
     <div v-if="props.tab == 'traits'"><TraitsTab></TraitsTab></div>
     <div v-if="props.tab == 'fauna'"><FaunaTab></FaunaTab></div>
-    <div v-if="props.tab == 'effigy'">e</div>
+    <div v-if="props.tab == 'effigy'"><EffigyTab></EffigyTab></div>
     <div v-if="props.tab == 'performance'"><PerformanceTab></PerformanceTab></div>
     <div v-if="props.tab == 'martialbuilder'">
       <MartialAttackBuilderTab></MartialAttackBuilderTab>
@@ -95,6 +144,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
+  z-index: 3;
 }
 .archetypeDisplay {
   display: flex;
@@ -105,6 +155,7 @@ export default {
   display: flex;
   justify-content: space-between;
   height: 4rem;
+  margin-bottom: 1rem;
 }
 
 @media (max-width: 1200px) {

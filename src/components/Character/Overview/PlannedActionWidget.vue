@@ -1,51 +1,34 @@
 <script lang="ts">
-import { computed, ComputedRef, Ref, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { Ref, ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-import { storeToRefs } from 'pinia'
-import { useSpellStore } from '@/stores/spellsStore'
-import AbilityDisplayMedallion from '@/components/AbilityDisplayMedallion.vue'
-import {
-  BButton,
-  BForm,
-  BFormInput,
-  BFormText,
-  BFormTextarea,
-  BInputGroupText
-} from 'bootstrap-vue-next'
-import CustomModal from '@/components/CustomModal.vue'
 import AbilityDisplay from '@/components/AbilityDisplay.vue'
+import AbilityDisplayMedallion from '@/components/AbilityDisplayMedallion.vue'
+import AddAsStatusModal from '@/components/AddAsStatusModal.vue'
+import CustomModal from '@/components/CustomModal.vue'
 import MartialSkillDisplay from '@/components/MartialSkillDisplay.vue'
-import IconPicker from '@/components/IconPicker.vue'
-import CustomCheckbox from '../CustomCheckbox.vue'
-import { usePartyStore } from '@/stores/partyStore'
-import { useAdventureStore } from '@/stores/adventureStore'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { usePartyStore } from '@/stores/partyStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { BButton } from 'bootstrap-vue-next'
+import { storeToRefs } from 'pinia'
 
 export default {
   props: ['actionName', 'ability'],
   setup(props, context) {
     const modal = ref(false)
-    const statusModal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
+    const adventureStore = useAdventureStore()
     const spellsStore = useSpellStore()
     const { manualSpellgroups } = storeToRefs(spellsStore)
     const partyStore = usePartyStore()
     const characterName: Ref<any> = ref(['self'])
-    const statusName = ref(props.ability.name || '')
-    const statusDuration = ref(props.ability.duration || '')
-    const checkToBreak = ref(props.ability.resistance || '')
-    const party: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(partyStore.characterObjects) || []
-    })
-    const statusIcon = ref(
-      manualSpellgroups.value[props.ability.spellgroup]?.groupIcon || props.ability.groupIcon || ''
-    )
-    const statusDescription = ref(props.ability.description || props.ability.skills || '')
+    const opponentList: Ref<any> = ref([])
 
     function clearAbility() {
       if (props.actionName === 'Core Action') {
@@ -62,70 +45,6 @@ export default {
       }
     }
 
-    function openAndLoadStatusModal() {
-      characterName.value = ['self']
-      statusName.value = props.ability.name || ''
-      statusIcon.value =
-        manualSpellgroups.value[props.ability.spellgroup]?.groupIcon ||
-        props.ability.groupIcon ||
-        ''
-      statusDescription.value =
-        props.ability.description.replace('\\n', '\n\n ❖ ').replaceAll('\\n', '\n ❖ ') ||
-        props.ability.skills ||
-        ''
-      statusDuration.value = props.ability.duration || ''
-      checkToBreak.value = props.ability.resistance || ''
-
-      statusModal.value = true
-    }
-    function closeStatusModal() {
-      statusModal.value = false
-    }
-    const adventureStore = useAdventureStore()
-
-    function addAsStatus() {
-      characterName.value.forEach((name) => {
-        if (name === 'self') {
-          characterStore.addCustomStatus({
-            name: statusName.value,
-            description: statusDescription.value,
-            duration: statusDuration.value,
-            icon: statusIcon.value,
-            checkToBreak: checkToBreak.value,
-            linkedModifiers: []
-          })
-        } else {
-          let obj = {
-            name: statusName.value,
-            description: statusDescription.value,
-            duration: statusDuration.value,
-            icon: statusIcon.value,
-            checkToBreak: checkToBreak.value,
-            linkedModifiers: []
-          }
-          let userId = ''
-          const cIds = adventureStore.characterIds
-          for (let i = 0; i < cIds.length; i++) {
-            if (cIds[i] === name) {
-              userId = adventureStore.userIds[i]
-            }
-          }
-          partyStore.addCustomStatus(obj, name, userId)
-        }
-      })
-      if (characterName.value.includes('self')) {
-        characterStore.addCustomStatus({
-          name: statusName.value,
-          description: statusDescription.value,
-          duration: statusDuration.value,
-          icon: statusIcon.value,
-          checkToBreak: checkToBreak.value,
-          linkedModifiers: []
-        })
-      }
-      closeStatusModal()
-    }
-
     return {
       designStore,
       modal,
@@ -134,18 +53,10 @@ export default {
       props,
       manualSpellgroups,
       clearAbility,
-      statusName,
-      statusIcon,
-      statusDescription,
       characterName,
-      closeStatusModal,
-      statusModal,
-      openAndLoadStatusModal,
-      addAsStatus,
-      statusDuration,
-      checkToBreak,
       partyStore,
-      party
+      opponentList,
+      adventureStore
     }
   },
   components: {
@@ -154,11 +65,7 @@ export default {
     CustomModal,
     AbilityDisplay,
     MartialSkillDisplay,
-    BFormInput,
-    BInputGroupText,
-    IconPicker,
-    BFormTextarea,
-    CustomCheckbox
+    AddAsStatusModal
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -245,7 +152,7 @@ export default {
       :style="{
         background: designStore.inputBacking,
         borderColor: LightenDarkenColor(designStore.inputBacking, -10),
-        color: designStore.inputText
+        color: designStore.inputBacking
       }"
       @click="modal = !modal"
     >
@@ -268,6 +175,7 @@ export default {
             margin-right: 0.5rem;
             align-self: center;
           "
+          :style="{ color: designStore.inputText }"
         >
           {{ props.ability.name }}
         </div>
@@ -294,7 +202,7 @@ export default {
         background: designStore.secondaryTheme,
         borderColor: LightenDarkenColor(designStore.inputBacking, -10),
         boxShadow: 'inset 0px 0px 0px 2px ' + LightenDarkenColor(designStore.secondaryTheme, -10),
-        color: designStore.inputText
+        color: designStore.inputBacking
       }"
     >
       <div
@@ -307,7 +215,8 @@ export default {
         "
         class="outerBox"
         :style="{
-          background: designStore.inputBacking
+          background: designStore.inputBacking,
+          color: designStore.inputBacking
         }"
       >
         <div
@@ -319,7 +228,8 @@ export default {
             margin-right: 0.5rem;
           "
           :style="{
-            background: designStore.inputBacking
+            background: designStore.inputBacking,
+            color: designStore.inputText
           }"
         >
           No Ability Planned
@@ -402,189 +312,14 @@ export default {
           background: designStore.primaryTheme,
           color: designStore.primaryText
         }"
-        ><div style="display: flex; justify-content: flex-end" @click="openAndLoadStatusModal()">
-          <div style="text-wrap: wrap; width: 120%">Add as Status</div>
-          <i class="bi bi-plus-lg" style="font-size: x-large; margin-top: 0.25rem"> </i></div
+        ><div style="display: flex; justify-content: flex-end">
+          <AddAsStatusModal
+            :ability="props.ability"
+            :fontSize="'small'"
+            style="text-wrap: wrap; width: 120%"
+          ></AddAsStatusModal></div
       ></BButton>
     </div>
-    <CustomModal :showModal="statusModal" title="Add Ability as Status" @close="closeStatusModal()">
-      <template v-slot:body>
-        <div style="display: flex">
-          <BInputGroupText
-            style="
-              border: 3px solid;
-              border-radius: 0.675rem;
-              border-right: none;
-              border-top-right-radius: 0;
-              border-bottom-right-radius: 0;
-            "
-            :style="{
-              color: designStore.inputText,
-              background: designStore.inputBacking,
-              borderColor: designStore.secondaryTheme
-            }"
-            >Status Name</BInputGroupText
-          >
-          <BFormInput
-            v-model="statusName"
-            style="
-              border-top-left-radius: 0;
-              border-bottom-left-radius: 0;
-              border: 3px solid;
-              border-left: 1px solid;
-              margin-right: 0.5rem;
-            "
-            :style="{
-              color: designStore.inputText,
-              background: designStore.inputBacking,
-              borderColor: designStore.secondaryTheme
-            }"
-          ></BFormInput>
-          <IconPicker
-            style="align-self: center; border-radius: 10px"
-            :currentIcon="statusIcon"
-            @selectedIcon="(icon) => (statusIcon = icon)"
-            orientation="bottom"
-          ></IconPicker>
-        </div>
-        <BFormTextarea
-          onfocus='this.style.height = "";this.style.height = this.scrollHeight + "px"'
-          v-model="statusDescription"
-          style="white-space: pre-line; min-height: 6rem; margin-top: 0.5rem; border: 3px solid"
-          :style="{
-            color: designStore.inputText,
-            background: designStore.inputBacking,
-            borderColor: designStore.secondaryTheme
-          }"
-        ></BFormTextarea>
-        <div style="display: flex; margin-top: 0.5rem" class="wrappers">
-          <div style="display: flex" class="wrappingItem">
-            <BInputGroupText
-              style="
-                border: 3px solid;
-                border-radius: 0.675rem;
-                border-right: none;
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-              "
-              :style="{
-                color: designStore.inputText,
-                background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-              >Duration</BInputGroupText
-            >
-            <BFormInput
-              v-model="statusDuration"
-              style="
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-                border: 3px solid;
-                border-left: 1px solid;
-                margin-right: 0.5rem;
-              "
-              :style="{
-                color: designStore.inputText,
-                background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-            ></BFormInput>
-          </div>
-          <div style="display: flex" class="wrappingItem">
-            <BInputGroupText
-              style="
-                border: 3px solid;
-                border-radius: 0.675rem;
-                border-right: none;
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-              "
-              :style="{
-                color: designStore.inputText,
-                background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-              >Check Value</BInputGroupText
-            >
-            <BFormInput
-              v-model="checkToBreak"
-              style="
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-                border: 3px solid;
-                border-left: 1px solid;
-                margin-right: 0.5rem;
-              "
-              :style="{
-                color: designStore.inputText,
-                background: designStore.inputBacking,
-                borderColor: designStore.secondaryTheme
-              }"
-            ></BFormInput>
-          </div>
-        </div>
-        <div style="display: flex; justify-content: flex-end; flex-wrap: wrap">
-          <div style="align-self: center; margin-right: 0.5rem; margin-top: 0.5rem">
-            <div>Apply to...</div>
-          </div>
-          <div
-            style="
-              height: 100%;
-              display: flex;
-              margin-top: 0.5rem;
-              padding: 0.5rem;
-              padding-bottom: 0.75rem;
-              border-radius: 0.25rem;
-              border: 2px solid;
-            "
-            :style="{
-              background: designStore.inputBacking,
-              color: designStore.inputText,
-              borderColor: designStore.secondaryTheme
-            }"
-          >
-            <div style="display: flex; padding-right: 1rem">
-              <div style="align-self: center; margin-right: 0.5rem">
-                <div style="margin-right: 0.5rem">Self:</div>
-              </div>
-              <CustomCheckbox
-                style="margin-top: -0.5rem; width: 2rem"
-                @true="characterName.push('self')"
-                @false="characterName.splice(characterName.indexOf('self'), 1)"
-                :isChecked="characterName.includes('self')"
-              ></CustomCheckbox>
-            </div>
-            <div v-for="partyMember in party" :key="partyMember">
-              <div style="display: flex; padding-right: 1rem">
-                <div style="align-self: center; margin-right: 0.5rem">
-                  <div style="margin-right: 0.5rem">{{ partyMember.name }}:</div>
-                </div>
-                <CustomCheckbox
-                  style="margin-top: -0.5rem; width: 2rem"
-                  @true="characterName.push(partyMember.id)"
-                  @false="characterName.splice(characterName.indexOf(partyMember.id), 1)"
-                  :isChecked="characterName.includes(partyMember.id)"
-                ></CustomCheckbox>
-              </div>
-            </div>
-          </div>
-        </div>
-      </template>
-      <template v-slot:footer>
-        <BButton
-          @click="addAsStatus()"
-          style="border: 1px solid; margin-right: 1rem"
-          :style="{ borderColor: designStore.secondaryTheme }"
-          >Add as Status</BButton
-        >
-        <BButton
-          style="border: 1px solid"
-          :style="{ borderColor: designStore.secondaryTheme }"
-          @click="closeStatusModal()"
-          >Cancel</BButton
-        ></template
-      >
-    </CustomModal>
   </div>
 </template>
 

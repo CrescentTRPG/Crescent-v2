@@ -1,25 +1,12 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import {
-  BButton,
-  BCard,
-  BNavItem,
-  BNavbar,
-  BFormSelect,
-  BFormSelectOption
-} from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useCharacterStore } from '../../../stores/characterStore'
-import { useUserStore } from '../../../stores/userStore'
+import { useRouter } from 'vue-router'
+import { useCharacterStore } from '../../../stores/characterStore.ts'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import { useUserStore } from '../../../stores/userStore.ts'
 
-import CharacterSidebar from '../Build/CharacterSidebar.vue'
-import BannerItem from '../Build/BannerItem.vue'
-import { storeToRefs } from 'pinia'
-import BFormSelectOptionGroup from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelectOptionGroup.vue'
-import SelectCharacter from '@/components/SelectCharacter.vue'
 import DropdownSelect from '@/components/DropdownSelect.vue'
+import { storeToRefs } from 'pinia'
 
 export default {
   setup(props, context) {
@@ -39,10 +26,10 @@ export default {
       { value: 'mage', text: 'Mage' },
       { value: 'monk', text: 'Monk' },
       { value: 'rogue', text: 'Rogue' },
+      { value: 'priest', text: 'Priest' },
       { value: 'segment', text: 'Light Armor', segment: true },
       { value: 'mystic', text: 'Mystic' },
       { value: 'nomad', text: 'Nomad' },
-      { value: 'priest', text: 'Priest' },
       { value: 'elementalist', text: 'Elementalist' },
       { value: 'sorcerer', text: 'Sorcerer' }
     ]
@@ -90,7 +77,6 @@ export default {
   methods: {
     selectArchetype(archetype: string) {
       this.$emit(archetype)
-      console.log(archetype)
       this.characterStore.setArchetype(
         archetype,
         this.userStore.getUserId,

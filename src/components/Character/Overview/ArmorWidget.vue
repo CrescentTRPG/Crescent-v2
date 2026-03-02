@@ -1,20 +1,19 @@
 <script lang="ts">
 import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import MiniArmorWidget from './MiniArmorWidget.vue'
-import { storeToRefs } from 'pinia'
 import CustomModal from '@/components/CustomModal.vue'
-import { BButton, BFormInput, BFormSelect, BInputGroup } from 'bootstrap-vue-next'
-import StatusModifierExplaination from './StatusModifierExplaination.vue'
-import CustomCheckbox from '../CustomCheckbox.vue'
-import ToggleSwitch from '@/components/ToggleSwitch.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
-import StatusEffectItem from './StatusEffectItem.vue'
+import ToggleSwitch from '@/components/ToggleSwitch.vue'
+import { BInputGroup } from 'bootstrap-vue-next'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
-import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
 import BPopover from 'bootstrap-vue-next/src/components/BPopover.vue'
 import BasicInput from '../BasicInput.vue'
+import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
+import MiniArmorWidget from './MiniArmorWidget.vue'
+import StatusEffectItem from './StatusEffectItem.vue'
+import StatusModifierExplaination from './StatusModifierExplaination.vue'
+import AddStatusModifierModal from './AddStatusModifierModal.vue'
 
 export default {
   props: [
@@ -35,12 +34,14 @@ export default {
     'bonusDvs',
     'totalDvs',
     'isEditing',
-    'setDvs'
+    'setDvs',
+    'isDodging',
+    'setIsDodging',
+    'hasDodging'
   ],
   setup(props, context) {
     const modal = ref(false)
     const designStore = useDesignStore()
-    const isDodging = ref(false)
     const modifierType = [
       'Modify Armor Dvs',
       'Modify Shield Dvs',
@@ -69,7 +70,6 @@ export default {
       modifiers.forEach((modGroup: any) => {
         ret = ret.concat(Object.values(modGroup))
       })
-      console.log(ret)
 
       return ret
     })
@@ -112,18 +112,18 @@ export default {
       }
       return designStore.secondaryTheme
     }
-
+    const isHidden = ref(false)
     return {
       designStore,
       modal,
       modifierType,
-      isDodging,
       statusModifiersList,
       addArmorStatusModifier,
       removeModifier,
       armorColor,
       getColor,
-      props
+      props,
+      isHidden
     }
   },
   components: {
@@ -132,12 +132,10 @@ export default {
     ToggleSwitch,
     BInputGroup,
     BInputGroupText,
-    StatusModifierExplaination,
-    TitleWidget,
     StatusEffectItem,
-    AddStatusEffectWidget,
     BPopover,
-    BasicInput
+    BasicInput,
+    AddStatusModifierModal
   }
 }
 </script>
@@ -146,7 +144,7 @@ export default {
   <div
     class="hoverableIconOnSidebar"
     @click="modal = !modal"
-    style="width: 13.5rem; height: 10rem; margin-top: -0.65rem"
+    style="width: 13.25rem; height: 10rem; margin-top: -0.65rem"
     :style="{ fontFamily: designStore.font }"
   >
     <div
@@ -324,6 +322,7 @@ export default {
           </BPopover>
         </div>
         <BInputGroup
+          v-if="hasDodging"
           style="border: 2px solid; border-radius: 10px; margin-bottom: 1rem; width: 12rem"
           :style="{
             borderColor: designStore.secondaryTheme,
@@ -338,22 +337,18 @@ export default {
           >
           <ToggleSwitch
             style="margin-top: 0.75rem"
-            @true="isDodging = true"
-            @false="isDodging = false"
-            :value="isDodging"
+            @true="props.setIsDodging(true)"
+            @false="props.setIsDodging(false)"
+            :value="props.isDodging"
           ></ToggleSwitch>
         </BInputGroup>
 
-        <div style="display: flex; justify-content: space-between; margin-top: -1.5rem">
-          <TitleWidget title="Status Modifiers" style="width: 100%"></TitleWidget>
-          <StatusModifierExplaination
-            style="position: relative; top: 2.5rem"
-          ></StatusModifierExplaination>
-        </div>
-        <AddStatusEffectWidget
-          :modifierType="modifierType"
-          @added="(addedVal) => addArmorStatusModifier(addedVal)"
-        ></AddStatusEffectWidget>
+        <AddStatusModifierModal
+          :modify-is-hidden="(val) => (isHidden = val)"
+          :modifiers="modifierType"
+          modifierType="Defense Values"
+          @added="(val) => addArmorStatusModifier(val)"
+        ></AddStatusModifierModal>
 
         <div v-for="mod in statusModifiersList" :key="mod">
           <StatusEffectItem
@@ -366,6 +361,7 @@ export default {
       </template>
     </CustomModal>
     <CustomModal
+      :is-hidden="isHidden"
       v-if="props.isEditing"
       title="Modify Dvs"
       :showModal="modal"

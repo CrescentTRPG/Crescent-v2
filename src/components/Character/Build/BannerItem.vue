@@ -1,26 +1,19 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useRouter } from 'vue-router'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
 export default {
   props: ['name'],
   setup(props, context) {
-    const name = ref(props?.name || '')
+    const nameBanner = ref(props?.name || '')
     const router = useRouter()
     const designStore = useDesignStore()
-    return { designStore, name, props }
+    return { designStore, nameBanner, props }
   },
 
   methods: {},
-  components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard
-  }
+  components: {}
 }
 </script>
 

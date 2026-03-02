@@ -1,9 +1,7 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import { onKeyStroke } from '@vueuse/core'
+import { useDesignStore } from '@/stores/designStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
 import { computed, ComputedRef, ref } from 'vue'
 
 export default {

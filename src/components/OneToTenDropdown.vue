@@ -1,13 +1,10 @@
 <script lang="ts">
-import { ref } from 'vue'
-import { useDesignStore } from '../stores/designStore'
-import { BDropdown, BDropdownItem } from 'bootstrap-vue-next'
+import { useDesignStore } from '../stores/designStore.ts'
 export default {
   props: ['selectedValue'],
   setup(props, context) {
     const designStore = useDesignStore()
     const send = (num) => {
-      console.log(num)
       context.emit('selected', num)
     }
     return { designStore, send }

@@ -1,20 +1,17 @@
 <script lang="ts">
-import { DEFAULT_STAT_BLOCK } from '@/bases'
-import { useDesignStore } from '@/stores/designStore'
-import { BButton } from 'bootstrap-vue-next'
-import { onMounted, Ref, ref } from 'vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import PowerLevelDisplay from './PowerLevelDisplay.vue'
-import RibbonTitle from '@/components/RibbonTitle.vue'
-import RandomlyGenerateStatBlock from './RandomlyGenerateStatBlock.vue'
-import CustomModal from '@/components/CustomModal.vue'
 import BasicInput from '@/components/Character/BasicInput.vue'
-import StatBlockTags from './StatBlockTags.vue'
-import BOffcanvas from 'bootstrap-vue-next/src/components/BOffcanvas/BOffcanvas.vue'
+import CustomModal from '@/components/CustomModal.vue'
 import StatBlockDiceRoller from '@/components/DiceSidebar/StatBlockDiceRoller.vue'
+import IconDisplay from '@/components/IconDisplay.vue'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { BButton } from 'bootstrap-vue-next'
+import BOffcanvas from 'bootstrap-vue-next/src/components/BOffcanvas/BOffcanvas.vue'
+import { onMounted, Ref, ref } from 'vue'
+import PowerLevelDisplay from './PowerLevelDisplay.vue'
+import StatBlockTags from './StatBlockTags.vue'
 
 export default {
-  props: ['currentStatBlock', 'isEditing', 'updateTemp'],
+  props: ['currentStatBlock', 'isEditing', 'updateTemp', 'useIconInsteadOfPowerLevel'],
   setup(props, context) {
     const designStore = useDesignStore()
     const name = ref('')
@@ -22,7 +19,6 @@ export default {
     const powerLevel: Ref<Number> = ref(0)
     const modal = ref(false)
     onMounted(() => {
-      console.log(props.currentStatBlock)
       name.value = props.currentStatBlock.name
       tags.value = props.currentStatBlock.tags
       powerLevel.value = props.currentStatBlock.powerLevel
@@ -67,7 +63,8 @@ export default {
     StatBlockTags,
     BOffcanvas,
     StatBlockDiceRoller,
-    BButton
+    BButton,
+    IconDisplay
   }
 }
 </script>
@@ -147,6 +144,7 @@ export default {
         </div>
 
         <PowerLevelDisplay
+          v-if="!props.useIconInsteadOfPowerLevel"
           :currentStatBlock="props.currentStatBlock"
           style="margin-top: -0.25rem; margin-right: 2rem"
           @power="(level) => sendPower(level)"
@@ -154,6 +152,14 @@ export default {
           @powerIcon="(icon) => sendPowerIcon(icon)"
           @overrideIcon="(icon) => sendOverrideIcon(icon)"
         ></PowerLevelDisplay>
+        <div v-else>
+          <IconDisplay
+            size="xx-large"
+            scale="3"
+            :color="designStore.secondaryTheme"
+            :icon="props.currentStatBlock.groupIcon"
+          ></IconDisplay>
+        </div>
       </div>
       <div style="display: flex">
         <StatBlockTags

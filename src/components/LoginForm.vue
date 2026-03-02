@@ -10,7 +10,7 @@
 <script>
 import { auth } from '../firebase/config'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/userStore.ts'
 
 export default {
   data: function () {
@@ -31,7 +31,6 @@ export default {
         if (!res) {
           throw new Error('Could not complete Login')
         }
-        console.log(res)
         this.error = null
         return res
       } catch (err) {

@@ -1,12 +1,11 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import { computed, ComputedRef, Ref, ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useStatusEffectStore } from '@/stores/statusEffectStore'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useSkillStore } from '@/stores/skillsStore.ts'
+import { useStatusEffectStore } from '@/stores/statusEffectStore.ts'
+import { computed, ComputedRef } from 'vue'
 import DiceSidebar from './DiceSidebar.vue'
-import { useSkillStore } from '@/stores/skillsStore'
 export default {
-  props: ['currentStatBlock'],
+  props: ['currentStatBlock', 'omitRollingAs'],
   setup(props, context) {
     let designStore = useDesignStore()
     const statusEffectsStore = useStatusEffectStore()
@@ -15,6 +14,16 @@ export default {
     }
 
     function getExceptionals(type) {
+      let attr = type.substring(0, 1).toUpperCase() + type.substring(1)
+      let execs = props.currentStatBlock.stressedExceptionals
+        ? props.currentStatBlock.stressedExceptionals[attr] || {}
+        : {}
+      const spentExceptionals = Object.values(execs)
+      let spentExceptionalCount = 0
+
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
       const baseExceptionalVal = parseInt('' + props.currentStatBlock.exceptionals[type])
       let max = 0
 
@@ -28,7 +37,9 @@ export default {
           0
         )
       }
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     }
     function getInferiors(type) {
       let mod = 0
@@ -252,7 +263,7 @@ export default {
 </script>
 <template>
   <DiceSidebar
-    :rollAs="props.currentStatBlock.name"
+    :rollAs="props.omitRollingAs! && props.currentStatBlock.name"
     :attrs="attrs"
     @rolled="
       (rollObj) => {

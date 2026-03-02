@@ -8,7 +8,7 @@ interface PerformanceStyles {
   style2: string
   style3: string
 }
-interface PerformanceAbility {
+export interface PerformanceAbility {
   rank: number
   passive: boolean
   name: string
@@ -90,6 +90,7 @@ export const usePerformanceStore = defineStore('performance', {
   actions: {
     async setManualPerformanceStyles(styles: any) {
       this.manualPerformanceStyles = styles
+      this.setUpBuildDisplayFromScratch()
     },
     setLocalPerformanceStyles(styles: PerformanceStyles) {
       this.performanceStyles = styles
@@ -119,6 +120,7 @@ export const usePerformanceStore = defineStore('performance', {
       let index = 0
       let styleIndex = 0
       Object.entries(this.manualPerformanceStyles).map(([style]) => {
+        console.log(this.manualPerformanceStyles[style].styles)
         const stylesArray = Object.values(this.manualPerformanceStyles[style].styles).sort(
           (a: any, b: any) => {
             if (a.rank === b.rank) {

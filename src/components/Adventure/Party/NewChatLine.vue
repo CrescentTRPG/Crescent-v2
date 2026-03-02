@@ -1,9 +1,9 @@
 <script lang="ts">
-import { computed, ComputedRef, onMounted, onUnmounted, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useAdventureStore } from '@/stores/adventureStore'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
 import { BFormTextarea } from 'bootstrap-vue-next'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import { ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
 export default {
   props: ['sender', 'senderId'],

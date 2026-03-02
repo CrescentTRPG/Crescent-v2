@@ -1,17 +1,15 @@
 <script lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import { useDesignStore } from '../../stores/designStore'
-import BImg from 'bootstrap-vue-next/src/components/BImg.vue'
-import StatusEffectItem from '../Character/Overview/StatusEffectItem.vue'
 import StatusEffectIcon from '@/StatusEffectIcon.vue'
-import AddStatusButton from './AddStatusButton.vue'
-import ArmorWidget from '../Character/Overview/ArmorWidget.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useInitiativeStore } from '@/stores/initiativeStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import IconDisplay from '../IconDisplay.vue'
-import InitiativeDisplay from './Stat Blocks/initiativeDisplay.vue'
-import { useInitiativeStore } from '@/stores/initiativeStore'
+import BImg from 'bootstrap-vue-next/src/components/BImg.vue'
 import { storeToRefs } from 'pinia'
-import { useAdventureStore } from '@/stores/adventureStore'
+import { onMounted, ref } from 'vue'
+import { useDesignStore } from '../../stores/designStore.ts'
+import IconDisplay from '../IconDisplay.vue'
+import AddStatusButton from './AddStatusButton.vue'
+import InitiativeDisplay from './Stat Blocks/initiativeDisplay.vue'
 
 export default {
   props: [
@@ -43,7 +41,17 @@ export default {
     'collapseable',
     'changeInitiative',
     'agi',
-    'keyVal'
+    'keyVal',
+    'initiativeDisplayNumericHp',
+    'initiativeDisplayNumericMana',
+    'initiativeDisplayHp',
+    'initiativeDisplayMana',
+    'initiativeDisplayEnemyTraits',
+    'initiativeDisplayCharacterTraits',
+    'allowApplyStatusToCharacter',
+    'allowApplyStatusToEnemy',
+    'isOpponent',
+    'setHpModal'
   ],
   setup(props, context) {
     const modal = ref(false)
@@ -51,11 +59,12 @@ export default {
     const initiativeStore = useInitiativeStore()
     const adventureStore = useAdventureStore()
     const { initiativeOpened } = storeToRefs(initiativeStore)
-    const collapsed = ref(adventureStore.settings.initiativeDefaultExpanded)
+    const collapsed = ref(
+      !props.collapseable ? false : adventureStore.settings.initiativeDefaultExpanded
+    )
     let flip = document.querySelector('collapseOnClick')
     let header = document.querySelector('headerSpacer')
     flip?.addEventListener('click', function () {
-      console.log('HOW')
       header?.classList.add('collapse-spacer')
     })
     header?.addEventListener('animationend', function () {
@@ -79,7 +88,14 @@ export default {
       flipCollapsed
     }
   },
-  components: { BImg, StatusEffectIcon, AddStatusButton, BButton, IconDisplay, InitiativeDisplay }
+  components: {
+    BImg,
+    StatusEffectIcon,
+    AddStatusButton,
+    BButton,
+    IconDisplay,
+    InitiativeDisplay
+  }
 }
 </script>
 
@@ -125,6 +141,7 @@ export default {
       >
         <div>{{ props.name }}</div>
         <IconDisplay
+          v-if="props.collapseable"
           id="collapseOnClick"
           class="collapseIcon"
           @click="flipCollapsed()"
@@ -292,6 +309,7 @@ export default {
                   {{ props.name }}
                 </div>
                 <IconDisplay
+                  v-if="props.collapseable"
                   class="collapseIcon"
                   @click="flipCollapsed()"
                   :color="designStore.primaryText"
@@ -333,6 +351,7 @@ export default {
             <div
               style="display: flex; margin-left: 9.5rem; overflow-x: auto"
               class="restrictTraits"
+              v-if="isOpponent ? initiativeDisplayEnemyTraits : initiativeDisplayCharacterTraits"
             >
               <div v-for="trait in props.traits" :key="trait">
                 <StatusEffectIcon
@@ -371,6 +390,7 @@ export default {
                 ></StatusEffectIcon>
               </div>
               <AddStatusButton
+                v-if="isOpponent ? allowApplyStatusToEnemy : allowApplyStatusToCharacter"
                 :removeStatus="props.removeStatus"
                 :removeCustomStatus="props.removeCustomStatus"
                 :addStatus="props.addStatus"
@@ -387,12 +407,14 @@ export default {
         :style="{ borderColor: designStore.secondaryTheme }"
       >
         <div
-          style="display: flex; border-bottom: 2px solid"
+          v-if="!isOpponent ? true : initiativeDisplayHp"
+          style="display: flex; border-bottom: 2px solid; cursor: pointer"
           :style="{
             borderColor: designStore.secondaryTheme,
             background: designStore.inputBacking,
             color: designStore.inputText
           }"
+          @click="props.setHpModal(true)"
         >
           <div
             style="padding: 0.25rem; width: 5rem"
@@ -414,10 +436,13 @@ export default {
             style="padding: 0.25rem; width: 5rem; text-align: center"
             :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
           >
-            {{ currentHp }} / {{ totalHp }}
+            <div v-if="isOpponent ? initiativeDisplayNumericHp : true">
+              {{ currentHp }} / {{ totalHp }}
+            </div>
           </div>
         </div>
         <div
+          v-if="isOpponent ? initiativeDisplayMana : true"
           style="display: flex; border-bottom: 2px solid"
           :style="{
             borderColor: designStore.secondaryTheme,
@@ -446,7 +471,9 @@ export default {
             style="padding: 0.25rem; width: 5rem; text-align: center"
             :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"
           >
-            {{ currentMana }} / {{ totalMana }}
+            <div v-if="isOpponent ? initiativeDisplayNumericHp : true">
+              {{ currentMana }} / {{ totalMana }}
+            </div>
           </div>
         </div>
       </div>

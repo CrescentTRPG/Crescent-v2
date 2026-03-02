@@ -1,13 +1,14 @@
 <script lang="ts">
 import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
 import CustomModal from '@/components/CustomModal.vue'
-import StatusModifierExplaination from './StatusModifierExplaination.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
-import StatusEffectItem from './StatusEffectItem.vue'
-import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
 import BasicInput from '../BasicInput.vue'
+import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
+import StatusEffectItem from './StatusEffectItem.vue'
+import StatusModifierExplaination from './StatusModifierExplaination.vue'
+import AddStatusModifierModal from './AddStatusModifierModal.vue'
 
 export default {
   props: [
@@ -29,7 +30,6 @@ export default {
       modifiers.forEach((modGroup: any) => {
         ret = ret.concat(Object.values(modGroup))
       })
-      console.log(ret)
 
       return ret
     })
@@ -56,7 +56,7 @@ export default {
         linkedStatus: linkedStatus
       })
     }
-
+    const isHidden = ref(false)
     return {
       designStore,
       modal,
@@ -65,16 +65,16 @@ export default {
       addMpStatusModifier,
       removeModifier,
       getColor,
-      props
+      props,
+      isHidden
     }
   },
   components: {
-    TitleWidget,
     CustomModal,
-    AddStatusEffectWidget,
-    StatusModifierExplaination,
+
     StatusEffectItem,
-    BasicInput
+    BasicInput,
+    AddStatusModifierModal
   }
 }
 </script>
@@ -120,22 +120,24 @@ export default {
     >
       <v-icon name="gi-swords-emblem" scale="10.75"></v-icon>
     </div>
-    <CustomModal v-if="!isEditing" title="Modify MP " :showModal="modal" @close="modal = !modal">
+    <CustomModal
+      :is-hidden="isHidden"
+      v-if="!isEditing"
+      title="Modify MP "
+      :showModal="modal"
+      @close="modal = !modal"
+    >
       <template v-slot:body>
         <div style="font-size: x-large; text-align: center; margin-bottom: 0.25rem">
           {{ props.getMp }} Martial Points
         </div>
 
-        <div style="display: flex; justify-content: space-between; margin-top: -1.5rem">
-          <TitleWidget title="Status Modifiers" style="width: 100%"></TitleWidget>
-          <StatusModifierExplaination
-            style="position: relative; top: 2.5rem"
-          ></StatusModifierExplaination>
-        </div>
-        <AddStatusEffectWidget
-          :modifierType="modifierType"
-          @added="(addedVal) => addMpStatusModifier(addedVal)"
-        ></AddStatusEffectWidget>
+        <AddStatusModifierModal
+          :modify-is-hidden="(val) => (isHidden = val)"
+          :modifiers="modifierType"
+          modifierType="Modify Mp"
+          @added="(val) => addMpStatusModifier(val)"
+        ></AddStatusModifierModal>
 
         <div v-for="mod in statusModifiersList" :key="mod">
           <StatusEffectItem

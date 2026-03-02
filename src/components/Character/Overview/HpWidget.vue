@@ -1,18 +1,13 @@
 <script lang="ts">
 import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
 import CustomModal from '@/components/CustomModal.vue'
-import { BButton, BFormInput, BFormSelect, BInputGroup } from 'bootstrap-vue-next'
-import { Ref, watch } from 'vue'
-import StatusModifierExplaination from './StatusModifierExplaination.vue'
-import TitleWidget from '@/components/TitleWidget.vue'
-import StatusEffectItem from './StatusEffectItem.vue'
+import { useUserStore } from '@/stores/userStore.ts'
+import { Ref } from 'vue'
 
-import AddStatusEffectWidget from './AddStatusEffectWidget.vue'
-import BasicInput from '../BasicInput.vue'
 import BForm from 'bootstrap-vue-next/src/components/BForm/BForm.vue'
+import BasicInput from '../BasicInput.vue'
 import HpWidgetModal from './HpWidgetModal.vue'
 
 export default {
@@ -105,7 +100,6 @@ export default {
       modifiers.forEach((modGroup: any) => {
         ret = ret.concat(Object.values(modGroup))
       })
-      console.log(ret)
 
       return ret
     })
@@ -133,7 +127,6 @@ export default {
       if (finalBarrier < 0) {
         finalCurrent += finalBarrier
         finalBarrier = 0
-        console.log(finalBarrier)
       }
       props.setCurrentAndBarrier(finalCurrent, finalBarrier)
     }
@@ -200,40 +193,40 @@ export default {
         resistance =
           resistance ||
           props.traits['Elemental Resistance'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Resistance'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Resistance'] ||
-          props.wornArmorPassives[damageType + ' Elemental Resistance']
+          props.secondaryHandheldPassives['Elemental Resistance'] ||
+          props.primaryHandheldPassives['Elemental Resistance'] ||
+          props.wornArmorPassives['Elemental Resistance']
         susceptibility =
           susceptibility ||
           props.traits['Elemental Susceptibility'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Susceptibility'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Susceptibility'] ||
-          props.wornArmorPassives[damageType + ' Elemental Susceptibility']
+          props.secondaryHandheldPassives['Elemental Susceptibility'] ||
+          props.primaryHandheldPassives['Elemental Susceptibility'] ||
+          props.wornArmorPassives['Elemental Susceptibility']
         immunity =
           immunity ||
           props.traits['Elemental Immunity'] ||
           props.statusEffects['Ethereal'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Immunity'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Immunity'] ||
-          props.wornArmorPassives[damageType + ' Elemental Immunity']
+          props.secondaryHandheldPassives['Elemental Immunity'] ||
+          props.primaryHandheldPassives['Elemental Immunity'] ||
+          props.wornArmorPassives['Elemental Immunity']
         vulnerability =
           vulnerability ||
           props.traits['Elemental Vulnerability'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Vulnerability'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Vulnerability'] ||
-          props.wornArmorPassives[damageType + ' Elemental Vulnerability']
+          props.secondaryHandheldPassives['Elemental Vulnerability'] ||
+          props.primaryHandheldPassives['Elemental Vulnerability'] ||
+          props.wornArmorPassives['Elemental Vulnerability']
         damageReduction =
           damageReduction ||
           props.traits['Elemental Damage Reduction'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Damage Reduction'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Damage Reduction'] ||
-          props.wornArmorPassives[damageType + ' Elemental Damage Reduction']
+          props.secondaryHandheldPassives['Elemental Damage Reduction'] ||
+          props.primaryHandheldPassives['Elemental Damage Reduction'] ||
+          props.wornArmorPassives['Elemental Damage Reduction']
         damageAmplification =
           damageAmplification ||
           props.traits['Elemental Damage Amplification'] ||
-          props.secondaryHandheldPassives[damageType + ' Elemental Damage Amplification'] ||
-          props.primaryHandheldPassives[damageType + ' Elemental Damage Amplification'] ||
-          props.wornArmorPassives[damageType + ' Elemental Damage Amplification']
+          props.secondaryHandheldPassives['Elemental Damage Amplification'] ||
+          props.primaryHandheldPassives['Elemental Damage Amplification'] ||
+          props.wornArmorPassives['Elemental Damage Amplification']
       }
 
       if (
@@ -246,50 +239,51 @@ export default {
         resistance =
           resistance ||
           props.traits['Mundane Resistance'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Resistance'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Resistance'] ||
-          props.wornArmorPassives[damageType + ' Mundane Resistance']
+          props.secondaryHandheldPassives['Mundane Resistance'] ||
+          props.primaryHandheldPassives[damageType + 'Mundane Resistance'] ||
+          props.wornArmorPassives[damageType + 'Mundane Resistance']
         susceptibility =
           susceptibility ||
           props.traits['Mundane Susceptibility'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Susceptibility'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Susceptibility'] ||
-          props.wornArmorPassives[damageType + ' Mundane Susceptibility']
+          props.secondaryHandheldPassives['Mundane Susceptibility'] ||
+          props.primaryHandheldPassives['Mundane Susceptibility'] ||
+          props.wornArmorPassives['Mundane Susceptibility']
         immunity =
           immunity ||
           props.traits['Mundane Immunity'] ||
           props.statusEffects['Ethereal'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Immunity'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Immunity'] ||
-          props.wornArmorPassives[damageType + ' Mundane Immunity']
+          props.secondaryHandheldPassives['Mundane Immunity'] ||
+          props.primaryHandheldPassives['Mundane Immunity'] ||
+          props.wornArmorPassives['Mundane Immunity']
         vulnerability =
           vulnerability ||
           props.traits['Mundane Vulnerability'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Vulnerability'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Vulnerability'] ||
-          props.wornArmorPassives[damageType + ' Mundane Vulnerability']
+          props.secondaryHandheldPassives['Mundane Vulnerability'] ||
+          props.primaryHandheldPassives['Mundane Vulnerability'] ||
+          props.wornArmorPassives['Mundane Vulnerability']
         damageReduction =
           damageReduction ||
           props.traits['Mundane Damage Reduction'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Damage Reduction'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Damage Reduction'] ||
-          props.wornArmorPassives[damageType + ' Mundane Damage Reduction']
+          props.secondaryHandheldPassives['Mundane Damage Reduction'] ||
+          props.primaryHandheldPassives['Mundane Damage Reduction'] ||
+          props.wornArmorPassives['Mundane Damage Reduction']
         damageAmplification =
           damageAmplification ||
           props.traits['Mundane Damage Amplification'] ||
-          props.secondaryHandheldPassives[damageType + ' Mundane Damage Amplification'] ||
-          props.primaryHandheldPassives[damageType + ' Mundane Damage Amplification'] ||
-          props.wornArmorPassives[damageType + ' Mundane Damage Amplification']
+          props.secondaryHandheldPassives['Mundane Damage Amplification'] ||
+          props.primaryHandheldPassives['Mundane Damage Amplification'] ||
+          props.wornArmorPassives['Mundane Damage Amplification']
       }
 
       let damageAmp = 0
       let damageRed = 0
+      console.log(damageReduction)
 
       if (damageAmplification) {
-        damageAmp += dice.value * damageAmplification.number
+        damageAmp += parseInt(dice.value + '') * damageAmplification.number
       }
       if (damageReduction) {
-        damageRed -= dice.value * damageReduction.number
+        damageRed -= parseInt(dice.value + '') * damageReduction.number
       }
       if (immunity && !vulnerability) {
         return 0
@@ -304,7 +298,6 @@ export default {
         return Math.max(Math.floor(damage / 2) + damageAmp + damageRed, 0)
       }
       if (susceptibility) {
-        console.log('damage', damage, damageAmp, damageRed)
         return Math.max(Math.floor(damage * 2) + damageAmp + damageRed, 0)
       }
       return Math.max(Math.floor(damage) + damageAmp + damageRed, 0)
@@ -332,7 +325,6 @@ export default {
       finalCurrent = finalCurrent + parseInt(heal.value + '')
       if (finalCurrent > props.totalHp) {
         finalBarrier += finalCurrent - props.totalHp
-        console.log(finalCurrent - props.totalHp, ' vibes')
         finalCurrent = props.totalHp
       }
       props.setCurrentAndBarrier(finalCurrent, finalBarrier)
@@ -404,7 +396,7 @@ export default {
 
 <template>
   <div
-    style="width: 13.5rem; height: 10rem"
+    style="width: 13.25rem; height: 10rem"
     class="hoverableIconOnSidebar"
     :style="{ fontFamily: designStore.font }"
     @click="modal = !modal"

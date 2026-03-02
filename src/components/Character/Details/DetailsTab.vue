@@ -1,15 +1,14 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-import CharacterImage from './CharacterImage.vue'
+import { useUserStore } from '@/stores/userStore.ts'
 import BackstoryWidget from './BackstoryWidget.vue'
-import LunarMotivation from './LunarMotivation.vue'
+import CharacterImage from './CharacterImage.vue'
 import CoreTraits from './CoreTraits.vue'
-import LilDesign from './LilDesign.vue'
+import LunarMotivation from './LunarMotivation.vue'
 
 export default {
   setup(props, context) {

@@ -1,7 +1,8 @@
 <script lang="ts">
-import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import CustomModal from '@/components/CustomModal.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useTraitsStore } from '@/stores/traitsStore.ts'
 import {
   BButton,
   BButtonGroup,
@@ -9,14 +10,12 @@ import {
   BDropdownDivider,
   BDropdownItem
 } from 'bootstrap-vue-next'
-import { useTraitsStore } from '@/stores/traitsStore'
-import AddTrait from './AddTrait.vue'
-import CustomModal from '@/components/CustomModal.vue'
-import TraitsTable from './TraitsTable.vue'
-import { useCharacterStore } from '@/stores/characterStore'
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import AddCustomTrait from './AddCustomTrait.vue'
-import ToggleSwitch from '@/components/ToggleSwitch.vue'
+import AddTrait from './AddTrait.vue'
+import TraitsTable from './TraitsTable.vue'
 export default {
   setup(props, context) {
     const modal = ref(false)
@@ -62,10 +61,12 @@ export default {
     update(trait: any, isDefault: boolean) {
       let characterTraits = { ...this.traits }
       characterTraits[trait.name] = trait
+      console.log(trait)
       if (trait.name.includes('Exceptional') && isDefault) {
         const attrArr = trait.name.split(' ')
         const attr = attrArr[attrArr.length - 1].toLowerCase()
         console.log(attr)
+
         useCharacterStore().updateExceptionals(attr, trait.number)
       }
       if (trait.name.includes('Inferior') && isDefault) {

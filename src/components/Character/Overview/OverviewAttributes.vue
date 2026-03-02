@@ -1,15 +1,15 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-import OverviewAttr from './OverviewAttr.vue'
-import GridDiplayAttr from './GridDiplayAttr.vue'
-import { useStatusEffectStore } from '@/stores/statusEffectStore'
+import { useStatusEffectStore } from '@/stores/statusEffectStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
 import { storeToRefs } from 'pinia'
-import { get } from 'node_modules/bootstrap-vue-next/dist/src/utils'
+import GridDiplayAttr from './GridDiplayAttr.vue'
+import OverviewAttr from './OverviewAttr.vue'
+import GuideMessage from '@/components/GuideMessage.vue'
 
 export default {
   setup(props, context) {
@@ -75,12 +75,20 @@ export default {
       getPowerInferiors
     }
   },
-  components: { OverviewAttr, GridDiplayAttr }
+  components: { OverviewAttr, GridDiplayAttr, GuideMessage }
 }
 </script>
 
 <template>
   <div class="attributesCont" :style="{ background: designStore.inputBacking }">
+    <GuideMessage
+      :step="13"
+      style="position: absolute; margin-top: 3rem; margin-left: 7rem"
+      title="Attributes"
+      orientation="bottom"
+      guideNumber="13"
+      message="Attributes are represent your characters natural capabilities. They are displayed here for reference or can be temporarily modified here.  They are set permnanently in the Build Tab"
+    ></GuideMessage>
     <OverviewAttr class="fullDisplay" attribute="Strength" attr-shorthand="STR"></OverviewAttr>
     <OverviewAttr class="fullDisplay" attribute="Agility" attr-shorthand="AGI"></OverviewAttr>
     <OverviewAttr class="fullDisplay" attribute="Health" attr-shorthand="HEA"></OverviewAttr>
@@ -99,6 +107,8 @@ export default {
       :attribute-status-modifiers="characterStore.attributeStatusModifiers"
       :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+      :used-exceptionals="characterStore.stressedExceptionals['Strength'] || {}"
+      :use-exceptional="characterStore.flipExceptional"
     ></GridDiplayAttr>
     <GridDiplayAttr
       class="gridDisplay"
@@ -110,6 +120,8 @@ export default {
       :attribute-status-modifiers="characterStore.attributeStatusModifiers"
       :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+      :used-exceptionals="characterStore.stressedExceptionals['Agility'] || {}"
+      :use-exceptional="characterStore.flipExceptional"
     ></GridDiplayAttr>
     <GridDiplayAttr
       class="gridDisplay"
@@ -121,6 +133,8 @@ export default {
       :attribute-status-modifiers="characterStore.attributeStatusModifiers"
       :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+      :used-exceptionals="characterStore.stressedExceptionals['Health'] || {}"
+      :use-exceptional="characterStore.flipExceptional"
     ></GridDiplayAttr>
     <GridDiplayAttr
       class="gridDisplay"
@@ -132,6 +146,8 @@ export default {
       :attribute-status-modifiers="characterStore.attributeStatusModifiers"
       :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+      :used-exceptionals="characterStore.stressedExceptionals['Willpower'] || {}"
+      :use-exceptional="characterStore.flipExceptional"
     ></GridDiplayAttr>
     <GridDiplayAttr
       class="gridDisplay"
@@ -143,6 +159,8 @@ export default {
       :attribute-status-modifiers="characterStore.attributeStatusModifiers"
       :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+      :used-exceptionals="characterStore.stressedExceptionals['Perception'] || {}"
+      :use-exceptional="characterStore.flipExceptional"
     ></GridDiplayAttr>
     <GridDiplayAttr
       class="gridDisplay"
@@ -154,6 +172,8 @@ export default {
       :attribute-status-modifiers="characterStore.attributeStatusModifiers"
       :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+      :used-exceptionals="characterStore.stressedExceptionals['Charisma'] || {}"
+      :use-exceptional="characterStore.flipExceptional"
     ></GridDiplayAttr>
     <GridDiplayAttr
       class="gridDisplay"
@@ -165,6 +185,8 @@ export default {
       :attribute-status-modifiers="characterStore.attributeStatusModifiers"
       :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+      :used-exceptionals="characterStore.stressedExceptionals['Intelligence'] || {}"
+      :use-exceptional="characterStore.flipExceptional"
     ></GridDiplayAttr>
     <GridDiplayAttr
       class="gridDisplay"
@@ -176,6 +198,8 @@ export default {
       :attribute-status-modifiers="characterStore.attributeStatusModifiers"
       :remove-attribute-status-modifier="characterStore.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="characterStore.addNewAttributeStatusModifier"
+      :used-exceptionals="characterStore.stressedExceptionals['Power'] || {}"
+      :use-exceptional="characterStore.flipExceptional"
     ></GridDiplayAttr>
   </div>
 </template>

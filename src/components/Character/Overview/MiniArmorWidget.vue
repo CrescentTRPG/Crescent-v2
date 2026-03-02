@@ -1,11 +1,10 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-import { styleText } from 'util'
+import { useUserStore } from '@/stores/userStore.ts'
 
 export default {
   props: ['emblem', 'marginTop', 'value', 'color'],

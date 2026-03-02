@@ -1,11 +1,11 @@
 <script lang="ts">
-import { BButton, BInputGroup, BFormSelect, BInputGroupText } from 'bootstrap-vue-next'
-import { ref } from 'vue'
-import { useDesignStore } from '@/stores/designStore'
 import CustomModal from '@/components/CustomModal.vue'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
-import { storeToRefs } from 'pinia'
 import DropdownSelect from '@/components/DropdownSelect.vue'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { BButton, BInputGroupText } from 'bootstrap-vue-next'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 
 export default {
   setup(context) {

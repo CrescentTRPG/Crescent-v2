@@ -1,20 +1,18 @@
 <script lang="ts">
+import { useDesignStore } from '@/stores/designStore.ts'
 import {
   BButton,
-  BFormSelect,
-  BFormInput,
   BDropdown,
   BDropdownItem,
+  BFormInput,
+  BFormSelect,
   BFormSelectOption
 } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../../stores/designStore'
-import { useUserStore } from '../../stores/userStore'
-import { useCharacterStore } from '../../stores/characterStore'
+import { useUserStore } from '../../stores/userStore.ts'
 import CustomModal from '../CustomModal.vue'
-import CustomCheckbox from './CustomCheckbox.vue'
 import IconPicker from '../IconPicker.vue'
-import { DEFAULT_DESIGN } from '@/bases'
+import CustomCheckbox from './CustomCheckbox.vue'
 
 export default {
   props: ['isAdventure'],
@@ -266,12 +264,9 @@ export default {
         charIcon: 'bi bi-moon-stars-fill',
         iconColor: '#000000'
       }
-      console.log(designObj)
       this.design.setDesign(designObj, useUserStore().getUserId, this.props.isAdventure)
     },
     setFromDropdown(obj) {
-      console.log(obj)
-
       this.design.setDesign(obj, useUserStore().getUserId, this.props.isAdventure)
     }
   },
@@ -623,8 +618,8 @@ export default {
     </CustomModal>
     <BButton
       @click="modal = !modal"
-      class="button"
       style="margin-right: 0.25rem; font-size: 1rem; margin-bottom: 1rem"
+      class="button shrinkingButton"
       :style="{ background: design.primaryTheme, color: design.primaryText }"
     >
       <i class="bi bi-palette"></i>

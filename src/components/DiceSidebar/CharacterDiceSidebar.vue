@@ -1,9 +1,9 @@
 <script lang="ts">
-import { useCharacterStore } from '@/stores/characterStore'
-import { useDesignStore } from '@/stores/designStore'
-import { computed, ComputedRef, Ref, ref } from 'vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useStatusEffectStore } from '@/stores/statusEffectStore.ts'
 import { storeToRefs } from 'pinia'
-import { useStatusEffectStore } from '@/stores/statusEffectStore'
+import { computed, ComputedRef, ref } from 'vue'
 import DiceSidebar from './DiceSidebar.vue'
 export default {
   setup(props, context) {

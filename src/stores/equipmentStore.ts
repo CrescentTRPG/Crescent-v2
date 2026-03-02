@@ -3,6 +3,8 @@ import { useCharacterStore } from './characterStore.js'
 import { useUserStore } from './userStore.js'
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '@/firebase/config.js'
+import { useSkillStore } from './skillsStore.js'
+import _ from 'lodash'
 
 export interface Item {
   name: string
@@ -12,6 +14,12 @@ export interface Item {
   isAttuneable: boolean
   isAttuned: boolean
   equippedStats: Equippable
+}
+
+export interface Potion extends Item {
+  name: string
+  ingredients: []
+  ability: { name: string }
 }
 export enum itemType {
   Generic,
@@ -26,7 +34,7 @@ export interface Passive {
   damageType: string
   name: string
 }
-interface Equippable {
+export interface Equippable {
   ability: { name: string }
   passives: {}
   material: string
@@ -65,6 +73,7 @@ export const useEquipmentStore = defineStore('equipment', {
     genericsWithAbilitites: [''],
     shieldsWithAbilitites: [''],
     weaponsWithAbilitites: [''],
+    potionsWithAbilities: [''],
     equipment: {
       coins: {
         '0': { name: 'Copper', amount: 0, exchangeRate: 10, num: 0 },
@@ -84,7 +93,8 @@ export const useEquipmentStore = defineStore('equipment', {
         Ingredient: {},
         Potion: {}
       }
-    }
+    },
+    alchemicalIngredients: { bases: {}, reagents: {}, mutagens: {} }
   }),
   getters: {
     getArmorSpecs: (state): Item => state.equipment.items.Armor[state.equipment.wornArmor],
@@ -104,6 +114,23 @@ export const useEquipmentStore = defineStore('equipment', {
         {}
       )
     },
+    getAllItems: (context) => {
+      return Object.values(context.equipment.items.Generic)
+        .concat(Object.values(context.equipment.items.Armor))
+        .concat(Object.values(context.equipment.items.Weapon))
+        .concat(Object.values(context.equipment.items.Shield)) as Array<Item>
+    },
+    getTotalAttuneableItems: (context) => {
+      return useSkillStore().skills['Crafting']?.rank === 10 ? 7 : 6
+    },
+    getNumberofAttunedItems: (context) => {
+      const items: Array<Item> = Object.values(context.equipment.items.Generic)
+        .concat(Object.values(context.equipment.items.Armor))
+        .concat(Object.values(context.equipment.items.Weapon))
+        .concat(Object.values(context.equipment.items.Shield)) as any
+
+      return items.reduce((acc: number, val: Item) => (val.isAttuned ? acc + 1 : acc), 0)
+    },
     getSecondarySpecs: (state): Item =>
       state.equipment.items.Shield[state.equipment.secondaryHand] ||
       state.equipment.items.Weapon[state.equipment.secondaryHand],
@@ -113,6 +140,7 @@ export const useEquipmentStore = defineStore('equipment', {
         .concat(state.genericsWithAbilitites)
         .concat(state.shieldsWithAbilitites)
         .concat(state.weaponsWithAbilitites)
+        .concat(state.potionsWithAbilities)
         .map((name) => {
           let obj = undefined
           if (name != '') {
@@ -140,6 +168,12 @@ export const useEquipmentStore = defineStore('equipment', {
                 isEquipment: true
               }
             }
+            if (state.equipment.items.Potion[name]?.type === 'Potion') {
+              obj = {
+                ...state.equipment.items.Potion[name].ability,
+                isEquipment: true
+              }
+            }
             return obj
           }
         })
@@ -150,11 +184,17 @@ export const useEquipmentStore = defineStore('equipment', {
     async setLocalEquipment(equipment: any) {
       this.equipment = equipment
     },
+    setAlchemicalIngredientsFromFirebase(ingredients) {
+      this.alchemicalIngredients = ingredients
+    },
     async setArmorsWithAbilities(armorsWithAbilities: any) {
       this.armorsWithAbilities = armorsWithAbilities
     },
     async setShieldsWithAbilities(shieldsWithAbilitites: any) {
       this.shieldsWithAbilitites = shieldsWithAbilitites
+    },
+    async setPotionsWithAbilities(potionsWithAbilities: any) {
+      this.potionsWithAbilities = potionsWithAbilities
     },
     async setWeaponsWithAbilities(weaponsWithAbilitites: any) {
       this.weaponsWithAbilitites = weaponsWithAbilitites
@@ -164,24 +204,22 @@ export const useEquipmentStore = defineStore('equipment', {
     },
     updateWornArmor(equipped: string) {
       this.equipment.wornArmor = equipped
-      this.setEquipment(this.equipment)
+      this.setEquipmentInFirebase(this.equipment)
     },
     updatePrimary(equipped: string) {
       this.equipment.primaryHand = equipped
-      this.setEquipment(this.equipment)
+      this.setEquipmentInFirebase(this.equipment)
     },
     updateSecondary(equipped: string) {
       this.equipment.secondaryHand = equipped
-      this.setEquipment(this.equipment)
+      this.setEquipmentInFirebase(this.equipment)
     },
     editInPlace(item: Item) {
       this.equipment.items[item.type][item.name] = item
-      this.setEquipment(this.equipment)
+      this.setEquipmentInFirebase(this.equipment)
     },
-    addItem(item: Item) {
-      console.log(item)
-      this.equipment.items[item.type][item.name] = item
-      if (item.equippedStats.ability.name && (!item.isAttuneable || item.isAttuned)) {
+    addItem(item: Item | Potion) {
+      if (item.equippedStats?.ability?.name && (!item.isAttuneable || item.isAttuned)) {
         if (item.type === 'Generic') {
           this.genericsWithAbilitites.unshift(item.name)
         }
@@ -196,7 +234,19 @@ export const useEquipmentStore = defineStore('equipment', {
           this.shieldsWithAbilitites.unshift(item.name)
         }
       }
-      this.setEquipment(this.equipment)
+      if (item.type === 'Potion') {
+        this.potionsWithAbilities.unshift(item.name)
+      }
+      const newEquip = _.cloneDeep(this.equipment)
+      newEquip.items[item.type][item.name] = item
+
+      this.setEquipmentInFirebase(newEquip)
+    },
+    increaseItemAmount(name, amount, type) {
+      const newEquip = _.cloneDeep(this.equipment)
+
+      newEquip.items[type][name].count = this.equipment.items[type][name].count + amount
+      this.setEquipmentInFirebase(newEquip)
     },
     removeItem(item: Item, unequip = false) {
       if (item.type === 'Armor' && item.name === this.equipment.wornArmor && unequip) {
@@ -222,12 +272,15 @@ export const useEquipmentStore = defineStore('equipment', {
           )
         }
       }
+      if (item.type === 'Potion') {
+        this.potionsWithAbilities = this.potionsWithAbilities.filter((word) => word != item.name)
+      }
       delete this.equipment.items[item.type][item.name]
-      this.setEquipment(this.equipment)
+      this.setEquipmentInFirebase(this.equipment)
     },
     setCoins(coins) {
       this.equipment.coins = coins
-      this.setEquipment(this.equipment)
+      this.setEquipmentInFirebase(this.equipment)
     },
     async setEquipment(equipment: any) {
       this.setLocalEquipment(equipment)
@@ -238,7 +291,28 @@ export const useEquipmentStore = defineStore('equipment', {
           armorsWithAbilities: this.armorsWithAbilities,
           shieldsWithAbilitites: this.shieldsWithAbilitites,
           weaponsWithAbilitites: this.weaponsWithAbilitites,
-          genericsWithAbilitites: this.genericsWithAbilitites
+          genericsWithAbilitites: this.genericsWithAbilitites,
+          potionsWithAbilities: this.potionsWithAbilities
+        }
+      )
+      console.log(ret)
+    },
+    async setEquipmentInFirebase(equipment: any) {
+      const ret = updateDoc(
+        doc(
+          db,
+          'User/' +
+            useCharacterStore().getUser() +
+            '/Character/' +
+            useCharacterStore().getCharacterId
+        ),
+        {
+          equipment: equipment,
+          armorsWithAbilities: this.armorsWithAbilities,
+          shieldsWithAbilitites: this.shieldsWithAbilitites,
+          weaponsWithAbilitites: this.weaponsWithAbilitites,
+          genericsWithAbilitites: this.genericsWithAbilitites,
+          potionsWithAbilities: this.potionsWithAbilities
         }
       )
       console.log(ret)

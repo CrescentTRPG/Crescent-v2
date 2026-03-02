@@ -10,26 +10,22 @@ import {
   BInputGroupText
 } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import CustomModal from '../../CustomModal.vue'
 
 export default {
   props: ['attribute', 'attributeValue', 'exceptionalValue'],
   setup(props, context) {
     const router = useRouter()
-    const attributeValue = ref(0)
-    const exceptionalValue = ref(0)
+    const attributeValueLocal = ref(0)
+    const exceptionalValueLocal = ref(0)
     const designStore = useDesignStore()
     const modal = ref(false)
-    return { designStore, modal, attributeValue, exceptionalValue }
+    return { designStore, modal, attributeValueLocal, exceptionalValueLocal, props }
   },
 
   methods: {},
   components: {
-    BButton,
-    BNavbar,
-    BNavItem,
-    BCard,
     CustomModal,
     BFormInput,
     BInputGroup,
@@ -49,8 +45,8 @@ export default {
     @click="modal = !modal"
   >
     <div class="innerAttr">
-      <div style="align-self: center">{{ $props.attribute }}</div>
-      <div style="align-self: center; font-size: 3rem">{{ $props.attributeValue }}</div>
+      <div style="align-self: center">{{ props.attribute }}</div>
+      <div style="align-self: center; font-size: 3rem">{{ props.attributeValue }}</div>
     </div>
     <CustomModal :showModal="modal" :title="$props.attribute" @close="modal = false">
       <template v-slot:body>
@@ -68,7 +64,7 @@ export default {
             type="number"
             min="0"
             max="10"
-            v-model="attributeValue"
+            v-model="attributeValueLocal"
           ></BFormInput>
         </BInputGroup>
         <BInputGroup
@@ -85,7 +81,7 @@ export default {
             type="number"
             min="-10"
             max="10"
-            v-model="exceptionalValue"
+            v-model="exceptionalValueLocal"
           ></BFormInput>
         </BInputGroup>
       </template>

@@ -1,25 +1,15 @@
 <script lang="ts">
-import { useSkillStore } from '@/stores/skillsStore'
-import { useCharacterStore } from '../../../stores/characterStore'
-import { useUserStore } from '../../../stores/userStore'
-import {
-  BButton,
-  BTable,
-  BFormSelect,
-  BTh,
-  BTableSimple,
-  BThead,
-  BTr,
-  BTd
-} from 'bootstrap-vue-next'
 import CustomModal from '@/components/CustomModal.vue'
-import CustomCheckbox from '../CustomCheckbox.vue'
-import { ref, onMounted, toRaw, watch } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { storeToRefs } from 'pinia'
-import TitleWidget from '@/components/TitleWidget.vue'
-import OneToTenDropdown from '@/components/OneToTenDropdown.vue'
 import DropdownSelect from '@/components/DropdownSelect.vue'
+import TitleWidget from '@/components/TitleWidget.vue'
+import { useSkillStore } from '@/stores/skillsStore.ts'
+import { BButton, BTableSimple, BTd, BTh, BThead, BTr } from 'bootstrap-vue-next'
+import { storeToRefs } from 'pinia'
+import { ref, toRaw, watch } from 'vue'
+import { useCharacterStore } from '../../../stores/characterStore.ts'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import { useUserStore } from '../../../stores/userStore.ts'
+import CustomCheckbox from '../CustomCheckbox.vue'
 
 interface Skill {
   skill: string
@@ -55,7 +45,6 @@ export default {
       { value: 10, text: '10' }
     ]
     watch(effectiveSkills, async (newEffectiveSkills, old) => {
-      console.log(newEffectiveSkills, 'hoorah')
       effectiveSkillsClone.value = structuredClone(toRaw(effectiveSkills.value))
     })
     const modal = ref(false)
@@ -87,8 +76,6 @@ export default {
       return '#' + newColor.toString(16)
     },
     tableBg(num: number) {
-      console.log(parseInt(this.designStore.inputBacking.substring(1), 16))
-
       if (num % 2 === 0) {
         if (parseInt(this.designStore.inputBacking.substring(1), 16) >= 3000000) {
           return this.LightenDarkenColor(this.designStore.inputBacking, 10)

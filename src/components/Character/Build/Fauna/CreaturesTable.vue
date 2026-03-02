@@ -1,23 +1,16 @@
 <script lang="ts">
-import { BInputGroup, BFormInput, BInputGroupText, BButton, BTable } from 'bootstrap-vue-next'
-import { computed, ComputedRef, Ref, ref } from 'vue'
-import { useSkillStore } from '@/stores/skillsStore'
-import { storeToRefs } from 'pinia'
-import { useCharacterStore } from '@/stores/characterStore'
 import CustomModal from '@/components/CustomModal.vue'
-import { useUserStore } from '@/stores/userStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
+import { Ref, ref } from 'vue'
 
 import CustomPagination from '@/components/CustomPagination.vue'
 
-import ArrayTabs from '@/components/ArrayTabs.vue'
-import { Item, useEquipmentStore } from '@/stores/equipmentStore'
-import TitleWidget from '@/components/TitleWidget.vue'
-import BButtonGroup from 'bootstrap-vue-next/src/components/BButton/BButtonGroup.vue'
+import { Item } from '@/stores/equipmentStore.ts'
 
-import { GiConsoleController } from 'oh-vue-icons/icons/gi'
-import { useFaunaStore } from '@/stores/faunaStore'
-import { useDesignStore } from '@/stores/designStore'
-import TraitDisplay from './TraitDisplay.vue'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useFaunaStore } from '@/stores/faunaStore.ts'
 import CreatureDisplay from './CreatureDisplay.vue'
 
 export default {

@@ -135,7 +135,7 @@
 </template>
 
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 import BPopover from 'bootstrap-vue-next/src/components/BPopover.vue'
 
 export default {

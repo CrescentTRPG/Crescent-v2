@@ -28,12 +28,10 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import CharacterCard from './CharacterCard.vue'
 
-import { useUserStore } from '../stores/userStore'
-import { getCollection, getCollectionOnce } from '../composable/getCollection'
+import { useUserStore } from '../stores/userStore.ts'
 import { db } from '@/firebase/config.js'
 import { onSnapshot, collection } from 'firebase/firestore'
-import { useDesignStore } from '@/stores/designStore'
-import { useAdventureStore } from '@/stores/adventureStore'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
 
 export default {
   setup(props, context) {
@@ -48,7 +46,7 @@ export default {
       }
     }
     function selectAdventure(adventure) {
-      console.log(adventure)
+      adventureStore.clearImportantAdventureInfo()
       adventureStore.setLocalAdventure(adventure)
       this.router.push({ name: 'adventure' })
     }

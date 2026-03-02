@@ -17,10 +17,8 @@
 </template>
 
 <script lang="ts">
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
+import { useDesignStore } from '@/stores/designStore.ts'
 import { ref } from 'vue'
-import moon from '../assets/5Mox5f01.svg'
-import { useDesignStore } from '@/stores/designStore'
 
 export default {
   scale: ['scale'],

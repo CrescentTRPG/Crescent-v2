@@ -1,14 +1,14 @@
 <script lang="ts">
 import { computed, ComputedRef, Ref, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
 import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import TitleMedallion from '@/components/TitleMedallion.vue'
 import SearchableDropdown from '@/components/SearchableDropdown.vue'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import { Passive, useEquipmentStore } from '@/stores/equipmentStore'
+import { Passive, useEquipmentStore } from '@/stores/equipmentStore.ts'
 import PassiveListObj from './PassiveListObj.vue'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
 import CustomCheckbox from '../CustomCheckbox.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue'
@@ -207,9 +207,6 @@ export default {
       }
     }
     function addPassive() {
-      console.log(selectedMod.value)
-      console.log(target.value)
-
       if (selectedMod.value) {
         if (
           selectedMod.value.includes('Attribute') ||

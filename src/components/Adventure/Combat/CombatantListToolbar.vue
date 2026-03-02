@@ -1,9 +1,9 @@
 <script lang="ts">
-import { Ref, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useAdventureStore } from '@/stores/adventureStore'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useInitiativeStore } from '@/stores/initiativeStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import { useInitiativeStore } from '@/stores/initiativeStore'
+import { ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
 export default {
   props: [
@@ -174,7 +174,7 @@ export default {
           </div>
           <BButton
             v-if="props.mode === 'run'"
-            @click="props.openAddCombatantModal"
+            @click="props.rollInitiative()"
             style="
               font-size: 1rem;
               padding: 0.25rem;
@@ -193,7 +193,7 @@ export default {
           </BButton>
           <BButton
             v-if="props.mode === 'run'"
-            @click="props.openAddCombatantModal"
+            @click="initiativeStore.sort()"
             style="
               font-size: 1rem;
               padding: 0.25rem;
@@ -216,7 +216,7 @@ export default {
           </BButton>
           <BButton
             v-if="props.mode === 'run'"
-            @click="props.openAddCombatantModal"
+            @click="initiativeStore.lastTurn()"
             style="
               font-size: 1rem;
               padding: 0.25rem;
@@ -242,7 +242,7 @@ export default {
           </BButton>
           <BButton
             v-if="props.mode === 'run'"
-            @click="props.openAddCombatantModal"
+            @click="initiativeStore.nextTurn()"
             style="
               font-size: 1rem;
               padding: 0.25rem;

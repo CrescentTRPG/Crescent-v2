@@ -1,12 +1,13 @@
 <script lang="ts">
-import { useCharacterStore } from '../../../stores/characterStore'
-import { useUserStore } from '../../../stores/userStore'
-import { BButton, BTh, BTableSimple, BThead, BTr, BTd } from 'bootstrap-vue-next'
-import CustomModal from '@/components/CustomModal.vue'
-import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
 import AbilityDisplay from '@/components/AbilityDisplay.vue'
-import { useTraitsStore } from '@/stores/traitsStore'
+import AreYouSure from '@/components/AreYouSure.vue'
+import CustomModal from '@/components/CustomModal.vue'
+import { useTraitsStore } from '@/stores/traitsStore.ts'
+import { BButton, BTableSimple, BTd, BTh, BThead, BTr } from 'bootstrap-vue-next'
+import { ref } from 'vue'
+import { useCharacterStore } from '../../../stores/characterStore.ts'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import { useUserStore } from '../../../stores/userStore.ts'
 
 export default {
   props: ['traits'],
@@ -40,8 +41,6 @@ export default {
       return '#' + newColor.toString(16)
     },
     tableBg(num: number) {
-      console.log(parseInt(this.designStore.inputBacking.substring(1), 16))
-
       if (num % 2 === 0) {
         if (parseInt(this.designStore.inputBacking.substring(1), 16) >= 3000000) {
           return this.LightenDarkenColor(this.designStore.inputBacking, 10)
@@ -70,7 +69,8 @@ export default {
     BTd,
     BThead,
     CustomModal,
-    AbilityDisplay
+    AbilityDisplay,
+    AreYouSure
   }
 }
 </script>
@@ -175,13 +175,17 @@ export default {
               </template>
             </CustomModal>
           </BTd>
-          <BTd
-            ><i
-              class="bi bi-x-lg"
-              :style="{ color: designStore.inputText }"
-              style="font-size: large; margin-bottom: 0.5rem"
-              @click="traitsStore.removeTrait(trait.name)"
-            ></i
+          <BTd>
+            <AreYouSure
+              :passedFunction="traitsStore.removeTrait"
+              :passedVal="trait.name"
+              :action="'delete trait: ' + trait.name + ''"
+            >
+              <i
+                class="bi bi-x-lg"
+                :style="{ color: designStore.inputText }"
+                style="font-size: large; margin-bottom: 0.5rem"
+              ></i> </AreYouSure
           ></BTd>
         </BTr>
       </BThead>

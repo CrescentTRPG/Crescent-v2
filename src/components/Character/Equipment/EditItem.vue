@@ -1,6 +1,6 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import { BForm, BFormInput, BFormTextarea, BInputGroup, BInputGroupText } from 'bootstrap-vue-next'
 import ToggleSwitch from '@/components/ToggleSwitch.vue'
 import ActionCostDropdown from '@/components/ActionCostDropdown.vue'
@@ -21,9 +21,11 @@ export default {
       count: props.passedItem.count,
       type: props.passedItem.type,
       description: props.passedItem.description,
-      icon: props.passedItem.icon,
+      icon: props.passedItem.icon || 'gi-uncertainty',
       isAttuneable: props.passedItem.isAttuneable,
       isAttuned: props.passedItem.isAttuned,
+      ability: props.passedItem.ability || ' ',
+      ingredients: props.passedItem.ingredients || [],
       equippedStats: {
         ability: props.passedItem.equippedStats.ability || {},
         passives: props.passedItem.equippedStats.passives || {},

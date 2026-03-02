@@ -1,12 +1,9 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
-import { computed, ComputedRef, ref } from 'vue'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
+import { computed, ref } from 'vue'
 import SearchableDropdown from './SearchableDropdown.vue'
-import { useSpellStore } from '@/stores/spellsStore'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
 
 export default {
   emits: ['ability'],

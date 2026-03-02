@@ -1,12 +1,10 @@
 <script lang="ts">
 import { computed, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-import { useStatusEffectStore } from '@/stores/statusEffectStore'
-import { storeToRefs } from 'pinia'
-import { get } from 'node_modules/bootstrap-vue-next/dist/src/utils'
 import GridDiplayAttr from '@/components/Character/Overview/GridDiplayAttr.vue'
+import { useUserStore } from '@/stores/userStore.ts'
+import _ from 'lodash'
 
 export default {
   props: ['currentStatBlock', 'isEditing', 'updateTemp', 'removeAttributeStatusModifier'],
@@ -16,6 +14,16 @@ export default {
     const designStore = useDesignStore()
 
     function getExceptionals(type) {
+      let attr = type.substring(0, 1).toUpperCase() + type.substring(1)
+      let execs = props.currentStatBlock.stressedExceptionals
+        ? props.currentStatBlock.stressedExceptionals[attr] || {}
+        : {}
+      const spentExceptionals = Object.values(execs)
+      let spentExceptionalCount = 0
+
+      for (let i = 0; i < spentExceptionals.length; i++) {
+        spentExceptionalCount += 1
+      }
       const baseExceptionalVal = parseInt('' + props.currentStatBlock.exceptionals[type])
       let max = 0
 
@@ -29,7 +37,9 @@ export default {
           0
         )
       }
-      return baseExceptionalVal >= 0 ? baseExceptionalVal + max : max
+      return baseExceptionalVal >= 0
+        ? baseExceptionalVal + max - spentExceptionalCount
+        : max - spentExceptionalCount
     }
     function getInferiors(type) {
       let mod = 0
@@ -47,6 +57,26 @@ export default {
         )
       }
       return baseExceptionalVal <= 0 ? (baseExceptionalVal - mod) * -1 : mod
+    }
+
+    function flipExceptional(index, newVal, attr) {
+      let newTemp = _.cloneDeep(props.currentStatBlock)
+      if (!newTemp.stressedExceptionals) {
+        newTemp.stressedExceptionals = {}
+      }
+
+      if (newVal) {
+        if (newTemp.stressedExceptionals[attr]) {
+          newTemp.stressedExceptionals[attr][index] = { index: index, used: true }
+        } else {
+          newTemp.stressedExceptionals[attr] = {}
+          newTemp.stressedExceptionals[attr][index] = { index: index, used: true }
+        }
+      } else {
+        delete newTemp.stressedExceptionals[attr][index]
+        console.log(newTemp.stressedExceptionals)
+      }
+      props.updateTemp(newTemp)
     }
 
     function addAttributeStatusModifier(modifier) {
@@ -71,6 +101,30 @@ export default {
       newTemp.attributes[attr] = val
       props.updateTemp(newTemp)
     }
+    const strUsed = computed(() => {
+      return props.currentStatBlock.stressedExceptionals?.Strength || {}
+    })
+    const agiUsed = computed(() => {
+      return props.currentStatBlock.stressedExceptionals?.Agility || {}
+    })
+    const heaUsed = computed(() => {
+      return props.currentStatBlock.stressedExceptionals?.Health || {}
+    })
+    const perUsed = computed(() => {
+      return props.currentStatBlock.stressedExceptionals?.Perception || {}
+    })
+    const powUsed = computed(() => {
+      return props.currentStatBlock.stressedExceptionals?.Power || {}
+    })
+    const intUsed = computed(() => {
+      return props.currentStatBlock.stressedExceptionals?.Intelligence || {}
+    })
+    const chaUsed = computed(() => {
+      return props.currentStatBlock.stressedExceptionals?.Charisma || {}
+    })
+    const wilUsed = computed(() => {
+      return props.currentStatBlock.stressedExceptionals?.Willpower || {}
+    })
 
     return {
       designStore,
@@ -80,7 +134,16 @@ export default {
       addAttributeStatusModifier,
       getInferiors,
       update,
-      props
+      props,
+      flipExceptional,
+      strUsed,
+      agiUsed,
+      heaUsed,
+      perUsed,
+      powUsed,
+      intUsed,
+      chaUsed,
+      wilUsed
     }
   },
   components: { GridDiplayAttr }
@@ -104,6 +167,8 @@ export default {
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
       :is-editable-attr="isEditing"
+      :use-exceptional="flipExceptional"
+      :used-exceptionals="strUsed"
       @updateAttr="(val) => update('strength', val)"
     ></GridDiplayAttr>
     <GridDiplayAttr
@@ -117,6 +182,8 @@ export default {
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
       :is-editable-attr="isEditing"
+      :use-exceptional="flipExceptional"
+      :used-exceptionals="agiUsed"
       @updateAttr="(val) => update('agility', val)"
     ></GridDiplayAttr>
     <GridDiplayAttr
@@ -129,7 +196,9 @@ export default {
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
+      :used-exceptionals="heaUsed"
       :is-editable-attr="isEditing"
+      :use-exceptional="flipExceptional"
       @updateAttr="(val) => update('health', val)"
     ></GridDiplayAttr>
     <GridDiplayAttr
@@ -142,7 +211,9 @@ export default {
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
+      :used-exceptionals="wilUsed"
       :is-editable-attr="isEditing"
+      :use-exceptional="flipExceptional"
       @updateAttr="(val) => update('willpower', val)"
     ></GridDiplayAttr>
     <GridDiplayAttr
@@ -155,7 +226,9 @@ export default {
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
+      :used-exceptionals="perUsed"
       :is-editable-attr="isEditing"
+      :use-exceptional="flipExceptional"
       @updateAttr="(val) => update('perception', val)"
     ></GridDiplayAttr>
     <GridDiplayAttr
@@ -168,7 +241,9 @@ export default {
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
+      :used-exceptionals="chaUsed"
       :is-editable-attr="isEditing"
+      :use-exceptional="flipExceptional"
       @updateAttr="(val) => update('charisma', val)"
     ></GridDiplayAttr>
     <GridDiplayAttr
@@ -181,7 +256,9 @@ export default {
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
+      :used-exceptionals="intUsed"
       :is-editable-attr="isEditing"
+      :use-exceptional="flipExceptional"
       @updateAttr="(val) => update('intelligence', val)"
     ></GridDiplayAttr>
     <GridDiplayAttr
@@ -194,6 +271,8 @@ export default {
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
+      :used-exceptionals="powUsed"
+      :use-exceptional="flipExceptional"
       :is-editable-attr="isEditing"
       @updateAttr="(val) => update('power', val)"
     ></GridDiplayAttr>
@@ -215,7 +294,7 @@ export default {
   display: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   .fullDisplay {
     display: none;
   }

@@ -1,30 +1,37 @@
 <script lang="ts">
 import { BInputGroup, BFormInput, BInputGroupText, BButton, BTable } from 'bootstrap-vue-next'
-import { computed, ComputedRef, Ref, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useSkillStore } from '@/stores/skillsStore'
+import { computed, ComputedRef, Ref, ref, watch } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import { useSkillStore } from '@/stores/skillsStore.ts'
 import { storeToRefs } from 'pinia'
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 import CustomModal from '@/components/CustomModal.vue'
-import { useUserStore } from '@/stores/userStore'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
-import { useSpellStore } from '@/stores/spellsStore'
+import { useUserStore } from '@/stores/userStore.ts'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
+import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
 import AbilityDisplay from '@/components/AbilityDisplay.vue'
 import CustomPagination from '@/components/CustomPagination.vue'
-import { LiteralUnion } from 'node_modules/bootstrap-vue-next/dist/src/types'
 import MartialSkillDisplay from '@/components/MartialSkillDisplay.vue'
 import ArrayTabs from '@/components/ArrayTabs.vue'
 import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue'
 import BDropdownItem from 'bootstrap-vue-next/src/components/BDropdown/BDropdownItem.vue'
 import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
 import { isTemplateExpression } from 'typescript'
-import { useEquipmentStore } from '@/stores/equipmentStore'
-import { usePerformanceStore } from '@/stores/performanceStore'
-import { useFaunaStore } from '@/stores/faunaStore'
-import { useManualStore } from '@/stores/manualStore'
+import { useEquipmentStore } from '@/stores/equipmentStore.ts'
+import { usePerformanceStore } from '@/stores/performanceStore.ts'
+import { useFaunaStore } from '@/stores/faunaStore.ts'
+import { useManualStore } from '@/stores/manualStore.ts'
 import CreatureDisplay from '../Build/Fauna/CreatureDisplay.vue'
 import MartialAttackDisplay from '../Matrial Attack Builder/MartialAttackDisplay.vue'
+import AddAsStatusModal from '@/components/AddAsStatusModal.vue'
+import FilterByActionCost from './FilterByActionCost.vue'
+import AnimatedTrackerItem from './Tracker Components/AnimatedTrackerItem.vue'
+import TrackerWidget from './TrackerWidget.vue'
+import BFormSpinbutton from 'bootstrap-vue-next/src/components/BFormSpinbutton/BFormSpinbutton.vue'
+import ChargesTracker from './ChargesTracker.vue'
+import { LiteralUnion } from 'bootstrap-vue-next/src/types/LiteralUnion.js'
+import InputRange from '@/components/InputRange.vue'
 
 export default {
   emits: ['ability'],
@@ -218,7 +225,9 @@ export default {
         .forEach((perk) => {
           let perkx = {
             ...buildDisplayMartialPerks.value[perk.perkIndex],
-            groupIcon: getMedallion(perk.perkGroup)
+            groupIcon: getMedallion(perk.perkGroup),
+            charges: perk.charges,
+            chargesSpent: perk.chargesSpent
           }
           knownPerks.push(perkx)
         })
@@ -254,7 +263,6 @@ export default {
       skillsArr.forEach((skillx) => {
         skillsRet.push({ ...effectiveSkills.value[skillx.index], name: skillx.skill })
       })
-      console.log(skillsRet)
       return skillsRet || []
     })
 
@@ -331,6 +339,7 @@ export default {
 
       return arr
     })
+    const actionCost = ref({ value: 0, name: 'Any' })
 
     const selectedTabs: Ref<Array<any>> = ref([])
 
@@ -339,37 +348,73 @@ export default {
       if (selectedTabs.value && selectedTabs.value.length > 0) {
         selectedTabs.value.forEach((tab) => {
           if (tab.name === 'Skills') {
-            abilities = abilities.concat(knownSkillz.value)
+            if (actionCost.value.name === 'Any') abilities = abilities.concat(knownSkillz.value)
           }
           if (tab.name === 'Specializations') {
-            abilities = abilities.concat(knownSpecializations.value)
+            if (actionCost.value.name === 'Any' || actionCost.value.name === 'Core')
+              abilities = abilities.concat(knownSpecializations.value)
           }
           if (tab.name === 'Combat Styles') {
-            abilities = abilities.concat(knownCombatStyles.value)
+            if (actionCost.value.name === 'Any' || actionCost.value.name === 'Core')
+              abilities = abilities.concat(knownCombatStyles.value)
           }
           if (tab.name === 'Traits') {
-            abilities = abilities.concat(knownTraits.value)
+            if (actionCost.value.name === 'Any') abilities = abilities.concat(knownTraits.value)
+            else
+              abilities = abilities.concat(
+                knownTraits.value.filter((a) => a.actionCost.includes(actionCost.value.name))
+              )
           }
           if (tab.name === 'Equipment') {
-            abilities = abilities.concat(equipmentStore.getAbilitites)
+            if (actionCost.value.name === 'Any')
+              abilities = abilities.concat(equipmentStore.getAbilitites)
+            else
+              abilities = abilities.concat(
+                equipmentStore.getAbilitites.filter((a: any) =>
+                  a.actionCost.includes(actionCost.value.name)
+                )
+              )
           }
           if (tab.name === 'Performance') {
-            abilities = abilities.concat(performanceStore.getAbilities)
+            if (actionCost.value.name === 'Any')
+              abilities = abilities.concat(performanceStore.getAbilities)
+            else
+              abilities = abilities.concat(
+                performanceStore.getAbilities.filter((a: any) =>
+                  a.actionCost.includes(actionCost.value.name)
+                )
+              )
           }
           if (tab.name === 'Martial Perks') {
-            abilities = abilities.concat(knownPerks.value)
+            if (actionCost.value.name === 'Any') abilities = abilities.concat(knownPerks.value)
+            else
+              abilities = abilities.concat(
+                knownPerks.value.filter((a: any) => a.actionCost.includes(actionCost.value.name))
+              )
           }
           if (tab.name === 'Fauna Transformations') {
-            abilities = abilities.concat(faunaStore.getCreatures)
+            if (actionCost.value.name === 'Any' || actionCost.value.name === 'Swift')
+              abilities = abilities.concat(faunaStore.getCreatures)
           }
           if (tab.name == 'Martial Attacks') {
-            abilities = abilities.concat(knownMartialAttacks.value)
+            if (actionCost.value.name === 'Any' || actionCost.value.name === 'Core')
+              abilities = abilities.concat(knownMartialAttacks.value)
           }
           if (tab.name === 'General Actions') {
-            abilities = abilities.concat(generalActions.value)
+            if (actionCost.value.name === 'Any') abilities = abilities.concat(generalActions.value)
+            else
+              abilities = abilities.concat(
+                generalActions.value.filter((a: any) =>
+                  a.actionCost.includes(actionCost.value.name)
+                )
+              )
           }
           if (tab.name === 'Spells') {
-            abilities = abilities.concat(knownSpells.value)
+            if (actionCost.value.name === 'Any') abilities = abilities.concat(knownSpells.value)
+            else
+              abilities = abilities.concat(
+                knownSpells.value.filter((a: any) => a.actionCost.includes(actionCost.value.name))
+              )
           } else {
             if (
               tab.name != 'Skills' &&
@@ -383,26 +428,61 @@ export default {
               tab.name != 'General Actions' &&
               tab.name != 'Martial Attacks'
             ) {
-              abilities = abilities.concat(getSpellsAtLoc(tab.name) || [])
+              if (actionCost.value.name === 'Any')
+                abilities = abilities.concat(getSpellsAtLoc(tab.name) || [])
+              else {
+                abilities = abilities.concat(
+                  getSpellsAtLoc(tab.name).filter((a: any) =>
+                    a.actionCost.includes(actionCost.value.name)
+                  )
+                )
+              }
             }
           }
         })
         return abilities || []
       }
-      return knownSpells.value
-        .concat(knownPerks.value)
-        .concat(knownCombatStyles.value)
-        .concat(knownSpecializations.value)
-        .concat(knownSkillz.value)
-        .concat(knownTraits.value)
-        .concat(equipmentStore.getAbilitites)
-        .concat(performanceStore.getAbilities)
-        .concat(faunaStore.getCreatures)
-        .concat(knownMartialAttacks.value)
-        .concat(generalActions.value)
+      if (actionCost.value.name === 'Any')
+        return knownSpells.value
+          .concat(knownPerks.value)
+          .concat(knownCombatStyles.value)
+          .concat(knownSpecializations.value)
+          .concat(knownSkillz.value)
+          .concat(knownTraits.value)
+          .concat(equipmentStore.getAbilitites)
+          .concat(performanceStore.getAbilities)
+          .concat(faunaStore.getCreatures)
+          .concat(knownMartialAttacks.value)
+          .concat(generalActions.value)
+      else {
+        let ret = knownSpells.value
+          .filter((a: any) => a.actionCost.includes(actionCost.value.name))
+          .concat(knownPerks.value)
+          .filter((a: any) => a.actionCost.includes(actionCost.value.name))
+          .concat(knownTraits.value)
+          .filter((a: any) => a.actionCost.includes(actionCost.value.name))
+          .concat(equipmentStore.getAbilitites)
+          .filter((a: any) => a.actionCost.includes(actionCost.value.name))
+          .concat(performanceStore.getAbilities)
+          .filter((a: any) => a.actionCost.includes(actionCost.value.name))
+          .concat(generalActions.value)
+          .filter((a: any) => a.actionCost.includes(actionCost.value.name))
+        if (actionCost.value.name === 'Core')
+          ret = ret
+            .concat(knownCombatStyles.value)
+            .concat(knownSpecializations.value)
+            .concat(knownMartialAttacks.value)
+        if (actionCost.value.name === 'Swift') ret = ret.concat(faunaStore.getCreatures)
+
+        return ret
+      }
     })
 
     const totalRows = ref(knownAbilities?.value?.length)
+
+    watch(knownAbilities, (oldVal, newVal) => {
+      totalRows.value = knownAbilities.value.length
+    })
 
     function getSortedSkills(spec) {
       return spec.skills.sort(function (a, b) {
@@ -429,6 +509,7 @@ export default {
         return ret
       })
     }
+
     return {
       designStore,
       userStore,
@@ -453,7 +534,9 @@ export default {
       selectedTabs,
       infoModal,
       manualPerformanceStyles,
-      getSortedSkills
+      getSortedSkills,
+      actionCost,
+      martialPerksStore
     }
   },
   components: {
@@ -468,7 +551,10 @@ export default {
     BDropdown,
     BDropdownItem,
     CreatureDisplay,
-    MartialAttackDisplay
+    MartialAttackDisplay,
+    AddAsStatusModal,
+    FilterByActionCost,
+    ChargesTracker
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -532,6 +618,13 @@ export default {
       :tabs="Object.values(tabObject)"
       @selectedTabs="(tabs) => (selectedTabs = tabs)"
     ></ArrayTabs>
+    <FilterByActionCost
+      @actionCost="
+        (val) => {
+          actionCost = val
+        }
+      "
+    ></FilterByActionCost>
     <BFormInput
       class="inputSearch"
       placeholder="Search..."
@@ -565,6 +658,41 @@ export default {
       :fields="fields"
       :items="knownAbilities"
     >
+      <template #cell(cost)="data">
+        <div>
+          <div>
+            {{
+              data.item
+                ? data.item.spellgroup
+                  ? `${data.item.rank} Mana`
+                  : data.item.uses
+                    ? data.item.uses
+                    : data.item.Movement
+                      ? `${data.item.rank} Mana`
+                      : data.item.perkGroup
+                        ? `${data.item.type}`
+                        : data.item.mp
+                          ? `${data.item.mp}` + ' MP'
+                          : data.item.style
+                            ? `${data.item.type}`
+                            : data.item.cost
+                              ? data.item.cost
+                              : 'No Cost'
+                : 'Something went wrong'
+            }}
+          </div>
+          <div v-if="data.item.charges">
+            <ChargesTracker
+              :updateChargesSpent="
+                (newChargesSpent) =>
+                  martialPerksStore.updatePerkCharges(data.item.name, newChargesSpent)
+              "
+              :charges="data.item.charges"
+              :chargesSpent="data.item.chargesSpent"
+            ></ChargesTracker>
+          </div>
+        </div>
+      </template>
       <template #cell(actionCost)="data">
         <div style="white-space: pre-line">
           {{ formatActionCost(data.item.actionCost) || 'Variable' }}
@@ -706,6 +834,9 @@ export default {
               ><i class="bi bi-plus"></i
             ></BButton>
           </template>
+          <BDropdownItem href="#">
+            <AddAsStatusModal :ability="data.item"></AddAsStatusModal>
+          </BDropdownItem>
           <div
             style="padding: 0.5rem"
             :style="{ background: designStore.primaryTheme, color: designStore.primaryText }"

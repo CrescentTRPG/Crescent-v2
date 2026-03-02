@@ -1,24 +1,23 @@
 <script lang="ts">
-import { BInputGroup, BFormInput, BInputGroupText, BButton, BTable } from 'bootstrap-vue-next'
-import { computed, ComputedRef, Ref, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useSkillStore } from '@/stores/skillsStore'
-import { storeToRefs } from 'pinia'
-import { useCharacterStore } from '@/stores/characterStore'
 import CustomModal from '@/components/CustomModal.vue'
-import { useUserStore } from '@/stores/userStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
+import { storeToRefs } from 'pinia'
+import { computed, ComputedRef, Ref, ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
 import CustomPagination from '@/components/CustomPagination.vue'
 
 import ArrayTabs from '@/components/ArrayTabs.vue'
-import { Item, useEquipmentStore } from '@/stores/equipmentStore'
-import CustomCheckbox from '../CustomCheckbox.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
+import { Item, useEquipmentStore } from '@/stores/equipmentStore.ts'
 import BButtonGroup from 'bootstrap-vue-next/src/components/BButton/BButtonGroup.vue'
-import NewItem from './NewItem.vue'
-import ItemDisplay from './ItemDisplay.vue'
+import CustomCheckbox from '../CustomCheckbox.vue'
 import EditItem from './EditItem.vue'
-import { GiConsoleController } from 'oh-vue-icons/icons/gi'
+import ItemDisplay from './ItemDisplay.vue'
+import NewItem from './NewItem.vue'
+import BrewPotionModal from './BrewPotionModal.vue'
 
 export default {
   emits: ['ability'],
@@ -29,7 +28,8 @@ export default {
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
     const equipmentStore = useEquipmentStore()
-    const { equipment } = storeToRefs(equipmentStore)
+    const { equipment, getNumberofAttunedItems, getTotalAttuneableItems } =
+      storeToRefs(equipmentStore)
     const stagedItem: Ref<Item> = ref({
       name: '',
       count: 0,
@@ -90,16 +90,48 @@ export default {
     const items: ComputedRef<Array<any>> = computed(() => {
       if (selectedTabs.value.length === 0) {
         return genericItems.value.concat(
-          weapons.value.concat(
-            armor.value.concat(shields.value.concat(potions.value.concat(ingredients.value)))
-          )
+          weapons.value
+            .concat(
+              armor.value.concat(shields.value.concat(potions.value.concat(ingredients.value)))
+            )
+            .sort((a: any, b: any) => {
+              if (a.rank === b.rank) {
+                let aCode = a.name.charCodeAt(0)
+                let bCode = b.name.charCodeAt(0)
+                if (aCode - bCode == 0) {
+                  aCode = a.name.charCodeAt(1)
+                  bCode = b.name.charCodeAt(1)
+                  if (aCode - bCode == 0) {
+                    aCode = a.name.charCodeAt(2)
+                    bCode = b.name.charCodeAt(2)
+                  }
+                }
+                return aCode - bCode
+              }
+              return a.rank - b.rank
+            })
         )
       } else {
         let ret = Object.values(equipment.value.items[selectedTabs.value[0].name])
         selectedTabs.value.forEach((type) => {
           ret.concat(Object.values(equipment.value.items[type.name]))
         })
-        return ret
+        return ret.sort((a: any, b: any) => {
+          if (a.rank === b.rank) {
+            let aCode = a.name.charCodeAt(0)
+            let bCode = b.name.charCodeAt(0)
+            if (aCode - bCode == 0) {
+              aCode = a.name.charCodeAt(1)
+              bCode = b.name.charCodeAt(1)
+              if (aCode - bCode == 0) {
+                aCode = a.name.charCodeAt(2)
+                bCode = b.name.charCodeAt(2)
+              }
+            }
+            return aCode - bCode
+          }
+          return a.rank - b.rank
+        })
       }
     })
     function addItem() {
@@ -196,6 +228,8 @@ export default {
     const selectedTabs: Ref<Array<any>> = ref([])
 
     const totalRows = ref(items?.value?.length)
+
+    const brewPotionModal = ref(false)
     return {
       designStore,
       userStore,
@@ -227,7 +261,10 @@ export default {
       deleteForReal,
       deleteModal,
       itemToDelete,
-      editAttuned
+      editAttuned,
+      getNumberofAttunedItems,
+      getTotalAttuneableItems,
+      brewPotionModal
     }
   },
   components: {
@@ -242,7 +279,8 @@ export default {
     CustomModal,
     NewItem,
     ItemDisplay,
-    EditItem
+    EditItem,
+    BrewPotionModal
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -276,7 +314,12 @@ export default {
     style="border-left: 2px solid; margin-left: -2px"
     :style="{ borderColor: designStore.secondaryTheme }"
   >
-    <TitleWidget title="Items"></TitleWidget>
+    <TitleWidget
+      title="Items"
+      :total="getTotalAttuneableItems"
+      units="Attuned Items"
+      :spent="getNumberofAttunedItems"
+    ></TitleWidget>
     <BButtonGroup
       class="bar"
       :style="{
@@ -298,7 +341,7 @@ export default {
         >Add Craftable Item</BButton
       >
       <BButton
-        disabled
+        @click="brewPotionModal = true"
         class="indivs"
         style="border: 1px solid; font-size: medium; border-top: 0px; border-bottom: 0px"
         :style="{
@@ -446,6 +489,10 @@ export default {
        
       </template> -->
     </BTable>
+    <BrewPotionModal
+      :showModal="brewPotionModal"
+      @close-modal="brewPotionModal = false"
+    ></BrewPotionModal>
 
     <CustomPagination
       @currentPage="(page) => (currentPage = page)"

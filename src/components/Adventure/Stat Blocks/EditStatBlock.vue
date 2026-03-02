@@ -1,10 +1,8 @@
 <script lang="ts">
-import { DEFAULT_STAT_BLOCK } from '@/bases'
-import { useDesignStore } from '@/stores/designStore'
-import { BButton } from 'bootstrap-vue-next'
-import { ref, watch } from 'vue'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { ref } from 'vue'
 import StatBlockDetailedReference from './StatBlockDetailedReference.vue'
-import { useAdventureStore } from '@/stores/adventureStore'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
 
 export default {
   props: ['currentStatBlock', 'lightenDarkenColor', 'id'],

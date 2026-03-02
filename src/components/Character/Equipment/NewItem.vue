@@ -1,17 +1,15 @@
 <script lang="ts">
-import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { BForm, BFormInput, BFormTextarea, BInputGroup, BInputGroupText } from 'bootstrap-vue-next'
-import IconPicker from '@/components/IconPicker.vue'
-import ToggleSwitch from '@/components/ToggleSwitch.vue'
 import ActionCostDropdown from '@/components/ActionCostDropdown.vue'
+import DropdownSelect from '@/components/DropdownSelect.vue'
+import IconPicker from '@/components/IconPicker.vue'
+import SearchForAbilityDropdown from '@/components/SearchForAbilityDropdown.vue'
+import ToggleSwitch from '@/components/ToggleSwitch.vue'
+import { BForm, BFormInput, BFormTextarea, BInputGroup, BInputGroupText } from 'bootstrap-vue-next'
 import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
-import BFormCheckbox from 'bootstrap-vue-next/src/components/BFormCheckbox/BFormCheckbox.vue'
-import { itemType } from '@/stores/equipmentStore'
+import { ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import CustomCheckbox from '../CustomCheckbox.vue'
 import EquippableProperties from './EquippableProperties.vue'
-import SearchableDropdown from '@/components/SearchableDropdown.vue'
-import SearchForAbilityDropdown from '@/components/SearchForAbilityDropdown.vue'
 export default {
   emits: ['stagedItem'],
   setup(props, context) {
@@ -73,7 +71,6 @@ export default {
       emitItem()
     }
     function setEquippableProperties(updatedInfo) {
-      console.log(updatedInfo)
       item.value.equippedStats.passives = updatedInfo.passives || item.value.equippedStats.passives
       item.value.equippedStats.material = updatedInfo.material || item.value.equippedStats.material
       item.value.equippedStats.enchantments =
@@ -126,6 +123,7 @@ export default {
     ActionCostDropdown,
     BForm,
     BFormSelect,
+    DropdownSelect,
     CustomCheckbox,
     EquippableProperties,
     SearchForAbilityDropdown,
@@ -199,16 +197,27 @@ export default {
         >Item Type</BInputGroupText
       >
 
-      <BFormSelect
-        v-model="item.type"
+      <DropdownSelect
+        :default="item.type"
+        @selection="(val) => (item.type = val)"
+        :borderless="true"
+        :options="types"
+        :overrideDown="true"
+        style="
+          height: 2.5rem;
+          padding: 0.2rem;
+          width: 100%;
+          border-radius: 0.375rem;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border: 1px solid;
+        "
         :style="{
           background: designStore.inputBacking,
           color: designStore.inputText,
           borderColor: designStore.secondaryTheme
         }"
-        :options="types"
-        style="border-top-left-radius: 0; border-bottom-left-radius: 0"
-      ></BFormSelect>
+      ></DropdownSelect>
     </div>
     <div class="name-and-amount">
       <BInputGroupText

@@ -1,22 +1,18 @@
 <script lang="ts">
-import TitleWidget from '@/components/TitleWidget.vue'
-import { useDesignStore } from '@/stores/designStore'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import { computed, Ref, ref } from 'vue'
-import MartialSkillTabs from './MartialSkillTabs.vue'
-import WeaponStrike from './WeaponStrike.vue'
-import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
-import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
-import BPopover from 'bootstrap-vue-next/src/components/BPopover.vue'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import { useEquipmentStore, Weapon } from '@/stores/equipmentStore'
-import { storeToRefs } from 'pinia'
-import AttributeSkillRoller from '@/components/DiceSidebar/AttributeSkillRoller.vue'
-import RollstringLineup from './RollstringLineup.vue'
-import MartialAttackDisplay from './MartialAttackDisplay.vue'
-import { useCharacterStore } from '@/stores/characterStore'
-import { watch } from 'fs'
 import IconPicker from '@/components/IconPicker.vue'
+import TitleWidget from '@/components/TitleWidget.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useEquipmentStore, Weapon } from '@/stores/equipmentStore.ts'
+import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
+import { storeToRefs } from 'pinia'
+import { computed, Ref, ref } from 'vue'
+import MartialAttackDisplay from './MartialAttackDisplay.vue'
+import MartialSkillTabs from './MartialSkillTabs.vue'
+import RollstringLineup from './RollstringLineup.vue'
+import WeaponStrike from './WeaponStrike.vue'
 
 export default {
   emits: ['saved'],
@@ -93,7 +89,6 @@ export default {
             }
           }
           if (strike === 'Offhand') {
-            console.log((equipmentStore.getSecondarySpecs.equippedStats as Weapon).damageString)
             if ((equipmentStore.getSecondarySpecs.equippedStats as Weapon).damageString != '') {
               let num = Object.keys(weaponAttack.value).length - 1
               vals = 'Strike ' + num

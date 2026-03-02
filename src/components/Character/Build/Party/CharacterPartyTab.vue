@@ -1,19 +1,14 @@
 <script lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import { useDesignStore } from '../../../../stores/designStore'
-import { useUserStore } from '@/stores/userStore'
-import { useAdventureStore } from '@/stores/adventureStore'
-import { usePartyStore } from '@/stores/partyStore'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import CustomModal from '@/components/CustomModal.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import CharacterComputedShell from '../../../Adventure/CharacterComputedShell.vue'
-import TitleWidget from '@/components/TitleWidget.vue'
-import { useCharacterStore } from '@/stores/characterStore'
-import { storeToRefs } from 'pinia'
-import { watch } from 'vue'
-import { validateHeaderValue } from 'http'
 import ChatWindow from '@/components/Adventure/Party/ChatWindow.vue'
+import TitleWidget from '@/components/TitleWidget.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { usePartyStore } from '@/stores/partyStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { storeToRefs } from 'pinia'
+import { ref, watch } from 'vue'
+import { useDesignStore } from '../../../../stores/designStore.ts'
+import CharacterComputedShell from '../../../Adventure/CharacterComputedShell.vue'
 
 export default {
   setup(props, context) {

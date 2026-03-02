@@ -1,6 +1,6 @@
 <script lang="ts">
 import { computed, ComputedRef, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import { BFormInput, BFormRadio, BInputGroup, BInputGroupText } from 'bootstrap-vue-next'
 import IconPicker from '@/components/IconPicker.vue'
 export default {
@@ -9,7 +9,7 @@ export default {
   setup(props, context) {
     const designStore = useDesignStore()
     const tab = ref('corestats')
-    const number = ref(0)
+    const number = ref(1)
     const emitTrait = (traitType: string) => {
       switch (traitType) {
         case 'number':
@@ -37,9 +37,7 @@ export default {
     })
     const nestedTraits: ComputedRef<Array<any>> = computed((): Array<any> => {
       if (props.trait.nested) {
-        let ret: Array<any> = Object.values(props.trait).filter((item) => item != true)
-        console.log(ret)
-
+        let ret: Array<any> = Object.values(props.trait).filter((item: any) => item.name)
         return ret
       } else return []
     })
@@ -64,7 +62,11 @@ export default {
   },
   watch: {
     selectedNestedTrait() {
-      this.emitTrait('nested')
+      if (this.selectedNestedTrait['number'] === 0) {
+        this.emitTrait('nestedNumber')
+      } else {
+        this.emitTrait('nested')
+      }
     }
   },
   components: { BInputGroup, BFormInput, BInputGroupText, BFormRadio }
@@ -88,7 +90,9 @@ export default {
           :value="o"
           :key="o.name"
         >
-          {{ o.name }}
+          {{
+            o.name.includes('Bonus') ? o.name.split(' ')[1] + ' ' + o.name.split(' ')[2] : o.name
+          }}
         </BFormRadio>
       </div>
 
@@ -114,7 +118,6 @@ export default {
             style="border: none; border-left: 1px solid"
             type="number"
             min="0"
-            max="10"
             v-model="number"
             @change="emitTrait('nestedNumber')"
           ></BFormInput>

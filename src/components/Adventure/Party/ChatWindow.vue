@@ -1,21 +1,17 @@
 <script lang="ts">
-import { computed, ComputedRef, onMounted, onUnmounted, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useAdventureStore } from '@/stores/adventureStore'
-import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import NewChatLine from './NewChatLine.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { computed, ComputedRef } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import ChatBubble from './ChatBubble.vue'
+import NewChatLine from './NewChatLine.vue'
+import { storeToRefs } from 'pinia'
 
 export default {
   props: ['sender', 'senderId'],
   setup(props, context) {
     const adventureStore = useAdventureStore()
     const designStore = useDesignStore()
-    const chats: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(adventureStore.chat).sort((a: any, b: any) => {
-        return Date.parse(a.timestamp) - Date.parse(b.timestamp)
-      })
-    })
+    const { chats } = storeToRefs(adventureStore)
     return {
       props,
       designStore,

@@ -1,5 +1,5 @@
 <template>
-  <div id="main">
+  <div>
     <v-icon
       :style="{ color: designStore.secondaryTheme }"
       name="gi-hourglass"
@@ -67,10 +67,8 @@
 <script lang="ts">
 import BasicInput from '@/components/Character/BasicInput.vue'
 import CustomModal from '@/components/CustomModal.vue'
-import { useDesignStore } from '@/stores/designStore'
-import { useInitiativeStore } from '@/stores/initiativeStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import { onMounted, ref } from 'vue'
 
 export default {

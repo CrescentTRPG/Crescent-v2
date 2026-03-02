@@ -1,19 +1,10 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
-import { computed, onMounted, ref } from 'vue'
-import { useDesignStore } from '../../stores/designStore'
-import AbilityDisplayMedallion from '../AbilityDisplayMedallion.vue'
-import DescriptionHoverDisplay from '@/components/DescriptionHoverDisplay.vue'
-import { styleText } from 'util'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import { computed, ref } from 'vue'
+import { useDesignStore } from '../../stores/designStore.ts'
 
-import BFormRadio from 'bootstrap-vue-next/src/components/BFormRadio/BFormRadio.vue'
-import CustomCheckbox from '../Character/CustomCheckbox.vue'
-import DropdownSelect from '../DropdownSelect.vue'
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 import MartialAttackDisplay from '../Character/Matrial Attack Builder/MartialAttackDisplay.vue'
+import DropdownSelect from '../DropdownSelect.vue'
 
 export default {
   emits: ['rollString', 'as'],

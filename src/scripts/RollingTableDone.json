@@ -1,0 +1,331 @@
+{
+  "0": {
+    "result": "Target's Ears triple in size, affected target can hear exceptionally well. Loud noises befuddle the target."
+  },
+  "1": {
+    "result": "Target grows one size category."
+  },
+  "2": {
+    "result": "Target shrinks one size category."
+  },
+  "3": {
+    "result": "If Target is holding an item it is dropped"
+  },
+  "4": {
+    "result": "Target's nose triples in size, affected target has an exceptionally good sense of smell, but gains effect sickened when too close to gross scents."
+  },
+  "5": {
+    "result": "Turn male targets into biological females, and female targets into biological males."
+  },
+  "6": {
+    "result": "Target turns into a 20 HP Horse via polymorph"
+  },
+  "7": {
+    "result": "Target gains resistance to last damage taken"
+  },
+  "8": {
+    "result": "Target's *&subtable&* is broken",
+    "subtable": {
+      "0": "left arm",
+      "2": "right arm",
+      "3": "left leg",
+      "4": "right leg"
+    }
+  },
+  "9": {
+    "result": "Target's most spoken language is forgotten."
+  },
+  "10": {
+    "result": "Target can speak all languages"
+  },
+  "11": {
+    "result": "Target is charmed"
+  },
+  "12": {
+    "result": "Target grows 10 inches"
+  },
+  "13": {
+    "result": "Target gains perfect nightvision, but is blinded in daylight"
+  },
+  "14": {
+    "result": "Target spontaneously combusts gaining rank stacks of fire suffering"
+  },
+  "15": {
+    "result": "Target can teleport 10ft as a swift action per round"
+  },
+  "16": {
+    "result": "Target is stunned until they can make a WIL save of 15"
+  },
+  "17": {
+    "result": "Target becomes pinned until they make a strength save of 12"
+  },
+  "18": {
+    "result": "Target becomes unconsolably sad"
+  },
+  "19": {
+    "result": "Target becomes irate"
+  },
+  "20": {
+    "result": "Gravity effects the target at half strength"
+  },
+  "21": {
+    "result": "Ethereal Voices compliment the target everytime they cast magic"
+  },
+  "22": {
+    "result": "Target craves rocks and can digest them"
+  },
+  "23": {
+    "result": "Target is rendered illiterate."
+  },
+  "24": {
+    "result": "Should target sweat, they sweat acid dealing 1d4 toxic damage when in contact with their skin"
+  },
+  "25": {
+    "result": "Where the target walks flowers and grass grows no matter the enviroment"
+  },
+  "26": {
+    "result": "A bird falls out of the sky right infront of the target"
+  },
+  "27": {
+    "result": "Target's feet sound like trumpets when they walk"
+  },
+  "28": {
+    "result": "Target is now wearing a ring that grants an exceptional charisma"
+  },
+  "29": {
+    "result": "The target launches a cone of bees(15ft) in the direction they are looking"
+  },
+  "30": {
+    "result": "A giant wasp is summoned next to the target, it is hostile only to the target and immeadiately attacks."
+  },
+  "31": {
+    "result": "Target dances, consuming their movement action until hit"
+  },
+  "32": {
+    "result": "Target becomes charged with electric current and deals 1d6 lightning damage to targets on touch(channeled through metal melee weapons)"
+  },
+  "33": {
+    "result": "Target has animals flock to them like a certain princess"
+  },
+  "34": {
+    "result": "A tree sprouts next to the target, bearing strange and unusual fruit."
+  },
+  "35": {
+    "result": "Intense battle music plays in the area around the target from nowhere in particular."
+  },
+  "36": {
+    "result": "The next meal the target eats will taste extremely spicy"
+  },
+  "37": {
+    "result": "Target is doused in mud and filth."
+  },
+  "38": {
+    "result": "A 5' portal opens up beaneath the target's feet which teleports them 40' *&subtable&*",
+    "subtable": {
+      "0": "North",
+      "1": "East",
+      "2": "South",
+      "3": "West",
+      "4": "Up"
+    }
+  },
+  "39": {
+    "result": "The ground beneath the target(s) raises 100' into the air like a mesa"
+  },
+  "40": {
+    "result": "Target must pray to a god whether they believe in one or not"
+  },
+  "41": {
+    "result": "Target disgorges 50 silver"
+  },
+  "42": {
+    "result": "Target has a mysterious note in their back pocket"
+  },
+  "43": {
+    "result": "Target has a vision of horrible ruin as a consequence of their actions"
+  },
+  "44": {
+    "result": "Target is transformed into the same species as the nearest creature."
+  },
+  "45": {
+    "result": "A storm cloud forms over the target's head raining on them and making them succeptible to lightning damage"
+  },
+  "46": {
+    "result": "Target grows fond of their most hated enemy"
+  },
+  "47": {
+    "result": "Target's legs morph into a large lamia-like snake tail."
+  },
+  "48": {
+    "result": "Target becomes Immune to a random damage type"
+  },
+  "49": {
+    "result": "Target becomes Vulnerable to a random damage type"
+  },
+  "50": {
+    "result": "Target becomes very clumsy (inferior AGI)"
+  },
+  "51": {
+    "result": "Target becomes very stupid (inferior INT)"
+  },
+  "52": {
+    "result": "Target becomes very weak (inferior STR)"
+  },
+  "53": {
+    "result": "Target finds *&subtable&*",
+    "subtable": {
+      "0": "Sunflower Seeds",
+      "1": "Parasol Mushrooms",
+      "2": "Iron Shavings",
+      "3": "Myrrh",
+      "4": "Saffron Seeds",
+      "6": "Soap"
+    }
+  },
+  "54": {
+    "result": "A blindfold appears on the target, requiring a swift action to untie and remove blindness."
+  },
+  "55": {
+    "result": "Should target die, their body evaporates, rendering them unrevivable"
+  },
+  "56": {
+    "result": "Target gains the ability to speak with animals"
+  },
+  "57": {
+    "result": "Target is hit by a stray arrow dealing rank d8 piercing damage"
+  },
+  "58": {
+    "result": "Target can't remember why they are here"
+  },
+  "59": {
+    "result": "A holy knight appears claiming to be target's sworn enemy."
+  },
+  "60": {
+    "result": "A quietly whispering mask appears in the target's inventory."
+  },
+  "61": {
+    "result": "Target becomes hostile to anyone within 10' of them"
+  },
+  "62": {
+    "result": "Target's hair falls out"
+  },
+  "63": {
+    "result": "The door closest to the target becomes locked."
+  },
+  "64": {
+    "result": "Target slips and falls prone"
+  },
+  "65": {
+    "result": "Target's armor is now made out of cheese and no longer provides and armor DVs"
+  },
+  "66": {
+    "result": "Target now requires water to breathe instead of air."
+  },
+  "67": {
+    "result": "Target is hit by a blast of violent energy dealing rank d12 chaotic damage"
+  },
+  "68": {
+    "result": "Target is illuminated by a beam of sunlight, healling rankd6"
+  },
+  "69": {
+    "result": "Target is hit by a blast of violent energy dealing rank d20 chaotic damage"
+  },
+  "70": {
+    "result": "Target is hit by a blast of violent energy dealing rank d10 chaotic damage"
+  },
+  "71": {
+    "result": "Everytime the target casts they take pure magic damage equal to (mana spent) d10"
+  },
+  "72": {
+    "result": "Target hears the scream of a loved one"
+  },
+  "73": {
+    "result": "The GM goes \"hoo hoo hoo!\" and then tells the players \"nothing appears to happen\" without revealing the dice roll."
+  },
+  "74": {
+    "result": "Every time the target takes a reaction they are dealt rank d6 chaotic damage"
+  },
+  "75": {
+    "result": "Target's maximum and current HP are halved"
+  },
+  "76": {
+    "result": "Target's skin takes on a metallic sheen, granting them 2 shield DVs."
+  },
+  "77": {
+    "result": "Double the effect of the rolled modifier."
+  },
+  "78": {
+    "result": "Magical Lights appear around the target giving off 5ft of light"
+  },
+  "79": {
+    "result": "Target experiences a sudden infatuation with dragons."
+  },
+  "80": {
+    "result": "Target's spells are negatively finessed twice in directions determined on casting. This does not make the spell cheaper to cast."
+  },
+  "81": {
+    "result": "Target's armor and clothes take on a regal and expensive appearance."
+  },
+  "82": {
+    "result": "Target's teeth turn into steel, granting them a (Rank)d6 melee bite attack."
+  },
+  "83": {
+    "result": "Target becomes disconcertingly attractive."
+  },
+  "84": {
+    "result": "Target is humbled, losing an exceptional if they possess one and choosing one to lose if they have multiple."
+  },
+  "85": {
+    "result": "Target is convinced the moon is falling."
+  },
+  "86": {
+    "result": "Target is now holding a staff of fireball (Pyromancy - 4), the staff shatters after one use."
+  },
+  "87": {
+    "result": "The last person/monster the target killed raises from the ground as an undead bent on getting revenge."
+  },
+  "88": {
+    "result": "Target is dealt rank*2 d12 chaotic damage"
+  },
+  "89": {
+    "result": "Target auto-fails the next check/save they make"
+  },
+  "90": {
+    "result": "Target hears a high pitched buzzing sound no one else can hear"
+  },
+  "91": {
+    "result": "Target is now holding a bomb that will explode in 1 round for rank d20 damage in a 10' radius"
+  },
+  "92": {
+    "result": "If the target has a weapon, that weapon is now reconfigured into a standard iron *&subtable&*",
+    "subtable": {
+      "0": " Versatile Bow",
+      "2": "Versatile Sword",
+      "3": "Versatile Whip",
+      "4": "Heavy Polearm",
+      "5": "Precision Knife",
+      "6": "Heavy  Crossbow"
+    }
+  },
+  "93": {
+    "result": "Target sprouts wings and has 30' of flight speed"
+  },
+  "94": {
+    "result": "All damage Target takes will be force damage"
+  },
+  "95": {
+    "result": "Target takes rank*2 d10 stress damage"
+  },
+  "96": {
+    "result": "Target accelerates and takes their next turn at the top of the turn order"
+  },
+  "97": {
+    "result": "Target has to manually breathe now, losing 1 focus slot"
+  },
+  "98": {
+    "result": "Target has a swift breeze blown across their face"
+  },
+  "99": {
+    "result": "Next spell Target cast fineses up once"
+  }
+}

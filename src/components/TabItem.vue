@@ -1,5 +1,5 @@
 <script lang="ts">
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
 import { BButton } from 'bootstrap-vue-next'
 import { ref } from 'vue'
 
@@ -47,7 +47,7 @@ export default {
 <template>
   <BButton
     @click="click"
-    style="border-radius: 0px; border: 2px solid"
+    style="border-radius: 0px; border: 2px solid; text-wrap: nowrap"
     :style="{
       background: buttonBg(),
       borderColor: designStore.sidebarBacking,

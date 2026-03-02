@@ -1,20 +1,10 @@
 <script lang="ts">
-import { useCharacterStore } from '@/stores/characterStore'
-import { useDesignStore } from '@/stores/designStore'
-import BAccordion from 'bootstrap-vue-next/src/components/BAccordion/BAccordion.vue'
-import BAccordionItem from 'bootstrap-vue-next/src/components/BAccordion/BAccordionItem.vue'
-import BNavItem from 'bootstrap-vue-next/src/components/BNav/BNavItem.vue'
-import BNavbar from 'bootstrap-vue-next/src/components/BNavbar/BNavbar.vue'
-import { computed, ComputedRef, ref } from 'vue'
-import TitleWidget from '../TitleWidget.vue'
-import BFormSelect from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelect.vue'
-import BFormSelectOption from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelectOption.vue'
-import BFormSelectOptionGroup from 'bootstrap-vue-next/src/components/BFormSelect/BFormSelectOptionGroup.vue'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import { useDesignStore } from '@/stores/designStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
-import ToggleSwitch from '../ToggleSwitch.vue'
-import TitleMedallion from '../TitleMedallion.vue'
+import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import BPopover from 'bootstrap-vue-next/src/components/BPopover.vue'
+import { ref } from 'vue'
+import TitleMedallion from '../TitleMedallion.vue'
 
 export default {
   emits: ['rollString'],

@@ -1,25 +1,25 @@
 <script lang="ts">
-import { computed, ComputedRef, onMounted, Ref, ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { useAdventureStore } from '@/stores/adventureStore'
-import StatBlockQuickReferenceShell from '../Stat Blocks/StatBlockQuickReferenceShell.vue'
-import { BButton, BFormInput } from 'bootstrap-vue-next'
+import { DEFAULT_STAT_BLOCK } from '@/bases.ts'
 import CustomModal from '@/components/CustomModal.vue'
-import CombatantListToolbar from './CombatantListToolbar.vue'
-import PowerLevelIcon from '../Stat Blocks/PowerLevelIcon.vue'
-import PowerLevelDisplay from '../Stat Blocks/PowerLevelDisplay.vue'
 import IconDisplay from '@/components/IconDisplay.vue'
 import TitleMedallion from '@/components/TitleMedallion.vue'
-import StatBlockTable from '../Stat Blocks/StatBlockTable.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
-import { DEFAULT_STAT_BLOCK } from '@/bases'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useInitiativeStore } from '@/stores/initiativeStore.ts'
+import { usePartyStore } from '@/stores/partyStore.ts'
+import { BButton, BFormInput } from 'bootstrap-vue-next'
 import BInputGroup from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroup.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
-import { usePartyStore } from '@/stores/partyStore'
-import { useInitiativeStore } from '@/stores/initiativeStore'
-import { storeToRefs } from 'pinia'
-import CharacterComputedShell from '../CharacterComputedShell.vue'
 import _ from 'lodash'
+import { storeToRefs } from 'pinia'
+import { computed, ComputedRef, Ref, ref } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
+import CharacterComputedShell from '../CharacterComputedShell.vue'
+import InitiativeDisplay from '../Stat Blocks/initiativeDisplay.vue'
+import StatBlockQuickReferenceShell from '../Stat Blocks/StatBlockQuickReferenceShell.vue'
+import StatBlockTable from '../Stat Blocks/StatBlockTable.vue'
+import CombatantListToolbar from './CombatantListToolbar.vue'
 
 export default {
   props: [
@@ -31,7 +31,18 @@ export default {
     'switchTab',
     'updateDeletedViewedCombatant',
     'mode',
-    'noToolbar'
+    'noToolbar',
+    'noViewButton',
+    'initiativeDisplayNumericHp',
+    'initiativeDisplayNumericMana',
+    'initiativeDisplayHp',
+    'initiativeDisplayMana',
+    'initiativeDisplayEnemyTraits',
+    'initiativeDisplayCharacterTraits',
+    'allowApplyStatusToCharacter',
+    'allowApplyStatusToEnemy',
+    'primaryOverride',
+    'collapseable'
   ],
   setup(props, context) {
     const modal = ref(false)
@@ -99,7 +110,13 @@ export default {
         let newTemp = { ...props.combat }
         delete newTemp.combatants[combatantName]
         props.updateTemp(newTemp)
+        initiativeStore.removeOrderedCombatant(combatantName)
       }
+    }
+    function getName(id) {
+      return partyStore.characterObjects[id]?.name
+        ? partyStore.characterObjects[id]?.name + ' (Player)'
+        : id
     }
 
     const sameNameModal = ref(false)
@@ -117,9 +134,12 @@ export default {
       }
       return false
     }
+    function changeInitiative(key: string, newVal: number, agi: string | number) {
+      initiativeStore.changeInitiativeOrder(key, newVal, agi)
+    }
     const blankEnemyName = ref('')
     const statBlocks: Ref<Array<any>> = ref(Object.values(adventureStore.statBlocks))
-
+    const characterStore = useCharacterStore()
     return {
       designStore,
       modal,
@@ -139,7 +159,10 @@ export default {
       orderedCombatantList,
       initiativeStore,
       partyStore,
-      updateCombatant
+      updateCombatant,
+      characterStore,
+      changeInitiative,
+      getName
     }
   },
   components: {
@@ -154,66 +177,108 @@ export default {
     TitleWidget,
     BInputGroup,
     BInputGroupText,
-    CharacterComputedShell
+    CharacterComputedShell,
+    InitiativeDisplay
   }
 }
 </script>
 
 <template>
   <div
-    :style="{ fontFamily: designStore.font, background: designStore.sidebarBacking }"
+    :style="{
+      fontFamily: designStore.font,
+      background: props.primaryOverride ? designStore.primaryTheme : designStore.sidebarBacking
+    }"
     style="padding-bottom: 3rem"
   >
     <CombatantListToolbar
       v-if="!props.noToolbar"
       :rollInitiative="rollInitiative"
       :overrideFull="props.overrideFull"
-      :sortHighToLow="console.log('sort')"
-      :nextTurn="console.log('nextTurn')"
+      :sortHighToLow="initiativeStore.sort"
+      :nextTurn="initiativeStore.nextTurn"
       :mode="props.mode"
-      :lastTurn="console.log('lastTurn')"
+      :lastTurn="initiativeStore.lastTurn"
       :openAddCombatantModal="openAddCombatantModal"
     ></CombatantListToolbar>
     <div v-if="overrideFull">
       <div v-for="c in orderedCombatantList" :key="c">
         <StatBlockQuickReferenceShell
-          v-if="props.combat.combatants[c]?.name"
-          :statBlock="props.combat.combatants[c]"
-          :editable="true"
+          v-if="initiativeStore.combatants[c]?.name"
+          :statBlock="initiativeStore.combatants[c]"
+          :editable="!props.noViewButton"
           :edit="props.openEdit"
           :updateTemp="updateCombatant"
           :initiative="initiativeStore.combatants[c].initiativeScore || 0"
+          :initiativeDisplayNumericHp="initiativeDisplayNumericHp"
+          :initiativeDisplayNumericMana="initiativeDisplayNumericMana"
+          :initiativeDisplayHp="initiativeDisplayHp"
+          :initiativeDisplayMana="initiativeDisplayMana"
+          :initiativeDisplayEnemyTraits="initiativeDisplayEnemyTraits"
+          :allowApplyStatusToEnemy="allowApplyStatusToEnemy"
+          :collapseable="props.collapseable"
         ></StatBlockQuickReferenceShell>
         <CharacterComputedShell
           v-else-if="partyStore.characterObjects[c]?.name"
           :editable="false"
+          allowApplyStatusToChar
+          :allowApplyStatusToCharacter="allowApplyStatusToCharacter"
+          :initiativeDisplayCharacterTraits="initiativeDisplayCharacterTraits"
           :character="partyStore.characterObjects[c] || {}"
           :initiative="adventureStore.characterInitiatives[c]?.initiativeScore || 0"
         ></CharacterComputedShell>
+        <div
+          style="padding: 1rem; display: flex; border-bottom: 2px solid"
+          :style="{ background: designStore.primaryTheme, borderColor: designStore.secondaryTheme }"
+          v-if="characterStore.id === c"
+        >
+          <InitiativeDisplay
+            :initiative="adventureStore.characterInitiatives[c]?.initiativeScore || 0"
+          ></InitiativeDisplay>
+          <div style="font-size: x-large; padding: 0.25rem">
+            {{ characterStore.name }}
+          </div>
+
+          <IconDisplay
+            :color="designStore.secondaryTheme"
+            :icon="designStore.charIconFlair"
+            scale="1"
+            size="1rem"
+            style="position: relative; right: 0.5rem"
+          ></IconDisplay>
+        </div>
       </div>
     </div>
     <div v-if="!overrideFull">
       <div v-for="c in orderedCombatantList" :key="c" class="combatantList">
         <StatBlockQuickReferenceShell
-          v-if="props.combat.combatants[c]?.name"
-          :statBlock="props.combat.combatants[c]"
+          v-if="initiativeStore.combatants[c]?.name"
+          :statBlock="initiativeStore.combatants[c]"
           :editable="true"
           :edit="props.openEdit"
           :updateTemp="updateCombatant"
           :initiative="initiativeStore.combatants[c].initiativeScore || 0"
+          :initiativeDisplayNumericHp="initiativeDisplayNumericHp"
+          :initiativeDisplayNumericMana="initiativeDisplayNumericMana"
+          :initiativeDisplayHp="initiativeDisplayHp"
+          :initiativeDisplayMana="initiativeDisplayMana"
+          :initiativeDisplayEnemyTraits="initiativeDisplayEnemyTraits"
+          :allowApplyStatusToCharacter="allowApplyStatusToCharacter"
+          :allowApplyStatusToEnemy="allowApplyStatusToEnemy"
         ></StatBlockQuickReferenceShell>
         <CharacterComputedShell
           v-else-if="partyStore.characterObjects[c]?.name"
           :editable="false"
+          :allowApplyStatusToCharacter="allowApplyStatusToCharacter"
+          :initiativeDisplayCharacterTraits="initiativeDisplayCharacterTraits"
           :character="partyStore.characterObjects[c] || {}"
           :initiative="adventureStore.characterInitiatives[c]?.initiativeScore || 0"
         ></CharacterComputedShell>
       </div>
       <div class="miniListCombatants">
-        <BButton
+        <div
           v-for="c in orderedCombatantList"
           :key="c"
-          @click="props.openEdit(c)"
           class="miniListButtons"
           :style="{
             background: designStore.primaryTheme,
@@ -221,14 +286,29 @@ export default {
             borderColor: designStore.secondaryTheme
           }"
         >
-          <div style="display: flex">
-            <IconDisplay
-              style="margin-left: -0.25rem"
-              :icon="props.combat.combatants[c]?.icon || 'gi-uncertainty'"
-            ></IconDisplay>
-            <div class="full-combatant-name">{{ c }}</div>
-          </div></BButton
-        >
+          <div style="display: flex; padding: 0.15rem">
+            <InitiativeDisplay
+              :changeInitiative="changeInitiative"
+              style="width: 2.65rem; translate: 0rem -0.25rem"
+              :initiative="
+                initiativeStore.combatants[c]?.initiativeScore ||
+                adventureStore.characterInitiatives[c]?.initiativeScore ||
+                0
+              "
+            ></InitiativeDisplay>
+            <div
+              class="full-combatant-name"
+              @click="props.openEdit(c)"
+              style="cursor: pointer"
+              v-if="initiativeStore.combatants[c]?.name"
+            >
+              {{ c }}
+            </div>
+            <div class="full-combatant-name" v-if="partyStore.characterObjects[c]?.name">
+              {{ partyStore.characterObjects[c]?.name }}
+            </div>
+          </div>
+        </div>
       </div>
       <div
         class="combatantOffCanvas"
@@ -244,10 +324,7 @@ export default {
       <template v-slot:body>
         <div class="manageModalContainer">
           <div style="display: flex; flex-direction: column; justify-content: center">
-            <TitleMedallion
-              :color="designStore.primaryText"
-              title="Opponents in Combat"
-            ></TitleMedallion>
+            <TitleMedallion :color="designStore.primaryText" title="Combatants"></TitleMedallion>
             <div
               v-if="orderedCombatantList.length <= 0"
               style="align-self: center; display: flex; justify-content: center"
@@ -263,7 +340,8 @@ export default {
               @click="removeCombatat(s)"
               v-for="s in orderedCombatantList"
               :key="s"
-              ><i style="position: absolute; left: 0.5rem" class="bi bi-x-lg"></i> {{ s }}</BButton
+              ><i style="position: absolute; left: 0.5rem" class="bi bi-x-lg"></i>
+              {{ getName(s) }}</BButton
             >
           </div>
           <div class="addCombatantContainer">
@@ -373,9 +451,16 @@ export default {
   margin-left: 0.5rem;
 }
 .miniListButtons {
+  padding: 0.35rem;
+
   font-size: 1rem;
   border: 2px solid;
   margin: 0.25rem;
+}
+.full-combatant-name {
+  overflow-x: hidden;
+  align-self: center;
+  padding-left: 0.25rem;
 }
 @media (max-width: 1500px) {
   .miniListCombatants {
@@ -397,9 +482,6 @@ export default {
   }
 }
 @media (max-width: 800px) {
-  .full-combatant-name {
-    display: none;
-  }
   .miniListButtons {
     font-size: 1rem;
     border: 2px solid;

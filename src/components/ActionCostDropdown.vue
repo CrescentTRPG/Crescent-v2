@@ -1,21 +1,20 @@
 <script lang="ts">
-import { signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { BButton, BCard, BFormSelect, BNavItem, BNavbar, BNavbarNav } from 'bootstrap-vue-next'
-import { ref } from 'vue'
-import { useDesignStore } from '../stores/designStore'
+import { ref, watch } from 'vue'
+import { useDesignStore } from '../stores/designStore.ts'
+import DropdownSelect from './DropdownSelect.vue'
 
 export default {
+  props: ['modelValue'],
   setup(props, context) {
     const designStore = useDesignStore()
     const tab = ref('corestats')
     const actionCosts = [
-      { value: 'Select Action Cost', text: 'Select Action Cost', disabled: true },
       { value: 'Core Action', text: 'Core Action' },
       { value: 'Swift Action', text: 'Swift Action' },
       { value: 'Movement Action', text: 'Movement Action' },
       { value: 'Reaction', text: 'Reaction' },
       { value: 'Passive', text: 'Passive' },
+      { value: 'Free Action', text: 'Free Action' },
       { value: 'Core / Swift Action', text: 'Core / Swift Action' },
       { value: 'Core / Movement Action', text: 'Core / Movement Action' },
       { value: 'Core / Reaction', text: 'Core / Reaction' },
@@ -24,33 +23,40 @@ export default {
       { value: 'Swift / Reaction', text: 'Swift / Reaction' },
       { value: 'Swift / Passive', text: 'Swift / Passive' },
       { value: 'Movement / Reaction', text: 'Movement / Reaction' },
-      { value: 'Movement / Passive', text: 'Movement / Passive' }
+      { value: 'Movement / Passive', text: 'Movement / Passive' },
+      { value: 'Reaction / Passive', text: 'Reaction / Passive' }
     ]
-    const chosen = ref('Select Action Cost')
+
+    const chosen = ref(props.modelValue || 'Select Action Cost')
+    watch(props, (last, now) => {
+      if (props.modelValue != chosen.value) {
+        chosen.value = props.modelValue
+      }
+    })
     return { designStore, actionCosts, chosen }
   },
-  components: { BFormSelect },
+  components: { DropdownSelect },
   methods: {
     select(val) {
-      this.$emit('selection', val)
+      this.$emit('update:modelValue', val)
+      this.$emit('change')
     }
   }
 }
 </script>
 
 <template>
-  <BFormSelect
-    v-model="chosen"
+  <DropdownSelect
+    style="flex-grow: 1; align-self: center"
+    :background="designStore.sidebarBacking"
+    :color="designStore.sidebarText"
+    :borderless="true"
     :options="actionCosts"
-    :style="{
-      background: designStore.sidebarBacking,
-      color: designStore.sidebarText,
-      '--bs-secondary-color': designStore.sidebarText
-    }"
-    placeholder="action cost"
-    style="border: none; border-radius: 0; height: max-content; overflow: ellipsis"
-    @change="select(chosen)"
-  ></BFormSelect>
+    :default="chosen"
+    @selection="(val) => select(val)"
+    :override-down="true"
+  >
+  </DropdownSelect>
 </template>
 
 <style></style>

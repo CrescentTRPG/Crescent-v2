@@ -1,14 +1,15 @@
 <script lang="ts">
-import { BNavItem, BNavbar } from 'bootstrap-vue-next'
+import { useUserStore } from '@/stores/userStore.ts'
+import { BNavItem } from 'bootstrap-vue-next'
 import { ref } from 'vue'
-import { useUserStore } from '@/stores/userStore'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useDesignStore } from '@/stores/designStore'
-import { useAdventureStore } from '@/stores/adventureStore'
-import BNav from 'bootstrap-vue-next/src/components/BNav/BNav.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import BNav from 'bootstrap-vue-next/src/components/BNav/BNav.vue'
+import { useRouter } from 'vue-router'
 import TitleMedallion from '../TitleMedallion.vue'
 
 export default {
@@ -17,6 +18,8 @@ export default {
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
     const adventureStore = useAdventureStore()
+    let router = useRouter()
+
     function navItemStyle(item: string) {
       if (navPos.value === item) {
         return designStore.alertTheme
@@ -27,6 +30,10 @@ export default {
     function nukeItAll() {
       context.emit('close')
       characterStore.dispatchHardReset()
+    }
+
+    function deleteCharacter() {
+      router.push({ name: 'home' })
     }
     const events = ref([{ timestamp: '00;44:33', message: 'Deleted Everything' }])
     const navPos = ref('manage')

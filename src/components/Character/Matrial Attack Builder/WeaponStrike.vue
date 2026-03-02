@@ -1,14 +1,11 @@
 <script lang="ts">
-import TitleWidget from '@/components/TitleWidget.vue'
-import { useDesignStore } from '@/stores/designStore'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
-import { computed, Ref, ref } from 'vue'
-import MartialSkillTabs from './MartialSkillTabs.vue'
-import WeaponSkillTab from './WeaponSkillTab.vue'
-import { useCharacterStore } from '@/stores/characterStore'
-import { storeToRefs } from 'pinia'
-import TitleMedallion from '@/components/TitleMedallion.vue'
 import DropdownSelect from '@/components/DropdownSelect.vue'
+import TitleMedallion from '@/components/TitleMedallion.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { storeToRefs } from 'pinia'
+import { computed, Ref, ref } from 'vue'
+import WeaponSkillTab from './WeaponSkillTab.vue'
 
 export default {
   emits: ['kill', 'dropped', 'remove', 'draggedItem', 'selection', 'newHand'],
@@ -38,7 +35,6 @@ export default {
       context.emit('dropped', props.strike)
     }
     function startDrag(event, item, index) {
-      //console.log(item)
       context.emit('remove', props.strike)
       event.dataTransfer.dropEffect = 'copy'
       event.dataTransfer.effectAllowed = 'copyMove'

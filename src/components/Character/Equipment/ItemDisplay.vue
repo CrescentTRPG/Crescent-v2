@@ -1,11 +1,9 @@
 <script lang="ts">
-import { useRouter } from 'vue-router'
-import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
 import AbilityDisplay from '@/components/AbilityDisplay.vue'
-import { useSpellStore } from '@/stores/spellsStore'
-import { storeToRefs } from 'pinia'
 import TitleMedallion from '@/components/TitleMedallion.vue'
+import { useSpellStore } from '@/stores/spellsStore.ts'
+import { storeToRefs } from 'pinia'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import PassiveListObj from './PassiveListObj.vue'
 
 export default {
@@ -218,7 +216,9 @@ export default {
             :key="spec"
           >
             {{ spec }}
-            <div v-if="index < props.item.equippedStats.specializations.length - 1">,</div>
+            <div v-if="parseInt(index + '') < props.item.equippedStats.specializations.length - 1">
+              ,
+            </div>
           </div>
         </div>
         <div style="display: flex">
@@ -229,7 +229,9 @@ export default {
             :key="style"
           >
             {{ style }}
-            <div v-if="index < props.item.equippedStats.combatStyles.length - 1">,</div>
+            <div v-if="parseInt(index + '') < props.item.equippedStats.combatStyles.length - 1">
+              ,
+            </div>
           </div>
         </div>
       </div>
@@ -241,7 +243,9 @@ export default {
           :key="damage"
         >
           {{ damage }}
-          <div v-if="index < props.item.equippedStats.weaponDamageTypes.length - 1">,</div>
+          <div v-if="parseInt(index + '') < props.item.equippedStats.weaponDamageTypes.length - 1">
+            ,
+          </div>
         </div>
       </div>
     </div>
@@ -316,6 +320,18 @@ export default {
         :type="props.item.equippedStats.ability.type"
       ></AbilityDisplay>
     </div>
+    <AbilityDisplay
+      style="margin-top: 2rem"
+      v-if="props.item.type === 'Potion'"
+      :medallion="props.item.ability.groupIcon"
+      :description="props.item.ability.description"
+      :area="props.item.ability.area"
+      :duration="props.item.ability.duration"
+      :action-cost="props.item.ability.actionCost"
+      :resistance="props.item.ability.resistance"
+      :target="props.item.ability.target"
+      :type="props.item.ability.type"
+    ></AbilityDisplay>
   </div>
 </template>
 

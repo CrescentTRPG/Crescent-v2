@@ -1,23 +1,8 @@
 <script lang="ts">
-import { useSkillStore } from '@/stores/skillsStore'
-
-import {
-  BButton,
-  BTable,
-  BFormSelect,
-  BTh,
-  BTableSimple,
-  BThead,
-  BTr,
-  BTd
-} from 'bootstrap-vue-next'
-import CustomModal from '@/components/CustomModal.vue'
-import { ref, onMounted, toRaw } from 'vue'
-import { storeToRefs } from 'pinia'
-import TitleWidget from '@/components/TitleWidget.vue'
-import OneToTenDropdown from '@/components/OneToTenDropdown.vue'
-import { useFaunaStore } from '@/stores/faunaStore'
-import { useDesignStore } from '@/stores/designStore'
+import { useDesignStore } from '@/stores/designStore.ts'
+import { useFaunaStore } from '@/stores/faunaStore.ts'
+import { BTableSimple, BTd, BTh, BThead, BTr } from 'bootstrap-vue-next'
+import { ref } from 'vue'
 
 interface Skill {
   skill: string

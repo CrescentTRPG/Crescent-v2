@@ -1,21 +1,20 @@
 <script lang="ts">
-import { BInputGroup, BFormInput, BInputGroupText, BButton, BTable } from 'bootstrap-vue-next'
-import { computed, ComputedRef, Ref, ref, watch } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
-import { storeToRefs } from 'pinia'
-import { useCharacterStore } from '@/stores/characterStore'
-import CustomModal from '@/components/CustomModal.vue'
-import { useUserStore } from '@/stores/userStore'
-import { useSpellStore } from '@/stores/spellsStore'
 import AbilityDisplay from '@/components/AbilityDisplay.vue'
-import CustomPagination from '@/components/CustomPagination.vue'
-import MartialSkillDisplay from '@/components/MartialSkillDisplay.vue'
-import { usePerformanceStore } from '@/stores/performanceStore'
+import AddAsStatusModal from '@/components/AddAsStatusModal.vue'
 import CreatureDisplay from '@/components/Character/Build/Fauna/CreatureDisplay.vue'
-import MartialAttackDisplay from '@/components/Character/Matrial Attack Builder/MartialAttackDisplay.vue'
 import CustomCheckbox from '@/components/Character/CustomCheckbox.vue'
+import MartialAttackDisplay from '@/components/Character/Matrial Attack Builder/MartialAttackDisplay.vue'
+import CustomModal from '@/components/CustomModal.vue'
+import CustomPagination from '@/components/CustomPagination.vue'
 import DropdownSelect from '@/components/DropdownSelect.vue'
-import TitleWidget from '@/components/TitleWidget.vue'
+import MartialSkillDisplay from '@/components/MartialSkillDisplay.vue'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { usePerformanceStore } from '@/stores/performanceStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
+import { ref, watch } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
 export default {
   props: [
@@ -33,7 +32,8 @@ export default {
     'buildDisplaySkills',
     'updateSkill',
     'updateStyle',
-    'buildDisplayPerformanceAbilities'
+    'buildDisplayPerformanceAbilities',
+    'manualSpellgroups'
   ],
   emits: ['ability'],
   setup(props, context) {
@@ -43,7 +43,6 @@ export default {
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
     const spellsStore = useSpellStore()
-    const { manualSpellgroups } = storeToRefs(spellsStore)
     const { manualPerformanceStyles } = usePerformanceStore()
 
     const currentPage = ref(1)
@@ -64,9 +63,10 @@ export default {
       }
     }
     const totalRows = ref(props.abilities?.length)
-
+    watch(props, (newOne, oldOne) => {
+      totalRows.value = props.abilities?.length
+    })
     function getSortedSkills(spec) {
-      console.log(spec)
       return spec.skills.sort(function (a, b) {
         let aVal =
           a.skillStats.type === 'Passive'
@@ -115,7 +115,6 @@ export default {
       filterOn,
       filter,
       totalRows,
-      manualSpellgroups,
       infoModal,
       manualPerformanceStyles,
       getSortedSkills,
@@ -134,7 +133,8 @@ export default {
     MartialSkillDisplay,
     MartialAttackDisplay,
     CustomCheckbox,
-    DropdownSelect
+    DropdownSelect,
+    AddAsStatusModal
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -241,7 +241,7 @@ export default {
                     !data.item.Movement)
                 "
                 :medallion="
-                  manualSpellgroups[data.item.spellgroup as any]?.groupIcon ||
+                  props.manualSpellgroups[data.item.spellgroup as any]?.groupIcon ||
                   data.item.groupIcon ||
                   'gi-cubes'
                 "
@@ -291,7 +291,7 @@ export default {
               props.updateSpell(
                 data.item.name,
                 data.item.rank,
-                manualSpellgroups[data.item.spellgroup as any].source,
+                props.manualSpellgroups[data.item.spellgroup as any].source,
                 true,
                 data.item.spellgroup,
                 data.item.groupNumber,
@@ -303,7 +303,7 @@ export default {
               props.updateSpell(
                 data.item.name,
                 data.item.rank,
-                manualSpellgroups[data.item.spellgroup as any].source,
+                props.manualSpellgroups[data.item.spellgroup as any].source,
                 false,
                 data.item.spellgroup,
                 data.item.groupNumber,
@@ -457,6 +457,17 @@ export default {
           </div>
         </div>
       </template>
+      <template #cell(addStatus)="data">
+        <BButton
+          style="text-align: left; width: 6rem"
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText
+          }"
+        >
+          <AddAsStatusModal :font-size="'small'" :ability="data.item"></AddAsStatusModal
+        ></BButton>
+      </template>
       <template #cell(group)="data">
         <div class="fullGroup">
           {{
@@ -488,7 +499,9 @@ export default {
         <div class="iconGroup">
           <v-icon
             scale="1.5"
-            :name="manualSpellgroups[data.item.spellgroup as any]?.groupIcon || data.item.groupIcon"
+            :name="
+              props.manualSpellgroups[data.item.spellgroup as any]?.groupIcon || data.item.groupIcon
+            "
           ></v-icon>
         </div>
       </template>

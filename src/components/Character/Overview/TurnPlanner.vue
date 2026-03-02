@@ -1,13 +1,12 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { useDesignStore } from '../../../stores/designStore'
+import { useDesignStore } from '../../../stores/designStore.ts'
 
-import { useCharacterStore } from '@/stores/characterStore'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 
-import { useUserStore } from '@/stores/userStore'
-import PlannedActionWidget from './PlannedActionWidget.vue'
 import TitleMedallion from '@/components/TitleMedallion.vue'
-import TrackerWidget from './TrackerWidget.vue'
+import { useUserStore } from '@/stores/userStore.ts'
+import PlannedActionWidget from './PlannedActionWidget.vue'
 
 export default {
   setup(props, context) {

@@ -24,21 +24,17 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCharacterStore } from '../stores/characterStore.ts'
+import { useUserStore } from '../stores/userStore.ts'
 import CharacterCard from './CharacterCard.vue'
-import { useCharacterStore } from '../stores/characterStore'
-import { useUserStore } from '../stores/userStore'
-import { getCollection, getCollectionOnce } from '../composable/getCollection'
-import { db } from '@/firebase/config.js'
-import { onSnapshot, collection } from 'firebase/firestore'
-import { useDesignStore } from '@/stores/designStore'
-import { useSpellStore } from '@/stores/spellsStore'
-import { useMartialPerksStore } from '@/stores/martialPerksStore'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore'
-import { useSkillStore } from '@/stores/skillsStore'
-import { useFaunaStore } from '@/stores/faunaStore'
-import { usePerformanceStore } from '@/stores/performanceStore'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import { useFaunaStore } from '@/stores/faunaStore.ts'
+import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
+import { usePerformanceStore } from '@/stores/performanceStore.ts'
+import { useSkillStore } from '@/stores/skillsStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
 
 export default {
   props: ['charList'],
@@ -52,13 +48,18 @@ export default {
   },
   methods: {
     addCharacter() {
-      if (this.props.charList.length < 2 || useUserStore().subscriptionLevel === 'Overlord') {
+      if (
+        this.props.charList.length < 2 ||
+        useUserStore().subscriptionLevel === 'Overlord' ||
+        useUserStore().subscriptionLevel === 'Lord'
+      ) {
         useCharacterStore().addCharacter(useUserStore().getUserId)
       } else {
         alert('User is not entitled to more than two characters')
       }
     },
     selectCharacter(character) {
+      useAdventureStore().unsubscribe()
       usePerformanceStore().clearPerformance()
       useFaunaStore().clearFauna()
       useSpellStore().clearBuildDisplay()
@@ -67,6 +68,7 @@ export default {
       useSkillStore().clearEffectiveSkills()
       useCharacterStore().setLocalCharacter(character)
       useCharacterStore().setLocalSpentAbilityPoints(0)
+      useAdventureStore().clearImportantAdventureInfo()
       this.router.push({ name: 'character' })
     }
   }
