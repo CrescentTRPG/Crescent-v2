@@ -18,7 +18,7 @@ import IconDisplay from '../IconDisplay.vue'
 import IconPicker from '../IconPicker.vue'
 
 export default {
-  props: ['icon', 'imageHeight', 'imageWidth', 'deleteIndex'],
+  props: ['icon', 'imageHeight', 'imageWidth', 'deleteIndex', 'placement'],
   emits: ['iconUpdate'],
   setup(props, context) {
     const modal = ref(false)
@@ -84,6 +84,7 @@ export default {
         class="popover"
         click="true"
         hover
+        :placement="placement"
         :close-on-hide="true"
         :delay="{ show: 0, hide: 0 }"
         style="width: fit-content"
@@ -118,7 +119,7 @@ export default {
             ></IconDisplay>
           </div>
         </template>
-        <div style="z-index: 6">
+        <div style="z-index: 6" :style="{ width: icon.description ? 20 + 'rem' : 'fit-content' }">
           <div style="display: flex; justify-content: space-between">
             <div
               v-if="tempIcon.title"

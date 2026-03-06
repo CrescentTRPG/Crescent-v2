@@ -208,6 +208,8 @@ export default {
           count: amount.value,
           description: 'Potion containing the ingredients ' + props.ingredients,
           type: 'Potion',
+          holder: characterStore.id,
+          holderType: 'Character',
           isAttuneable: false,
           isAttuned: false,
           equippedStats: {

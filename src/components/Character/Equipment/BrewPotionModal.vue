@@ -24,10 +24,12 @@ import EditAbility from '@/components/EditAbility.vue'
 import CustomCheckbox from '../CustomCheckbox.vue'
 import BuyPotionModal from './BuyPotionModal.vue'
 import MakePotionWithSkill from './MakePotionWithSkill.vue'
+import BasicInput from '../BasicInput.vue'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
 
 export default {
   emits: ['ability', 'closeModal'],
-  props: ['showModal'],
+  props: ['showModal', 'adventureMode'],
   setup(props, context) {
     const modal = ref(false)
     const infoModal = ref(false)
@@ -38,13 +40,15 @@ export default {
     const { alchemicalIngredients } = storeToRefs(equipmentStore)
     const skillStore = useSkillStore()
     const { skills } = storeToRefs(skillStore)
-    const ignoreSkillUnlocks = ref(false)
+    const ignoreSkillUnlocks = ref(props.adventureMode)
     const stagedItem: Ref<Potion> = ref({
       name: 'Potion of Nothingness',
       count: 0,
       description: '',
       type: 'Potion',
       isAttuneable: false,
+      holder: props.adventureMode ? '' : characterStore.id,
+      holderType: props.adventureMode ? '' : 'Character',
       isAttuned: false,
       equippedStats: {
         ability: {
@@ -639,6 +643,87 @@ export default {
     function dispatchMakePotion() {
       makePotionModal.value = true
     }
+    const hasSameIngredients = computed(() => {
+      let ingredients = indegredientList.value.filter((a) => a != '')
+      if (props.adventureMode) {
+        let arr1 = [...ingredients].sort()
+        let arr2 = [
+          ...(useAdventureStore().equipment.items.Potion[
+            abilityEdits.value.name || computedName.value
+          ]?.ingredients || [])
+        ].sort()
+        console.log(arr1, arr2)
+        if (arr1.length != arr2.length) {
+          return false
+        } else {
+          for (let i = 0; i < arr1.length; i++) {
+            if (arr1[i] != arr2[i]) {
+              return false
+            }
+          }
+        }
+        return countPotionInAdventure.value > 0 && true
+      }
+      return false
+    })
+    const countPotionInAdventure = computed(() => {
+      if (props.adventureMode) {
+        return useAdventureStore().equipment.items.Potion[
+          abilityEdits.value.name || computedName.value
+        ]
+          ? useAdventureStore().equipment.items.Potion[
+              abilityEdits.value.name || computedName.value
+            ].count
+          : 0
+      } else {
+        return false
+      }
+    })
+    function addPotionToAdventure() {
+      let newCount = parseInt(count.value + '')
+      if (countPotionInAdventure.value) {
+        newCount =
+          useAdventureStore().equipment.items.Potion[abilityEdits.value.name || computedName.value]
+            .count + newCount
+      }
+      let ingredients = indegredientList.value.filter((a) => a != '')
+
+      let newPotion: Potion = {
+        name: abilityEdits.value.name || computedName.value,
+        count: newCount,
+        description: 'Potion containing the ingredients ' + ingredients,
+        type: 'Potion',
+        holder: '',
+        holderType: '',
+        isAttuneable: false,
+        isAttuned: false,
+        equippedStats: {
+          ability: { name: '' },
+          passives: {},
+          material: '',
+          enchantments: {},
+          technicalAddons: {},
+          materialCoverings: {}
+        },
+        ingredients: ingredients,
+        ability: {
+          name: abilityEdits.value.name || computedName.value,
+          area: abilityEdits.value.area || area.value,
+          duration: abilityEdits.value.duration || duration.value,
+          target: abilityEdits.value.target || target.value,
+          resistance: abilityEdits.value.resistance || resistance.value,
+          cost: 'Consumable',
+          description: abilityEdits.value.description || description.value,
+          groupIcon: 'gi-standing-potion',
+          rank: '',
+          actionCost: abilityEdits.value.actionCost || actionCost.value,
+          type: abilityEdits.value.type || type.value
+        }
+      }
+      useAdventureStore().addItem(newPotion)
+      context.emit('closeModal')
+    }
+    const count = ref(1)
     const buyPotionModal = ref(false)
     const makePotionModal = ref(false)
     function dispatchBuyPotion() {
@@ -667,7 +752,9 @@ export default {
       context,
       dispatchMakePotion,
       alchemicalIngredients,
+      addPotionToAdventure,
       base,
+      count,
       reagent,
       mutagens,
       target,
@@ -692,7 +779,9 @@ export default {
       clearAll,
       closeAndClear,
       makePotionModal,
-      isHidden
+      isHidden,
+      hasSameIngredients,
+      countPotionInAdventure
     }
   },
   components: {
@@ -705,7 +794,8 @@ export default {
     EditAbility,
     CustomCheckbox,
     BuyPotionModal,
-    MakePotionWithSkill
+    MakePotionWithSkill,
+    BasicInput
     // TitleWidget
   }
 }
@@ -723,6 +813,7 @@ export default {
         <div>
           <div>
             <div
+              v-if="!props.adventureMode"
               style="display: flex; padding: 0.5rem; justify-content: flex-end; font-size: small"
               :style="{ background: designStore.inputBacking, color: designStore.inputText }"
             >
@@ -971,8 +1062,16 @@ export default {
           ></EditAbility>
         </div>
       </template>
-      <template v-slot:footer
-        ><BButton
+      <template v-slot:footer>
+        <div
+          v-if="hasSameIngredients"
+          :style="{ color: designStore.alertTheme }"
+          style="margin-right: 0.5rem"
+        >
+          Matching Potion Detected
+        </div>
+        <BButton
+          v-if="!props.adventureMode"
           style="border: 1px solid"
           :style="{
             background: designStore.primaryTheme,
@@ -983,6 +1082,7 @@ export default {
           >Brew Potion ({{ difficultyScore }} Alchemy Check)</BButton
         >
         <BButton
+          v-if="!props.adventureMode"
           style="border: 1px solid; margin-left: 0.5rem"
           :style="{
             background: designStore.primaryTheme,
@@ -992,6 +1092,19 @@ export default {
           @click="(dispatchBuyPotion(), (isHidden = true))"
           >Buy Potion</BButton
         >
+        <BasicInput label="Amount to Add" :value="count" type="number"></BasicInput>
+        <BButton
+          @click="addPotionToAdventure()"
+          v-if="props.adventureMode"
+          :disabled="countPotionInAdventure && !hasSameIngredients"
+          style="border: 1px solid; margin-left: 0.5rem"
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText,
+            borderColor: designStore.secondaryTheme
+          }"
+          >Add {{ hasSameIngredients ? ' to Existing ' : '' }} Potion(s)
+        </BButton>
         <BButton
           style="border: 1px solid; margin-left: 0.5rem"
           :style="{
@@ -1048,6 +1161,7 @@ export default {
       ></template>
       <template v-slot:footer>Difficulty Score: {{ difficultyScore }} </template>
     </CustomModal>
+
     <MakePotionWithSkill
       :modifyIsHidden="(val) => (isHidden = val)"
       :close-and-clear-brew="closeAndClear"

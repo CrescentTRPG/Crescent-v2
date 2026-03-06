@@ -15,6 +15,7 @@ import StatBlockHeader from './StatBlockHeader.vue'
 import StatBlockMovespeedWrapper from './StatBlockMovespeedWrapper.vue'
 import StatBlockState from './StatBlockState.vue'
 import StatBlockVersionControl from './StatBlockVersionControl.vue'
+import StatBlockEquipment from './StatBlockEquipment.vue'
 
 export default {
   props: [
@@ -312,7 +313,12 @@ export default {
     function toggleBio() {
       showBio.value = !showBio.value
     }
+    const showEquipment = ref(false)
 
+    function updateTempEquipment(equipment) {
+      currentStatBlockTemp.value.equipment = equipment
+      updateTemp(currentStatBlockTemp.value)
+    }
     return {
       designStore,
       statBlock,
@@ -348,7 +354,9 @@ export default {
       overridePowerLevel,
       removeHpStatusModifier,
       removeManaStatusModifier,
-      removeMpStatusModifier
+      removeMpStatusModifier,
+      showEquipment,
+      updateTempEquipment
     }
   },
   components: {
@@ -362,7 +370,8 @@ export default {
     EffectsRibbon,
     BButton,
     RandomlyGenerateStatBlock,
-    BOffcanvas
+    BOffcanvas,
+    StatBlockEquipment
   }
 }
 </script>
@@ -383,7 +392,10 @@ export default {
       @overridePowerLevel="(level) => (overridePowerLevel = level)"
     ></StatBlockHeader>
 
-    <div style="display: flex; width: 100%; height: inherit; overflow-y: auto">
+    <div
+      style="display: flex; width: 100%; height: inherit; overflow-y: auto"
+      v-if="!showEquipment"
+    >
       <div style="flex-grow: 1">
         <div class="arrangeMainBlock">
           <div>
@@ -484,6 +496,15 @@ export default {
         ></StatBlockBio>
       </BOffcanvas>
     </div>
+    <div v-else style="width: 100%">
+      <StatBlockEquipment
+        :update="updateTempEquipment"
+        :equipment="currentStatBlockTemp.equipment"
+        :updateTemp="updateTemp"
+        :currentStatBlock="currentStatBlockTemp"
+        :currentStatBlockId="currentStatBlockId"
+      ></StatBlockEquipment>
+    </div>
     <div
       v-if="!props.omitToolbar"
       style="
@@ -502,22 +523,42 @@ export default {
       }"
     >
       <div style="display: flex; justify-content: space-between; margin: 0.2rem; width: 100%">
-        <BButton
-          @click="editing = !editing"
-          class="footerButtons"
-          :style="{
-            color: editing ? designStore.alertTheme : designStore.primaryText,
-            borderColor: editing ? designStore.alertTheme : designStore.secondaryTheme
-          }"
-        >
-          <div v-if="editing" style="display: flex">
-            <div class="goBackText" style="margin-right: 0.25rem">Toggle Edit Mode</div>
-            <i class="bi bi-pen"></i>
-          </div>
-          <div v-else style="display: flex">
-            <div class="goBackText" style="margin-right: 0.25rem">Toggle Edit Mode</div>
-            <i class="bi bi-binoculars"></i></div
-        ></BButton>
+        <div style="display: flex">
+          <BButton
+            @click="editing = !editing"
+            class="footerButtons"
+            :style="{
+              color: editing ? designStore.alertTheme : designStore.primaryText,
+              borderColor: editing ? designStore.alertTheme : designStore.secondaryTheme
+            }"
+          >
+            <div v-if="editing" style="display: flex">
+              <div class="goBackText" style="margin-right: 0.25rem">Toggle Edit Mode</div>
+              <i class="bi bi-pen"></i>
+            </div>
+            <div v-else style="display: flex">
+              <div class="goBackText" style="margin-right: 0.25rem">Toggle Edit Mode</div>
+              <i class="bi bi-binoculars"></i></div
+          ></BButton>
+          <BButton
+            :style="{
+              background: designStore.primaryTheme,
+              color: designStore.primaryText,
+              borderColor: designStore.secondaryTheme
+            }"
+            @click="showEquipment = !showEquipment"
+            class="footerButtons"
+            style="margin-left: 0.5rem"
+          >
+            <div v-if="showEquipment" style="display: flex">
+              <div class="goBackText" style="margin-right: 0.25rem">Toggle Tab</div>
+              <i class="bi bi-backpack4"></i>
+            </div>
+            <div v-else style="display: flex">
+              <div class="goBackText" style="margin-right: 0.25rem">Toggle Tab</div>
+              <i class="bi bi-view-list"></i></div
+          ></BButton>
+        </div>
         <div style="display: flex">
           <RandomlyGenerateStatBlock
             v-if="editing"
@@ -535,7 +576,7 @@ export default {
             @click="save()"
           >
             <i class="bi bi-floppy"></i>
-            <div style="margin-left: 0.5rem" class="discardText">Save</div>
+            <div style="margin-left: 0.5rem; margin-right: 0.25rem" class="goBackText">Save</div>
             <div class="goBackText">and Go Back</div>
           </BButton>
           <BButton
@@ -596,7 +637,7 @@ export default {
   display: flex;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
   .bioSidebar {
     display: none;
   }
@@ -611,7 +652,7 @@ export default {
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .discardText {
     margin-left: 0.25rem;
   }

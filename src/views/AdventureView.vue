@@ -108,7 +108,7 @@
     <PartyTab v-if="navPos === 'party'"></PartyTab>
     <CombatTab v-if="navPos === 'combat'"></CombatTab>
     <StatBlockTab v-if="navPos === 'statblocks'"></StatBlockTab>
-    <BeingBuilt v-if="navPos === 'items'"></BeingBuilt>
+    <ItemsTab v-if="navPos === 'items'"></ItemsTab>
     <JournalTab :isCharacter="false" style="flex-grow: 1" v-if="navPos === 'notes'"></JournalTab>
     <ManualTab v-if="navPos === 'manual'"></ManualTab>
     <Teleport to="body">
@@ -194,6 +194,7 @@ import { useManualStore } from '@/stores/manualStore.ts'
 import { storeToRefs } from 'pinia'
 import ChatBubble from '@/components/Adventure/Party/ChatBubble.vue'
 import CustomModal from '@/components/CustomModal.vue'
+import ItemsTab from '@/components/Adventure/Items/ItemsTab.vue'
 
 export default {
   setup(props, context) {
@@ -361,7 +362,7 @@ export default {
     DesignButton,
     BOffcanvas,
     AdventureNav,
-    BeingBuilt,
+    ItemsTab,
     PartyTab,
     StatBlockTab,
     CombatTab,

@@ -21,6 +21,8 @@ export default {
       count: props.passedItem.count,
       type: props.passedItem.type,
       description: props.passedItem.description,
+      holder: props.passedItem.holder,
+      holderType: props.passedItem.holderType,
       icon: props.passedItem.icon || 'gi-uncertainty',
       isAttuneable: props.passedItem.isAttuneable,
       isAttuned: props.passedItem.isAttuned,

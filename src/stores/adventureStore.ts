@@ -1,15 +1,18 @@
 import { useCollection } from '@/composable/useCollection.js'
-import { defineStore } from 'pinia'
-import { useUserStore } from './userStore.js'
-import { deleteDoc, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '@/firebase/config.js'
+import { deleteDoc, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
+import _ from 'lodash'
+import { defineStore } from 'pinia'
 import { useDesignStore } from './designStore.js'
 import { usePartyStore } from './partyStore.js'
-import { useManualStore } from './manualStore.js'
+import { useUserStore } from './userStore.js'
+
+import { ABILITY_ENTRY, AbilityEntry, DEFAULT_DESIGN } from '@/bases.js'
 import { useCharacterStore } from './characterStore.js'
-import { ABILITY_ENTRY, AbilityEntry, DEFAULT_COMBAT, DEFAULT_DESIGN } from '@/bases.js'
+import { Item, Potion, useEquipmentStore } from './equipmentStore.ts'
 import { useInitiativeStore } from './initiativeStore.js'
 import { useJournalStore } from './journalStore.js'
+import { useManualStore } from './manualStore.js'
 export interface CustomAbilities {
   [key: string]: AbilityEntry
 }
@@ -41,6 +44,18 @@ export const useAdventureStore = defineStore('adventure', {
     manual: {},
     statBlocks: {},
     rollingTables: {},
+    adventureItems: {},
+    equipment: {
+      attunedItems: [],
+      items: {
+        Generic: {},
+        Armor: {},
+        Shield: {},
+        Weapon: {},
+        Ingredient: {},
+        Potion: {}
+      }
+    },
     settings: {
       maxChats: 100,
       initiativeDisplayNumericHp: false,
@@ -158,6 +173,21 @@ export const useAdventureStore = defineStore('adventure', {
       this.statBlocks[statBlock.name] = statBlock
       this.updateStatBlocksInFirebase()
     },
+    async updateStatBlockEquipment(item) {
+      console.log(item)
+      const block = await this.getStatBlockDetails(item.holder)
+      if (!block) {
+        alert('Statblock Does not Exist?')
+        return 'error'
+      }
+      if (block && block.equipment.items[item.type][item.name]) {
+        alert('Statblock already has item by same name')
+
+        return 'error'
+      }
+      block.equipment.items[item.type][item.name] = item
+      this.putStatBlock(block, item.holder)
+    },
     async getStatBlockDetails(id) {
       const docRef = doc(
         db,
@@ -273,6 +303,10 @@ export const useAdventureStore = defineStore('adventure', {
       this.userIds = adventure.userIds
       this.combatNavPos = adventure.combatNavPos
       this.activeCombatId = adventure.activeCombatId
+      this.equipment = adventure.equipment
+    },
+    resetEquipment() {
+      useEquipmentStore().setLocalEquipment(this.equipment)
     },
     editChat(messageObj) {
       this.chat[messageObj.timestamp] = messageObj
@@ -347,8 +381,20 @@ export const useAdventureStore = defineStore('adventure', {
             combats: doc.data()?.combats,
             userIds: doc.data()?.userIds,
             combatNavPos: doc.data()?.combatNavPos || 'table',
-            activeCombatId: doc.data()?.activeCombatId || ''
+            activeCombatId: doc.data()?.activeCombatId || '',
+            equipment: doc.data()?.equipment || {
+              attunedItems: [],
+              items: {
+                Generic: {},
+                Armor: {},
+                Shield: {},
+                Weapon: {},
+                Ingredient: {},
+                Potion: {}
+              }
+            }
           }
+
           console.log('adventure snap')
           if (doc.data()?.activeCombatId != this.activeCombatId && doc.data()?.activeCombatId) {
             this.activeCombatId = doc.data()?.activeCombatId
@@ -424,6 +470,36 @@ export const useAdventureStore = defineStore('adventure', {
       }
 
       useDesignStore().setLocalDesign(this.design)
+    },
+    addItem(item: Item | Potion) {
+      const newEquip = _.cloneDeep(this.equipment)
+      newEquip.items[item.type][item.name] = item
+      this.equipment = newEquip
+
+      const ret = updateDoc(
+        doc(db, 'User/' + useAdventureStore().gameMasterId + '/Adventure/' + this.id),
+        {
+          equipment: newEquip
+        }
+      )
+    },
+    editInPlace(item: Item) {
+      this.equipment.items[item.type][item.name] = item
+      const ret = updateDoc(
+        doc(db, 'User/' + useAdventureStore().gameMasterId + '/Adventure/' + this.id),
+        {
+          equipment: this.equipment
+        }
+      )
+    },
+    removeItem(item: Item, unequip = false) {
+      delete this.equipment.items[item.type][item.name]
+      const ret = updateDoc(
+        doc(db, 'User/' + useAdventureStore().gameMasterId + '/Adventure/' + this.id),
+        {
+          equipment: this.equipment
+        }
+      )
     },
     async pullAdventureAsCharacterFromFirebase(adventureId: string, gameMasterId: string) {
       this.loading = true
@@ -520,6 +596,11 @@ export const useAdventureStore = defineStore('adventure', {
           combats: this.combats
         }
       )
+    },
+    async updateCharacterEquipment(equipment, userId, charId) {
+      const ret = updateDoc(doc(db, 'User/' + userId + '/Character/' + charId), {
+        equipment: equipment
+      })
     },
     async addAdventure() {
       const adventure = {

@@ -284,7 +284,7 @@ export const ScarletThorn = {
   buildDescription:
     '<p><h5>3/5 Difficulty</h5></br>Simultaneously Beloved and Bemoaned, Scarlet Thorn is the epitome of a character that excells at buffing and debuffing, with the option to heal thrown in as well. They do not work well working alone, but are great within a team.</p>',
   atributeDescriptions:
-    '<p>This Character should prioritize <i>Charisma</i>, then <i>Power</i>. <hr> This Character Prioritizes <i>Charisma</i>, as it is the modifier setting their Performance Checks.  Having a high <i>Charisma</i> also syngergizes with their exceptional charsima and it leaves room for this character to get more <i>Charisma</i> based spellgroups in the future.</br></br> This Character Prioritizes <i>Power</i>, since as all spellcasters use <i>Power</i> as the modifier for their spells resistance checks.  They also prioritize <i>Power</i> since it restricts the maximum spell rank they can have.</br> </p>',
+    '<p>This Character should prioritize <i>Charisma</i>, then <i>Power</i>. <hr> This Character Prioritizes <i>Charisma</i>, as it is the modifier setting their Performance Checks.  Having a high <i>Charisma</i> also syngergizes with their exceptional charsima and it leaves room for this character to get more <i>Charisma</i> based spellgroups in the future.</br></br> This Character Prioritizes <i>Power</i>, since spellcasters use <i>Power</i> as the modifier for their spells resistance checks.  They also prioritize <i>Power</i> since it restricts the maximum spell rank they can have.</br> </p>',
   originSkills: ['Performance', 'Interpersonal'],
   originSkillsDescription:
     "<p>This Character prioritizes <i>Charisma</i> more than any other, so it's only natural that they get placed rolls in both <i>Charisma</i> based skills.</p>",
@@ -484,6 +484,33 @@ export const ScarletThorn = {
         manaGain: 1,
         rankLimiter: 'Power',
         source: 'Base'
+      },
+      Arcana: {
+        baseCost: 3,
+        flatCost: true,
+        groupIcon: 'gi-magic-palm',
+        groupPurchaseLimiter: 'None',
+        inOrder: true,
+        manaGain: 0,
+        name: 'Arcana',
+        rankLimiter: 'Power',
+        spells: {
+          Sear: {
+            actionCost: 'Core Action',
+            area: "(Spell Rank)' Radius",
+            description:
+              'Caster concentrates their arcane energy in a specific area, searing those inside with (Spell Rank/2) d6 adaptive damage. HEA save to halve the damage.',
+            duration: 'Instantaneous',
+            name: 'Sear',
+            rank: 0,
+            resistance: 'HEA',
+            spellgroup: 'Arcana',
+            target: "LOS 30'",
+            type: 'Evocation'
+          }
+        },
+
+        source: 'Base'
       }
     }
   }
@@ -560,6 +587,7 @@ export const IronBlade = {
     totalMana: 0,
     currentMana: 0,
     armorDvs: 7,
+    mp: 2,
     shieldDvs: 0,
     spells: {},
     perkGain: ['hitpoints', '', '', '', ''],
@@ -835,7 +863,7 @@ export const DevoutProtector = {
   exceptional: 'Perception',
   lunarMotivation: 'Sacrifice',
   lunarMotivationDescription:
-    'Any character build may have any motivation.  In this example, Devout Protector was raised to believe that they are a gift for others.  For better or for worse they give their whole heart to others and have difficulty advocating for their own interests.  They have a poor sense of self and have a tendency to attach themself to people they feel need help..',
+    'Any character build may have any motivation.  In this example, Devout Protector was raised to believe that they are a gift for others.  For better or for worse they give their whole heart to others and have difficulty advocating for their own interests.  They have a poor sense of self and have a tendency to attach themself to people they feel need help.',
 
   equipment:
     'Devout Protector has Iron Medium Iron Armor (provides 5 armor DVs) and an Iron Shield (provides 1 shield DV)',
@@ -1085,7 +1113,7 @@ export const PoisonBlade = {
   buildDescription:
     '<p><h5>5/5 Difficulty</h5></br>Poison Blade is a Jack of all Trades. They can support, they can deal damage, and they can provide utility.  Their weakness is that the only defense they have is their DVs, and once they run out of potions and traps they are significantly weaker.</p>',
   atributeDescriptions:
-    "<p>This Character should prioritize <i>Agility</i>, then <i>Willpower</i> and <i>Perception</i>. <hr> This Character Prioritizes <i>Agility</i> since as a Light Weapons User, it sets all their resistance checks and restricts the highest rank the character can learn in their Weapon Skills.</br></br> This Character Prioritizes <i>Willpower</i> since Alchemy's Dominant Stat is Willpower.</br></br>This Character Prioritizes <i>Perception</i>, since their attacks invlove rolls to hit. Once they get better at alchemy they can throw potions that explode in an AOE.</br> </p>",
+    "<p>This Character should prioritize <i>Agility</i>, then <i>Willpower</i> and <i>Perception</i>. <hr> This Character Prioritizes <i>Agility</i> since as a Light Weapons User, it sets all their resistance checks and restricts the highest rank the character can learn in their Weapon Skills.</br></br> This Character Prioritizes <i>Willpower</i> since Alchemy's Dominant Stat is Willpower.</br></br>This Character Prioritizes <i>Perception</i>, since their attacks involve rolls to hit. Once they get better at alchemy they can throw potions that explode in an AOE.</br> </p>",
   originSkills: ['Alchemy', 'Acrobatics'],
   originSkillsDescription:
     '<p>As an Alchemist, the placed roll in Alchemy is a no-brainer. Additionally, I envisioned this character to be nimble, so the placed roll in Acrobatics reflects this.</p>',

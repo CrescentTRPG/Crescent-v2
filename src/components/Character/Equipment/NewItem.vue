@@ -11,6 +11,7 @@ import { useDesignStore } from '../../../stores/designStore.ts'
 import CustomCheckbox from '../CustomCheckbox.vue'
 import EquippableProperties from './EquippableProperties.vue'
 export default {
+  props: ['holder', 'holderType'],
   emits: ['stagedItem'],
   setup(props, context) {
     const designStore = useDesignStore()
@@ -23,6 +24,8 @@ export default {
       description: 'Write the item description here',
       icon: 'gi-cubes',
       isAttuneable: false,
+      holder: props.holder,
+      holderType: props.holderType,
       isAttuned: false,
       equippedStats: {
         ability: {},
@@ -122,7 +125,6 @@ export default {
     BFormTextarea,
     ActionCostDropdown,
     BForm,
-    BFormSelect,
     DropdownSelect,
     CustomCheckbox,
     EquippableProperties,

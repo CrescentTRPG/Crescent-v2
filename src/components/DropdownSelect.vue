@@ -2,6 +2,7 @@
 import { useDesignStore } from '@/stores/designStore.ts'
 import { BFormInput } from 'bootstrap-vue-next'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import { write } from 'fs'
 import { computed, onBeforeUnmount, Ref, ref, watch } from 'vue'
 
 export default {
@@ -23,7 +24,8 @@ export default {
     'writeIn',
     'overrideDisplay',
     'squared',
-    'placeholder'
+    'placeholder',
+    'typeToFilter'
   ],
   setup(props, context) {
     const designStore = useDesignStore()
@@ -31,8 +33,43 @@ export default {
     const showDropdown = ref(false)
     const dropDown: any = ref(null)
     const writeInVal: Ref<string> = ref('')
+    function getDistance(input: string, key: string) {
+      let count = 0
+      let inputArr = input.split('')
+      let keyArr = input.split('')
+      if (input.length < keyArr.length) {
+        count += 1
+        for (let i = keyArr.length - input.length; i > 0; i--) {
+          inputArr.push('*')
+        }
+      } else {
+        inputArr = inputArr.slice(0, keyArr.length)
+      }
+      let i = 0
+      while (i < input.length) {
+        if (input[i] != key[i] && input[i] != '*') count++
+        i++
+      }
+      return count
+    }
+    const values = computed(() => {
+      if (props.typeToFilter && writeInVal.value != '') {
+        return props.options.filter((option) =>
+          option.value === ''
+            ? true
+            : typeof option.text === 'string'
+              ? option.text.length -
+                  writeInVal.value.length -
+                  getDistance(option.text, writeInVal.value) >
+                -2
+              : option.length - -writeInVal.value.length - getDistance(option, writeInVal.value) >
+                -2
+        )
+      } else return props.options
+    })
     function emitSelection(selection) {
       showDropdown.value = false
+      writeInVal.value = ''
       selectedOption.value = typeof selection === 'string' ? selection : selection.value
       context.emit('selection', selectedOption.value)
     }
@@ -94,6 +131,16 @@ export default {
       var newColor = g | (b << 8) | (r << 16)
       return '#' + newColor.toString(16)
     }
+
+    function getDisplayText() {
+      let ret =
+        selectedOption.value.substring(0, 1).toUpperCase() + selectedOption.value.substring(1)
+      let opt = props.options.filter((a) => a.value === selectedOption.value)
+      if (opt.length === 1) {
+        ret = opt[0].text
+      }
+      return ret
+    }
     return {
       props,
       designStore,
@@ -106,7 +153,9 @@ export default {
       hoverShade,
       lightenDarkenColor,
       writeInVal,
-      publishWriteIn
+      publishWriteIn,
+      getDisplayText,
+      values
     }
   },
   components: {
@@ -173,7 +222,7 @@ export default {
               ><i class="bi bi-check"></i
             ></BButton>
           </div>
-          <div v-for="item in props.options" :key="item">
+          <div v-for="item in values" :key="item">
             <div
               v-if="!item.segment"
               @click="emitSelection(item)"
@@ -250,12 +299,25 @@ export default {
             'border-top-left-radius': props.header ? 0 : ''
           }"
         >
-          <div style="width: 100%; text-align: inherit">
+          <BFormInput
+            style="
+              width: 100%;
+              text-align: inherit;
+              margin-top: -0.25rem;
+              background: none;
+              border: none;
+            "
+            :style="{ '--bs-secondary-color': designStore.inputText }"
+            :placeholder="getDisplayText()"
+            v-if="typeToFilter"
+            v-model="writeInVal"
+          ></BFormInput>
+          <div style="width: 100%; text-align: inherit" v-else>
             {{
               props.overrideDisplay
                 ? props.overrideDisplay
                 : typeof selectedOption === 'string'
-                  ? selectedOption.substring(0, 1).toUpperCase() + selectedOption.substring(1)
+                  ? getDisplayText()
                   : selectedOption
             }}
           </div>
@@ -292,7 +354,7 @@ export default {
               props.overrideDisplay
                 ? props.overrideDisplay
                 : typeof selectedOption === 'string'
-                  ? selectedOption.substring(0, 1).toUpperCase() + selectedOption.substring(1)
+                  ? getDisplayText()
                   : selectedOption
             }}
             {{ props.label ? props.label : '' }}

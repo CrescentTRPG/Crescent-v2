@@ -6,20 +6,41 @@ import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
 import { storeToRefs } from 'pinia'
 import { computed, ComputedRef, Ref, ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore.ts'
-
+import _ from 'lodash'
 import CustomPagination from '@/components/CustomPagination.vue'
 
 import ArrayTabs from '@/components/ArrayTabs.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
-import { Item, useEquipmentStore } from '@/stores/equipmentStore.ts'
+import { Equippable, Item, Potion, useEquipmentStore } from '@/stores/equipmentStore.ts'
 import BButtonGroup from 'bootstrap-vue-next/src/components/BButton/BButtonGroup.vue'
 import CustomCheckbox from '../CustomCheckbox.vue'
 import EditItem from './EditItem.vue'
 import ItemDisplay from './ItemDisplay.vue'
 import NewItem from './NewItem.vue'
 import BrewPotionModal from './BrewPotionModal.vue'
+import { usePartyStore } from '@/stores/partyStore.ts'
+import { useAdventureStore } from '@/stores/adventureStore.ts'
+import BasicInput from '../BasicInput.vue'
+import DropdownSelect from '@/components/DropdownSelect.vue'
 
 export default {
+  props: [
+    'getTotalAttuneableItems',
+    'getNumberofAttunedItems',
+    'equipment',
+    'add',
+    'remove',
+    'edit',
+    'adventureMode',
+    'genericItems',
+    'weapons',
+    'armor',
+    'shields',
+    'potions',
+    'ingredients',
+    'addTo',
+    'hideOwnership'
+  ],
   emits: ['ability'],
   setup(props, context) {
     const modal = ref(false)
@@ -27,14 +48,30 @@ export default {
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
-    const equipmentStore = useEquipmentStore()
-    const { equipment, getNumberofAttunedItems, getTotalAttuneableItems } =
-      storeToRefs(equipmentStore)
+    const partyStore = usePartyStore()
+    const adventureStore = useAdventureStore()
+    const { characterObjects } = storeToRefs(partyStore)
+    const { statBlocks } = storeToRefs(adventureStore)
+    const tradeModal = ref(false)
+    const itemToTrade: Ref<Item | Potion> = ref({
+      name: '',
+      holder: '',
+      holderType: '',
+      count: 0,
+      type: 'Generic',
+      isAttuneable: false,
+      isAttuned: false,
+      equippedStats: {} as Equippable,
+      description: ''
+    } as Item)
+
     const stagedItem: Ref<Item> = ref({
       name: '',
       count: 0,
       description: '',
       type: 'Generic',
+      holder: props.adventureMode ? props.addTo || '' : characterStore.id,
+      holderType: props.adventureMode ? (props.addTo ? 'Statblock' : '') : 'Character',
       isAttuneable: false,
       isAttuned: false,
       equippedStats: {
@@ -59,40 +96,32 @@ export default {
     const currentModal = ref(0)
     const filterOn = ['name', 'type', 'isAttuned']
     const filter = ref('')
-    const fields = ref([
-      { key: 'name', label: 'Item' },
-      { key: 'count', label: 'Amount' },
-      { key: 'type', label: 'Type' },
-      { key: 'isAttuned', label: 'Attuned?', sortable: true }
-    ])
+    const fields = ref(
+      props.adventureMode
+        ? [
+            { key: 'name', label: 'Item' },
+            { key: 'count', label: 'Amount' },
+            { key: 'type', label: 'Type' },
+            { key: 'owner', label: props.hideOwnership ? 'Send Item' : 'Owner' }
+          ]
+        : [
+            { key: 'name', label: 'Item' },
+            { key: 'count', label: 'Amount' },
+            { key: 'type', label: 'Type' },
+            { key: 'isAttuned', label: 'Attuned?', sortable: true }
+          ]
+    )
     function showModal(index) {
       currentModal.value = index
       viewItemModal.value = true
     }
-    const genericItems: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(equipment.value.items.Generic)
-    })
-    const weapons: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(equipment.value.items.Weapon)
-    })
-    const armor: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(equipment.value.items.Armor)
-    })
-    const shields: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(equipment.value.items.Shield)
-    })
-    const potions: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(equipment.value.items.Potion)
-    })
-    const ingredients: ComputedRef<Array<any>> = computed(() => {
-      return Object.values(equipment.value.items.Ingredient)
-    })
+
     const items: ComputedRef<Array<any>> = computed(() => {
       if (selectedTabs.value.length === 0) {
-        return genericItems.value.concat(
-          weapons.value
+        return props.genericItems.concat(
+          props.weapons
             .concat(
-              armor.value.concat(shields.value.concat(potions.value.concat(ingredients.value)))
+              props.armor.concat(props.shields.concat(props.potions.concat(props.ingredients)))
             )
             .sort((a: any, b: any) => {
               if (a.rank === b.rank) {
@@ -112,9 +141,14 @@ export default {
             })
         )
       } else {
-        let ret = Object.values(equipment.value.items[selectedTabs.value[0].name])
-        selectedTabs.value.forEach((type) => {
-          ret.concat(Object.values(equipment.value.items[type.name]))
+        let ret: Array<any> = []
+        selectedTabs.value.forEach((element) => {
+          if (element.name === 'Potion') ret = ret.concat(props.potions)
+          if (element.name === 'Armor') ret = ret.concat(props.armor)
+          if (element.name === 'Shield') ret = ret.concat(props.shields)
+          if (element.name === 'Weapon') ret = ret.concat(props.weapons)
+          if (element.name === 'Ingredient') ret = ret.concat(props.ingredients)
+          if (element.name === 'Generic') ret = ret.concat(props.genericItems)
         })
         return ret.sort((a: any, b: any) => {
           if (a.rank === b.rank) {
@@ -135,8 +169,8 @@ export default {
       }
     })
     function addItem() {
-      if (!equipmentStore.equipment.items[stagedItem.value.type][stagedItem.value.name]?.name) {
-        equipmentStore.addItem(stagedItem.value)
+      if (!props.equipment.items[stagedItem.value.type][stagedItem.value.name]?.name) {
+        props.add(stagedItem.value)
         addModal.value = false
       } else {
         alert(
@@ -178,18 +212,18 @@ export default {
     }
 
     function deleteForReal() {
-      equipmentStore.removeItem(itemToDelete.value, true)
+      props.remove(itemToDelete.value, true)
       deleteModal.value = false
     }
 
     function editAttuned(item, newVal) {
       item.isAttuned = newVal
-      equipmentStore.editInPlace(item)
+      props.edit(item)
     }
 
     function saveEdits(newItem, oldItem) {
-      equipmentStore.removeItem(oldItem)
-      equipmentStore.addItem(newItem)
+      props.remove(oldItem)
+      props.add(newItem)
       itemToEdit.value = {}
 
       editItemModal.value = false
@@ -230,6 +264,125 @@ export default {
     const totalRows = ref(items?.value?.length)
 
     const brewPotionModal = ref(false)
+
+    function trade(item) {
+      itemToTrade.value = item
+      amountToTrade.value = 1
+      tradeTo.value = item.holder || ''
+      tradeModal.value = true
+    }
+    const amountToTrade = ref(1)
+
+    async function executeTrade() {
+      if (amountToTrade.value > itemToTrade.value.count) {
+        alert("Can't move a greater amount than the original item count")
+      }
+      // give to Character
+      if (Object.keys(characterObjects.value).includes(tradeTo.value)) {
+        let userId = ''
+        const cIds = adventureStore.characterIds
+        for (let i = 0; i < cIds.length; i++) {
+          if (cIds[i] === tradeTo.value) {
+            userId = adventureStore.userIds[i]
+          }
+        }
+
+        let equip = _.cloneDeep(characterObjects.value[tradeTo.value].equipment)
+        if (equip.items[itemToTrade.value.type][itemToTrade.value.name]) {
+          alert('Character already has item by this name')
+        } else {
+          equip.items[itemToTrade.value.type][itemToTrade.value.name] = {
+            ...itemToTrade.value,
+            count: amountToTrade.value,
+            holder: tradeTo.value,
+            holderType: 'Character'
+          }
+          adventureStore.updateCharacterEquipment(equip, userId, tradeTo.value)
+        }
+      }
+      //giveToGm
+      else {
+        console.log('trade to', tradeTo, 'item', itemToTrade)
+        if (tradeTo.value === '')
+          adventureStore.addItem({
+            ...itemToTrade.value,
+            count: amountToTrade.value,
+            holder: '',
+            holderType: ''
+          })
+        else {
+          await adventureStore.updateStatBlockEquipment({
+            ...itemToTrade.value,
+            count: amountToTrade.value,
+            holder: tradeTo.value,
+            holderType: 'Statblock'
+          })
+        }
+      }
+      // if previously held by character
+      if (Object.keys(characterObjects.value).includes(itemToTrade.value.holder)) {
+        let userId = ''
+        const cIds = adventureStore.characterIds
+        for (let i = 0; i < cIds.length; i++) {
+          if (cIds[i] === itemToTrade.value.holder) {
+            userId = adventureStore.userIds[i]
+          }
+        }
+        if (amountToTrade.value < itemToTrade.value.count) {
+          let equip = _.cloneDeep(characterObjects.value[itemToTrade.value.holder].equipment)
+
+          equip.items[itemToTrade.value.type][itemToTrade.value.name] = {
+            ...itemToTrade,
+            count: itemToTrade.value.count - amountToTrade.value
+          }
+
+          adventureStore.updateCharacterEquipment(equip, userId, itemToTrade.value.holder)
+        } else {
+          let equip = _.cloneDeep(characterObjects.value[itemToTrade.value.holder].equipment)
+
+          delete equip.items[itemToTrade.value.type][itemToTrade.value.name]
+          adventureStore.updateCharacterEquipment(equip, userId, itemToTrade.value.holder)
+        }
+      }
+      //held by GM
+      else {
+        if (amountToTrade.value < itemToTrade.value.count) {
+          if (itemToTrade.value.holder === '') {
+            adventureStore.editInPlace({
+              ...itemToTrade.value,
+              count: itemToTrade.value.count - amountToTrade.value,
+              holder: itemToTrade.value.holder || '',
+              holderType: itemToTrade.value.holderType || ''
+            })
+          } else {
+            props.edit({
+              ...itemToTrade.value,
+              count: itemToTrade.value.count - amountToTrade.value,
+              holder: itemToTrade.value.holder || '',
+              holderType: itemToTrade.value.holderType || ''
+            })
+          }
+        } else {
+          if (itemToTrade.value.holder === '') {
+            adventureStore.removeItem(itemToTrade.value)
+          } else {
+            props.remove(itemToTrade.value)
+          }
+        }
+      }
+    }
+
+    const tradeTo = ref('')
+    const tradeOptions = computed(() => {
+      let ret = [{ value: '', text: 'Unowned' }]
+      Object.values(characterObjects.value).forEach((c: any) => {
+        ret = ret.concat({ text: c.name, value: c.id })
+      })
+      Object.values(adventureStore.statBlocks).forEach((c: any) => {
+        ret = ret.concat({ text: c.name, value: c.id })
+      })
+      return ret
+    })
     return {
       designStore,
       userStore,
@@ -262,9 +415,17 @@ export default {
       deleteModal,
       itemToDelete,
       editAttuned,
-      getNumberofAttunedItems,
-      getTotalAttuneableItems,
-      brewPotionModal
+      props,
+      brewPotionModal,
+      characterObjects,
+      statBlocks,
+      tradeModal,
+      trade,
+      itemToTrade,
+      amountToTrade,
+      tradeOptions,
+      executeTrade,
+      tradeTo
     }
   },
   components: {
@@ -280,7 +441,9 @@ export default {
     NewItem,
     ItemDisplay,
     EditItem,
-    BrewPotionModal
+    BrewPotionModal,
+    BasicInput,
+    DropdownSelect
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -464,6 +627,71 @@ export default {
       <template #cell(rank)="data">
         <div style="margin-left: 1rem; margin-top: 0.5rem">{{ data.item.rank }}</div>
       </template>
+      <template #cell(owner)="data">
+        <div style="display: flex; justify-content: space-between">
+          <div v-if="!props.hideOwnership" style="align-self: center; padding-right: 0.5rem">
+            {{
+              data.item.holderType === 'Character'
+                ? characterObjects[data.item.holder].name
+                : data.item.holderType === 'Statblock'
+                  ? statBlocks[data.item.holder].name
+                  : 'Unowned'
+            }}
+          </div>
+          <BButton
+            @click="trade(data.item)"
+            style="border: 2px solid"
+            :style="{
+              background: designStore.primaryTheme,
+              color: designStore.primaryText,
+              borderColor: designStore.secondaryTheme
+            }"
+            ><v-icon name="gi-trade"></v-icon
+          ></BButton>
+          <CustomModal
+            :show-modal="
+              tradeModal &&
+              itemToTrade.name === data.item.name &&
+              data.item.holder === itemToTrade.holder
+            "
+            :allowOverflow="true"
+            title="Send Item"
+            @close="tradeModal = false"
+          >
+            <template v-slot:body>
+              <div style="display: flex">
+                <div style="padding: 0.5rem">Move {{ itemToTrade.name }} to</div>
+                <DropdownSelect
+                  style="flex-grow: 1; padding-bottom: 2rem"
+                  :overrideDown="true"
+                  @selection="(val) => (tradeTo = val)"
+                  :options="tradeOptions"
+                  :default="tradeTo"
+                  :typeToFilter="true"
+                ></DropdownSelect>
+              </div>
+            </template>
+            <template v-slot:footer>
+              <BasicInput
+                style="margin-right: 0.5rem"
+                :value="amountToTrade"
+                @new-value="(val) => (amountToTrade = parseInt('' + val))"
+                type="number"
+              ></BasicInput>
+              <BButton
+                style="border: 1px solid"
+                :style="{
+                  background: designStore.primaryTheme,
+                  color: designStore.primaryText,
+                  borderColor: designStore.secondaryTheme
+                }"
+                @click="executeTrade()"
+                >Send Item(s)</BButton
+              >
+            </template>
+          </CustomModal>
+        </div>
+      </template>
       <template #cell(isAttuned)="data">
         <div style="display: flex; justify-content: center; flex-direction: column; height: 100%">
           <CustomCheckbox
@@ -490,6 +718,7 @@ export default {
       </template> -->
     </BTable>
     <BrewPotionModal
+      :adventureMode="props.adventureMode"
       :showModal="brewPotionModal"
       @close-modal="brewPotionModal = false"
     ></BrewPotionModal>
@@ -502,7 +731,11 @@ export default {
     ></CustomPagination>
     <CustomModal :showModal="addModal" title="Add Item" @close="addModal = false">
       <template v-slot:body>
-        <NewItem @staged-item="(item) => setStagedItem(item)"></NewItem>
+        <NewItem
+          :holder="stagedItem.holder || ''"
+          :holderType="stagedItem.holderType || ''"
+          @staged-item="(item) => setStagedItem(item)"
+        ></NewItem>
       </template>
       <template v-slot:footer
         ><BButton

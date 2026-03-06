@@ -28,7 +28,8 @@ export default {
     'closeOnEnter',
     'refs',
     'saveRef',
-    'isHidden'
+    'isHidden',
+    'allowOverflow'
   ],
   setup(props, context) {
     const designStore = useDesignStore()
@@ -119,7 +120,8 @@ export default {
             background: props.background || designStore.primaryTheme,
             color: props.color || designStore.primaryText,
             fontFamily: designStore.font,
-            scrollbarColor: scrollbarColor
+            scrollbarColor: scrollbarColor,
+            overflowY: props.allowOverflow ? 'visible' : 'auto'
           }"
         >
           <div style="height: fit-content">

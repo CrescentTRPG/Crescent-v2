@@ -61,6 +61,8 @@ export default {
       count: 0,
       description: '',
       type: 'Generic',
+      holder: '',
+      holderType: '',
       isAttuneable: false,
       isAttuned: false,
       equippedStats: {

@@ -203,6 +203,15 @@ export default {
           :imageHeight="imageHeight"
           :imageWidth="imageWidth"
           :deleteIndex="() => deleteIndex(index)"
+          :placement="
+            imageWidth * icon.x < 200
+              ? 'right'
+              : icon.x * imageWidth > imageWidth - 200
+                ? 'left'
+                : imageHeight * icon.y > 200
+                  ? 'top'
+                  : 'bottom'
+          "
         ></EditableIconInfoDisplay>
       </div>
     </div>

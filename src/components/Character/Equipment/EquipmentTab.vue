@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ref } from 'vue'
+import { computed, ComputedRef, ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore.ts'
 
 import { useCharacterStore } from '@/stores/characterStore.ts'
@@ -10,6 +10,8 @@ import EquippedItems from './EquippedItems.vue'
 import CoinPurse from './CoinPurse.vue'
 import EquippedItemsMobileView from './EquippedItemsMobileView.vue'
 import GuideMessage from '@/components/GuideMessage.vue'
+import { useEquipmentStore } from '@/stores/equipmentStore.ts'
+import { storeToRefs } from 'pinia'
 
 export default {
   setup(props, context) {
@@ -17,11 +19,42 @@ export default {
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
+    const equipmentStore = useEquipmentStore()
+    const { equipment, getTotalAttuneableItems, getNumberofAttunedItems } =
+      storeToRefs(equipmentStore)
+    const genericItems: ComputedRef<Array<any>> = computed(() => {
+      return Object.values(equipment.value.items.Generic)
+    })
+    const weapons: ComputedRef<Array<any>> = computed(() => {
+      return Object.values(equipment.value.items.Weapon)
+    })
+    const armor: ComputedRef<Array<any>> = computed(() => {
+      return Object.values(equipment.value.items.Armor)
+    })
+    const shields: ComputedRef<Array<any>> = computed(() => {
+      return Object.values(equipment.value.items.Shield)
+    })
+    const potions: ComputedRef<Array<any>> = computed(() => {
+      return Object.values(equipment.value.items.Potion)
+    })
+    const ingredients: ComputedRef<Array<any>> = computed(() => {
+      return Object.values(equipment.value.items.Ingredient)
+    })
     return {
       designStore,
       modal,
       userStore,
-      characterStore
+      characterStore,
+      equipment,
+      getTotalAttuneableItems,
+      getNumberofAttunedItems,
+      equipmentStore,
+      genericItems,
+      weapons,
+      potions,
+      armor,
+      shields,
+      ingredients
     }
   },
   components: { EquipmentTable, EquippedItems, CoinPurse, EquippedItemsMobileView, GuideMessage }
@@ -77,7 +110,21 @@ export default {
           message="This table shows every item in your character's possesion. Adding a craftable item uses the crafting mechanics to build an item form scratch, brewing a potion uses alchemy mechanics to make a potion following the rules, and add item works for anything from generic items to uniqque magical artifacts with custom abilities and passives."
         ></GuideMessage>
         <div class="smallView"><EquippedItemsMobileView></EquippedItemsMobileView></div>
-        <EquipmentTable></EquipmentTable>
+        <EquipmentTable
+          :equipment="equipment"
+          :add="equipmentStore.addItem"
+          :remove="equipmentStore.removeItem"
+          :edit="equipmentStore.editInPlace"
+          :get-numberof-attuned-items="getNumberofAttunedItems"
+          :getTotalAttuneableItems="getTotalAttuneableItems"
+          :adventure-mode="false"
+          :weapons="weapons"
+          :armor="armor"
+          :shields="shields"
+          :potions="potions"
+          :ingredients="ingredients"
+          :genericItems="genericItems"
+        ></EquipmentTable>
       </div>
     </div>
   </div>

@@ -14,12 +14,28 @@ export interface Item {
   isAttuneable: boolean
   isAttuned: boolean
   equippedStats: Equippable
+  holder: string
+  holderType: string
 }
 
 export interface Potion extends Item {
   name: string
-  ingredients: []
-  ability: { name: string }
+  ingredients: string[] | []
+  ability:
+    | {
+        name: string
+        area: string
+        duration: string
+        target: string
+        resistance: string
+        cost: string
+        description: string
+        groupIcon: string
+        rank: string
+        actionCost: string
+        type: string
+      }
+    | { name: string }
 }
 export enum itemType {
   Generic,

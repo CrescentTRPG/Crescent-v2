@@ -13,6 +13,7 @@ import { ref, watch } from 'vue'
 import { useDesignStore } from '../../../stores/designStore.ts'
 import CharacterComputedShell from '../CharacterComputedShell.vue'
 import ChatWindow from './ChatWindow.vue'
+import { useEquipmentStore } from '@/stores/equipmentStore.ts'
 
 export default {
   props: ['isCharacter'],
@@ -63,6 +64,7 @@ export default {
       showParty.value = true
       characterStore.clearCharacterNameAndID()
       adventureStore.setCurrentViewedUserId('')
+      adventureStore.resetEquipment()
       handle()
       useDesignStore().setLocalDesign(adventureStore.design)
     }
