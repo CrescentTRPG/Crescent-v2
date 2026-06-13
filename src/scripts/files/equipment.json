@@ -250,13 +250,13 @@
           "numericalAddedValue": 30000
         },
         "Orichalcum": {
-          "name": "Iron",
+          "name": "Orichalcum",
           "dv": 0,
           "description": "1 placed roll on any attempts to resist an ability.",
-          "difficulty": 1,
-          "cost": "2 / 3 GP",
-          "numericalCost": 200,
-          "numericalAddedValue": 300
+          "difficulty": 9,
+          "cost": "250 / 300 GP",
+          "numericalCost": 25000,
+          "numericalAddedValue": 30000
         },
         "Selenium": {
           "name": "Selenium",
@@ -278,7 +278,7 @@
           "numericalAddedValue": 60000
         }
       },
-      "addon": {
+      "covering": {
         "Invisible Ink": {
           "name": "Invisible Ink",
           "difficulty": 1,
@@ -566,6 +566,458 @@
         "numericalCost": 0,
         "numericalAddedValue": 1000,
         "description": "The wearer can give someone a temporary copy of their own armor without the duplicate enchantment once between rest periods (lasts 8 hours.)"
+      }
+    }
+  },
+  "weapon": {
+    "technique": {
+      "base": {
+        "Standard": {
+          "name": "Standard",
+          "cost": "None",
+          "numericalCost": 0,
+          "numericalAddedValue": 0,
+          "description": "Standard Weapon"
+        },
+        "Unique Weapon": {
+          "name": "Unique Weapon",
+          "difficulty": 4,
+          "cost": "15 GP / 20 GP",
+          "numericalCost": 1500,
+          "numericalAddedValue": 2000,
+          "description": "Weapon uses a unique Specialization of your creation.",
+          "unique": true
+        },
+        "Musical Weapon": {
+          "name": "Musical Weapon",
+          "difficulty": 2,
+          "cost": "5 / 10 GP",
+          "numericalCost": 500,
+          "numericalAddedValue": 1000,
+          "description": "The weapon is also an instrument",
+          "musical": true
+        },
+        "Double Weapon": {
+          "name": "Double Weapon",
+          "difficulty": 2,
+          "cost": "15 / 20 GP",
+          "numericalCost": 1500,
+          "numericalAddedValue": 2000,
+          "description": "Weapon acts as twoacts as two distinct weapons at the same time.",
+          "double": true
+        },
+        "Triple Weapon": {
+          "name": "Triple Weapon",
+          "difficulty": 6,
+          "cost": "30 / 40 GP",
+          "numericalCost": 3000,
+          "numericalAddedValue": 4000
+        }
+      },
+      "addon": {
+        "Secret Compartment": {
+          "name": "Secret Compartment",
+          "difficulty": 3,
+          "cost": "10 / 12 GP",
+          "numericalCost": 1000,
+          "numericalAddedValue": 1200,
+          "description": "A secret pocket on the inside of the weapon capable of concealing an item a few inches thick and a few feet long/wide."
+        },
+        "Casting": {
+          "name": "Casting",
+          "difficulty": 4,
+          "cost": "10 / 12 GP",
+          "numericalCost": 1000,
+          "numericalAddedValue": 1200,
+          "description": "The weapon no longer inhibits casting."
+        },
+        "Phial Mount": {
+          "name": "Phial Mount",
+          "difficulty": 5,
+          "cost": "50 / 60 GP",
+          "numericalCost": 5000,
+          "numericalAddedValue": 6000,
+          "description": "The weapon can store up to 5 doses of a single type of potion. A dose can be applied to the weapon as per the potion’s writeup as a reaction"
+        },
+        "Adaptable Weapon": {
+          "name": "Adaptable Weapon",
+          "difficulty": 5,
+          "cost": "150 / 180 GP",
+          "numericalCost": 1500,
+          "numericalAddedValue": 1800,
+          "description": "The user can purchase the relevant combat style and weapon specialization using an attribute of the character’s choice, for use with this weapon. The character utilizes the attribute of their choice to set those resistance checks."
+        },
+        "Structured Weapon": {
+          "name": "Structured Weapon",
+          "difficulty": 3,
+          "cost": "25 / 30 GP",
+          "numericalCost": 2500,
+          "numericalAddedValue": 3000,
+          "description": "Weapon skill resistance checks set by the character are always 10 + the character’s ranks in crafting (Cannot be further enhanced.)"
+        },
+        "Collapseable Weapon": {
+          "name": "Collapseable Weapon",
+          "difficulty": 2,
+          "cost": "20 / 24 GP",
+          "numericalCost": 2000,
+          "numericalAddedValue": 2400,
+          "description": "The weapon can collapse to be the size of the character’s palm (no weight change) as a swift action."
+        }
+      }
+    },
+    "material": {
+      "base": {
+        "Iron": {
+          "name": "Iron",
+          "difficulty": 1,
+          "description": "Base Weapon Damage",
+          "cost": "1 GP",
+          "numericalCost": 100,
+          "numericalAddedValue": 100,
+          "die": "base"
+        },
+        "Steel": {
+          "name": "Steel",
+          "description": "+1 of the Weapon’s Damage Type to each attack",
+          "difficulty": 3,
+          "cost": "6 / 8 GP",
+          "numericalCost": 600,
+          "numericalAddedValue": 800,
+          "die": "base + 1"
+        },
+        "Lumil": {
+          "name": "Lumil",
+          "difficulty": 5,
+          "description": "+2 of the Weapon’s Damage Type to each attack",
+          "cost": "25 / 40 GP",
+          "numericalCost": 2500,
+          "numericalAddedValue": 4000,
+          "die": "base + 2"
+        },
+        "Adamant": {
+          "name": "Adamant",
+          "description": "+3 of the Weapon’s Damage Type to each attack",
+
+          "difficulty": 9,
+          "cost": "150 / 180 GP",
+          "numericalCost": 15000,
+          "numericalAddedValue": 18000,
+          "die": "base + 3"
+        },
+        "Orichalcum": {
+          "name": "Orichalcum",
+          "description": "Weapon ignores resistance and damage reduction to it’s damage type and can harm ethereal targets.",
+          "difficulty": 7,
+          "cost": "150 / 180 GP",
+          "die": "base",
+          "numericalCost": 15000,
+          "numericalAddedValue": 18000
+        },
+        "Selenium": {
+          "name": "Selenium",
+          "description": "The armor can hold double the normal maximum difficulty score of enchantments (20, instead of 10.) Crafter’s ranks in crafting are doubled when working with this material.",
+          "difficulty": 9,
+          "cost": "250 / 300 GP",
+          "die": "base",
+          "numericalCost": 25000,
+          "numericalAddedValue": 30000
+        },
+        "Illiastrium": {
+          "name": "Illiastrium",
+          "dv": 0,
+          "dvOverride": 0,
+          "description": "Mundane Damage Reduction 4, Negates a weapon’s bonus damage (Any additional damage beyond base damage die of weapon), unless it is a Magical Damage type; character no longer benefits from armor DVs.",
+          "difficulty": 10,
+          "die": "base*1",
+          "cost": "500 / 600 GP",
+          "numericalCost": 50000,
+          "numericalAddedValue": 60000
+        }
+      },
+      "covering": {
+        "Silvered": {
+          "name": "Silvered",
+          "difficulty": 1,
+          "cost": "15 / 18 GP",
+          "numericalCost": 1500,
+          "numericalAddedValue": 1800,
+          "description": "The weapon is treated as though it were made of Silver."
+        },
+        "Auruphyte Coating": {
+          "name": "Auruphyte Coating",
+          "difficulty": 5,
+          "cost": "125 / 150 GP",
+          "numericalCost": 12500,
+          "numericalAddedValue": 15000,
+          "damageType": "Blight",
+          "description": "Weapon’s Damage Type is changed to Blight."
+        },
+        "Soulsteel Coating": {
+          "name": "Soulsteel Coating",
+          "difficulty": 5,
+          "cost": "150 / 180 GP",
+          "numericalCost": 15000,
+          "numericalAddedValue": 18000,
+          "damageType": "Divine",
+          "description": "Weapon’s Damage Type is changed to Divine."
+        },
+        "Serrated Edge": {
+          "name": "Serrated Edge",
+          "difficulty": 9,
+          "cost": "50 / 60 GP",
+          "numericalCost": 5000,
+          "numericalAddedValue": 6000,
+          "description": "The weapon’s base damage is reduced to 0. Instead of inflicting damage, each successful attack inflicts an instance of suffering (of the weapon’s mundane damage type.)",
+          "inflictSuffering": true
+        },
+        "Extending Range": {
+          "name": "Extending Range",
+          "difficulty": 3,
+          "cost": "25 / 30 GP",
+          "numericalCost": 2500,
+          "numericalAddedValue": 3000,
+          "description": "Increases the reach of a ranged weapon by 40’",
+          "rangeMod": 40
+        },
+        "Extending Range II": {
+          "name": "Extending Range II",
+          "difficulty": 7,
+          "cost": "60 / 72 GP",
+          "numericalCost": 6000,
+          "numericalAddedValue": 7200,
+          "description": "Increases the reach of a ranged weapon by 120’",
+          "rangeMod": 120
+        },
+        "Extending Reach": {
+          "name": "Extending Reach",
+          "difficulty": 3,
+          "cost": "25 / 30 GP",
+          "numericalCost": 2500,
+          "numericalAddedValue": 3000,
+          "description": "Increases the reach of a melee weapon by 5’",
+          "reachMod": 5
+        },
+        "Extending Reach II": {
+          "name": "Extending Reach II",
+          "difficulty": 7,
+          "cost": "60 / 72 GP",
+          "numericalCost": 6000,
+          "numericalAddedValue": 7200,
+          "description": "Increases the reach of a melee weapon by 15’",
+          "reachMod": 15
+        }
+      }
+    },
+    "enchantment": {
+      "Magical Enchant I": {
+        "name": "Magical Enchant I",
+        "difficulty": 3,
+        "cost": "Any Group: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "attackRollMod": 1,
+        "description": "+ 1 bonus to attack rolls"
+      },
+      "Magical Enchant II": {
+        "name": "Magical Enchant II",
+        "difficulty": 7,
+        "cost": "Any Group: 7 / 14 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1400,
+        "attackRollMod": 2,
+        "description": "+ 2 bonus to attack rolls, becomes +3 with Magical Enchant I"
+      },
+      "Magical Affinity": {
+        "name": "Magical Affinity",
+        "difficulty": 3,
+        "cost": "Any Group: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "Applies any damage bonus granted by the weapon to any attack rolls caused by the casting of a spell. The damage type is reflected by the spell’s damage type."
+      },
+      "Runic Enchant": {
+        "name": "Runic Enchant",
+        "difficulty": 7,
+        "cost": "Any Group: 7 / 14 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1400,
+        "dieMod": "+2",
+        "description": "+ 2 to the Weapon’s Damage Type."
+      },
+      "Warp Mechanism": {
+        "name": "Warp Mechanism",
+        "difficulty": 4,
+        "cost": "Space Time: 4 / 8 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 800,
+        "description": "Struck targets are Hexed (incapable of teleporation) until the end of their next turn and allows the character to dismiss and summon the item from a pocket dimension as a swift action."
+      },
+      "Elemental Property": {
+        "name": "Elemental Property",
+        "difficulty": 7,
+        "cost": "Any ElementalGroup: 7 / 14 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1400,
+        "dieMod": "+2",
+        "damageType": ["Fire", "Ice", "Lightning", "Force"],
+        "description": "+ 2 Damage of a chosen element type, alters the material/base damage to reflect the elemental property."
+      },
+      "Phantom Blade": {
+        "name": "Phantom Blade",
+        "difficulty": 7,
+        "cost": "Interdictions: 7 / 14 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1400,
+        "description": "First successful this turn reduces the target’s Mana by 4."
+      },
+      "Anima": {
+        "name": "Anima",
+        "difficulty": 7,
+        "cost": "Astral Power: 7 / 14 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1400,
+        "description": "Evocations are finessed once in a direction of the user’s choosing, when channeling through this weapon."
+      },
+      "Illusory Weapon": {
+        "name": "Illusory Weapon",
+        "difficulty": 5,
+        "cost": "Illusions: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "The weapon is an intangible illusion with special properties - the user can alter which of the 5 senses it carries as a swift action. The character cannot change the damage, base range, or weapon category that it functions as."
+      },
+      "Predictability": {
+        "name": "Predictability",
+        "difficulty": 10,
+        "cost": "Scrying: 10 / 20 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "crit": 11,
+        "critDmg": 1.5,
+        "description": "The weapon’s critical hit value is changed to 11 . The weapon always hits on this number, multiplying all damage done by 1.5x. All other critical hit values lose their effectiveness as critical hits, causing them to inflict normal damage."
+      },
+      "Hex of Attachment": {
+        "name": "Hex of Attachment",
+        "difficulty": 2,
+        "cost": "Charms: 2 / 4 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 400,
+        "description": "The weapon can be returned to the owners hands as a swift action, if it is within 100’ of the character."
+      },
+      "Magnetism": {
+        "name": "Magnetism",
+        "difficulty": 4,
+        "cost": "Terramancy: 4 / 8 GP",
+        "numericalCost": 0,
+        "strReqAttr": "Intelligence",
+        "numericalAddedValue": 800,
+        "description": "The weapon is magnetized - causing it to float telekinetically around the character, extending its reach by 5’, though it is still wielded normally. The STR requirement is converted to an equal INT requirement when using the weapon telepathically."
+      },
+      "Explosive Weapon": {
+        "name": "Explosive Weapon",
+        "difficulty": 7,
+        "cost": "Pyromancy: 7 / 14 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1400,
+        "description": "All within a 10’ radius of the target take 1d12 fire damage (excluding the target), on the first successful strike in a turn."
+      },
+      "Shifting Weapon": {
+        "name": "Shifting Weapon",
+        "difficulty": 8,
+        "cost": "Charms: 8 / 16 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1600,
+        "description": "All attacks made with the shifting weapon grapple a target, once struck the weapon itself grapples the target, transforming into watery chains. The STR of the chains is 10 + creator’s rank in crafting. When broken, the weapon falls to the ground resuming it’s normal form."
+      },
+      "Light as Air": {
+        "name": "Light as Air",
+        "difficulty": 1,
+        "cost": "Light: 1 / 2 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 200,
+        "strReq": 0,
+        "description": "The STR requirement of the weapon is reduced to 0."
+      },
+      "Preservation": {
+        "name": "Preservation",
+        "difficulty": 3,
+        "cost": "Life: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "The weapon’s damage type becomes stress damage. (non-lethal)"
+      },
+      "Guiding Light": {
+        "name": "Guiding Light",
+        "difficulty": 1,
+        "cost": "Light: 1 / 2 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 200,
+        "description": "Taking an hour of sun exposure to charge, the wielder can release this sunlight in 20’ radius around themselves as a swift action. It remains there for a minute"
+      },
+      "Death Toll": {
+        "name": "Death Toll",
+        "difficulty": 5,
+        "cost": "Death: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "If the target is unconscious or below 0 HP this weapon instead instantly kills the target when they are struck. (Can kill immortal beings who meet the criteria of the attack.)"
+      },
+      "Dread": {
+        "name": "Dread",
+        "difficulty": 7,
+        "cost": "Darkness: 7 / 14 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "This weapon gains a placed roll when attempting to hit a target in darkness and two placed rolls when hitting targets in magical darkness."
+      },
+      "Embedded Weapon": {
+        "name": "Embedded Weapon",
+        "difficulty": 2,
+        "cost": "Flora: 2 / 4 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 400,
+        "handsMod": -1,
+        "description": "The weapon takes root in one's body. This reduces the amount of arms needed to wield this weapon by 1."
+      },
+      "Familiar": {
+        "name": "Familiar",
+        "difficulty": 3,
+        "cost": "Fauna: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "The weapon gains the ability to transform into a harmless familiar that obeys the wielder. The owner can toggle the ability to see through their familiar’s eyes as a swift action. The familiar must be at least 5’’ x 5’’ and can be up to 5’ x 5’, with a land speed of 30’ or flight speed of 10’ The familiar can be visually different each time it is summoned."
+      },
+      "Stormchaser": {
+        "name": "Stormchaser",
+        "difficulty": 3,
+        "cost": "Tempest: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "On a successful spell (above rank 0) attack roll, the wielder of the weapon can teleport anywhere within melee reach of the target"
+      },
+      "Chaos incarnate": {
+        "name": "Chaos incarnate",
+        "difficulty": 5,
+        "cost": "Turmoil: 5 / 10 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 1000,
+        "description": "Inflict chaos bolt on hit, however the weapon forcibly expends 8 HP per chaos effect."
+      },
+      "Mimic": {
+        "name": "Mimic",
+        "difficulty": 3,
+        "cost": "Equilibrium: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "The weapon has the ability to turn into any weapon the caster can see (perfect replica), as a swift action. The mimic effect wears off after an hour. This can only be used once in between rest periods."
+      },
+      "Duplicate": {
+        "name": "Duplicate",
+        "difficulty": 3,
+        "cost": "Effigy: 3 / 6 GP",
+        "numericalCost": 0,
+        "numericalAddedValue": 600,
+        "description": "When this weapon is forged it splits in two, creating two identical weapons. As a swift action, the caster can pull one weapon to the other if it is within 200’ of the other."
       }
     }
   }

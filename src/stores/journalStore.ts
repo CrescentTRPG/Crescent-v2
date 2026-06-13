@@ -132,8 +132,11 @@ export const useJournalStore = defineStore('journal', {
       this.openFileUnsavedChanges = true
       this.openFile = file
       if (Object.keys(this.bookmarkedEntries).includes(this.openFile.id)) {
+        console.log('hi')
         this.saveBookmarkedEntry(this.openFile)
       }
+      console.log('here instead')
+
       this.updateJournalIDKeyItem(file.id, file)
     },
     async openNewFileFromObj(file, isCharacter) {

@@ -473,6 +473,7 @@ export const useCharacterStore = defineStore('character', {
       if (
         (
           (this.attributeStatusModifiers[attribute] &&
+            this.attributeStatusModifiers[attribute][modifier.modifierType] &&
             modifier.modifierType &&
             Object.values(this.attributeStatusModifiers[attribute][modifier.modifierType])) ||
           {}

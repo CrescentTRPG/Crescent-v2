@@ -4,27 +4,47 @@ import { useCharacterStore } from '@/stores/characterStore.ts'
 import { useUserStore } from '@/stores/userStore.ts'
 import { ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore.ts'
-import EquippedArmor from './EquippedArmor.vue'
-import PrimaryHandheld from './PrimaryHandheld.vue'
-import SecondaryHandheld from './SecondaryHandheld.vue'
+import _ from 'lodash'
+
 import { useEquipmentStore } from '@/stores/equipmentStore.ts'
 import { storeToRefs } from 'pinia'
+import SecondaryHandheld from '@/components/Character/Equipment/SecondaryHandheld.vue'
+import PrimaryHandheld from '@/components/Character/Equipment/PrimaryHandheld.vue'
+import EquippedArmor from '@/components/Character/Equipment/EquippedArmor.vue'
 
 export default {
+  props: ['currentStatBlock', 'updateTemp', 'addItem', 'removeItem'],
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
-    const equipmentStore = useEquipmentStore()
-    const { equipment } = storeToRefs(equipmentStore)
     const characterStore = useCharacterStore()
+    function updateWornArmor(newWorn) {
+      let temp = _.cloneDeep(props.currentStatBlock)
+      temp.equipment.wornArmor = newWorn
+      props.updateTemp(temp)
+    }
+    function updatePrimary(newPrimary) {
+      let temp = _.cloneDeep(props.currentStatBlock)
+      temp.equipment.primaryHand = newPrimary
+      props.updateTemp(temp)
+    }
+
+    function updateSecondary(newSecondary) {
+      let temp = _.cloneDeep(props.currentStatBlock)
+      temp.equipment.secondaryHand = newSecondary
+      props.updateTemp(temp)
+    }
+
     return {
       designStore,
       modal,
       userStore,
       characterStore,
-      equipmentStore,
-      equipment
+      props,
+      updateWornArmor,
+      updatePrimary,
+      updateSecondary
     }
   },
   components: { EquippedArmor, PrimaryHandheld, SecondaryHandheld, TitleMedallion }
@@ -48,24 +68,24 @@ export default {
     >
       <TitleMedallion title="Equipped Items"></TitleMedallion>
       <EquippedArmor
-        :update-worn-armor="equipmentStore.updateWornArmor"
-        :equipment="equipment"
-        :remove-item="equipmentStore.removeItem"
-        :add-item="equipmentStore.addItem"
+        :update-worn-armor="updateWornArmor"
+        :equipment="props.currentStatBlock.equipment"
+        :remove-item="props.removeItem"
+        :add-item="props.addItem"
         class="bannerItem"
       ></EquippedArmor>
       <PrimaryHandheld
-        :update-primary="equipmentStore.updatePrimary"
-        :equipment="equipment"
-        :remove-item="equipmentStore.removeItem"
-        :add-item="equipmentStore.addItem"
+        :update-primary="updatePrimary"
+        :equipment="props.currentStatBlock.equipment"
+        :remove-item="props.removeItem"
+        :add-item="props.addItem"
         class="bannerItem"
       ></PrimaryHandheld>
       <SecondaryHandheld
-        :update-secondary="equipmentStore.updateSecondary"
-        :equipment="equipment"
-        :remove-item="equipmentStore.removeItem"
-        :add-item="equipmentStore.addItem"
+        :update-secondary="updateSecondary"
+        :equipment="props.currentStatBlock.equipment"
+        :remove-item="props.removeItem"
+        :add-item="props.addItem"
         class="bannerItem"
       >
       </SecondaryHandheld>

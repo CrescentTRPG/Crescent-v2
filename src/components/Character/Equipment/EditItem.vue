@@ -9,6 +9,7 @@ import CustomCheckbox from '../CustomCheckbox.vue'
 import EquippableProperties from './EquippableProperties.vue'
 import SearchForAbilityDropdown from '@/components/SearchForAbilityDropdown.vue'
 import IconPicker from '@/components/IconPicker.vue'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
 export default {
   emits: ['stagedItem'],
   props: ['passedItem'],
@@ -34,6 +35,7 @@ export default {
         material: props.passedItem.equippedStats.material || '',
         enchantments: props.passedItem.equippedStats.enchantments || {},
         technicalAddons: props.passedItem.equippedStats.technicalAddons || {},
+
         materialCoverings: props.passedItem.equippedStats.materialCoverings || {},
         value: props.passedItem.equippedStats.value || 0,
         weight: props.passedItem.equippedStats.weight || '',
@@ -70,6 +72,13 @@ export default {
         context.emit('stagedItem', item.value)
       }
     }
+    function setIconBasedOnSpecialization(specializations: string[]) {
+      if (item.value.icon === 'gi-saber-and-pistol' && specializations.length === 1) {
+        item.value.icon =
+          useMartialSkillsStore().allSpecializations[specializations[0]]?.groupIcon ||
+          'gi-saber-and-pistol'
+      }
+    }
     function setAbilityFromDropdown(ability) {
       itemAbility.value = ability
       emitItem()
@@ -92,6 +101,7 @@ export default {
       item.value.equippedStats.strReq = updatedInfo.strReq || item.value.equippedStats.strReq
       item.value.equippedStats.damageString =
         updatedInfo.damageString || item.value.equippedStats.damageString
+      item.value.icon = updatedInfo.icon
       item.value.equippedStats.specializations =
         updatedInfo.specializations || item.value.equippedStats.specializations
       item.value.equippedStats.combatStyles =
@@ -99,6 +109,7 @@ export default {
       item.value.equippedStats.isMusical =
         updatedInfo.isMusical || item.value.equippedStats.isMusical
       item.value.equippedStats.isCustom = updatedInfo.isCustom || item.value.equippedStats.isCustom
+      setIconBasedOnSpecialization(item.value.equippedStats.specializations)
 
       emitItem()
     }

@@ -16,7 +16,7 @@ export default {
   setup() {
     const designStore = useDesignStore()
     const spellStore = useSpellStore()
-    const { buildDisplaySpellgroups, buildDisplaySpells, manualSpellgroups } =
+    const { buildDisplaySpellgroups, buildDisplaySpells, manualSpellgroups, spellgroups } =
       storeToRefs(spellStore)
     const fields = ref([
       { key: 'name', label: 'Name' },
@@ -76,7 +76,8 @@ export default {
       buildDisplaySpellgroups,
       manualSpellgroups,
       spellsMessage,
-      spellgroupModal
+      spellgroupModal,
+      spellgroups
     }
   },
   components: {
@@ -236,6 +237,12 @@ export default {
                 :resistance="data.item.resistance"
                 :target="data.item.target"
                 :type="data.item.type"
+                :spellgroup="data.item.spellgroup"
+                :spellgroups="spellgroups"
+                :anyRankSpellgroup="
+                  manualSpellgroups[data.item.spellgroup].flatCost &&
+                  manualSpellgroups[data.item.spellgroup].groupPurchaseLimiter === 'None'
+                "
               ></AbilityDisplay>
             </template>
           </CustomModal>

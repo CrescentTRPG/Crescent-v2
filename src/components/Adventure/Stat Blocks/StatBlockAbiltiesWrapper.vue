@@ -285,14 +285,14 @@ export default {
     }
 
     function addCustomAbilities() {
-      console.log('add Custom')
+      // console.log('add Custom')
       Object.values(adventureStore.customAbilites).forEach((a: any) => {
         if (a.type === 'Spellgroup' && a.statBlockAccessible) {
           manualSpellgroupsWithCustom.value[a.name] = a
-          console.log(a)
+          // console.log(a)
         }
       })
-      console.log(manualSpellgroupsWithCustom.value)
+      // console.log(manualSpellgroupsWithCustom.value)
       determineIfDanglingAbilities()
     }
     function determineIfDanglingAbilities() {
@@ -737,9 +737,9 @@ export default {
       if (!props.isEditing && knownTraits.value.length >= 1) {
         arr['Traits'] = { known: true, name: 'Traits', index: index++ }
       }
-      // if (!props.isEditing) {
-      //   arr['Equipment'] = { known: true, name: 'Equipment', index: index++ }
-      // }
+      if (!props.isEditing && equipmentAbilities.value.length >= 1) {
+        arr['Equipment'] = { known: true, name: 'Equipment', index: index++ }
+      }
       if (performanceAbilities.value.length > 0) {
         arr['Performance'] = { known: true, name: 'Performance', index: index++ }
       }
@@ -768,6 +768,51 @@ export default {
       return arr
     })
 
+    const equipmentAbilities = computed(() => {
+      const ret = (props.currentStatBlock.armorsWithAbilities || [])
+        .concat(props.currentStatBlock.genericsWithAbilitites || [])
+        .concat(props.currentStatBlock.shieldsWithAbilitites || [])
+        .concat(props.currentStatBlock.weaponsWithAbilitites || [])
+        .concat(props.currentStatBlock.potionsWithAbilities || [])
+        .map((name) => {
+          let obj = undefined
+          if (name != '') {
+            if (props.currentStatBlock.equipment.items.Generic[name]?.type === 'Generic') {
+              obj = {
+                ...props.currentStatBlock.equipment.items.Generic[name].equippedStats.ability,
+                isEquipment: true
+              }
+            }
+            if (props.currentStatBlock.equipment.items.Armor[name]?.type === 'Armor') {
+              obj = {
+                ...props.currentStatBlock.equipment.items.Armor[name].equippedStats.ability,
+                isEquipment: true
+              }
+            }
+            if (props.currentStatBlock.equipment.items.Weapon[name]?.type === 'Weapon') {
+              obj = {
+                ...props.currentStatBlock.equipment.items.Weapon[name].equippedStats.ability,
+                isEquipment: true
+              }
+            }
+            if (props.currentStatBlock.equipment.items.Shield[name]?.type === 'Shield') {
+              obj = {
+                ...props.currentStatBlock.equipment.items.Shield[name].equippedStats.ability,
+                isEquipment: true
+              }
+            }
+            if (props.currentStatBlock.equipment.items.Potion[name]?.type === 'Potion') {
+              obj = {
+                ...props.currentStatBlock.equipment.items.Potion[name].ability,
+                isEquipment: true
+              }
+            }
+            return obj
+          }
+        })
+      return ret.filter((item) => item != undefined)
+    })
+
     const selectedTabs: Ref<Array<any>> = ref([])
 
     let knownAbilities: ComputedRef<Array<any>> = computed(() => {
@@ -786,14 +831,14 @@ export default {
           if (tab.name === 'Traits') {
             abilities = abilities.concat(knownTraits.value)
           }
-          if (tab.name === 'Equipment') {
-            abilities = abilities.concat(equipmentStore.getAbilitites)
-          }
           if (tab.name === 'Performance') {
             abilities = abilities.concat(performanceAbilities.value)
           }
           if (tab.name === 'Martial Perks') {
             abilities = abilities.concat(martialPerks.value)
+          }
+          if (tab.name === 'Equipment') {
+            abilities = abilities.concat(equipmentAbilities.value)
           }
           if (tab.name === 'Fauna Transformations') {
             abilities = abilities.concat(faunaStore.getCreatures)
@@ -833,6 +878,7 @@ export default {
         .concat(knownTraits.value)
         .concat(performanceAbilities.value)
         .concat(generalActions.value)
+        .concat(equipmentAbilities.value)
     })
 
     const totalRows = ref(knownAbilities?.value?.length)
@@ -1105,7 +1151,8 @@ export default {
       buildDisplayPerformanceAbilities,
       performanceAbilities,
       spells,
-      manualSpellgroupsWithCustom
+      manualSpellgroupsWithCustom,
+      equipmentAbilities
     }
   },
   components: {

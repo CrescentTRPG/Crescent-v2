@@ -200,6 +200,106 @@ export const JOUNRAL_ENTRY: JournalEntry = {
   linkedEntries: {},
   linkedBy: {}
 }
+
+export interface MartialAttack {
+  name: string
+  icon: string
+  mp: number
+  description: string
+  actionCost: 'Core Action'
+  attackObj: AttackDetails
+}
+export interface AttackDetails {
+  [key: string]: StrikeInfo | Universal
+  'Next Successful Strike': StrikeInfo
+  'Universal Skills': Universal
+}
+export interface Universal {
+  forceTypeMalleableToBe: undefined | string
+  increasedCosts: number
+  modeObj: Mode
+  modes: string[]
+  rollstring: string
+  skills: any
+  modifiesSomeCosts: number
+  modifiesSomeCostsSkill: string
+  increasedCostsSkill: string
+}
+export interface Condition {
+  [key: string]: {
+    alternateAppliesStatus: any
+    alternateCausesSave: string | undefined
+    alternateDamageString: string | undefined
+    alternateMinWeaponDamage: number
+    alternateRollstring: string
+    condition: string
+    useCondition: boolean
+  }
+}
+export interface Mode {
+  [key: string]: {
+    conditionObj: Condition
+    alternateRollstring: string
+    rollstring: string
+  }
+}
+export const DEFAULT_WEAPON_ATTACK: MartialAttack = {
+  name: '',
+  icon: 'gi-saber-pistol',
+  mp: 0,
+  description: '',
+  actionCost: 'Core Action',
+  attackObj: {
+    'Next Successful Strike': {
+      conditionObj: {},
+      hand: '',
+      handRestriction: '',
+      modeObj: {},
+      modes: [''],
+      rollstring: '',
+      skills: {},
+      specialization: '',
+      mirrors: '',
+      alternateRollstring: ''
+    },
+    'Universal Skills': {
+      forceTypeMalleableToBe: '',
+      increasedCosts: 0,
+      modeObj: {},
+      modes: [],
+      rollstring: '',
+      skills: {},
+      modifiesSomeCosts: 0,
+      modifiesSomeCostsSkill: '',
+      increasedCostsSkill: ''
+    },
+    'Strike 1': {
+      conditionObj: {},
+      hand: 'Primary',
+      handRestriction: '',
+      modeObj: {},
+      modes: [''],
+      rollstring: '',
+      skills: {},
+      specialization: '',
+      mirrors: '',
+      alternateRollstring: ''
+    }
+  }
+}
+
+export interface StrikeInfo {
+  conditionObj: Condition
+  hand: string
+  handRestriction: string
+  modeObj: Mode
+  modes: string[]
+  rollstring: string
+  skills: any
+  specialization: string
+  mirrors: undefined | string
+  alternateRollstring: undefined | string
+}
 export const ABILITY_ENTRY: AbilityEntry = {
   name: 'ability',
   groupIcon: 'gi-uncertainty',

@@ -17,19 +17,18 @@ import EditItem from './EditItem.vue'
 import ItemDisplay from './ItemDisplay.vue'
 
 export default {
+  props: ['equipment', 'updateWornArmor', 'removeItem', 'addItem'],
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
-    const equipmentStore = useEquipmentStore()
-    const { equipment } = storeToRefs(equipmentStore)
     const wornArmor = computed(() => {
-      return equipment.value.wornArmor
+      return props.equipment?.wornArmor
     })
-    const equipped = ref(equipmentStore.equipment.wornArmor)
+    const equipped = ref(props.equipment?.wornArmor)
     const armors: ComputedRef<Array<string>> = computed(() => {
-      let armors = Object.values(equipmentStore.equipment.items.Armor)
+      let armors = Object.values(props.equipment?.items.Armor)
       let ret: Array<string> = []
       armors.forEach((armor: any) => {
         ret.push(armor.name)
@@ -40,13 +39,13 @@ export default {
       return equipped.value != '' ? true : false
     })
     function updateEquippedArmor(armor) {
-      equipmentStore.updateWornArmor(armor)
+      props.updateWornArmor(armor)
     }
     const itemToEdit = ref({})
     const editItemModal = ref(false)
     function saveEdits(newItem, oldItem) {
-      equipmentStore.removeItem(oldItem)
-      equipmentStore.addItem(newItem)
+      props.removeItem(oldItem)
+      props.addItem(newItem)
       itemToEdit.value = {}
 
       editItemModal.value = false
@@ -83,7 +82,7 @@ export default {
       characterStore,
       equipped,
       armors,
-      equipmentStore,
+      props,
       displayItem,
       updateEquippedArmor,
       wornArmor,
@@ -229,8 +228,8 @@ export default {
             }"
           >
             {{
-              equipmentStore.equipment.items.Armor[equipped]?.equippedStats?.value
-                ? equipmentStore.equipment.items.Armor[equipped]?.equippedStats?.value
+              props.equipment?.items.Armor[equipped]?.equippedStats?.value
+                ? props.equipment?.items.Armor[equipped]?.equippedStats?.value
                 : 0
             }}
           </div>
@@ -299,7 +298,7 @@ export default {
               class="dropdown-fill"
               :borderless="true"
               :options="armors"
-              :default="equipmentStore.equipment.wornArmor"
+              :default="props.equipment?.wornArmor"
               :style="{
                 color: designStore.inputText,
                 background: designStore.inputBacking,
@@ -311,32 +310,30 @@ export default {
           </div>
           <ItemDisplay
             v-if="displayItem"
-            :item="equipmentStore.equipment.items.Armor[equipped]"
+            :item="props.equipment?.items.Armor[equipped]"
           ></ItemDisplay>
         </template>
         <template v-slot:footer>
           <BButton
-            v-if="equipmentStore.equipment.wornArmor"
+            v-if="props.equipment?.wornArmor"
             style="border: 1px solid; margin-right: 0.5rem"
             :style="{
               background: designStore.primaryTheme,
               color: designStore.primaryText,
               borderColor: designStore.secondaryTheme
             }"
-            @click="
-              editItem(equipmentStore.equipment.items.Armor[equipmentStore.equipment.wornArmor])
-            "
+            @click="editItem(props.equipment?.items.Armor[props.equipment?.wornArmor])"
             >Edit Item</BButton
           >
           <BButton
-            v-if="equipmentStore.equipment.wornArmor"
+            v-if="props.equipment?.wornArmor"
             style="border: 1px solid; margin-right: 0.5rem"
             :style="{
               background: designStore.primaryTheme,
               color: designStore.primaryText,
               borderColor: designStore.secondaryTheme
             }"
-            @click="equipmentStore.updateWornArmor('')"
+            @click="props.updateWornArmor('')"
             >Unequip</BButton
           >
         </template>

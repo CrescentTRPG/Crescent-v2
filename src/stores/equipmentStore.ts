@@ -57,6 +57,7 @@ export interface Equippable {
   enchantments: {}
   technicalAddons: {}
   materialCoverings: {}
+  equippedStats: any
 }
 export interface Armor extends Equippable {
   value: number
@@ -151,7 +152,6 @@ export const useEquipmentStore = defineStore('equipment', {
       state.equipment.items.Shield[state.equipment.secondaryHand] ||
       state.equipment.items.Weapon[state.equipment.secondaryHand],
     getAbilitites(state) {
-      console.log(state.armorsWithAbilities)
       const ret = state.armorsWithAbilities
         .concat(state.genericsWithAbilitites)
         .concat(state.shieldsWithAbilitites)

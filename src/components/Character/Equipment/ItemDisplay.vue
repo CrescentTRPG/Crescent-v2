@@ -5,6 +5,7 @@ import { useSpellStore } from '@/stores/spellsStore.ts'
 import { storeToRefs } from 'pinia'
 import { useDesignStore } from '../../../stores/designStore.ts'
 import PassiveListObj from './PassiveListObj.vue'
+import IconDisplay from '@/components/IconDisplay.vue'
 
 export default {
   props: ['item'],
@@ -16,7 +17,7 @@ export default {
   },
 
   methods: {},
-  components: { AbilityDisplay, TitleMedallion, PassiveListObj }
+  components: { AbilityDisplay, TitleMedallion, PassiveListObj, IconDisplay }
 }
 </script>
 
@@ -25,72 +26,39 @@ export default {
     style="display: flex; flex-direction: column; width: 100%"
     :style="{ fontFamily: designStore.font }"
   >
-    <div style="display: flex; justify-content: flex-start; flex-wrap: wrap; margin-top: -0.75rem">
-      <div
-        :style="{
-          background: designStore.inputBacking,
-          color: designStore.inputText,
-          borderColor: designStore.secondaryTheme
-        }"
-        class="slightlySpaced"
-      >
-        Amount: {{ props.item.count }}
+    <div style="display: flex; align-items: center">
+      <div style="display: flex; flex-direction: column; padding-top: 1rem; min-width: 6.5rem">
+        <div style="display: flex">
+          <IconDisplay
+            :scale="2"
+            :size="'2rem'"
+            style="margin-top: -0.25rem; padding-bottom: 0.5rem"
+            :icon="item.icon || item.groupIcon || 'gi-potion-ball'"
+          ></IconDisplay>
+          <div style="font-size: large">{{ item.type }}</div>
+        </div>
+        <div
+          v-if="item.isAttuneable"
+          style="font-style: italic; font-size: small; margin-top: -1.25rem; align-self: end"
+        >
+          <div>{{ item.isAttuned ? 'Attuned' : 'Not Attuned' }}</div>
+        </div>
       </div>
-      <div
-        :style="{
-          background: designStore.inputBacking,
-          color: designStore.inputText,
-          borderColor: designStore.secondaryTheme
-        }"
-        class="slightlySpaced"
-      >
-        Type: {{ props.item.type }}
-      </div>
-      <div
-        :style="{
-          background: designStore.inputBacking,
-          color: designStore.inputText,
-          borderColor: designStore.secondaryTheme
-        }"
-        v-if="props.item.isAttuneable"
-        class="slightlySpaced"
-      >
-        Is Attuneable?: Yes
-      </div>
-      <div
-        :style="{
-          background: designStore.inputBacking,
-          color: designStore.inputText,
-          borderColor: designStore.secondaryTheme
-        }"
-        v-if="!props.item.isAttuneable"
-        class="slightlySpaced"
-      >
-        Is Attuneable?: No
-      </div>
-      <div
-        :style="{
-          background: designStore.inputBacking,
-          color: designStore.inputText,
-          borderColor: designStore.secondaryTheme
-        }"
-        v-if="props.item.isAttuned"
-        class="slightlySpaced"
-      >
-        Is Attuned?: Yes
-      </div>
-      <div
-        :style="{
-          background: designStore.inputBacking,
-          color: designStore.inputText,
-          borderColor: designStore.secondaryTheme
-        }"
-        v-if="!props.item.isAttuned"
-        class="slightlySpaced"
-      >
-        Is Attuned?: No
+      <IconDisplay
+        scale="1.5"
+        :color="designStore.secondaryTheme"
+        icon="gi-abstract-107"
+      ></IconDisplay>
+      <hr
+        style="margin-left: -0.5rem; margin-top: 2rem"
+        :style="{ color: designStore.secondaryTheme }"
+      />
+      <div style="width: fit-content; text-wrap: nowrap; padding: 0.5rem">
+        Count: {{ item.count }}
       </div>
     </div>
+
+    <div style="padding: 0.5rem">{{ item.description }}</div>
     <div
       v-if="
         props.item.type === 'Armor' || props.item.type === 'Shield' || props.item.type === 'Weapon'
@@ -271,12 +239,7 @@ export default {
         :deleteable="false"
       ></PassiveListObj>
     </div>
-    <div style="font-size: large" :style="{ fontFamily: designStore.titleFont }">Description:</div>
-    <hr
-      style="margin-bottom: -0.25rem; margin-top: 0.25rem"
-      :style="{ color: designStore.secondaryTheme }"
-    />
-    <div>{{ props.item.description }}</div>
+
     <div v-if="props.item.equippedStats.ability.name">
       <TitleMedallion
         :title="props.item.equippedStats.ability.name"

@@ -21,45 +21,46 @@ export default {
     'isStunned',
     'isPinned',
     'isProne',
-    'isSlowed'
+    'isSlowed',
+    'wornArmorPassives',
+    'secondaryHandheldPassives',
+    'primaryHandheldPassives'
   ],
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterComputedStore = useCharacterComputedStore()
-    const wornArmorPassives = computed(() => {
-      return (
-        props.currentStatBlock.equipment.items.Armor[props.currentStatBlock.equipment.wornArmor]
-          ?.equippedStats?.passives || {}
-      )
-    })
-    const primaryHandheldPassives = computed(() => {
-      return (
-        props.currentStatBlock.equipment.items.Weapon[props.currentStatBlock.equipment.primaryHand]
-          ?.equippedStats?.passives || {}
-      )
-    })
-    const secondaryHandheldPassives = computed(() => {
-      return (
-        props.currentStatBlock.equipment.items.Shield[
-          props.currentStatBlock.equipment.secondaryHand
-        ]?.equippedStats?.passives ||
-        props.currentStatBlock.equipment.items.Weapon[
-          props.currentStatBlock.equipment.secondaryHand
-        ]?.equippedStats?.passives ||
-        {}
-      )
-    })
+
     const armorDvs: ComputedRef<number> = computed(() => {
       if (props.isEditing) {
         return props.currentStatBlock.armorDvs
       }
-      let modifier = 0
+      let modifier = -1000
       if (props.currentStatBlock?.overviewValues?.isDodging) {
         return 0
       }
-
+      if (props.wornArmorPassives['Modify Armor Dvs']) {
+        modifier = Math.max(
+          parseInt(props.wornArmorPassives['Modify Armor Dvs']?.modAmount),
+          modifier
+        )
+      }
+      if (props.primaryHandheldPassives['Modify Armor Dvs']) {
+        modifier = Math.max(
+          parseInt(props.primaryHandheldPassives['Modify Armor Dvs']?.modAmount),
+          modifier
+        )
+      }
+      if (props.secondaryHandheldPassives['Modify Armor Dvs']) {
+        modifier = Math.max(
+          parseInt(props.secondaryHandheldPassives['Modify Armor Dvs']?.modAmount),
+          modifier
+        )
+      }
+      if (modifier === -1000) {
+        modifier = 0
+      }
       if (props.currentStatBlock.armorStatusModifiers['Modify Armor Dvs']) {
         const max = Object.values(
           props.currentStatBlock.armorStatusModifiers['Modify Armor Dvs']
@@ -86,9 +87,13 @@ export default {
         }
       }
 
-      let baseArmorVal = props.currentStatBlock.traits['Armor DVs']
-        ? props.currentStatBlock.traits['Armor DVs']?.number
-        : props.currentStatBlock.armorDvs
+      let baseArmorVal = props.currentStatBlock.equipment.wornArmor
+        ? props.currentStatBlock.equipment.items.Armor[props.currentStatBlock.equipment.wornArmor]
+            ?.equippedStats?.value
+        : props.currentStatBlock.traits['Armor DVs']
+          ? props.currentStatBlock.traits['Armor DVs']?.number
+          : props.currentStatBlock.armorDvs
+      baseArmorVal = parseInt(baseArmorVal + '')
 
       return Math.max(baseArmorVal + modifier, 0)
     })
@@ -160,7 +165,16 @@ export default {
         }
       }
 
-      return Math.max(parseInt(props.currentStatBlock.shieldDvs + '') + modifier, 0)
+      let dvs =
+        props.currentStatBlock.equipment.secondaryHand &&
+        props.currentStatBlock.equipment.items.Shield[
+          props.currentStatBlock.equipment.secondaryHand
+        ]
+          ? props.currentStatBlock.equipment.items.Shield[
+              props.currentStatBlock.equipment.secondaryHand
+            ].equippedStats.value
+          : props.currentStatBlock.shieldDvs
+      return Math.max(parseInt(dvs + '') + modifier, 0)
     })
 
     const moveDvs: ComputedRef<number> = computed(() => {
@@ -215,7 +229,15 @@ export default {
       if (props.currentStatBlock.minorBonuses) {
         ret = characterComputedStore.totalHp / 2
       }
-
+      if (props.wornArmorPassives['Override Base Hp']) {
+        ret = parseInt(props.wornArmorPassives['Override Base Hp'].modAmount)
+      }
+      if (props.primaryHandheldPassives['Override Base Hp']) {
+        ret = parseInt(props.primaryHandheldPassives['Override Base Hp'].modAmount)
+      }
+      if (props.secondaryHandheldPassives['Override Base Hp']) {
+        ret = parseInt(props.secondaryHandheldPassives['Override Base Hp'].modAmount)
+      }
       if (props.currentStatBlock.hpStatusModifiers['Override Base Hp']) {
         const max = Object.values(
           props.currentStatBlock.hpStatusModifiers['Override Base Hp']
@@ -228,7 +250,28 @@ export default {
           ret = max
         }
       }
-      let modifier = 0
+      let modifier = -1000
+      if (props.wornArmorPassives['Modify Base Hp']) {
+        modifier = Math.max(
+          parseInt(props.wornArmorPassives['Modify Base Hp']?.modAmount),
+          modifier
+        )
+      }
+      if (props.primaryHandheldPassives['Modify Base Hp']) {
+        modifier = Math.max(
+          parseInt(props.primaryHandheldPassives['Modify Base Hp']?.modAmount),
+          modifier
+        )
+      }
+      if (props.secondaryHandheldPassives['Modify Base Hp']) {
+        modifier = Math.max(
+          parseInt(props.secondaryHandheldPassives['Modify Base Hp']?.modAmount),
+          modifier
+        )
+      }
+      if (modifier == -1000) {
+        modifier = 0
+      }
 
       if (props.currentStatBlock.hpStatusModifiers['Modify Base Hp']) {
         const max = Object.values(
@@ -251,7 +294,16 @@ export default {
 
     const totalMana = computed(() => {
       let sum = props.currentStatBlock.totalMana
+      if (props.wornArmorPassives['Override Base Mana']) {
+        sum = parseInt(props.wornArmorPassives['Override Base Mana'].modAmount)
+      }
 
+      if (props.primaryHandheldPassives['Override Base Mana']) {
+        sum = parseInt(props.primaryHandheldPassives['Override Base Mana'].modAmount)
+      }
+      if (props.secondaryHandheldPassives['Override Base Mana']) {
+        sum = parseInt(props.secondaryHandheldPassives['Override Base Mana'].modAmount)
+      }
       if (props.currentStatBlock.manaStatusModifiers['override base mana']) {
         const max = Object.values(
           props.currentStatBlock.manaStatusModifiers['override base mana']
@@ -264,7 +316,28 @@ export default {
           sum = max
         }
       }
-      let modifier = 0
+      let modifier = -1000
+      if (props.wornArmorPassives['Modify Base Mana']) {
+        modifier = Math.max(
+          parseInt(props.wornArmorPassives['Modify Base Mana'].modAmount),
+          modifier
+        )
+      }
+      if (props.primaryHandheldPassives['Modify Base Mana']) {
+        modifier = Math.max(
+          parseInt(props.primaryHandheldPassives['Modify Base Mana'].modAmount),
+          modifier
+        )
+      }
+      if (props.secondaryHandheldPassives['Modify Base Mana']) {
+        modifier = Math.max(
+          parseInt(props.secondaryHandheldPassives['Modify Base Mana'].modAmount),
+          modifier
+        )
+      }
+      if (modifier == -1000) {
+        modifier = 0
+      }
 
       if (props.currentStatBlock.manaStatusModifiers['modify base mana']) {
         const baseModifier = props.currentStatBlock.manaStatusModifiers['modify base mana']
@@ -292,7 +365,15 @@ export default {
 
     const mp = computed(() => {
       let sum = props.currentStatBlock.mp
-
+      if (props.wornArmorPassives['Override Mp']) {
+        sum = parseInt(props.wornArmorPassives['Override Mp']?.modAmount)
+      }
+      if (props.primaryHandheldPassives['Override Mp']) {
+        sum = parseInt(props.primaryHandheldPassives['Override Mp']?.modAmount)
+      }
+      if (props.secondaryHandheldPassives['Override Mp']) {
+        sum = parseInt(props.secondaryHandheldPassives['Override Mp']?.modAmount)
+      }
       if (props.currentStatBlock.mpStatusModifiers['Override Mp']) {
         const max = Object.values(props.currentStatBlock.manaStatusModifiers['Override Mp']).reduce(
           (acc: number, mod: any) =>
@@ -303,7 +384,27 @@ export default {
           sum = max
         }
       }
-      let modifier = 0
+
+      let modifier = -1000
+
+      if (props.wornArmorPassives['Modify Mp']) {
+        modifier = Math.max(parseInt(props.wornArmorPassives['Modify Mp']?.modAmount), modifier)
+      }
+      if (props.primaryHandheldPassives['Modify Mp']) {
+        modifier = Math.max(
+          parseInt(props.primaryHandheldPassives['Modify Mp']?.modAmount),
+          modifier
+        )
+      }
+      if (props.secondaryHandheldPassives['Modify Mp']) {
+        modifier = Math.max(
+          parseInt(props.secondaryHandheldPassives['Modify Mp']?.modAmount),
+          modifier
+        )
+      }
+      if (modifier == -1000) {
+        modifier = 0
+      }
 
       if (props.currentStatBlock.mpStatusModifiers['Modify Mp']) {
         const baseModifier = props.currentStatBlock.mpStatusModifiers['Modify Mp']
@@ -419,9 +520,6 @@ export default {
       designStore,
       modal,
       userStore,
-      wornArmorPassives,
-      primaryHandheldPassives,
-      secondaryHandheldPassives,
       props,
       totalDvs,
       setCurrentMana,
@@ -478,9 +576,9 @@ export default {
           "
         >
           <HpWidget
-            :secondaryHandheldPassives="secondaryHandheldPassives"
-            :primaryHandheldPassives="primaryHandheldPassives"
-            :wornArmorPassives="wornArmorPassives"
+            :secondaryHandheldPassives="props.secondaryHandheldPassives"
+            :primaryHandheldPassives="props.primaryHandheldPassives"
+            :wornArmorPassives="props.wornArmorPassives"
             :setCurrentAndBarrier="setCurrentAndBarrierHP"
             :current-hp="props.currentStatBlock.currentHp"
             :barrier-hp="props.currentStatBlock.barrierHp"
@@ -503,9 +601,9 @@ export default {
             :traits="props.currentStatBlock.traits"
             :manaStatusModifiers="props.currentStatBlock.manaStatusModifiers"
             :setCurrentMana="setCurrentMana"
-            :secondaryHandheldPassives="secondaryHandheldPassives"
-            :primaryHandheldPassives="primaryHandheldPassives"
-            :wornArmorPassives="wornArmorPassives"
+            :secondaryHandheldPassives="props.secondaryHandheldPassives"
+            :primaryHandheldPassives="props.primaryHandheldPassives"
+            :wornArmorPassives="props.wornArmorPassives"
             :isEditing="props.isEditing"
             :setMana="setMana"
             class="bannerItem"
@@ -518,12 +616,18 @@ export default {
             :totalDvs="totalDvs"
             :traits="props.currentStatBlock.traits"
             :armorStatusModifiers="props.currentStatBlock.armorStatusModifiers"
-            :secondaryHandheldPassives="secondaryHandheldPassives"
-            :primaryHandheldPassives="primaryHandheldPassives"
-            :wornArmorPassives="wornArmorPassives"
+            :secondaryHandheldPassives="props.secondaryHandheldPassives"
+            :primaryHandheldPassives="props.primaryHandheldPassives"
+            :wornArmorPassives="props.wornArmorPassives"
             :statusEffects="props.currentStatBlock.statusEffects"
-            :wornArmor="props.currentStatBlock.equipment.wornArmor"
-            :wornShield="''"
+            :wornArmor="{ name: props.currentStatBlock.equipment.wornArmor }"
+            :wornShield="{
+              name: props.currentStatBlock.equipment.items.Shield[
+                props.currentStatBlock.equipment.secondaryHand
+              ]
+                ? props.currentStatBlock.equipment.secondaryHand
+                : ''
+            }"
             :martialPerks="props.currentStatBlock.perks"
             :removeArmorStatusModifier="props.removeArmorStatusModifier"
             :addNewArmorStatusModifier="addNewArmorStatusModifier"
@@ -535,6 +639,9 @@ export default {
             :mpStatusModifiers="props.currentStatBlock.mpStatusModifiers"
             :addNewMpStatusModifier="addNewMpStatusModifier"
             :removeMpStatusModifier="props.removeMpStatusModifier"
+            :secondaryHandheldPassives="props.secondaryHandheldPassives"
+            :primaryHandheldPassives="props.primaryHandheldPassives"
+            :wornArmorPassives="props.wornArmorPassives"
             :getMp="mp"
             class="bannerItem"
             style="margin-left: 0.5rem"

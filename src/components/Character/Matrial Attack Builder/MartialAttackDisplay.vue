@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import { useDesignStore } from '../../../stores/designStore.ts'
 import AbilityDisplayMedallion from '../../AbilityDisplayMedallion.vue'
 import CustomCheckbox from '../CustomCheckbox.vue'
+import AllStrikesEffects from './AllStrikesEffects.vue'
 
 export default {
   emits: ['rollString'],
@@ -16,9 +17,11 @@ export default {
     const router = useRouter()
     const designStore = useDesignStore()
     const tab = ref('corestats')
-    const mode = ref(props.weaponAttack['Universal Skills'].modes[0])
+    const mode = ref(props.weaponAttack['Strike 1'].modes[0])
     const strikes = computed(() => {
-      return Object.keys(props.weaponAttack).sort()
+      return Object.keys(props.weaponAttack)
+        .sort()
+        .filter((strike) => strike != 'Next Successful Strike')
     })
     const rollStringOverride = ref({})
     const localAttack = ref({})
@@ -86,9 +89,14 @@ export default {
     function getRollstring(strike) {
       let rollstring = props.weaponAttack[strike].rollstring
       if (mode.value === '' && props.weaponAttack[strike].modeObj) {
-        mode.value = props.weaponAttack['Universal Skills'].modes[0]
+        mode.value = props.weaponAttack['Strike 1'].modes[0]
       }
-      if (props.weaponAttack[strike].modeObj[mode.value]) {
+
+      if (
+        props.weaponAttack[strike].modeObj &&
+        mode.value != '' &&
+        props.weaponAttack[strike]?.modeObj[mode.value]
+      ) {
         rollstring = props.weaponAttack[strike].modeObj[mode.value].rollstring
       }
       if (props.weaponAttack[strike].conditionObj) {
@@ -138,7 +146,7 @@ export default {
     <div style="padding: 0.5rem; white-space: nowrap">{{ props.description }}</div>
     <hr :style="{ color: designStore.secondaryTheme }" />
     <div
-      v-if="props.weaponAttack['Universal Skills'].modes.length > 1"
+      v-if="props.weaponAttack['Strike 1'].modes.length > 1"
       style="display: flex; margin-left: 0.5rem"
     >
       Modes:
@@ -153,7 +161,7 @@ export default {
         <BFormRadio
           style="margin: 0.25rem"
           v-model="mode"
-          v-for="o in props.weaponAttack['Universal Skills'].modes"
+          v-for="o in props.weaponAttack['Strike 1'].modes"
           :value="o"
           :key="o.name"
           @change="updateRollstring('all')"

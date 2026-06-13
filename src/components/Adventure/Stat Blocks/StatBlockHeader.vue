@@ -11,7 +11,15 @@ import PowerLevelDisplay from './PowerLevelDisplay.vue'
 import StatBlockTags from './StatBlockTags.vue'
 
 export default {
-  props: ['currentStatBlock', 'isEditing', 'updateTemp', 'useIconInsteadOfPowerLevel'],
+  props: [
+    'currentStatBlock',
+    'isEditing',
+    'updateTemp',
+    'useIconInsteadOfPowerLevel',
+    'secondaryHandheldPassives',
+    'wornArmorPassives',
+    'primaryHandheldPassives'
+  ],
   setup(props, context) {
     const designStore = useDesignStore()
     const name = ref('')
@@ -129,7 +137,12 @@ export default {
               '--bs-btn-close-color': designStore.primaryText
             }"
           >
-            <StatBlockDiceRoller :currentStatBlock="props.currentStatBlock"></StatBlockDiceRoller>
+            <StatBlockDiceRoller
+              :currentStatBlock="props.currentStatBlock"
+              :wornArmorPassives="wornArmorPassives"
+              :secondaryHandheldPassives="secondaryHandheldPassives"
+              :primaryHandheldPassives="primaryHandheldPassives"
+            ></StatBlockDiceRoller>
           </BOffcanvas>
         </div>
       </div>
@@ -192,7 +205,12 @@ export default {
               '--bs-btn-close-color': designStore.primaryText
             }"
           >
-            <StatBlockDiceRoller :currentStatBlock="props.currentStatBlock"></StatBlockDiceRoller>
+            <StatBlockDiceRoller
+              :wornArmorPassives="wornArmorPassives"
+              :secondaryHandheldPassives="secondaryHandheldPassives"
+              :primaryHandheldPassives="primaryHandheldPassives"
+              :currentStatBlock="props.currentStatBlock"
+            ></StatBlockDiceRoller>
           </BOffcanvas>
         </div>
       </div>

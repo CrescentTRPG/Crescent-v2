@@ -15,16 +15,25 @@ import TraitsTab from './TraitsTab.vue'
 import TitleWidget from '@/components/TitleWidget.vue'
 import FaunaTab from './Fauna/FaunaTab.vue'
 import PerformanceTab from './PerformanceTab.vue'
-import MartialAttackBuilderTab from '../Matrial Attack Builder/MartialAttackBuilderTab.vue'
 import EffigyTab from '../Effigy/EffigyTab.vue'
 import GuideMessage from '@/components/GuideMessage.vue'
+import WeaponAttackBuilderTab from '../Weapon Attack Builder Remastered/WeaponAttackBuilderTab.vue'
+import { useEquipmentStore } from '@/stores/equipmentStore.ts'
+import { storeToRefs } from 'pinia'
+import { useCharacterStore } from '@/stores/characterStore.ts'
+import { useSkillStore } from '@/stores/skillsStore.ts'
 
 export default {
   props: ['tab'],
   setup(props, context) {
     const router = useRouter()
     const designStore = useDesignStore()
-    return { designStore, props }
+    const equipmentStore = useEquipmentStore()
+    const characterStore = useCharacterStore()
+    const skillStore = useSkillStore()
+
+    const { equipment } = storeToRefs(equipmentStore)
+    return { designStore, props, equipment, characterStore, skillStore }
   },
   methods: {},
   components: {
@@ -41,7 +50,7 @@ export default {
     TitleWidget,
     FaunaTab,
     PerformanceTab,
-    MartialAttackBuilderTab,
+    WeaponAttackBuilderTab,
     EffigyTab,
     GuideMessage
   }
@@ -125,7 +134,11 @@ export default {
     <div v-if="props.tab == 'effigy'"><EffigyTab></EffigyTab></div>
     <div v-if="props.tab == 'performance'"><PerformanceTab></PerformanceTab></div>
     <div v-if="props.tab == 'martialbuilder'">
-      <MartialAttackBuilderTab></MartialAttackBuilderTab>
+      <WeaponAttackBuilderTab
+        :equipment="equipment"
+        :might="(skillStore.getSkills as any).Might?.rank || 0"
+        :strength="characterStore.attributes.strength"
+      ></WeaponAttackBuilderTab>
     </div>
   </div>
 </template>

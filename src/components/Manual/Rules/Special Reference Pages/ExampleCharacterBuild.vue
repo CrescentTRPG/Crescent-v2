@@ -44,7 +44,13 @@ export default {
     <TitleWidget :title="props.buildName"></TitleWidget>
     <div style="margin: 1rem" v-html="buildDescription"></div>
     <TitleWidget title="Attributes"></TitleWidget>
-    <StatBlockAttributes :currentStatBlock="stats" :isEditing="false"></StatBlockAttributes>
+    <StatBlockAttributes
+      :currentStatBlock="stats"
+      :isEditing="false"
+      :wornArmorPassives="{}"
+      :secondaryHandheldPassives="{}"
+      :primaryHandheldPassives="{}"
+    ></StatBlockAttributes>
     <div style="margin: 1rem" v-html="atributeDescriptions"></div>
     <TitleWidget :title="'Archetype: ' + props.archetype"></TitleWidget>
     <div style="margin: 1rem" v-html="archetypeDescription"></div>

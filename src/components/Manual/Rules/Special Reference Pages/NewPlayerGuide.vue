@@ -48,7 +48,7 @@ export default {
     </p>
     <AbilityDisplayMedallion :medallion="'gi-journey'"></AbilityDisplayMedallion>
 
-    <TitleWidget title="How do Players Interact with the Story?"></TitleWidget>
+    <TitleWidget title="How do players interact with the story?"></TitleWidget>
     <div style="margin: 0.5rem">
       Player interaction depends on the current speed of play. There are two basic speeds of play:
       Exploration and Turn by Turn. <br /><br />
@@ -56,7 +56,8 @@ export default {
       All characters are free to announce actions, speak in character, use abilities, or make plans.
       Time may pass nebulously, or linger for awhile in the same moment. Whenever the result of an
       action is in question or an ability is used that specifies that rolls will be made, Players
-      will need to roll dice. See <i>Rolling Dice</i> for more information.<br /><br />
+      will need to roll dice. See <i>Rolling Dice</i> for more information. Some of these rolls may
+      be as a part of a <i>Skill Challenge</i>.<br /><br />
       <h5>Turn By Turn Mode</h5>
       Everyone rolls initiative and waits for their turn in the initiative order to come up. Players
       have a set of actions they are allowed to take within that round (Core, Swift, Move, and

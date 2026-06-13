@@ -5,7 +5,13 @@ import { useStatusEffectStore } from '@/stores/statusEffectStore.ts'
 import { computed, ComputedRef } from 'vue'
 import DiceSidebar from './DiceSidebar.vue'
 export default {
-  props: ['currentStatBlock', 'omitRollingAs'],
+  props: [
+    'currentStatBlock',
+    'omitRollingAs',
+    'secondaryHandheldPassives',
+    'wornArmorPassives',
+    'primaryHandheldPassives'
+  ],
   setup(props, context) {
     let designStore = useDesignStore()
     const statusEffectsStore = useStatusEffectStore()
@@ -24,7 +30,41 @@ export default {
       for (let i = 0; i < spentExceptionals.length; i++) {
         spentExceptionalCount += 1
       }
-      const baseExceptionalVal = parseInt('' + props.currentStatBlock.exceptionals[type])
+      let armorPassives = props.wornArmorPassives[
+        'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+
+      let primaryPassives = props.primaryHandheldPassives[
+        'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      let secondaryPassives = props.secondaryHandheldPassives[
+        'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+
+      const baseExceptionalVal =
+        parseInt('' + props.currentStatBlock.exceptionals[type]) +
+        armorPassives +
+        primaryPassives +
+        secondaryPassives
+
       let max = 0
 
       const arr = Object.values(
@@ -43,9 +83,39 @@ export default {
     }
     function getInferiors(type) {
       let mod = 0
+      let armorPassives = props.wornArmorPassives[
+        'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
 
-      const baseExceptionalVal = parseInt('' + props.currentStatBlock.exceptionals[type])
-
+      let primaryPassives = props.primaryHandheldPassives[
+        'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      let secondaryPassives = props.secondaryHandheldPassives[
+        'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      const baseExceptionalVal =
+        parseInt('' + props.currentStatBlock.exceptionals[type]) -
+        armorPassives -
+        primaryPassives -
+        secondaryPassives
       const arr = Object.values(
         props.currentStatBlock.attributeStatusModifiers[type]['Add Inferior(s)'] || {}
       )
@@ -61,7 +131,152 @@ export default {
 
     function getPlaced(attribute) {
       let placed = 0
+      let armorPassives = props.wornArmorPassives[
+        'Add Placed Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Add Placed Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      let primaryPassives = props.primaryHandheldPassives[
+        'Add Placed Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Add Placed Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      let secondaryPassives = props.secondaryHandheldPassives[
+        'Add Placed Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Add Placed Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      const maxEquipPlaced = Math.max(primaryPassives, Math.max(armorPassives, secondaryPassives))
 
+      armorPassives = props.wornArmorPassives[
+        'Override Placed Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Override Placed Rolls ' +
+                attribute.substring(0, 1).toUpperCase() +
+                attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      primaryPassives = props.primaryHandheldPassives[
+        'Override Placed Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Override Placed Rolls ' +
+                attribute.substring(0, 1).toUpperCase() +
+                attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      secondaryPassives = props.secondaryHandheldPassives[
+        'Override Placed Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Override Placed Rolls ' +
+                attribute.substring(0, 1).toUpperCase() +
+                attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      const maxEquipOverridePlaced = Math.max(
+        primaryPassives,
+        Math.max(armorPassives, secondaryPassives)
+      )
+      armorPassives = props.wornArmorPassives[
+        'Add Displaced Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Add Displaced Rolls ' +
+                attribute.substring(0, 1).toUpperCase() +
+                attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      primaryPassives = props.primaryHandheldPassives[
+        'Add Displaced Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Add Displaced Rolls ' +
+                attribute.substring(0, 1).toUpperCase() +
+                attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      secondaryPassives = props.secondaryHandheldPassives[
+        'Add Displaced Rolls ' + attribute.substring(0, 1).toUpperCase() + attribute.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Add Displaced Rolls ' +
+                attribute.substring(0, 1).toUpperCase() +
+                attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      const maxDisplacedEquip = Math.max(
+        primaryPassives,
+        Math.max(armorPassives, secondaryPassives)
+      )
+      armorPassives = props.wornArmorPassives[
+        'Override Displaced Rolls ' +
+          attribute.substring(0, 1).toUpperCase() +
+          attribute.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Override Displaced Rolls ' +
+                attribute.substring(0, 1).toUpperCase() +
+                attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      primaryPassives = props.primaryHandheldPassives[
+        'Override Displaced Rolls ' +
+          attribute.substring(0, 1).toUpperCase() +
+          attribute.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Override Displaced Rolls ' +
+                attribute.substring(0, 1).toUpperCase() +
+                attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      secondaryPassives = props.secondaryHandheldPassives[
+        'Override Displaced Rolls ' +
+          attribute.substring(0, 1).toUpperCase() +
+          attribute.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Override Displaced Rolls ' +
+                attribute.substring(0, 1).toUpperCase() +
+                attribute.substring(1)
+            ].modAmount
+          )
+        : 0
+      const maxDisplacedOverrideEquip = Math.max(
+        primaryPassives,
+        Math.max(armorPassives, secondaryPassives)
+      )
       if (props.currentStatBlock.diceStatusModifiers[attribute]) {
         if (props.currentStatBlock.diceStatusModifiers[attribute]['Override Placed Rolls']) {
           const max = Object.values(
@@ -71,22 +286,26 @@ export default {
               parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
             -1000
           )
-          if (max != -1000) {
-            placed += max
-          }
+          placed += Math.max(max, maxEquipOverridePlaced)
+          placed -= maxDisplacedOverrideEquip
         }
         if (props.currentStatBlock.diceStatusModifiers[attribute]['Modify Placed Rolls']) {
-          const max = Object.values(
+          let max = Object.values(
             props.currentStatBlock.diceStatusModifiers[attribute]['Modify Placed Rolls']
           ).reduce(
             (acc: number, mod: any) =>
               parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
             -1000
           )
-          if (max != -1000) {
-            placed += max
-          }
+          max = Math.max(max, maxEquipPlaced)
+          placed += max
+          placed -= maxDisplacedEquip
         }
+      } else {
+        placed += maxEquipOverridePlaced
+        placed -= maxDisplacedOverrideEquip
+        placed += maxEquipPlaced
+        placed -= maxDisplacedEquip
       }
       if (
         (attribute === 'intelligence' || attribute === 'perception') &&
@@ -119,7 +338,69 @@ export default {
 
       return placed
     }
+    function getAttrVal(type) {
+      let ret = props.currentStatBlock.attributes[type]
+      let armorPassives = props.wornArmorPassives[
+        'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
 
+      let primaryPassives = props.primaryHandheldPassives[
+        'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      let secondaryPassives = props.secondaryHandheldPassives[
+        'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      if (armorPassives || primaryPassives || secondaryPassives) {
+        ret = Math.max(Math.max(armorPassives, secondaryPassives), primaryPassives)
+      }
+      armorPassives = props.wornArmorPassives[
+        'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+
+      primaryPassives = props.primaryHandheldPassives[
+        'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      secondaryPassives = props.secondaryHandheldPassives[
+        'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      return (ret += primaryPassives + secondaryPassives + armorPassives)
+    }
     const attributes: ComputedRef<any> = computed(() => {
       let ret = {
         strength: {
@@ -127,56 +408,56 @@ export default {
           exceptionalVal: getExceptionals('strength') - getInferiors('strength'),
           modifiers: [],
           name: 'strength',
-          modifier: parseInt(props.currentStatBlock.attributes.strength + '')
+          modifier: getAttrVal('strength')
         },
         agility: {
           placed: getInferiors('agility') * -1 + getPlaced('agility'),
           exceptionalVal: getExceptionals('agility') - getInferiors('agility'),
           modifiers: [],
           name: 'agility',
-          modifier: parseInt(props.currentStatBlock.attributes.agility + '')
+          modifier: getAttrVal('agility')
         },
         perception: {
           placed: getInferiors('perception') * -1 + getPlaced('perception'),
           exceptionalVal: getExceptionals('perception') - getInferiors('perception'),
           modifiers: [],
           name: 'perception',
-          modifier: parseInt(props.currentStatBlock.attributes.perception + '')
+          modifier: getAttrVal('perception')
         },
         willpower: {
           placed: getInferiors('willpower') * -1 + getPlaced('willpower'),
           exceptionalVal: getExceptionals('willpower') - getInferiors('willpower'),
           modifiers: [],
           name: 'willpower',
-          modifier: parseInt(props.currentStatBlock.attributes.willpower + '')
+          modifier: getAttrVal('willpower')
         },
         health: {
           placed: getInferiors('health') * -1 + getPlaced('health'),
           exceptionalVal: getExceptionals('health') - getInferiors('health'),
           modifiers: [],
           name: 'health',
-          modifier: parseInt(props.currentStatBlock.attributes.health + '')
+          modifier: getAttrVal('health')
         },
         intelligence: {
           placed: getInferiors('intelligence') * -1 + getPlaced('intelligence'),
           exceptionalVal: getExceptionals('intelligence') - getInferiors('intelligence'),
           modifiers: [],
           name: 'intelligence',
-          modifier: parseInt(props.currentStatBlock.attributes.intelligence + '')
+          modifier: getAttrVal('intelligence')
         },
         power: {
           exceptionalVal: getExceptionals('power') - getInferiors('power'),
           placed: getInferiors('power') * -1 + getPlaced('power'),
           modifiers: [],
           name: 'power',
-          modifier: parseInt(props.currentStatBlock.attributes.power + '')
+          modifier: getAttrVal('power')
         },
         charisma: {
           exceptionalVal: getExceptionals('charisma') - getInferiors('charisma'),
           placed: getInferiors('charisma') * -1 + getPlaced('Charisma'),
           modifiers: [],
           name: 'charisma',
-          modifier: parseInt(props.currentStatBlock.attributes.charisma + '')
+          modifier: getAttrVal('charisma')
         }
       }
 
@@ -202,31 +483,193 @@ export default {
 
         placed += props.currentStatBlock.skills[skillName]?.isOrigin ? 1 : 0 || 0
         placed -= inferior
+        let armorPassives = props.wornArmorPassives[
+          'Add Placed Rolls ' + skillName.substring(0, 1).toUpperCase() + skillName.substring(1)
+        ]
+          ? parseInt(
+              props.wornArmorPassives[
+                'Add Placed Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        let primaryPassives = props.primaryHandheldPassives[
+          'Add Placed Rolls ' + skillName.substring(0, 1).toUpperCase() + skillName.substring(1)
+        ]
+          ? parseInt(
+              props.primaryHandheldPassives[
+                'Add Placed Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        let secondaryPassives = props.secondaryHandheldPassives[
+          'Add Placed Rolls ' + skillName.substring(0, 1).toUpperCase() + skillName.substring(1)
+        ]
+          ? parseInt(
+              props.secondaryHandheldPassives[
+                'Add Placed Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        const maxEquipPlaced = Math.max(primaryPassives, Math.max(armorPassives, secondaryPassives))
+        armorPassives = props.wornArmorPassives[
+          'Override Placed Rolls ' +
+            skillName.substring(0, 1).toUpperCase() +
+            skillName.substring(1)
+        ]
+          ? parseInt(
+              props.wornArmorPassives[
+                'Override Placed Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        primaryPassives = props.primaryHandheldPassives[
+          'Override Placed Rolls ' +
+            skillName.substring(0, 1).toUpperCase() +
+            skillName.substring(1)
+        ]
+          ? parseInt(
+              props.primaryHandheldPassives[
+                'Override Placed Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        secondaryPassives = props.secondaryHandheldPassives[
+          'Override Placed Rolls ' +
+            skillName.substring(0, 1).toUpperCase() +
+            skillName.substring(1)
+        ]
+          ? parseInt(
+              props.secondaryHandheldPassives[
+                'Override Placed Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        const maxEquipOverridePlaced = Math.max(
+          primaryPassives,
+          Math.max(armorPassives, secondaryPassives)
+        )
+        armorPassives = props.wornArmorPassives[
+          'Add Displaced Rolls ' + skillName.substring(0, 1).toUpperCase() + skillName.substring(1)
+        ]
+          ? parseInt(
+              props.wornArmorPassives[
+                'Add Displaced Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        primaryPassives = props.primaryHandheldPassives[
+          'Add Displaced Rolls ' + skillName.substring(0, 1).toUpperCase() + skillName.substring(1)
+        ]
+          ? parseInt(
+              props.primaryHandheldPassives[
+                'Add Displaced Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        secondaryPassives = props.secondaryHandheldPassives[
+          'Add Displaced Rolls ' + skillName.substring(0, 1).toUpperCase() + skillName.substring(1)
+        ]
+          ? parseInt(
+              props.secondaryHandheldPassives[
+                'Add Displaced Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        const maxDisplacedEquip = Math.max(
+          primaryPassives,
+          Math.max(armorPassives, secondaryPassives)
+        )
+        armorPassives = props.wornArmorPassives[
+          'Override Displaced Rolls ' +
+            skillName.substring(0, 1).toUpperCase() +
+            skillName.substring(1)
+        ]
+          ? parseInt(
+              props.wornArmorPassives[
+                'Override Displaced Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        primaryPassives = props.primaryHandheldPassives[
+          'Override Displaced Rolls ' +
+            skillName.substring(0, 1).toUpperCase() +
+            skillName.substring(1)
+        ]
+          ? parseInt(
+              props.primaryHandheldPassives[
+                'Override Displaced Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        secondaryPassives = props.secondaryHandheldPassives[
+          'Override Displaced Rolls ' +
+            skillName.substring(0, 1).toUpperCase() +
+            skillName.substring(1)
+        ]
+          ? parseInt(
+              props.secondaryHandheldPassives[
+                'Override Displaced Rolls ' +
+                  skillName.substring(0, 1).toUpperCase() +
+                  skillName.substring(1)
+              ].modAmount
+            )
+          : 0
+        const maxDisplacedOverrideEquip = Math.max(
+          primaryPassives,
+          Math.max(armorPassives, secondaryPassives)
+        )
         if (props.currentStatBlock.diceStatusModifiers[skillName]) {
           if (props.currentStatBlock.diceStatusModifiers[skillName]['Override Placed Rolls']) {
-            const max = Object.values(
+            let max = Object.values(
               props.currentStatBlock.diceStatusModifiers[skillName]['Override Placed Rolls']
             ).reduce(
               (acc: number, mod: any) =>
                 parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
               -1000
             )
-            if (max != -1000) {
-              placed += max
-            }
+            max = Math.max(max, maxEquipOverridePlaced)
+            placed += max
+            placed -= maxDisplacedOverrideEquip
           }
           if (props.currentStatBlock.diceStatusModifiers[skillName]['Modify Placed Rolls']) {
-            const max = Object.values(
+            let max = Object.values(
               props.currentStatBlock.diceStatusModifiers[skillName]['Modify Placed Rolls']
             ).reduce(
               (acc: number, mod: any) =>
                 parseInt(mod.modAmount) > acc ? parseInt(mod.modAmount) : acc,
               -1000
             )
-            if (max != -1000) {
-              placed += max
-            }
+            max = Math.max(max, maxEquipPlaced)
+            placed += max
+            placed -= maxDisplacedEquip
           }
+        } else {
+          placed += maxEquipOverridePlaced
+          placed -= maxDisplacedOverrideEquip
+          placed += maxEquipPlaced
+          placed -= maxDisplacedEquip
         }
 
         // placed += useprops.currentStatBlock().archetype === 'augur' ? 1 : 0

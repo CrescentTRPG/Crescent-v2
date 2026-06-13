@@ -10,23 +10,23 @@ import CustomModal from '@/components/CustomModal.vue'
 import { BButton } from 'bootstrap-vue-next'
 
 import DropdownSelect from '@/components/DropdownSelect.vue'
-import { Item, useEquipmentStore } from '@/stores/equipmentStore.ts'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import { storeToRefs } from 'pinia'
 import { Ref } from 'vue'
 import EditItem from './EditItem.vue'
 import ItemDisplay from './ItemDisplay.vue'
+import { Item } from '@/stores/equipmentStore.ts'
 
 export default {
+  props: ['equipment', 'updateSecondary', 'removeItem', 'addItem'],
+
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
     const designStore = useDesignStore()
     const characterStore = useCharacterStore()
-    const equipmentStore = useEquipmentStore()
-    const { equipment } = storeToRefs(equipmentStore)
     const secondaryHand = computed(() => {
-      return equipment.value.secondaryHand
+      return props.equipment?.secondaryHand
     })
     const stagedItem: Ref<Item> = ref({
       name: '',
@@ -35,6 +35,8 @@ export default {
       type: 'Generic',
       isAttuneable: false,
       isAttuned: false,
+      holder: '',
+      holderType: '',
       equippedStats: {
         ability: {
           name: ''
@@ -46,10 +48,10 @@ export default {
         materialCoverings: {}
       }
     })
-    const equipped = ref(equipmentStore.equipment.secondaryHand)
+    const equipped = ref(props.equipment?.secondaryHand)
     const armors: ComputedRef<Array<string>> = computed(() => {
-      let weapons = Object.values(equipmentStore.equipment.items.Weapon)
-      let shields = Object.values(equipmentStore.equipment.items.Shield)
+      let weapons = Object.values(props.equipment?.items.Weapon)
+      let shields = Object.values(props.equipment?.items.Shield)
       let equippables = weapons.concat(shields)
       let ret: Array<string> = []
       equippables.forEach((item: any) => {
@@ -61,13 +63,13 @@ export default {
       return equipped.value != '' ? true : false
     })
     function updateSecondaryHand(item) {
-      equipmentStore.updateSecondary(item)
+      props.updateSecondary(item)
     }
     const itemToEdit = ref({})
     const editItemModal = ref(false)
     function saveEdits(newItem, oldItem) {
-      equipmentStore.removeItem(oldItem)
-      equipmentStore.addItem(newItem)
+      props.removeItem(oldItem)
+      props.addItem(newItem)
       itemToEdit.value = {}
 
       editItemModal.value = false
@@ -84,7 +86,7 @@ export default {
       characterStore,
       equipped,
       armors,
-      equipmentStore,
+      props,
       displayItem,
       updateSecondaryHand,
       secondaryHand,
@@ -146,7 +148,7 @@ export default {
       >
         <div style="display: flex; justify-content: center" v-if="displayItem">
           <v-icon
-            v-if="equipmentStore.equipment.items.Weapon[equipped]"
+            v-if="props.equipment?.items.Weapon[equipped]"
             style="z-index: 5; margin-right: -0.75rem; align-self: center; transform: scaleX(-1)"
             name="gi-magic-axe"
             scale="2"
@@ -179,7 +181,7 @@ export default {
             {{ equipped }}
           </div>
           <v-icon
-            v-if="equipmentStore.equipment.items.Weapon[equipped]"
+            v-if="props.equipment?.items.Weapon[equipped]"
             style="
               z-index: 4;
               margin-left: -0.75rem;
@@ -256,7 +258,7 @@ export default {
                 class="dropdown-fill"
                 :borderless="true"
                 :options="armors"
-                :default="equipmentStore.equipment.secondaryHand"
+                :default="props.equipment?.secondaryHand"
                 :style="{
                   color: designStore.inputText,
                   background: designStore.inputBacking,
@@ -271,14 +273,13 @@ export default {
           <ItemDisplay
             v-if="displayItem"
             :item="
-              equipmentStore.equipment.items.Weapon[equipped] ||
-              equipmentStore.equipment.items.Shield[equipped]
+              props.equipment?.items.Weapon[equipped] || props.equipment.items.Shield[equipped]
             "
           ></ItemDisplay>
         </template>
         <template v-slot:footer>
           <BButton
-            v-if="equipmentStore.equipment.secondaryHand"
+            v-if="props.equipment?.secondaryHand"
             style="border: 1px solid; margin-right: 0.5rem"
             :style="{
               background: designStore.primaryTheme,
@@ -287,21 +288,21 @@ export default {
             }"
             @click="
               editItem(
-                equipmentStore.equipment.items.Weapon[equipmentStore.equipment.secondaryHand] ||
-                  equipmentStore.equipment.items.Shield[equipmentStore.equipment.secondaryHand]
+                props.equipment.items.Weapon[props.equipment.secondaryHand] ||
+                  props.equipment.items.Shield[props.equipment.secondaryHand]
               )
             "
             >Edit Item</BButton
           >
           <BButton
-            v-if="equipmentStore.equipment.secondaryHand"
+            v-if="props.equipment?.secondaryHand"
             style="border: 1px solid; margin-right: 0.5rem"
             :style="{
               background: designStore.primaryTheme,
               color: designStore.primaryText,
               borderColor: designStore.secondaryTheme
             }"
-            @click="equipmentStore.updateSecondary('')"
+            @click="props.updateSecondary('')"
             >Unequip</BButton
           >
         </template>

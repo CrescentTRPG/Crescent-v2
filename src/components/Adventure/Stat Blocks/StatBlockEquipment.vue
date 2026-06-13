@@ -13,6 +13,7 @@ import { Item, useEquipmentStore } from '@/stores/equipmentStore.ts'
 import { storeToRefs } from 'pinia'
 import { useAdventureStore } from '@/stores/adventureStore.ts'
 import { usePartyStore } from '@/stores/partyStore.ts'
+import StatBlockEquippedItems from './StatBlockEquippedItems.vue'
 
 export default {
   props: ['equipment', 'update', 'updateTemp', 'currentStatBlock', 'currentStatBlockId'],
@@ -83,7 +84,7 @@ export default {
     }
     function removeItem(item: Item, unequip = false) {
       const newEquip = _.cloneDeep(props.equipment)
-      const newStatBlock = _.cloneDeep(props.currentStatBlock)
+      let newStatBlock = _.cloneDeep(props.currentStatBlock)
       if (item.type === 'Armor' && item.name === newEquip.wornArmor && unequip) {
         newEquip.equipment.wornArmor = ''
       }
@@ -137,34 +138,45 @@ export default {
       ingredients,
       addItem,
       editInPlace,
-      removeItem
+      removeItem,
+      props
     }
   },
-  components: { EquipmentTable }
+  components: { EquipmentTable, StatBlockEquippedItems }
 }
 </script>
 
 <template>
   <div :style="{ fontFamily: designStore.font }">
     <!-- <div class="largeView"><EquippedItems></EquippedItems></div> -->
-
-    <EquipmentTable
-      :equipment="equipment"
-      :add="addItem"
-      :remove="removeItem"
-      :edit="editInPlace"
-      :get-numberof-attuned-items="0"
-      :getTotalAttuneableItems="0"
-      :adventure-mode="true"
-      :weapons="weapons"
-      :armor="armor"
-      :potions="potions"
-      :ingredients="ingredients"
-      :genericItems="genericItems"
-      :shields="shields"
-      :addTo="currentStatBlockId"
-      :hideOwnership="true"
-    ></EquipmentTable>
+    <div class="arrangePage">
+      <div>
+        <StatBlockEquippedItems
+          :addItem="addItem"
+          :removeItem="removeItem"
+          :updateTemp="props.updateTemp"
+          :currentStatBlock="props.currentStatBlock"
+        ></StatBlockEquippedItems>
+      </div>
+      <EquipmentTable
+        style="flex-grow: 1"
+        :equipment="equipment"
+        :add="addItem"
+        :remove="removeItem"
+        :edit="editInPlace"
+        :get-numberof-attuned-items="0"
+        :getTotalAttuneableItems="0"
+        :adventure-mode="true"
+        :weapons="weapons"
+        :armor="armor"
+        :potions="potions"
+        :ingredients="ingredients"
+        :genericItems="genericItems"
+        :shields="shields"
+        :addTo="currentStatBlockId"
+        :hideOwnership="true"
+      ></EquipmentTable>
+    </div>
   </div>
 </template>
 

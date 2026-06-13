@@ -1092,7 +1092,12 @@ export default {
           @click="(dispatchBuyPotion(), (isHidden = true))"
           >Buy Potion</BButton
         >
-        <BasicInput label="Amount to Add" :value="count" type="number"></BasicInput>
+        <BasicInput
+          v-if="props.adventureMode"
+          label="Amount to Add"
+          :value="count"
+          type="number"
+        ></BasicInput>
         <BButton
           @click="addPotionToAdventure()"
           v-if="props.adventureMode"

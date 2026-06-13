@@ -21,7 +21,8 @@ export default {
     'showFolder',
     'showFiles',
     'openCreateFile',
-    'isCharacter'
+    'isCharacter',
+    'closeSidebar'
   ],
   setup(props, context) {
     const modal = ref(false)
@@ -232,6 +233,7 @@ export default {
         style="display: flex; flex-direction: column"
       >
         <JournalEntryOnSidebar
+          :close-side-bar="props.closeSidebar"
           :draggable="true"
           @dragstart="
             startDrag(

@@ -91,7 +91,7 @@ export default {
         }
       }
     })
-    return { designStore, props, getDropdownArray, context, purchase, rankCost }
+    return { designStore, props, getDropdownArray, context, purchase, rankCost, min }
   },
   components: { DropdownSelect, BPopover }
 }

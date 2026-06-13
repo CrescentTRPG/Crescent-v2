@@ -17,7 +17,10 @@ export default {
     'isPinned',
     'isStunned',
     'updateTemp',
-    'removeMovementStatusModifier'
+    'removeMovementStatusModifier',
+    'wornArmorPassives',
+    'primaryHandheldPassives',
+    'secondaryHandheldPassives'
   ],
   setup(props, context) {
     const designStore = useDesignStore()
@@ -49,9 +52,31 @@ export default {
     }
 
     const base: ComputedRef<number> = computed(() => {
-      let modifier = 0
       if (props.isEditing) {
         return props.currentStatBlock.base
+      }
+      let modifier = -1000
+
+      if (props.wornArmorPassives['Modify Movespeed']) {
+        modifier = Math.max(
+          parseInt(props.wornArmorPassives['Modify Movespeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.secondaryHandheldPassives['Modify Movespeed']) {
+        modifier = Math.max(
+          parseInt(props.secondaryHandheldPassives['Modify Movespeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.primaryHandheldPassives['Modify Movespeed']) {
+        modifier = Math.max(
+          parseInt(props.primaryHandheldPassives['Modify Movespeed']?.modAmount),
+          modifier
+        )
+      }
+      if (modifier === -1000) {
+        modifier = 0
       }
       if (props.currentStatBlock.movementStatusModifiers['Modify Base']) {
         const max = Object.values(
@@ -82,6 +107,30 @@ export default {
               : Math.max(max + modifier, 0)
         }
       }
+      if (props.wornArmorPassives['Override Movespeed']) {
+        const speed = parseInt(props.wornArmorPassives['Override Movespeed']?.modAmount)
+        return props.isPinned || props.isStunned
+          ? 0
+          : props.isProne || props.isSlowed
+            ? Math.floor(Math.max(speed + modifier, 0) / 2)
+            : Math.max(speed + modifier, 0)
+      }
+      if (props.secondaryHandheldPassives['Override Movespeed']) {
+        const speed = parseInt(props.secondaryHandheldPassives['Override Movespeed']?.modAmount)
+        return props.isPinned || props.isStunned
+          ? 0
+          : props.isProne || props.isSlowed
+            ? Math.floor(Math.max(speed + modifier, 0) / 2)
+            : Math.max(speed + modifier, 0)
+      }
+      if (props.primaryHandheldPassives['Override Movespeed']) {
+        const speed = parseInt(props.primaryHandheldPassives['Override Movespeed']?.modAmount)
+        return props.isPinned || props.isStunned
+          ? 0
+          : props.isProne || props.isSlowed
+            ? Math.floor(Math.max(speed + modifier, 0) / 2)
+            : Math.max(speed + modifier, 0)
+      }
 
       return props.isStunned || props.isPinned
         ? 0
@@ -95,8 +144,29 @@ export default {
       if (props.isEditing) {
         return speed
       }
-      let modifier = 0
+      let modifier = -1000
+      if (props.wornArmorPassives['Modify Flightspeed']) {
+        modifier = Math.max(
+          parseInt(props.wornArmorPassives['Modify Flightspeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.secondaryHandheldPassives['Modify Flightspeed']) {
+        modifier = Math.max(
+          parseInt(props.secondaryHandheldPassives['Modify Flightspeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.primaryHandheldPassives['Modify Flightspeed']) {
+        modifier = Math.max(
+          parseInt(props.primaryHandheldPassives['Modify Flightspeed']?.modAmount),
+          modifier
+        )
+      }
 
+      if (modifier === -1000) {
+        modifier = 0
+      }
       if (props.currentStatBlock.movementStatusModifiers['Override Flight']) {
         const max = Object.values(
           props.currentStatBlock.movementStatusModifiers['Override Flight']
@@ -108,6 +178,15 @@ export default {
         if (max > 0) {
           speed = max
         }
+      }
+      if (props.wornArmorPassives['Override Flightspeed']) {
+        speed = parseInt(props.wornArmorPassives['Override Flightspeed']?.modAmount)
+      }
+      if (props.secondaryHandheldPassives['Override Flightspeed']) {
+        speed = parseInt(props.secondaryHandheldPassives['Override Flightspeed']?.modAmount)
+      }
+      if (props.primaryHandheldPassives['Override Flightspeed']) {
+        speed = parseInt(props.primaryHandheldPassives['Override Flightspeed']?.modAmount)
       }
 
       if (props.currentStatBlock.movementStatusModifiers['Modify Flight']) {
@@ -139,8 +218,29 @@ export default {
       if (props.isEditing) {
         return speed
       }
-      let modifier = 0
+      let modifier = -1000
+      if (props.wornArmorPassives['Modify Climbspeed']) {
+        modifier = Math.max(
+          parseInt(props.wornArmorPassives['Modify Climbspeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.secondaryHandheldPassives['Modify Climbspeed']) {
+        modifier = Math.max(
+          parseInt(props.secondaryHandheldPassives['Modify Climbspeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.primaryHandheldPassives['Modify Climbspeed']) {
+        modifier = Math.max(
+          parseInt(props.primaryHandheldPassives['Modify Climbspeed']?.modAmount),
+          modifier
+        )
+      }
 
+      if (modifier === -1000) {
+        modifier = 0
+      }
       if (props.currentStatBlock.movementStatusModifiers['Override Climb']) {
         const max = Object.values(
           props.currentStatBlock.movementStatusModifiers['Override Climb']
@@ -153,7 +253,15 @@ export default {
           speed = max
         }
       }
-
+      if (props.wornArmorPassives['Override Climbspeed']) {
+        speed = parseInt(props.wornArmorPassives['Override Climbspeed']?.modAmount)
+      }
+      if (props.secondaryHandheldPassives['Override Climbspeed']) {
+        speed = parseInt(props.secondaryHandheldPassives['Override Climbspeed']?.modAmount)
+      }
+      if (props.primaryHandheldPassives['Override Climbspeed']) {
+        speed = parseInt(props.primaryHandheldPassives['Override Climbspeed']?.modAmount)
+      }
       if (props.currentStatBlock.movementStatusModifiers['Modify Climb']) {
         const max = Object.values(
           props.currentStatBlock.movementStatusModifiers['Modify Climb']
@@ -179,7 +287,29 @@ export default {
       if (props.isEditing) {
         return speed
       }
-      let modifier = 0
+      let modifier = -1000
+      if (props.wornArmorPassives['Modify Swimspeed']) {
+        modifier = Math.max(
+          parseInt(props.wornArmorPassives['Modify Swimspeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.secondaryHandheldPassives['Modify Swimspeed']) {
+        modifier = Math.max(
+          parseInt(props.secondaryHandheldPassives['Modify Swimspeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.primaryHandheldPassives['Modify Swimspeed']) {
+        modifier = Math.max(
+          parseInt(props.primaryHandheldPassives['Modify Swimspeed']?.modAmount),
+          modifier
+        )
+      }
+
+      if (modifier === -1000) {
+        modifier = 0
+      }
       if (props.currentStatBlock.traits['Swim Speed']) {
         speed = parseInt(props.currentStatBlock.traits['Swim Speed'].number)
       }
@@ -195,7 +325,15 @@ export default {
           speed = max
         }
       }
-
+      if (props.wornArmorPassives['Override Swimspeed']) {
+        speed = parseInt(props.wornArmorPassives['Override Swimspeed']?.modAmount)
+      }
+      if (props.secondaryHandheldPassives['Override Swimspeed']) {
+        speed = parseInt(props.secondaryHandheldPassives['Override Swimspeed']?.modAmount)
+      }
+      if (props.primaryHandheldPassives['Override Swimspeed']) {
+        speed = parseInt(props.primaryHandheldPassives['Override Swimspeed']?.modAmount)
+      }
       if (props.currentStatBlock.movementStatusModifiers['Modify Swim']) {
         const max = Object.values(
           props.currentStatBlock.movementStatusModifiers['Modify Swim']
@@ -221,7 +359,29 @@ export default {
       if (props.isEditing) {
         return speed
       }
-      let modifier = 0
+      let modifier = -1000
+      if (props.wornArmorPassives['Modify Burrowspeed']) {
+        modifier = Math.max(
+          parseInt(props.wornArmorPassives['Modify Burrowspeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.secondaryHandheldPassives['Modify Burrowspeed']) {
+        modifier = Math.max(
+          parseInt(props.secondaryHandheldPassives['Modify Burrowspeed']?.modAmount),
+          modifier
+        )
+      }
+      if (props.primaryHandheldPassives['Modify Burrowspeed']) {
+        modifier = Math.max(
+          parseInt(props.primaryHandheldPassives['Modify Burrowspeed']?.modAmount),
+          modifier
+        )
+      }
+
+      if (modifier === -1000) {
+        modifier = 0
+      }
       if (props.currentStatBlock.movementStatusModifiers['Override Burrow']) {
         const max = Object.values(
           props.currentStatBlock.movementStatusModifiers['Override Burrow']
@@ -234,7 +394,15 @@ export default {
           speed = max
         }
       }
-
+      if (props.wornArmorPassives['Override Burrowspeed']) {
+        speed = parseInt(props.wornArmorPassives['Override Burrowspeed']?.modAmount)
+      }
+      if (props.secondaryHandheldPassives['Override Burrowspeed']) {
+        speed = parseInt(props.secondaryHandheldPassives['Override Burrowspeed']?.modAmount)
+      }
+      if (props.primaryHandheldPassives['Override Burrowspeed']) {
+        speed = parseInt(props.primaryHandheldPassives['Override Burrowspeed']?.modAmount)
+      }
       if (props.currentStatBlock.movementStatusModifiers['Modify Burrow']) {
         const max = Object.values(
           props.currentStatBlock.movementStatusModifiers['Modify Burrow']

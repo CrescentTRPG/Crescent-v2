@@ -3,6 +3,7 @@
     "description": "Each rank purchased allows the character to add 3 damage to a single strike they make this turn.",
     "mp_cost": "1 MP per rank",
     "name": "Lethal",
+    "icon": "gi-claw-slashes",
     "skillStats": {
       "type": "Altered Strike",
       "grantsNewStrike": "",

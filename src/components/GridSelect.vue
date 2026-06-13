@@ -15,7 +15,20 @@ export default {
 
     function getColor(option) {
       if (props.multiSelect) {
-        if (Array.isArray(props.selected) && props.selected.includes(option)) {
+        if (!option.name) {
+          if (
+            Array.isArray(props.selected) &&
+            props.selected.filter((item) => item === option).length > 0
+          ) {
+            console.log(option)
+            return designStore.alertTheme
+          }
+        } else if (
+          Array.isArray(props.selected) &&
+          props.selected.filter(
+            (item) => item.name === option.name && item.description === option.description
+          ).length > 0
+        ) {
           return designStore.alertTheme
         }
         return designStore.secondaryTheme
@@ -28,14 +41,26 @@ export default {
     }
     function getBoxShadow(option) {
       if (props.multiSelect) {
-        if (Array.isArray(props.selected) && props.selected.includes(option)) {
+        if (!option.name) {
+          if (
+            Array.isArray(props.selected) &&
+            props.selected.filter((item) => item === option).length > 0
+          ) {
+            console.log(option)
+            return '0px 0px 10px 3px ' + designStore.alertTheme
+          }
+        } else if (
+          Array.isArray(props.selected) &&
+          props.selected.filter(
+            (item) =>
+              (item.name === option.name && item.description === option.description) ||
+              (item.name === undefined && item === option)
+          ).length > 0
+        ) {
+          console.log(option)
           return '0px 0px 10px 3px ' + designStore.alertTheme
         }
         return 'none'
-      } else {
-        if (option === props.selected) {
-          return '0px 0px 10px 3px ' + designStore.alertTheme
-        }
       }
       return 'none'
     }
@@ -86,11 +111,11 @@ export default {
           "
         >
           <TitleMedallion
-            :title="option.name"
+            :title="option.name + (option.nameDecorator || '')"
             :style="{ 'text-wrap': props.textWrap }"
           ></TitleMedallion>
 
-          <div style="display: flex; align-items: center">
+          <div class="interiorItems">
             <v-icon
               v-if="option.icon.substring(0, 2) === 'gi'"
               :name="option.icon"
@@ -108,12 +133,12 @@ export default {
             {{ option.disabledMessage }}
           </div>
         </div>
-        <div v-else style="cursor: pointer">
+        <div v-else style="cursor: pointer; height: 100%; display: flex; flex-direction: column">
           <TitleMedallion
             :title="option.name"
             :style="{ 'text-wrap': props.textWrap }"
           ></TitleMedallion>
-          <div style="display: flex; align-items: center">
+          <div class="interiorItems">
             <v-icon
               v-if="option.icon.substring(0, 2) === 'gi'"
               :name="option.icon"
@@ -137,14 +162,34 @@ export default {
   align-items: center;
   margin: 2rem;
 }
+.interiorItems {
+  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
 .gridSelectContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+}
+@media (max-width: 1100px) {
+  .interiorItems {
+    align-items: end;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: column-reverse;
+    flex-grow: 1;
+  }
 }
 @media (max-width: 900px) {
   .gridSelectContainer {
     display: flex;
     flex-direction: column;
+  }
+  .interiorItems {
+    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>

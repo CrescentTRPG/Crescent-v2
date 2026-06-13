@@ -10,6 +10,7 @@ import { ref } from 'vue'
 import { useDesignStore } from '../../../stores/designStore.ts'
 import CustomCheckbox from '../CustomCheckbox.vue'
 import EquippableProperties from './EquippableProperties.vue'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
 export default {
   props: ['holder', 'holderType'],
   emits: ['stagedItem'],
@@ -80,6 +81,8 @@ export default {
         updatedInfo.enchantments || item.value.equippedStats.enchantments
       item.value.equippedStats.technicalAddons =
         updatedInfo.technicalAddons || item.value.equippedStats.technicalAddons
+      item.value.icon = updatedInfo.icon
+
       item.value.equippedStats.materialCoverings =
         updatedInfo.materialCoverings || item.value.equippedStats.materialCoverings
       item.value.equippedStats.value = updatedInfo.value || item.value.equippedStats.value
@@ -98,12 +101,51 @@ export default {
       item.value.equippedStats.isMusical =
         updatedInfo.isMusical || item.value.equippedStats.isMusical
       item.value.equippedStats.isCustom = updatedInfo.isCustom || item.value.equippedStats.isCustom
+      setIconBasedOnSpecialization(item.value.equippedStats.specializations)
     }
 
     const updateHasAbility = (bool: boolean) => {
       hasAbility.value = bool
     }
 
+    function setIconBasedOnSpecialization(specializations: string[]) {
+      console.log(specializations)
+      if (
+        item.value.icon === 'gi-saber-and-pistol' ||
+        (item.value.icon === '' && specializations.length === 1)
+      ) {
+        item.value.icon =
+          useMartialSkillsStore().allSpecializations[specializations[0]]?.groupIcon ||
+          'gi-saber-and-pistol'
+      }
+      console.log(item.value.icon)
+    }
+
+    function setIcon() {
+      switch (item.value.type) {
+        case 'Potion':
+          item.value.icon = 'gi-potion-ball'
+          break
+        case 'Armor':
+          item.value.icon = 'gi-armor-vest'
+          break
+
+        case 'Weapon':
+          item.value.icon = 'gi-saber-and-pistol'
+          break
+
+        case 'Shield':
+          item.value.icon = 'gi-shield'
+          break
+
+        case 'Ingredient':
+          item.value.icon = 'gi-oak-leaf'
+          break
+
+        default:
+          item.value.icon = 'gi-cubes'
+      }
+    }
     return {
       designStore,
       props,
@@ -114,7 +156,8 @@ export default {
       itemAbility,
       types,
       setEquippableProperties,
-      setAbilityFromDropdown
+      setAbilityFromDropdown,
+      setIcon
     }
   },
   components: {
@@ -201,7 +244,7 @@ export default {
 
       <DropdownSelect
         :default="item.type"
-        @selection="(val) => (item.type = val)"
+        @selection="(val) => ((item.type = val), setIcon())"
         :borderless="true"
         :options="types"
         :overrideDown="true"

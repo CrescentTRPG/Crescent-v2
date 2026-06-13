@@ -363,7 +363,7 @@ export default {
     <CustomModal
       :is-hidden="isHidden"
       v-if="props.isEditing"
-      title="Modify Dvs"
+      title="Modify Base Dvs"
       :showModal="modal"
       @close="modal = !modal"
     >
@@ -403,6 +403,9 @@ export default {
           :max="999"
           @newValue="(val) => props.setDvs(props.armorDvs, props.shieldDvs, props.bonusDvs, val)"
         ></BasicInput>
+        <div style="text-align: end">
+          Note: Equipped armor and shields will override these values in view mode
+        </div>
       </template>
     </CustomModal>
   </div>

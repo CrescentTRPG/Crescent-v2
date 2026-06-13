@@ -25,7 +25,7 @@ export default {
     const spentMp = computed(() => {
       let ret = 0
       Object.values(weaponAttack.value).forEach((attack) => {
-        attack.skills.forEach((skill) => {
+        attack.skills.forEach((skill: any) => {
           ret += skill.purchasedMp
         })
       })

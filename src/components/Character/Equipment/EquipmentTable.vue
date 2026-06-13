@@ -22,6 +22,7 @@ import { usePartyStore } from '@/stores/partyStore.ts'
 import { useAdventureStore } from '@/stores/adventureStore.ts'
 import BasicInput from '../BasicInput.vue'
 import DropdownSelect from '@/components/DropdownSelect.vue'
+import TitleMedallion from '@/components/TitleMedallion.vue'
 
 export default {
   props: [
@@ -222,6 +223,14 @@ export default {
     }
 
     function saveEdits(newItem, oldItem) {
+      if (!newItem.holder) {
+        newItem.holder = ''
+        newItem.holderType = ''
+      }
+      if (!oldItem.holder) {
+        oldItem.holder = ''
+        oldItem.holderType = ''
+      }
       props.remove(oldItem)
       props.add(newItem)
       itemToEdit.value = {}
@@ -272,9 +281,64 @@ export default {
       tradeModal.value = true
     }
     const amountToTrade = ref(1)
+    const resolveItemDisputeModal = ref(false)
+    const resolveItemDisputeModalToStatBlock = ref(false)
+    const resolveItemDisputeModalUnowned = ref(false)
+    const itemInQuestion: Ref<Item | undefined> = ref()
+    const charUserId = ref('')
+    const equipCp: any = ref({})
+    const blockCp: any = ref({})
 
+    function override(newCount = amountToTrade.value) {
+      equipCp.value.items[itemToTrade.value.type][itemToTrade.value.name] = {
+        ...itemToTrade.value,
+        count: newCount,
+        holder: tradeTo.value,
+        holderType: 'Character'
+      }
+      if (
+        itemToTrade.value.equippedStats?.ability?.name &&
+        (!itemToTrade.value.isAttuneable || itemToTrade.value.isAttuned)
+      ) {
+        if (itemToTrade.value.type === 'Generic') {
+          equipCp.value.genericsWithAbilitites.unshift(itemToTrade.value.name)
+        }
+        if (itemToTrade.value.type === 'Armor') {
+          equipCp.value.armorsWithAbilities.unshift(itemToTrade.value.name)
+        }
+        if (itemToTrade.value.type === 'Weapon') {
+          equipCp.value.weaponsWithAbilitites.unshift(itemToTrade.value.name)
+        }
+        if (itemToTrade.value.type === 'Shield') {
+          equipCp.value.shieldsWithAbilitites.unshift(itemToTrade.value.name)
+        }
+      }
+      if (itemToTrade.value.type === 'Potion') {
+        equipCp.value.potionsWithAbilities.unshift(itemToTrade.value.name)
+      }
+      adventureStore.updateCharacterEquipment(equipCp.value, charUserId.value, tradeTo.value)
+      removeOld()
+      resolveItemDisputeModal.value = false
+      tradeModal.value = false
+    }
+
+    function increaseExistingCount() {
+      if (itemInQuestion.value) {
+        equipCp.value.items[itemToTrade.value.type][itemToTrade.value.name] = {
+          ...itemInQuestion.value,
+          count: amountToTrade.value + parseInt(itemInQuestion.value.count + ''),
+          holder: tradeTo.value,
+          holderType: 'Character'
+        }
+        adventureStore.updateCharacterEquipment(equipCp.value, charUserId.value, tradeTo.value)
+        removeOld()
+        resolveItemDisputeModal.value = false
+        tradeModal.value = false
+      }
+    }
     async function executeTrade() {
-      if (amountToTrade.value > itemToTrade.value.count) {
+      let alreadyRemoved = false
+      if (amountToTrade.value > parseInt(itemToTrade.value.count + '')) {
         alert("Can't move a greater amount than the original item count")
       }
       // give to Character
@@ -286,39 +350,138 @@ export default {
             userId = adventureStore.userIds[i]
           }
         }
+        charUserId.value = userId
 
         let equip = _.cloneDeep(characterObjects.value[tradeTo.value].equipment)
+        equipCp.value = equip
         if (equip.items[itemToTrade.value.type][itemToTrade.value.name]) {
-          alert('Character already has item by this name')
+          itemInQuestion.value = equip.items[itemToTrade.value.type][itemToTrade.value.name]
+          resolveItemDisputeModal.value = true
         } else {
-          equip.items[itemToTrade.value.type][itemToTrade.value.name] = {
-            ...itemToTrade.value,
-            count: amountToTrade.value,
-            holder: tradeTo.value,
-            holderType: 'Character'
-          }
-          adventureStore.updateCharacterEquipment(equip, userId, tradeTo.value)
+          override()
+          alreadyRemoved = true
         }
       }
       //giveToGm
       else {
         console.log('trade to', tradeTo, 'item', itemToTrade)
-        if (tradeTo.value === '')
+        if (tradeTo.value === '') {
+          if (adventureStore.equipment.items[itemToTrade.value.type][itemToTrade.value.name]) {
+            itemInQuestion.value =
+              adventureStore.equipment.items[itemToTrade.value.type][itemToTrade.value.name]
+            resolveItemDisputeModalToStatBlock.value = true
+            resolveItemDisputeModalUnowned.value = true
+            resolveItemDisputeModal.value = true
+          }
           adventureStore.addItem({
             ...itemToTrade.value,
             count: amountToTrade.value,
             holder: '',
             holderType: ''
           })
-        else {
-          await adventureStore.updateStatBlockEquipment({
-            ...itemToTrade.value,
-            count: amountToTrade.value,
-            holder: tradeTo.value,
-            holderType: 'Statblock'
-          })
+        } else {
+          const block = await adventureStore.getStatBlockDetails(tradeTo.value)
+          blockCp.value = block
+
+          if (!block) {
+            alert('Statblock Does not Exist?')
+            return 'error'
+          }
+          if (block && block.equipment.items[itemToTrade.value.type][itemToTrade.value.name]) {
+            resolveItemDisputeModalToStatBlock.value = true
+            resolveItemDisputeModal.value = true
+            itemInQuestion.value =
+              block.equipment.items[itemToTrade.value.type][itemToTrade.value.name]
+          } else {
+            overrideStatBlock()
+            alreadyRemoved = true
+          }
+        }
+        if (!resolveItemDisputeModal.value && !alreadyRemoved) {
+          removeOld()
+          resolveItemDisputeModal.value = false
         }
       }
+    }
+    function overrideStatBlock(amount = parseInt(amountToTrade.value + '')) {
+      if (resolveItemDisputeModalUnowned.value) {
+        adventureStore.addItem({
+          ...itemToTrade.value,
+          count: amount,
+          holder: '',
+          holderType: ''
+        })
+        resolveItemDisputeModal.value = false
+        resolveItemDisputeModalToStatBlock.value = false
+        resolveItemDisputeModalUnowned.value = false
+
+        tradeModal.value = false
+      } else {
+        if (
+          itemToTrade.value.equippedStats?.ability?.name &&
+          (!itemToTrade.value.isAttuneable || itemToTrade.value.isAttuned)
+        ) {
+          if (itemToTrade.value.type === 'Generic') {
+            blockCp.value.genericsWithAbilitites.unshift(itemToTrade.value.name)
+          }
+          if (itemToTrade.value.type === 'Armor') {
+            blockCp.value.armorsWithAbilities.unshift(itemToTrade.value.name)
+          }
+          if (itemToTrade.value.type === 'Weapon') {
+            blockCp.value.weaponsWithAbilitites.unshift(itemToTrade.value.name)
+          }
+          if (itemToTrade.value.type === 'Shield') {
+            blockCp.value.shieldsWithAbilitites.unshift(itemToTrade.value.name)
+          }
+        }
+        if (itemToTrade.value.type === 'Potion') {
+          blockCp.value.potionsWithAbilities.unshift(itemToTrade.value.name)
+        }
+        blockCp.value.equipment.items[itemToTrade.value.type][itemToTrade.value.name] = {
+          ...itemToTrade.value,
+          count: amount,
+          holder: tradeTo.value,
+          holderType: 'Statblock'
+        }
+        adventureStore.putStatBlock(blockCp.value, tradeTo.value)
+        resolveItemDisputeModal.value = false
+        resolveItemDisputeModalToStatBlock.value = false
+        tradeModal.value = false
+      }
+      removeOld()
+    }
+
+    function increaseCountStatblock() {
+      if (resolveItemDisputeModalUnowned.value && itemInQuestion.value) {
+        adventureStore.editInPlace({
+          ...itemInQuestion.value,
+          count: parseInt(amountToTrade.value + '') + parseInt(itemInQuestion.value.count + ''),
+          holder: '',
+          holderType: ''
+        })
+        resolveItemDisputeModal.value = false
+        resolveItemDisputeModalToStatBlock.value = false
+        resolveItemDisputeModalUnowned.value = false
+
+        tradeModal.value = false
+        removeOld()
+      } else if (itemInQuestion.value) {
+        blockCp.value.equipment.items[itemInQuestion.value.type][itemInQuestion.value.name] = {
+          ...itemInQuestion.value,
+          count: parseInt(itemInQuestion.value.count + '') + parseInt(amountToTrade.value + ''),
+          holder: tradeTo.value,
+          holderType: 'Statblock'
+        }
+        adventureStore.putStatBlock(blockCp.value, tradeTo.value)
+        resolveItemDisputeModal.value = false
+        resolveItemDisputeModalToStatBlock.value = false
+        tradeModal.value = false
+
+        removeOld()
+      }
+    }
+
+    function removeOld() {
       // if previously held by character
       if (Object.keys(characterObjects.value).includes(itemToTrade.value.holder)) {
         let userId = ''
@@ -328,19 +491,58 @@ export default {
             userId = adventureStore.userIds[i]
           }
         }
-        if (amountToTrade.value < itemToTrade.value.count) {
+        if (amountToTrade.value < parseInt(itemToTrade.value.count + '')) {
           let equip = _.cloneDeep(characterObjects.value[itemToTrade.value.holder].equipment)
 
           equip.items[itemToTrade.value.type][itemToTrade.value.name] = {
-            ...itemToTrade,
+            ...itemToTrade.value,
             count: itemToTrade.value.count - amountToTrade.value
           }
-
+          console.log(equip)
           adventureStore.updateCharacterEquipment(equip, userId, itemToTrade.value.holder)
         } else {
           let equip = _.cloneDeep(characterObjects.value[itemToTrade.value.holder].equipment)
 
           delete equip.items[itemToTrade.value.type][itemToTrade.value.name]
+          if (itemToTrade.value.type === 'Armor' && itemToTrade.value.name === equip.wornArmor) {
+            equip.wornArmor = ''
+          }
+          if (itemToTrade.value.name === equip.primaryHand) {
+            equip.primaryHand = ''
+          }
+          if (itemToTrade.value.name === equip.secondaryHand) {
+            equip.secondaryHand = ''
+          }
+          if (
+            itemToTrade.value.equippedStats.ability.name &&
+            (!itemToTrade.value.isAttuneable || itemToTrade.value.isAttuned)
+          ) {
+            if (itemToTrade.value.type === 'Generic') {
+              equip.genericsWithAbilitites = equip.genericsWithAbilitites.filter(
+                (word) => word != itemToTrade.value.name
+              )
+            }
+            if (itemToTrade.value.type === 'Armor') {
+              equip.armorsWithAbilities = equip.armorsWithAbilities.filter(
+                (word) => word != itemToTrade.value.name
+              )
+            }
+            if (itemToTrade.value.type === 'Weapon') {
+              equip.weaponsWithAbilitites = equip.weaponsWithAbilitites.filter(
+                (word) => word != itemToTrade.value.name
+              )
+            }
+            if (itemToTrade.value.type === 'Shield') {
+              equip.shieldsWithAbilitites = equip.shieldsWithAbilitites.filter(
+                (word) => word != itemToTrade.value.name
+              )
+            }
+          }
+          if (itemToTrade.value.type === 'Potion') {
+            equip.potionsWithAbilities = equip.potionsWithAbilities.filter(
+              (word) => word != itemToTrade.value.name
+            )
+          }
           adventureStore.updateCharacterEquipment(equip, userId, itemToTrade.value.holder)
         }
       }
@@ -383,6 +585,12 @@ export default {
       })
       return ret
     })
+    function getName(id) {
+      if (characterObjects.value[id]?.name) {
+        return characterObjects.value[id]?.name
+      } else if (adventureStore.statBlocks[id]?.name) return adventureStore.statBlocks[id]?.name
+      return 'Unowned'
+    }
     return {
       designStore,
       userStore,
@@ -425,7 +633,15 @@ export default {
       amountToTrade,
       tradeOptions,
       executeTrade,
-      tradeTo
+      tradeTo,
+      resolveItemDisputeModal,
+      itemInQuestion,
+      override,
+      increaseExistingCount,
+      getName,
+      overrideStatBlock,
+      increaseCountStatblock,
+      resolveItemDisputeModalToStatBlock
     }
   },
   components: {
@@ -443,7 +659,8 @@ export default {
     EditItem,
     BrewPotionModal,
     BasicInput,
-    DropdownSelect
+    DropdownSelect,
+    TitleMedallion
   },
   methods: {
     LightenDarkenColor(col, amt) {
@@ -807,6 +1024,116 @@ export default {
             borderColor: designStore.secondaryTheme
           }"
           @click="editItemModal = false"
+          >Cancel</BButton
+        >
+      </template>
+    </CustomModal>
+    <CustomModal
+      :showModal="resolveItemDisputeModal"
+      :title="'Resolve Item Stacking for ' + itemToTrade.name"
+      @close="resolveItemDisputeModal = false"
+    >
+      <template v-slot:body>
+        <div>
+          Duplicate item found while sending {{ amountToTrade }} "{{ itemToTrade.name }}"(s) to
+          {{ getName(tradeTo) }} from {{ getName(itemToTrade.holder) }}
+        </div>
+        <TitleMedallion
+          style="text-wrap: nowrap"
+          :title="'Existing Item ( ' + getName(tradeTo) + ' )'"
+          :color="designStore.primaryText"
+        ></TitleMedallion>
+        <ItemDisplay :item="itemInQuestion"></ItemDisplay>
+        <TitleMedallion
+          style="text-wrap: nowrap"
+          :title="'Sending Item ( ' + getName(itemToTrade.holder) + ' )'"
+          :color="designStore.primaryText"
+        ></TitleMedallion>
+        <ItemDisplay :item="{ ...itemToTrade, count: amountToTrade }"></ItemDisplay>
+      </template>
+      <template v-slot:footer
+        ><BButton
+          v-if="resolveItemDisputeModalToStatBlock"
+          style="border: 1px solid; margin-right: 0.5rem"
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText,
+            borderColor: designStore.secondaryTheme
+          }"
+          @click="overrideStatBlock()"
+          >Override with Sent</BButton
+        >
+        <BButton
+          v-else
+          style="border: 1px solid; margin-right: 0.5rem"
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText,
+            borderColor: designStore.secondaryTheme
+          }"
+          @click="override()"
+          >Override with Sent</BButton
+        >
+        <BButton
+          v-if="resolveItemDisputeModalToStatBlock"
+          style="border: 1px solid; margin-right: 0.5rem"
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText,
+            borderColor: designStore.secondaryTheme
+          }"
+          @click="increaseCountStatblock()"
+          >Increase Count of Existing</BButton
+        >
+        <BButton
+          v-else
+          style="border: 1px solid; margin-right: 0.5rem"
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText,
+            borderColor: designStore.secondaryTheme
+          }"
+          @click="increaseExistingCount()"
+          >Increase Count of Existing</BButton
+        >
+        <BButton
+          v-if="resolveItemDisputeModalToStatBlock"
+          style="border: 1px solid; margin-right: 0.5rem"
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText,
+            borderColor: designStore.secondaryTheme
+          }"
+          @click="
+            overrideStatBlock(
+              itemInQuestion ? parseInt(itemInQuestion.count + '') + amountToTrade : amountToTrade
+            )
+          "
+          >Override and Increase Count</BButton
+        >
+        <BButton
+          v-else
+          style="border: 1px solid; margin-right: 0.5rem"
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText,
+            borderColor: designStore.secondaryTheme
+          }"
+          @click="
+            override(
+              itemInQuestion ? parseInt(itemInQuestion.count + '') + amountToTrade : amountToTrade
+            )
+          "
+          >Override and Increase Count</BButton
+        >
+        <BButton
+          style="border: 1px solid"
+          :style="{
+            background: designStore.primaryTheme,
+            color: designStore.primaryText,
+            borderColor: designStore.secondaryTheme
+          }"
+          @click="resolveItemDisputeModal = false"
           >Cancel</BButton
         >
       </template>

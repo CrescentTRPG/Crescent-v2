@@ -490,8 +490,8 @@ export default {
     watch(chats, (newChats, oldChats) => {
       console.log(oldChats, newChats)
       if (
-        oldChats[oldChats.length - 1].timestamp != newChats[newChats.length - 1].timestamp &&
-        newChats[newChats.length - 1].fromId != character.id
+        oldChats[oldChats.length - 1]?.timestamp != newChats[newChats.length - 1]?.timestamp &&
+        newChats[newChats.length - 1]?.fromId != character.id
       ) {
         showToast.value = true
         toast.value = undefined
@@ -524,14 +524,16 @@ export default {
         let label = roll.label ? roll.label : '(' + roll.str + ')'
         message += label + ' = ' + roll.subtotal + '\n'
       })
-      adventureStore.addChat(
-        message,
-        character.name,
-        userStore.getUserId,
-        false,
-        [],
-        design.charIcon
-      )
+      if (character.adventure.adventureId) {
+        adventureStore.addChat(
+          message,
+          character.name,
+          userStore.getUserId,
+          false,
+          [],
+          design.charIcon
+        )
+      }
     }
     function rollAgi() {
       let rolls: Array<number> = []

@@ -45,6 +45,7 @@ export const useAdventureStore = defineStore('adventure', {
     statBlocks: {},
     rollingTables: {},
     adventureItems: {},
+    twoItemResolution: { existingItem: {}, newItem: {} },
     equipment: {
       attunedItems: [],
       items: {
@@ -173,21 +174,7 @@ export const useAdventureStore = defineStore('adventure', {
       this.statBlocks[statBlock.name] = statBlock
       this.updateStatBlocksInFirebase()
     },
-    async updateStatBlockEquipment(item) {
-      console.log(item)
-      const block = await this.getStatBlockDetails(item.holder)
-      if (!block) {
-        alert('Statblock Does not Exist?')
-        return 'error'
-      }
-      if (block && block.equipment.items[item.type][item.name]) {
-        alert('Statblock already has item by same name')
 
-        return 'error'
-      }
-      block.equipment.items[item.type][item.name] = item
-      this.putStatBlock(block, item.holder)
-    },
     async getStatBlockDetails(id) {
       const docRef = doc(
         db,

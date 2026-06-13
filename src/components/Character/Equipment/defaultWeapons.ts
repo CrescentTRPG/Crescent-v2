@@ -7,7 +7,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 6,
     combatStyles: ['Versatile'],
-    specialzations: ['Axes']
+    specialzations: ['Axes'],
+    icon: 'gi-war-axe'
   },
   {
     name: 'Battle Axe',
@@ -17,7 +18,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 6,
     combatStyles: ['Heavy'],
-    specialzations: ['Axes']
+    specialzations: ['Axes'],
+    icon: 'gi-battle-axe'
   },
   {
     name: 'Great Axe',
@@ -27,7 +29,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 9,
     combatStyles: ['Heavy'],
-    specialzations: ['Axes']
+    specialzations: ['Axes'],
+    icon: 'gi-halberd'
   },
   {
     name: 'Longbow',
@@ -37,7 +40,8 @@ export const defaultWeapons = [
     range: 80,
     strReq: 4,
     combatStyles: ['Versatile'],
-    specialzations: ['Bows']
+    specialzations: ['Bows'],
+    icon: 'gi-bow-arrow'
   },
   {
     name: 'Crossbow',
@@ -47,7 +51,8 @@ export const defaultWeapons = [
     range: 80,
     strReq: 6,
     combatStyles: ['Heavy'],
-    specialzations: ['Crossbows']
+    specialzations: ['Crossbows'],
+    icon: 'gi-crossbow'
   },
   {
     name: 'Cestus',
@@ -57,7 +62,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 6,
     combatStyles: ['Versatile'],
-    specialzations: ['Brawling']
+    specialzations: ['Brawling'],
+    icon: 'gi-mailed-fist'
   },
   {
     name: 'Pistol',
@@ -67,7 +73,8 @@ export const defaultWeapons = [
     range: 40,
     strReq: 2,
     combatStyles: ['Light'],
-    specialzations: ['Handguns']
+    specialzations: ['Handguns'],
+    icon: 'gi-pistol-gun'
   },
   {
     name: 'SMG',
@@ -77,7 +84,8 @@ export const defaultWeapons = [
     range: 40,
     strReq: 2,
     combatStyles: ['Light'],
-    specialzations: ['Machine Guns']
+    specialzations: ['Machine Guns'],
+    icon: 'gi-mp-40'
   },
   {
     name: 'Machine Gun',
@@ -87,7 +95,8 @@ export const defaultWeapons = [
     range: 60,
     strReq: 4,
     combatStyles: ['Versatile'],
-    specialzations: ['Machine Guns']
+    specialzations: ['Machine Guns'],
+    icon: 'gi-mp-5'
   },
   {
     name: 'War Hammer',
@@ -97,7 +106,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 6,
     combatStyles: ['Heavy'],
-    specialzations: ['Hammers']
+    specialzations: ['Hammers'],
+    icon: 'gi-warhammer'
   },
   {
     name: 'Maul',
@@ -107,7 +117,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 6,
     combatStyles: ['Heavy'],
-    specialzations: ['Hammers']
+    specialzations: ['Hammers'],
+    icon: 'gi-flat-hammer'
   },
   {
     name: 'Giant Hammer',
@@ -117,7 +128,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 9,
     combatStyles: ['Heavy'],
-    specialzations: ['Hammers']
+    specialzations: ['Hammers'],
+    icon: 'gi-thor-hammer'
   },
   {
     name: 'Dagger',
@@ -125,7 +137,8 @@ export const defaultWeapons = [
     damageTypes: ['Piercing'],
     hands: 1,
     range: 5,
-    strReq: 2
+    strReq: 2,
+    icon: 'gi-broad-dagger'
   },
   {
     name: 'Spear',
@@ -135,7 +148,8 @@ export const defaultWeapons = [
     range: 10,
     strReq: 6,
     combatStyles: ['Versatile'],
-    specialzations: ['Polearm']
+    specialzations: ['Polearms'],
+    icon: 'gi-barbed-spear'
   },
   {
     name: 'Glaive',
@@ -145,7 +159,8 @@ export const defaultWeapons = [
     range: 10,
     strReq: 6,
     combatStyles: ['Heavy'],
-    specialzations: ['Polearm']
+    specialzations: ['Polearms'],
+    icon: 'gi-glaive'
   },
   {
     name: 'Sarissa',
@@ -155,7 +170,8 @@ export const defaultWeapons = [
     range: 10,
     strReq: 9,
     combatStyles: ['Heavy'],
-    specialzations: ['Polearm']
+    specialzations: ['Polearms'],
+    icon: 'gi-spartan'
   },
   {
     name: 'Carbine',
@@ -165,7 +181,8 @@ export const defaultWeapons = [
     range: 60,
     strReq: 4,
     combatStyles: ['Versatile'],
-    specialzations: ['Rifle']
+    specialzations: ['Rifles'],
+    icon: 'gi-steyr-aug'
   },
   {
     name: 'Long Gun',
@@ -175,7 +192,20 @@ export const defaultWeapons = [
     range: 80,
     strReq: 6,
     combatStyles: ['Heavy'],
-    specialzations: ['Rifle']
+    specialzations: ['Rifles'],
+
+    icon: 'gi-winchester-rifle'
+  },
+  {
+    name: 'Shotgun',
+    damageString: '2d8',
+    damageTypes: ['Blunt'],
+    hands: 2,
+    range: 20,
+    strReq: 6,
+    combatStyles: ['Heavy'],
+    specialzations: ['Shotguns'],
+    icon: 'gi-sawed-off-shotgun'
   },
   {
     name: 'Longsword',
@@ -185,7 +215,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 6,
     combatStyles: ['Versatile'],
-    specialzations: ['Sword']
+    specialzations: ['Swords'],
+    icon: 'gi-pointy-sword'
   },
   {
     name: 'Bastard Sword',
@@ -195,7 +226,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 6,
     combatStyles: ['Heavy'],
-    specialzations: ['Sword']
+    specialzations: ['Swords'],
+    icon: 'gi-spinning-sword'
   },
   {
     name: 'Great Sword',
@@ -205,7 +237,8 @@ export const defaultWeapons = [
     range: 5,
     strReq: 9,
     combatStyles: ['Heavy'],
-    specialzations: ['Sword']
+    specialzations: ['Swords'],
+    icon: 'gi-relic-blade'
   },
   {
     name: 'Lash',
@@ -215,7 +248,8 @@ export const defaultWeapons = [
     range: 20,
     strReq: 2,
     combatStyles: ['Light'],
-    specialzations: ['Whip']
+    specialzations: ['Whips'],
+    icon: 'gi-whip'
   },
   {
     name: 'Great Lash',
@@ -225,7 +259,8 @@ export const defaultWeapons = [
     range: 20,
     strReq: 6,
     combatStyles: ['Versatile'],
-    specialzations: ['Whip']
+    specialzations: ['Whips'],
+    icon: 'gi-whip'
   },
   {
     name: 'Casting Wand',
@@ -235,7 +270,7 @@ export const defaultWeapons = [
     range: 5,
     strReq: 2,
     combatStyles: ['Light'],
-    specialzations: ['Knives']
+    icon: 'gi-fairy-wand'
   },
   {
     name: 'Casting Staff',
@@ -245,6 +280,7 @@ export const defaultWeapons = [
     range: 10,
     strReq: 6,
     combatStyles: ['Versatile'],
-    specialzations: ['Polearm']
+    specialzations: ['Polearms'],
+    icon: 'gi-wizard-staff'
   }
 ]

@@ -54,6 +54,33 @@ export default {
     function updateRandom() {
       randomized.value = false
     }
+    const wornArmorPassives = computed(() => {
+      return (
+        currentStatBlockTemp.value.equipment.items.Armor[
+          currentStatBlockTemp.value.equipment.wornArmor
+        ]?.equippedStats?.passives || {}
+      )
+    })
+
+    const primaryHandheldPassives = computed(() => {
+      return (
+        currentStatBlockTemp.value.equipment.items.Weapon[
+          currentStatBlockTemp.value.equipment.primaryHand
+        ]?.equippedStats?.passives || {}
+      )
+    })
+
+    const secondaryHandheldPassives = computed(() => {
+      return (
+        currentStatBlockTemp.value.equipment.items.Shield[
+          currentStatBlockTemp.value.equipment.secondaryHand
+        ]?.equippedStats?.passives ||
+        currentStatBlockTemp.value.equipment.items.Weapon[
+          currentStatBlockTemp.value.equipment.secondaryHand
+        ]?.equippedStats?.passives ||
+        {}
+      )
+    })
     const powerLevel = ref(0)
     const overridePowerLevel = ref('')
     const overrideIcon = ref('')
@@ -356,7 +383,10 @@ export default {
       removeManaStatusModifier,
       removeMpStatusModifier,
       showEquipment,
-      updateTempEquipment
+      updateTempEquipment,
+      wornArmorPassives,
+      primaryHandheldPassives,
+      secondaryHandheldPassives
     }
   },
   components: {
@@ -390,6 +420,9 @@ export default {
       @powerIcon="(icon) => (powerIcon = icon)"
       @overrideIcon="(icon) => (overrideIcon = icon)"
       @overridePowerLevel="(level) => (overridePowerLevel = level)"
+      :wornArmorPassives="wornArmorPassives"
+      :secondaryHandheldPassives="secondaryHandheldPassives"
+      :primaryHandheldPassives="primaryHandheldPassives"
     ></StatBlockHeader>
 
     <div
@@ -411,6 +444,9 @@ export default {
               :removeManaStatusModifier="removeManaStatusModifier"
               :removeMpStatusModifier="removeMpStatusModifier"
               :removeArmorStatusModifier="removeArmorStatusModifier"
+              :wornArmorPassives="wornArmorPassives"
+              :secondaryHandheldPassives="secondaryHandheldPassives"
+              :primaryHandheldPassives="primaryHandheldPassives"
             ></StatBlockState>
           </div>
           <div style="display: flex; flex-direction: column; flex-grow: 1">
@@ -442,6 +478,9 @@ export default {
                 :current-stat-block="currentStatBlockTemp"
                 :updateTemp="updateTemp"
                 :removeAttributeStatusModifier="removeAttributeStatusModifier"
+                :wornArmorPassives="wornArmorPassives"
+                :secondaryHandheldPassives="secondaryHandheldPassives"
+                :primaryHandheldPassives="primaryHandheldPassives"
               ></StatBlockAttributes>
             </div>
             <StatBlockMovespeedWrapper
@@ -453,6 +492,9 @@ export default {
               :isEditing="editing"
               :removeMovementStatusModifier="removeMovementStatusModifier"
               :updateTemp="updateTemp"
+              :wornArmorPassives="wornArmorPassives"
+              :secondaryHandheldPassives="secondaryHandheldPassives"
+              :primaryHandheldPassives="primaryHandheldPassives"
             ></StatBlockMovespeedWrapper>
             <StatBlockAbilitiesWrapper
               :updateTemp="updateTemp"

@@ -13,7 +13,7 @@ import CustomCheckbox from '../CustomCheckbox.vue'
 import BInputGroupText from 'bootstrap-vue-next/src/components/BInputGroup/BInputGroupText.vue'
 import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue'
 import BDropdownItem from 'bootstrap-vue-next/src/components/BDropdown/BDropdownItem.vue'
-import { defaultWeapons } from './defaultWeapons'
+import { defaultWeapons } from './defaultWeapons.ts'
 
 export default {
   emits: ['equippedStats'],
@@ -27,6 +27,7 @@ export default {
     const martialSkillsStore = useMartialSkillsStore()
     const passives: Ref<any> = ref(props.passedStats?.passives || {})
     const material = ref(props.passedStats?.material || '')
+    const icon = ref(props.passedStats?.icon || '')
     const searchS = ref('')
     const enchantments = ref(props.passedStats?.enchantments || {})
     const technicalAddons = ref(props.passedStats?.technicalAddons || {})
@@ -201,7 +202,8 @@ export default {
           material: material.value,
           enchantments: enchantments.value,
           technicalAddons: technicalAddons.value,
-          materialCoverings: materialCoverings.value
+          materialCoverings: materialCoverings.value,
+          icon: icon.value
         }
         context.emit('equippedStats', obj)
       }
@@ -287,6 +289,7 @@ export default {
     function populateFields(pos: number) {
       material.value = 'Iron'
       strReq.value = defaultWeapons[pos].strReq
+      icon.value = defaultWeapons[pos].icon
       range.value = defaultWeapons[pos].range
       hands.value = defaultWeapons[pos].hands
       weaponDamageTypes.value = defaultWeapons[pos].damageTypes || []

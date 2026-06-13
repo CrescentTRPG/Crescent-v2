@@ -1,21 +1,10 @@
 <script lang="ts">
-import {
-  computed,
-  nextTick,
-  onMounted,
-  onRenderTriggered,
-  onUnmounted,
-  onUpdated,
-  Ref,
-  ref,
-  useTemplateRef,
-  watch
-} from 'vue'
-import { onKeyStroke, useEventListener, useFocus } from '@vueuse/core'
+import { onKeyStroke } from '@vueuse/core'
+import { computed, onUpdated, Ref, ref, useTemplateRef } from 'vue'
 
-import { useDesignStore } from '../stores/designStore.ts'
-import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
 import BButton from 'bootstrap-vue-next/src/components/BButton/BButton.vue'
+import BFormInput from 'bootstrap-vue-next/src/components/BFormInput/BFormInput.vue'
+import { useDesignStore } from '../stores/designStore.ts'
 
 export default {
   emits: ['close'],
@@ -44,20 +33,6 @@ export default {
         context.emit('close')
       }
     })
-
-    function delay(time: number) {
-      return new Promise((resolve) => setTimeout(resolve, time))
-    }
-
-    onUpdated(() => {
-      //console.log('hi')
-      //nextTick(refreshRef)
-    })
-    function refreshRef() {
-      console.log(document.getElementById('attr'), props.refs[0])
-      if (props.refs) templateRef = useTemplateRef(props.refs[0]) || ref(null)
-      templateRef.value?.focus()
-    }
 
     onKeyStroke('Enter', () => {
       if (props.closeOnEnter && props.showModal) context.emit('close')

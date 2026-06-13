@@ -7,7 +7,15 @@ import { useUserStore } from '@/stores/userStore.ts'
 import _ from 'lodash'
 
 export default {
-  props: ['currentStatBlock', 'isEditing', 'updateTemp', 'removeAttributeStatusModifier'],
+  props: [
+    'currentStatBlock',
+    'isEditing',
+    'updateTemp',
+    'removeAttributeStatusModifier',
+    'wornArmorPassives',
+    'secondaryHandheldPassives',
+    'primaryHandheldPassives'
+  ],
   setup(props, context) {
     const modal = ref(false)
     const userStore = useUserStore()
@@ -24,7 +32,41 @@ export default {
       for (let i = 0; i < spentExceptionals.length; i++) {
         spentExceptionalCount += 1
       }
-      const baseExceptionalVal = parseInt('' + props.currentStatBlock.exceptionals[type])
+      let armorPassives = props.wornArmorPassives[
+        'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+
+      let primaryPassives = props.primaryHandheldPassives[
+        'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      let secondaryPassives = props.secondaryHandheldPassives[
+        'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Add Exceptional(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+
+      const baseExceptionalVal =
+        parseInt('' + props.currentStatBlock.exceptionals[type]) +
+        armorPassives +
+        primaryPassives +
+        secondaryPassives
+
       let max = 0
 
       const arr = Object.values(
@@ -43,8 +85,39 @@ export default {
     }
     function getInferiors(type) {
       let mod = 0
+      let armorPassives = props.wornArmorPassives[
+        'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
 
-      const baseExceptionalVal = parseInt('' + props.currentStatBlock.exceptionals[type])
+      let primaryPassives = props.primaryHandheldPassives[
+        'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      let secondaryPassives = props.secondaryHandheldPassives[
+        'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Add Inferior(s) ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      const baseExceptionalVal =
+        parseInt('' + props.currentStatBlock.exceptionals[type]) -
+        armorPassives -
+        primaryPassives -
+        secondaryPassives
 
       const arr = Object.values(
         props.currentStatBlock.attributeStatusModifiers[type]['Add Inferior(s)'] || {}
@@ -101,6 +174,69 @@ export default {
       newTemp.attributes[attr] = val
       props.updateTemp(newTemp)
     }
+    function getAttrVal(type) {
+      let ret = props.currentStatBlock.attributes[type]
+      let armorPassives = props.wornArmorPassives[
+        'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+
+      let primaryPassives = props.primaryHandheldPassives[
+        'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      let secondaryPassives = props.secondaryHandheldPassives[
+        'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Override Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      if (armorPassives || primaryPassives || secondaryPassives) {
+        ret = Math.max(Math.max(armorPassives, secondaryPassives), primaryPassives)
+      }
+      armorPassives = props.wornArmorPassives[
+        'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.wornArmorPassives[
+              'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+
+      primaryPassives = props.primaryHandheldPassives[
+        'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.primaryHandheldPassives[
+              'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      secondaryPassives = props.secondaryHandheldPassives[
+        'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+      ]
+        ? parseInt(
+            props.secondaryHandheldPassives[
+              'Modify Attribute ' + type.substring(0, 1).toUpperCase() + type.substring(1)
+            ].modAmount
+          )
+        : 0
+      return (ret += primaryPassives + secondaryPassives + armorPassives)
+    }
     const strUsed = computed(() => {
       return props.currentStatBlock.stressedExceptionals?.Strength || {}
     })
@@ -143,7 +279,8 @@ export default {
       powUsed,
       intUsed,
       chaUsed,
-      wilUsed
+      wilUsed,
+      getAttrVal
     }
   },
   components: { GridDiplayAttr }
@@ -162,7 +299,7 @@ export default {
       attr-shorthand="STR"
       :exceptionals="getExceptionals('strength')"
       :inferiors="getInferiors('strength')"
-      :value="props.currentStatBlock.attributes.strength"
+      :value="getAttrVal('strength')"
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
@@ -177,7 +314,7 @@ export default {
       attr-shorthand="AGI"
       :exceptionals="getExceptionals('agility')"
       :inferiors="getInferiors('agility')"
-      :value="props.currentStatBlock.attributes.agility"
+      :value="getAttrVal('agility')"
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
@@ -192,7 +329,7 @@ export default {
       attr-shorthand="HEA"
       :exceptionals="getExceptionals('health')"
       :inferiors="getInferiors('health')"
-      :value="props.currentStatBlock.attributes.health"
+      :value="getAttrVal('health')"
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
@@ -207,7 +344,7 @@ export default {
       attr-shorthand="WIL"
       :exceptionals="getExceptionals('willpower')"
       :inferiors="getInferiors('willpower')"
-      :value="props.currentStatBlock.attributes.willpower"
+      :value="getAttrVal('willpower')"
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
@@ -222,7 +359,7 @@ export default {
       attr-shorthand="PER"
       :exceptionals="getExceptionals('perception')"
       :inferiors="getInferiors('perception')"
-      :value="props.currentStatBlock.attributes.perception"
+      :value="getAttrVal('perception')"
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
@@ -237,7 +374,7 @@ export default {
       attr-shorthand="CHA"
       :exceptionals="getExceptionals('charisma')"
       :inferiors="getInferiors('charisma')"
-      :value="props.currentStatBlock.attributes.charisma"
+      :value="getAttrVal('charisma')"
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
@@ -252,7 +389,7 @@ export default {
       attr-shorthand="INT"
       :exceptionals="getExceptionals('intelligence')"
       :inferiors="getInferiors('intelligence')"
-      :value="props.currentStatBlock.attributes.intelligence"
+      :value="getAttrVal('intelligence')"
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"
@@ -267,7 +404,7 @@ export default {
       attr-shorthand="PWR"
       :exceptionals="getExceptionals('power')"
       :inferiors="getInferiors('power')"
-      :value="props.currentStatBlock.attributes.power"
+      :value="getAttrVal('power')"
       :attribute-status-modifiers="props.currentStatBlock.attributeStatusModifiers"
       :remove-attribute-status-modifier="props.removeAttributeStatusModifier"
       :add-new-attribute-status-modifier="addAttributeStatusModifier"

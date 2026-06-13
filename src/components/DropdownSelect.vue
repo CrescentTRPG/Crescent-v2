@@ -321,6 +321,8 @@ export default {
                   : selectedOption
             }}
           </div>
+          {{ props.label ? props.label : '' }}
+
           <i class="bi bi-caret-down" v-if="!showDropdown"></i>
           <i class="bi bi-caret-up" v-if="showDropdown"></i>
         </div>

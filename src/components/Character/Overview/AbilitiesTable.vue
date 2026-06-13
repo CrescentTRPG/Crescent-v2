@@ -1,37 +1,32 @@
 <script lang="ts">
-import { BInputGroup, BFormInput, BInputGroupText, BButton, BTable } from 'bootstrap-vue-next'
-import { computed, ComputedRef, Ref, ref, watch } from 'vue'
-import { useDesignStore } from '../../../stores/designStore.ts'
-import { useSkillStore } from '@/stores/skillsStore.ts'
-import { storeToRefs } from 'pinia'
-import { useCharacterStore } from '@/stores/characterStore.ts'
-import CustomModal from '@/components/CustomModal.vue'
-import { useUserStore } from '@/stores/userStore.ts'
-import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
-import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
-import { useSpellStore } from '@/stores/spellsStore.ts'
 import AbilityDisplay from '@/components/AbilityDisplay.vue'
+import AddAsStatusModal from '@/components/AddAsStatusModal.vue'
+import ArrayTabs from '@/components/ArrayTabs.vue'
+import CustomModal from '@/components/CustomModal.vue'
 import CustomPagination from '@/components/CustomPagination.vue'
 import MartialSkillDisplay from '@/components/MartialSkillDisplay.vue'
-import ArrayTabs from '@/components/ArrayTabs.vue'
-import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue'
-import BDropdownItem from 'bootstrap-vue-next/src/components/BDropdown/BDropdownItem.vue'
-import BFormTextarea from 'bootstrap-vue-next/src/components/BFormTextarea/BFormTextarea.vue'
-import { isTemplateExpression } from 'typescript'
+import { useCharacterStore } from '@/stores/characterStore.ts'
 import { useEquipmentStore } from '@/stores/equipmentStore.ts'
-import { usePerformanceStore } from '@/stores/performanceStore.ts'
 import { useFaunaStore } from '@/stores/faunaStore.ts'
 import { useManualStore } from '@/stores/manualStore.ts'
+import { useMartialPerksStore } from '@/stores/martialPerksStore.ts'
+import { useMartialSkillsStore } from '@/stores/martialSkillsStore.ts'
+import { usePerformanceStore } from '@/stores/performanceStore.ts'
+import { useSkillStore } from '@/stores/skillsStore.ts'
+import { useSpellStore } from '@/stores/spellsStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { BButton, BFormInput, BTable } from 'bootstrap-vue-next'
+import BDropdown from 'bootstrap-vue-next/src/components/BDropdown/BDropdown.vue'
+import BDropdownItem from 'bootstrap-vue-next/src/components/BDropdown/BDropdownItem.vue'
+import { LiteralUnion } from 'bootstrap-vue-next/src/types/LiteralUnion.js'
+import { storeToRefs } from 'pinia'
+import { computed, ComputedRef, Ref, ref, watch } from 'vue'
+import { useDesignStore } from '../../../stores/designStore.ts'
 import CreatureDisplay from '../Build/Fauna/CreatureDisplay.vue'
 import MartialAttackDisplay from '../Matrial Attack Builder/MartialAttackDisplay.vue'
-import AddAsStatusModal from '@/components/AddAsStatusModal.vue'
-import FilterByActionCost from './FilterByActionCost.vue'
-import AnimatedTrackerItem from './Tracker Components/AnimatedTrackerItem.vue'
-import TrackerWidget from './TrackerWidget.vue'
-import BFormSpinbutton from 'bootstrap-vue-next/src/components/BFormSpinbutton/BFormSpinbutton.vue'
 import ChargesTracker from './ChargesTracker.vue'
-import { LiteralUnion } from 'bootstrap-vue-next/src/types/LiteralUnion.js'
-import InputRange from '@/components/InputRange.vue'
+import FilterByActionCost from './FilterByActionCost.vue'
+import { DataConnect } from 'firebase/data-connect'
 
 export default {
   emits: ['ability'],
@@ -536,7 +531,8 @@ export default {
       manualPerformanceStyles,
       getSortedSkills,
       actionCost,
-      martialPerksStore
+      martialPerksStore,
+      spellgroups
     }
   },
   components: {
@@ -722,7 +718,7 @@ export default {
                 v-if="
                   data.item.spellgroup ||
                   data.item.perkGroup ||
-                  (!(data.item.attributes || data.item.combatStyles || data.item.mp) &&
+                  (!(data.item.attributes || data.item.combatStyles || data.item.mp >= 0) &&
                     !data.item.skill &&
                     !data.item.Movement)
                 "
@@ -738,9 +734,17 @@ export default {
                 :resistance="data.item.resistance || ''"
                 :target="data.item.target || ''"
                 :type="data.item.type || ''"
+                :spellgroup="data.item.spellgroup"
+                :spellgroups="spellgroups"
+                :anyRankSpellgroup="
+                  data.item.spellgroup
+                    ? manualSpellgroups[data.item.spellgroup].flatCost &&
+                      manualSpellgroups[data.item.spellgroup].groupPurchaseLimiter === 'None'
+                    : undefined
+                "
               ></AbilityDisplay>
               <MartialAttackDisplay
-                v-if="data.item.mp"
+                v-if="data.item.mp || data.item.mp === 0"
                 :description="data.item.description"
                 :weaponAttack="data.item.attackObj"
                 :icon="data.item.icon || 'gi-tec-9'"

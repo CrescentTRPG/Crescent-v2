@@ -149,6 +149,7 @@ export default {
       <div v-for="folderName in journalStore.getFolderDisplay" :key="folderName">
         <div v-if="folderName !== 'entryIds'">
           <FolderObject
+            :close-sidebar="closeSideBar"
             :openCreateFile="openCreateFile"
             :folderNames="getFolderNames(folderName)"
             :folder="getFolder(folderName)"
